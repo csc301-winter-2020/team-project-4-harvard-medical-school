@@ -1,4 +1,4 @@
-# Product Name/Team 53
+# Scribe/Team 53
 
 # Product Details
 
@@ -32,25 +32,25 @@ Enclosed within the repository are diagrams of our proposed view for each interf
 
 ## 2. Who are your target users?
 * Harvard medical students (all years)
-    - Name: Nick Sanders
-    - Age: 21
-    - Background: Current 1st year Harvard Medical School student
-    - Family status: Single
-    - Background: A hardworking and curious Harvard Medical School student eager to apply his course knowledge to the field via patient diagnoses.
-    - User Environment: Uses an iPad Pro to take notes and record patient diagnoses.
-    - End Goal: To be able to take patient diagnoses notes in a more convenient, readable, and elegant way.
+    - **Name**: Nick Sanders
+    - **Age**: 21
+    - **Background**: Current 1st year Harvard Medical School student
+    - **Family status**: Single
+    - **Background**: A hardworking and curious Harvard Medical School student eager to apply his course knowledge to the field via patient diagnoses.
+    - **User Environment**: Uses an iPad Pro to take notes and record patient diagnoses.
+    - **End Goal**: To be able to take patient diagnoses notes in a more convenient, readable, and elegant way.
 * Medical Educators
-    - Name: Dave Billinger
-    - Age: 69
-    - Background: A recently tenured professor of medical sciences at Harvard Medical School. Dave is always looking for ways to make his teaching experience more streamlined.
-    - User Environment: Uses a desktop PC running Windows 10 to grade and view student submissions (of patient diagnoses). 
-    - End Goal: To enhance and improve instructor marking efficiency and student convenience for medical student fieldwork submissions.
+    - **Name**: Dave Billinger
+    - **Age**: 69
+    - **Background**: A recently tenured professor of medical sciences at Harvard Medical School. Dave is always looking for ways to make his teaching experience more streamlined.
+    - **User Environment**: Uses a desktop PC running Windows 10 to grade and view student submissions (of patient diagnoses). 
+    - **End Goal**: To enhance and improve instructor marking efficiency and student convenience for medical student fieldwork submissions.
 * Medical Administrators/Researchers
-    - Name: Samson Liang
-    - Age: 30
-    - Background: A post-grad medical researcher currently conducting research pertaining to pedagogical advancements in the medical sciences.
-    - User Environment: Uses a desktop PC running Windows 10 to compile and process medical students’ notes. 
-    - End Goal: To advance pedagogical medical sciences through researching trends in student diagnoses over several years of medical schooling.
+    - **Name**: Samson Liang
+    - **Age**: 30
+    - **Background**: A post-grad medical researcher currently conducting research pertaining to pedagogical advancements in the medical sciences.
+    - **User Environment**: Uses a desktop PC running Windows 10 to compile and process medical students’ notes. 
+    - **End Goal**: To advance pedagogical medical sciences through researching trends in student diagnoses over several years of medical schooling.
 
 ## 3. Why would users choose your product? What are they using today to solve their problem/need
 
@@ -119,40 +119,76 @@ Ensures that the product is working as intended; tests possible user interaction
 Facilitates the organization of the group, dealing with team logistics, feature specification, timeline management, and partner communication.
 Additionally, all group members will take on full stack development roles as needed.
 
+#### Member 1
+
 **Name:** Sanggon Choi
+
 **Description:** Backend Developer; mostly database and API development
+
 **Strengths:** SQL Databases, JavaScript, Project Management
+
 **Weaknesses:** UI/UX Design, React, macOS Development
 
+#### Member 2
+
 **Name:** Robert Tan
+
 **Description:** Backend developer (APIs)
+
 **Strengths:** Object oriented programming, Java, Javascript
+
 **Weaknesses:** Front end design, React, Python
 
+#### Member 3
+
 **Name:** Qingyuan Qie
+
 **Description:** Backend Developer
+
 **Strengths:** Javascript, Linux, SQL Databases
+
 **Weaknesses:** UI Design, React, Project Management
 
+#### Member 4
+
 **Name:** Chris Koehler
+
 **Description:** Full stack developer (primarily frontend development for this), help out on any backend tasks if needed
+
 **Strengths:** C++, Java, Databases
+
 **Weaknesses:** UI, CSS, Authentication
 
+#### Member 5
+
 **Name:** Lance Oribello
+
 **Description:** Front-end Developer, UI/UX Design, Product Management
+
 **Strengths:** JavaScript, React, Product Management
+
 **Weaknesses:** Databases, Express, System Design
 
+#### Member 6
+
 **Name:** Christopher Marcok
-**Description:** Full Stack developer with emphasis on Front-End development. Will be responsible for making some of the portrait and landscape view components. 
+
+**Description:** Full Stack developer with emphasis on Front-End development. Will be responsible for making some of the portrait and landscape view components.
+ 
 **Strengths:** NoSQL, Front-End Design, Express
+
 **Weaknesses:** Algorithms, System Design, Mobile Development
 
+#### Member 7
+
 **Name:** Steven Kang
+
 **Description:** Full stack developer (primarily backend)
+
 **Strengths:** Scripting, Python, SQL
+
 **Weaknesses:** Web interfaces, Numpy, Agile Development Methodologies
+
 
 ## Q7: What operational events will you have as a team?
 
@@ -235,13 +271,18 @@ We picked Trello because:
 ## Q9: What are the rules regarding how your team works?
 ### Communications:
 We will be communicating over the internet via Slack. We believe that Slack’s abilities to pin items, create private chats, facilitate calls and its integration with other apps (Trello) will be able to fulfill our communication needs. Should we need to break off into teams, it will be useful to utilize Slack’s multiple text channels to organize communications between individual teams.
+
 We will expect to communicate on a day-by-day basis to organize the team’s needs and objectives. Team members should check Slack on a daily basis to keep up to date about issues and current events. We do not expect to be using phone calls or SMS messaging to communicate amongst each other.
+
 We will also be communicating to our partner through Slack. Additionally, we are scheduled for weekly partner meetings where we will share progress, and ask questions regarding the project.
 
 ### Meetings:
 We will be meeting at least once a week with our partner, likely in Bahen. We expect that everyone should be able to attend these meetings, but we understand that among 7 team members (and 2 partners) it may not be feasible to have everyone in the same room at the same time. In this case, those who are not physically present should join in via voice call which can be done over Slack. We aim to have at least 5 team members present at any given meeting. 
+
 We have no expectations for meeting amongst team members outside of partner meetings, as most development questions should be resolvable via Slack voice chat or Slack text chat. Should we feel that a large design decision should be made that would benefit a full team being physically present, we can schedule physical meetings as needed.
+
 We do not believe that we will require a meeting moderator, but should we require one in the future, we have appointed David Choi. We will conduct meetings by giving all team members the chance to bring up issues of importance and resolve each through group discussion and brainstorming. During this time we can begin discussion by reviewing what was done in the prior week. Afterwards we will discuss the next steps for development and how to achieve them. We will attempt to prioritize different tasks and create a roadmap for the coming week. Finally we will review what happened in the meeting to make sure everyone is on the same page. 
+
 Should a team member consistently not make an effort to attend meetings or complete action items, then we will firstly confront them about their unacceptable behaviour, or ask if they need assistance with their tasks. If the issue persists, then we will have to discuss with a TA about what action needs to be taken.
 
 ### Conflict Resolution:
@@ -270,7 +311,12 @@ We decided to use React due to the fact that it is quick to pick up for people w
 
 ## Pictures
 Imgur album: `https://imgur.com/a/Pxl9fiJ`
+
 Or view on github:
+
 [Administrator View](pics/administrator_app_design.jpg)
+
 [Instructor View](pics/intructor_app_design.jpg)
+
 [Student View](pics/student_app_design.jpg)
+

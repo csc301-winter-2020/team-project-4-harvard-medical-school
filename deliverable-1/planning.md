@@ -69,7 +69,7 @@ The administrators can review students’ notes and give marks to them. The note
 ## 4. How will you build it?
 Our plan is to deploy an Express + React Node.js application. We have decided to use Typescript to maintain our express and react files to maintain code quality and make it easier for team members to pick up the technology that they are unfamiliar with (via VSCode’s intellisense and autocomplete). For our database solution we have decided to use MySQL via Google’s Cloud services.
 
-Our application will require an OCR solution to recognize user handwriting. We plan to use Google’s Cloud Vision API, since we have tested it and it correctly handled our inputs during the demo. 
+Our application will require an OCR solution to recognize user handwriting. We plan to use Google’s Cloud Vision API, since we have tested it and it correctly handled our inputs during the demo. Amazon S3 Object Storage will be used for image storage.
 
 Our application will also integrate with the Isabel Health Care API, which will give clients information about potential diagnoses and suggestions to further patient interviews.
 

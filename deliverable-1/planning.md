@@ -100,14 +100,14 @@ Our application will also integrate with the Isabel Health Care API, which will 
 # Process Details
 ## Q6: What are the roles & responsibilities on the team?
 Roles:
-1. Database architect (Qie Qingyuan)
+1. Database architect (Qingyuan Qie)
 Responsible for designing the tables and their columns to store the persisting data in a meaningful and efficient way.
 2. React Frontend Developer (Christopher Marcok, Chris Koehler, Lance Oribello)
 Responsible for creating the Components the clients will see and interact with on the front-end. Components must be styled to support an intuitive experience in both portrait and landscape modes.
-3. Backend developer (Robert Tan, Sanggon Choi, Steven Kang, Qie Qingyuan)
+3. Backend developer (Robert Tan, Sanggon Choi, Steven Kang, Qingyuan Qie)
     - API development (Sanggon Choi)
     - Handwriting OCR, Isabel API calls (Robert Tan)
-    - Express Developer (Christopher Marcok)
+    - Express Developer (Christopher Marcok, Qingyuan Qie)
 Create and manage the backend infrastructure for the web application. Responsibilities include API development, interacting with public libraries/APIs, and handling requests from the frontend. In particular, the backend developers must write maintainable and testable code built using Node.js & Express.js.
 4. UI/UX Design (Lance Oribello)
 Determines the graphical layout of the application; this encompasses the display layout, interface animations, view transitions, and any sort of visual interactions or elements included within the application.

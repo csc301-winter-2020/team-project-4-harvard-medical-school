@@ -1,0 +1,14 @@
+@import '../../../node_modules/bootstrap/scss/bootstrap.scss';
+@import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
+
+
+$our-font: 'Comic Sans MS', sans-serif;
+$color-primary: #A51C30;
+$imported-font: 'Poppins', sans-serif;
+
+
+.my-class{
+    font-size: 100px;
+    font-family: $our-font;
+    background-color: $color-primary;
+}

@@ -64,14 +64,16 @@ Administrators using the application are also able to view the list of medical t
 
 By understanding how students approach diagnosis decision making, we can learn to prevent medical errors, as well as better guide students in their medical education. 
 
-The administrators can review students’ notes and give marks to them. The notes stored will also allows researchers to gain insight of how medical students approach diagnosis decision making, from which the client can learn to prevent medical errors as human decision bias is one of the most common causes of medical errors. After meeting with our partner extensively, besides reducing medical malpractice, they are also able to potentially improve patient satisfaction, decrease the amount of unnecessary tests performed, and help medical students improve their skills.
-
 ## 4. How will you build it?
-Our plan is to deploy an Express + React Node.js application. We have decided to use Typescript to maintain our express and react files to maintain code quality and make it easier for team members to pick up the technology that they are unfamiliar with (via VSCode’s intellisense and autocomplete). For our database solution we have decided to use MySQL via Google’s Cloud services.
+Our plan is to deploy an Express + React Node.js application. We have decided to use TypeScript to maintain our Express and React files to maintain code quality and make it easier for team members to pick up the technology that they are unfamiliar with (via VSCode’s intellisense and autocomplete). 
 
-Our application will require an OCR solution to recognize user handwriting. We plan to use Google’s Cloud Vision API, since we have tested it and it correctly handled our inputs during the demo. Amazon S3 Object Storage will be used for image storage.
+The majority of our team is already well acquainted with Express, React, Node.js, and TypeScript, having used it to develop web applications in previous courses (mainly CSC309).
 
-Our application will also integrate with the Isabel Health Care API, which will give clients information about potential diagnoses and suggestions to further patient interviews.
+For our database solution we have decided to use MySQL via Google’s Cloud services, as our designated database architect has extensive experience with this technology.
+
+Our application will require an OCR solution to recognize user handwriting. We plan to use Google’s Cloud Vision API, as we have personally tested it as a team and deemed it accurate enough in handling our inputs. Amazon S3 Object Storage will be used for image storage.
+
+Our application will also integrate with the Isabel Health Care API, which will give clients information about potential diagnoses, disease predictions, and suggestions to further patient interviews.
 
 ## 5. What are the user stories that make up the MVP?
 1. As a medical student, Nick would like a seamless note taking experience to organize his notes in an easily accessible format so that he can save time and paper.

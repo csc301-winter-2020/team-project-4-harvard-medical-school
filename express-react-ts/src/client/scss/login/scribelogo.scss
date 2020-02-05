@@ -1,0 +1,48 @@
+// This file is imported in ScribeSVG.tsx
+
+#scribe-logo-svg path:nth-child(2){
+  stroke-dasharray: 547px;
+  stroke-dashoffset: 547px;
+  animation: line-anim 2s ease-out forwards, fill-anim 0.2s ease-in forwards 3s;
+}
+#scribe-logo-svg > path:nth-child(3){
+  stroke-dasharray: 443px;
+  stroke-dashoffset: 443px;
+  animation: line-anim 2s ease-out forwards 0.4s;
+}
+#scribe-logo-svg > path:nth-child(4){
+  stroke-dasharray: 543px;
+  stroke-dashoffset: 543px;
+  animation: line-anim 2s ease-out forwards 0.8s;
+}
+#scribe-logo-svg > path:nth-child(5){
+  stroke-dasharray: 277px;
+  stroke-dashoffset: 277px;
+  animation: line-anim 2s ease-out forwards 1.2s;
+}
+#scribe-logo-svg > path:nth-child(6){
+  stroke-dasharray: 685px;
+  stroke-dashoffset: 685px;
+  animation: line-anim 2s ease-out forwards 1.6s;
+}
+#scribe-logo-svg > path:nth-child(7){
+  stroke-dasharray: 655px;
+  stroke-dashoffset: 655px;
+  animation: line-anim 2s ease-out forwards 2s;
+}
+
+@keyframes line-anim{
+  to{
+      stroke-dashoffset: 0;
+  }
+}
+
+@keyframes fill-anim{
+  from {
+      fill: transparent;
+  }
+  to{
+      fill: white;
+  }
+}
+

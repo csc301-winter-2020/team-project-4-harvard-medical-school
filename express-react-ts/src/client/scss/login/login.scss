@@ -55,6 +55,17 @@
   justify-content: center;
 }
 
+.login-form-header {
+  text-align: center;
+}
+
+.login-portrait-title {
+  font-size: 5rem;
+  text-align: center;
+  font-family: $serif-font;
+  margin-bottom: 20px;
+}
+
 .login-inner {
   align-self: center;
   width: 100%;
@@ -94,7 +105,18 @@
   background-color: $color-primary-dim;
 }
 
-@media only screen and (max-width: 1024px) {
+.login-register-small-text {
+  margin-top: 5px;
+  font-size: 0.75rem;
+}
+
+.login-register-span {
+  cursor: pointer;
+  color: blue;
+  text-decoration: underline;
+}
+
+@media only screen and (max-width: 1023px) {
   .login-page-left-section {
     display: none;
   }

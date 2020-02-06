@@ -1,0 +1,13 @@
+// This file is imported in Footer.tsx
+
+@import "./app.scss";
+.footer {
+  width: 100%;
+  height: 25px;
+  background-color: $color-primary;
+  color: white;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  font-family: $imported-font;
+}

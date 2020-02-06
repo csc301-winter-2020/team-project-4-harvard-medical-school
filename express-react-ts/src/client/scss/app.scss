@@ -1,25 +1,49 @@
 // This file is imported in index.tsx
 
 @import "../../../node_modules/bootstrap/scss/bootstrap.scss";
-@import url("https://fonts.googleapis.com/css?family=Poppins&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Libre+Franklin|Roboto+Slab|Poppins&display=swap");
 
 * {
   padding: 0;
   margin: 0;
 }
 
-$our-font: "Comic Sans MS", sans-serif;
+$our-font: "Comic-Sans MS", sans-serif;
+$sans-serif-font: "Libre Franklin", sans-serif;
 $color-primary: #a51c30;
 $color-primary-dim: #791523;
 $imported-font: "Poppins", sans-serif;
-
+$serif-font: "Roboto Slab", serif;
 .my-class {
   font-size: 100px;
   font-family: $our-font;
   background-color: $color-primary;
 }
 
-
-.app-error-page{
+.app-error-page {
   text-align: center;
+}
+
+// Scrollbar
+
+::-webkit-scrollbar {
+  height: 5px;
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 2px grey;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #666;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #ddd;
 }

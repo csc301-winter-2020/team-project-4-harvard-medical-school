@@ -6,6 +6,16 @@ import { Error } from "./comps/Pages/Errors/Error";
 import { LoginPage } from "./comps/Pages/LoginPage";
 import "./scss/app";
 import { HelixLoader } from "./comps/SubComponents/HelixLoader";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fab } from "@fortawesome/free-brands-svg-icons";
+import {
+  faCheckSquare,
+  faCoffee,
+  faSignInAlt
+} from "@fortawesome/free-solid-svg-icons";
+
+const myLibrary: any = library;
+myLibrary.add(fab, faCheckSquare, faCoffee, faSignInAlt);
 
 /**
  * This is the component that appears in the index.html file. It is a browser router that
@@ -19,7 +29,7 @@ render(
       <Route exact path="/" component={LoginPage} />
       <Route exact path="/home" component={Page} />
       <Route exact path="/loader" component={HelixLoader} />
-      <Route render={() => <Error errNo={404}/>} />
+      <Route render={() => <Error errNo={404} />} />
     </Switch>
   </BrowserRouter>,
   document.getElementById("root") //The BrowserRouter Comp will load on the div with ID "root".

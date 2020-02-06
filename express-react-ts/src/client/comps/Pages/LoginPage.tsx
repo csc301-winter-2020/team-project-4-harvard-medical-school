@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ToastContainer, toast } from "react-toastify";
 import "!style-loader!css-loader!react-toastify/dist/ReactToastify.css";
 import { Footer } from "../SubComponents/Footer";
+import { FormGroup } from "../SubComponents/Login/FormGroup";
 
 const createToast: any = toast;
 
@@ -21,7 +22,7 @@ type LoginState = {
 function reducer(
   state: LoginState,
   action: { type: string; fieldName?: string; value?: string }
-) {
+): LoginState {
   switch (action.type) {
     case "field":
       return {
@@ -36,7 +37,7 @@ function reducer(
     case "resize":
       return {
         ...state,
-        portraitMode: parseInt(action.value) < 1024
+        isPortraitMode: parseInt(action.value) < 1024
       };
     case "start register":
       return {
@@ -119,65 +120,33 @@ export const LoginPage: React.FC = () => {
                   {!isRegisterMode ? "Login" : "Register"}
                 </h1>
                 <form className="login-form">
-                  <div className="group">
-                    <input
-                      id="login-username"
-                      name="username"
-                      type="text"
-                      required
-                      value={username}
-                      onChange={e =>
-                        dispatch({
-                          type: "field",
-                          fieldName: e.target.name,
-                          value: e.target.value
-                        })
-                      }
-                    ></input>
-                    <span className="highlight"></span>
-                    <span className="bar"></span>
-                    <label>Username or Email</label>
-                  </div>
+                  <FormGroup
+                    dispatch={dispatch}
+                    id="login-username"
+                    label="Username or Email"
+                    value={username}
+                    type="text"
+                    name="username"
+                  />
 
-                  <div className="group">
-                    <input
-                      id="login-password"
-                      name="password"
-                      type="password"
-                      required
-                      value={password}
-                      onChange={e =>
-                        dispatch({
-                          type: "field",
-                          fieldName: e.target.name,
-                          value: e.target.value
-                        })
-                      }
-                    ></input>
-                    <span className="highlight"></span>
-                    <span className="bar"></span>
-                    <label>Password</label>
-                  </div>
+                  <FormGroup
+                    dispatch={dispatch}
+                    id="login-password"
+                    label="Password"
+                    value={password}
+                    type="password"
+                    name="password"
+                  />
+
                   {isRegisterMode && (
-                    <div className="group">
-                      <input
-                        id="login-username"
-                        name="repassword"
-                        type="password"
-                        required
-                        value={repassword}
-                        onChange={e =>
-                          dispatch({
-                            type: "field",
-                            fieldName: e.target.name,
-                            value: e.target.value
-                          })
-                        }
-                      ></input>
-                      <span className="highlight"></span>
-                      <span className="bar"></span>
-                      <label>Confirm Password</label>
-                    </div>
+                    <FormGroup
+                      dispatch={dispatch}
+                      id="login-repassword"
+                      label="Confirm Password"
+                      value={repassword}
+                      type="password"
+                      name="repassword"
+                    />
                   )}
 
                   <button className="login-btn" onClick={e => onSubmit(e)}>

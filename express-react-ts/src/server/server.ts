@@ -6,6 +6,7 @@ import * as session from "express-session";
 import * as passport from "passport";
 import * as dotenv from "dotenv";
 import * as bodyParser from "body-parser";
+import * as chalk from "chalk";
 dotenv.config();
 
 // Alias our types
@@ -26,7 +27,7 @@ app.use(
   session({
     secret: process.env.SECRET,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: false
   })
 );
 
@@ -50,5 +51,9 @@ app.get("*", (req: Request, res: Response) => {
 // Listen on port 3000, or on process.env.PORT which will be set accordingly by heroku during deployment.
 const port: string | number = process.env.PORT || 3000;
 app.listen(port, () =>
-  console.log(`Server listening on port ${port} in mode ${app.settings.env}`)
+  console.log(
+    chalk.white.bgCyan.bold(
+      `Server listening on port ${port} in ${app.settings.env} mode.`
+    )
+  )
 );

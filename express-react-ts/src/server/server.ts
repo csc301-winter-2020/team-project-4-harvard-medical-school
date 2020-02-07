@@ -1,12 +1,13 @@
 // Require our dependencies.
 import * as express from "express";
-import apiRouter from "./routes/exampleroute";
 import * as path from "path";
 import * as session from "express-session";
 import * as passport from "passport";
 import * as dotenv from "dotenv";
 import * as bodyParser from "body-parser";
 import * as chalk from "chalk";
+import apiRouter from "./routes/apiRouter";
+import loginRegisterRouter from "./routes/loginRegisterRouter";
 dotenv.config();
 
 // Alias our types
@@ -32,16 +33,15 @@ app.use(
 );
 
 // Initialize passport middleware for user authentication.
+/* TODO: Enable passport local strategy */
 // app.use(passport.initialize());
 // app.use(passport.session());
 
 // Bring in our routes.
 app.use(apiRouter);
+app.use(loginRegisterRouter);
 
 // Setup default routes for the server.
-app.get("/root", (req: Request, res: Response) => {
-  res.send("Express example route");
-});
 
 // Catchall route for anything not caught in the above routes. Will load the corresponding react page if possible, otherwise will load the react 404 page.
 app.get("*", (req: Request, res: Response) => {

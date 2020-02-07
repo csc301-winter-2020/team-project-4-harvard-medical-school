@@ -2,17 +2,20 @@
 
 @import url("https://fonts.googleapis.com/css?family=Libre+Franklin|Roboto+Slab|Poppins&display=swap");
 
-* {
-  padding: 0;
-  margin: 0;
-}
-
 $our-font: "Comic-Sans MS", sans-serif;
 $sans-serif-font: "Libre Franklin", sans-serif;
 $color-primary: #a51c30;
 $color-primary-dim: #791523;
 $imported-font: "Poppins", sans-serif;
 $serif-font: "Roboto Slab", serif;
+
+* {
+  padding: 0;
+  margin: 0;
+  font-family: $imported-font;
+}
+
+
 .my-class {
   font-size: 100px;
   font-family: $our-font;

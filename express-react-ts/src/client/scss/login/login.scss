@@ -50,7 +50,7 @@
   width: 400px;
   height: 100%;
   margin: auto;
-  font-family: "Poppins", sans-serif;
+  font-family: $imported-font;
   display: flex;
   justify-content: center;
 }
@@ -98,7 +98,7 @@
   cursor: pointer;
   vertical-align: middle;
   transition: all ease 0.1s;
-  font-family: "Poppins", sans-serif;
+  font-family: $imported-font;
 }
 
 .login-container button:hover {

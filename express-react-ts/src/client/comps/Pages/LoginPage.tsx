@@ -104,7 +104,7 @@ export const LoginPage: React.FC = () => {
         <div className="login-page-main-grid">
           <div className="login-page-left-section">
             <div className="login-page-left-content">
-              <ScribeSVG />
+              <ScribeSVG color="white" />
               <h1>Is our cool app</h1>
 
               <p>destroy steven kang</p>

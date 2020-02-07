@@ -21,6 +21,5 @@ The client configuration will also build the Sass files found at `/src/client/sc
 # Development Workflow
 ```
 git checkout dev
-git branch <utorid-feature-name>
-git checkout <utorid-feature-name>
+git checkout -b <utorid-feature_name>
 ```

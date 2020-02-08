@@ -74,3 +74,28 @@ input:focus {
   border-radius: 50%;
   background-image: url("https://api.adorable.io/avatars/50/17");
 }
+
+.home-page-content {
+  width: 800px;
+  margin: auto;
+}
+
+.home-patient-profile-container {
+  background-color: #ccc;
+  border-radius: 3px;
+  margin: 10px;
+  cursor: pointer;
+  padding: 10px;
+  transition: all 0.2s ease;
+}
+
+.home-patient-profile-container:hover {
+  background-color: #aaa;
+  transition: all 0.05s ease;
+}
+
+@media only screen and (max-width: 1023px) {
+  .home-page-content {
+    width: 100%;
+  }
+}

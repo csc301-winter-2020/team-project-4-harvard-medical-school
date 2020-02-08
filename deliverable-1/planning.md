@@ -133,32 +133,37 @@ Our application will also integrate with the Isabel Health Care API, which will 
 
 1. Team Meetings
     - When and where? Recurring or ad hoc? In-person or online?
-        - Meetings are generally ad hoc and as needed, and team members will actively check the Slack channel to communicate with each other on a consistent basis
-        - Code reviews are done online, preferably in 24 hours of each pull request
+        - Team-only meetings are generally organized ad hoc and as needed, and team members will actively check the Slack channel to communicate with each other on a consistent basis to set up such meetings
+        - The location of such meetings will normally be at Bahen, which is easily accessible to everyone on the team
+        - More minor discussions can be made over voice chat
     - What's the purpose of each meeting?
-        - To share the weekly status updates among each other (students) and make sure everything is progressing correctly
+        - Future team meetings will be held to collectively discuss features or implementations that are better communicated vocally rather than through our Slack chat
+        - Our first few team meetings were to finish Deliverable 1 as a group, splitting up on the various parts of the document, then going over our answers collectively
     - What did you discuss during the meetings?
-        - How we will be using the APIs they provide us
+        - What will be discussed for future team meetings is yet to be determined
+        - For our first few team meetings, we split up the work on Deliverable 1 so we can work on it concurrently, then read over the entire Deliverable collectively as a group
     - What were the outcomes of each meeting?
-        - To make sure everyone is on the same page and that everyone has the high level view of the product to be created
+        - The outcomes for future team meetings are yet to be determined
+        - Ultimately, our first few meetings ended with finished Deliverable 1
 2. Partner Meetings
     - When and where? Recurring or ad hoc? In-person or online?
-        - At least once a week on Slack and/or in person, aiming for everyone to attend in person but people who cannot be there in person will connect remotely online
-        - Meeting days will vary per each week based on project partner availability, but each week will have one or more meetings
+        - We plan to meet with the partner least once a week in person, aiming for everyone to attend physically but those who cannot will connect remotely online
+        - Meeting days will vary per each week based on project partner availability
     - What's the purpose of each meeting?
         - To update the project partner with our progress
         - Ask questions about any unclear instructions or major decisions which involve our partner
-        - Any issues that arise can be discussed at length here, however we will try to resolve any potential roadblocks as they come up rather than wait until the meeting to discuss them
+        - Discuss any roadblocks we have encountered, however we will try to resolve them as they come up rather than wait until the meeting to discuss them
     - You must have at least 2 meetings with your project partner (if you have one). Describe them here:
-        - Please see the minutes of our meeting below. We only were able to schedule one meeting with our partner.
+        - Please see the minutes of our two meetings linked below
     - What did you discuss during the meetings?
-        - The goal of this product and what its future is
-        - Various constraints on the project (ex: that it is an MVP)
-        - What the UI was to look like and the flow of various views that the project partner wanted
-        - The functionality of all the components at a high level
+        - Specified the partner's expectations for this product
+        - Clarified the specifications of the product's features
+        - Outlined the various interfaces/views of the product
+        - Discussed what tech stack/technologies that we plan to use
     - What were the outcomes of each meeting?
-        - Discuss with the project partner about our design choices and project tech stack choice
-        - Confirmation with the project partner that they are on board with the direction it is being taken with respect to all of the above
+        - Confirmed that the partner was satisfied with our proposed technologies/communication methods
+        - Established the procedures and expectations of future meetings
+        - Determined a good starting area to begin actual development of the application
     - You must provide meeting minutes.
         - [Link to meeting minutes](https://docs.google.com/document/d/1tmxcsp7aGkf7UtewsgJIl2fs81tNbaZXUXOSjGiX2xI/edit?usp=sharing)
 
@@ -200,7 +205,7 @@ We will be meeting at least once a week with our partner, likely in Bahen. We ex
 
 We have no expectations for meeting amongst team members outside of partner meetings, as most development questions should be resolvable via Slack voice chat or Slack text chat. Should we feel that a large design decision should be made that would benefit a full team being physically present, we can schedule physical meetings as needed.
 
-We do not believe that we will require a meeting moderator, but should we require one in the future, we have appointed David Choi. We will conduct meetings by giving all team members the chance to bring up issues of importance and resolve each through group discussion and brainstorming. During this time we can begin discussion by reviewing what was done in the prior week. Afterwards we will discuss the next steps for development and how to achieve them. We will attempt to prioritize different tasks and create a roadmap for the coming week. Finally we will review what happened in the meeting to make sure everyone is on the same page. 
+We do not believe that we will require a meeting moderator, but should we require one in the future, we have appointed Lance Oribello. We will conduct meetings by giving all team members the chance to bring up issues of importance and resolve each through group discussion and brainstorming. During this time we can begin discussion by reviewing what was done in the prior week. Afterwards we will discuss the next steps for development and how to achieve them. We will attempt to prioritize different tasks and create a roadmap for the coming week. Finally we will review what happened in the meeting to make sure everyone is on the same page. 
 
 Should a team member consistently not make an effort to attend meetings or complete action items, then we will firstly confront them about their unacceptable behaviour, or ask if they need assistance with their tasks. If the issue persists, then we will have to discuss with a TA about what action needs to be taken.
 

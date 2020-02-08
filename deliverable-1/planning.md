@@ -222,14 +222,14 @@ Should a team member consistently not make an effort to attend meetings or compl
 We decided to use Express over Django based on our team’s familiarity and confidence with Express. We believe that with such a large project, we would like to spend as little time as possible setting up our project so that we would have as much time as possible developing. 
 ### Typescript > Javascript
 We decided to use Typescript instead of Javascript to increase code readability and clarity due to its superior linter and ability to catch issues during transpilation. Using Typescript should also allow users unfamiliar with code another team member wrote to get a quick understanding of how to use their code, by being able to view meaningful function headers and return types.
-### Google Handwriting API
+### Google Handwriting API > Ocrad.js
 We need to use a third party service to help us parse student handwriting. We decided to use Google’s Handwriting Api due to the brand’s reliability, the API’s intuitive design and because we have free Google Service credits. Other solutions we considered were Tesseract.js, which we found unsuitable as it expected typed text rather than handwriting. We also considered ocrad.js but discovered during the demo that it failed to recognize basic handwriting inputs.
 
 Google OCR Demo:
 
 ![](https://i.gyazo.com/d28b64acc7a567cef8678666f4c2b4ab.png)
 
-OcradJS OCR Demo:
+Ocrad.js OCR Demo:
 
 ![](https://i.gyazo.com/c68ee02b11e35e2f2cc8189cc0265eec.png)
 
@@ -239,3 +239,7 @@ We decided to use Slack instead of discord as our main pipeline of communication
 After trying both Trello and Github Projects, we decided to choose Trello as it seemed more intuitive and supported a wide variety of plugins to enhance and customize our experience. While Github Projects does have native Github integration, our team was unfamiliar with it and did not feel that there was substantial value in learning the new platform. 
 ### React > Angular
 We decided to use React due to the fact that it is quick to pick up for people who already know Javascript and many of our group members were already familiar with the framework. By choosing a framework we are comfortable with, we will be able to spend more time implementing features for the MVP.
+### react-canvas-draw
+For our clientside drawing solution, we are going with the react-canvas-draw module, as it has great compatibility with React and had many great features we would like to use in our app, such as the ability to serialize the drawings as a string, being able to load images into the canvas with this string, and the ability to export the canvas as a PNG. We experimented with the module and were thoroughly impressed.
+
+![](https://i.gyazo.com/980a8098b5c94e98fcc563357ffa7aca.png)

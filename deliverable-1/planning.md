@@ -24,7 +24,7 @@ The educator-facing side of the application will allow educators to review patie
 
 The administrator-facing side of the application is able to access the generated list of medical terms and predicted diseases, derived from parsed student notes every given time-interval.
 
-Below are the diagrams of our proposed views for each interface of the application, as determined during our first partner meeting.
+Below are the diagrams of our proposed views for each interface of the application, as determined during our first partner meeting. They are not embedded in this markdown file as they are very large.
 
 Imgur album: `https://imgur.com/a/Pxl9fiJ`
 
@@ -224,6 +224,15 @@ We decided to use Express over Django based on our team’s familiarity and conf
 We decided to use Typescript instead of Javascript to increase code readability and clarity due to its superior linter and ability to catch issues during transpilation. Using Typescript should also allow users unfamiliar with code another team member wrote to get a quick understanding of how to use their code, by being able to view meaningful function headers and return types.
 ### Google Handwriting API
 We need to use a third party service to help us parse student handwriting. We decided to use Google’s Handwriting Api due to the brand’s reliability, the API’s intuitive design and because we have free Google Service credits. Other solutions we considered were Tesseract.js, which we found unsuitable as it expected typed text rather than handwriting. We also considered ocrad.js but discovered during the demo that it failed to recognize basic handwriting inputs.
+
+Google OCR Demo:
+
+![](https://i.gyazo.com/d28b64acc7a567cef8678666f4c2b4ab.png)
+
+OcradJS OCR Demo:
+
+![](https://i.gyazo.com/c68ee02b11e35e2f2cc8189cc0265eec.png)
+
 ### Slack > Discord
 We decided to use Slack instead of discord as our main pipeline of communication due to its increased connotation of professionalism. Many of us use discord for recreational activities, so we thought Slack would be more appropriate to induce a working environment.  
 ### Trello > Github Projects

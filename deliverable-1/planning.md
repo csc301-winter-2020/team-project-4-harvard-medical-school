@@ -125,75 +125,15 @@ Ensures that the product is working as intended; tests possible user interaction
 Facilitates the organization of the group, dealing with team logistics, feature specification, timeline management, and partner communication.
 Additionally, all group members will take on full stack development roles as needed.
 
-#### Member 1
-
-**Name:** Sanggon Choi
-
-**Description:** Backend Developer; mostly database and API development
-
-**Strengths:** SQL Databases, JavaScript, Project Management
-
-**Weaknesses:** UI/UX Design, React, macOS Development
-
-#### Member 2
-
-**Name:** Robert Tan
-
-**Description:** Backend developer (APIs)
-
-**Strengths:** Object oriented programming, Java, Javascript
-
-**Weaknesses:** Front end design, React, Python
-
-#### Member 3
-
-**Name:** Qingyuan Qie
-
-**Description:** Backend Developer
-
-**Strengths:** Javascript, Linux, SQL Databases
-
-**Weaknesses:** UI Design, React, Project Management
-
-#### Member 4
-
-**Name:** Chris Koehler
-
-**Description:** Full stack developer (primarily frontend development for this), help out on any backend tasks if needed
-
-**Strengths:** C++, Java, Databases
-
-**Weaknesses:** UI, CSS, Authentication
-
-#### Member 5
-
-**Name:** Lance Oribello
-
-**Description:** Front-end Developer, UI/UX Design, Product Management
-
-**Strengths:** JavaScript, React, Product Management
-
-**Weaknesses:** Databases, Express, System Design
-
-#### Member 6
-
-**Name:** Christopher Marcok
-
-**Description:** Full Stack developer with emphasis on Front-End development. Will be responsible for making some of the portrait and landscape view components.
- 
-**Strengths:** NoSQL, Front-End Design, Express
-
-**Weaknesses:** Algorithms, System Design, Mobile Development
-
-#### Member 7
-
-**Name:** Steven Kang
-
-**Description:** Full stack developer (primarily backend)
-
-**Strengths:** Scripting, Python, SQL
-
-**Weaknesses:** Web interfaces, Numpy, Agile Development Methodologies
+| Name               | Description                                                 | Strengths                                              | Weaknesses                                      |
+|--------------------|-------------------------------------------------------------|--------------------------------------------------------|-------------------------------------------------|
+| Sanggon Choi       | Backend developer; mostly database and API development      | SQL databases, JavaScript, Project management          | UI/UX design, React, macOS development          |
+| Robert Tan         | Backend developer (APIs)                                    | Object Oriented Programming, Documentation, Javascript | Algorithms, React, DevOPs                       |
+| Qingyuan Qie       | Backend developer                                           | JavaScript, Linux, SQL databases                       | UI design, React, project management            |
+| Chris Koehler      | Full stack developer (primarily frontend)                   | C++, Java, Databases                                   | UI, CSS, Authentication                         |
+| Lance Oribello     | Frontend developer, UI/UX design                            | JavaScript, React, Product management                  | Databases, Express, System design               |
+| Christopher Marcok | Full stack developer with emphasis on front-end development | NoSQL, Frontend design, Express                        | Algorithms, System design, Mobile development   |
+| Steven Kang        | Full stack developer (primarily backend)                    | Scripting, Express, SQL                                | Web interfaces, Deployment, Agile methodologies |
 
 
 ## Q7: What operational events will you have as a team?

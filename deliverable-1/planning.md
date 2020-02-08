@@ -160,6 +160,7 @@ Our application will also integrate with the Isabel Health Care API, which will 
         - Discuss with the project partner about our design choices and project tech stack choice
         - Confirmation with the project partner that they are on board with the direction it is being taken with respect to all of the above
     - You must provide meeting minutes.
+        - [Link to meeting minutes](https://docs.google.com/document/d/1tmxcsp7aGkf7UtewsgJIl2fs81tNbaZXUXOSjGiX2xI/edit?usp=sharing)
 
 **Note:** these minutes are a condensed version of what was recorded during the meeting
 ##### 5:00 - 5:15pm: Partner went over a general overview of the project

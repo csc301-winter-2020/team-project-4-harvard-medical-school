@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "!style-loader!css-loader!react-toastify/dist/ReactToastify.css";
 import { Footer } from "../SubComponents/Footer";
 import { FormGroup } from "../SubComponents/Login/FormGroup";
+import ReactDOM from "react-dom";
 
 const createToast: any = toast;
 
@@ -97,9 +98,11 @@ export const Student: React.FC = () => {
     createToast.success("⚠️ GAMER DETECTED!!!!!! ");
   };
 
+  let inputRef;
   return (
     <Fragment>
-      <CanvasDraw canvasWidth={window.innerWidth - 50} canvasHeight={window.innerHeight - 50} lazyRadius="0" brushRadius="5"></CanvasDraw>
+      <CanvasDraw ref={canvasDraw => (inputRef = canvasDraw)} canvasWidth={window.innerWidth - 50} canvasHeight={window.innerHeight - 50} lazyRadius={0} brushRadius={1}></CanvasDraw>
+      <button onClick={a}>Hiho</button>
       {!isPortraitMode && <Footer />}
     </Fragment>
   );

@@ -84,25 +84,26 @@ Our application will require an OCR solution to recognize user handwriting. We p
 Our application will also integrate with the Isabel Health Care API, which will give clients information about potential diagnoses, disease predictions, and suggestions to further patient interviews.
 
 ## 5. What are the user stories that make up the MVP?
-1. As a medical educator, Lee would like to be able enter the final diagnoses for a patient on student diagnoses so that he has a way of marking and providing feedback on student notes.
-2. As a medical student, Tony would like to extend the canvas of each page of the patient diagnoses template in case he runs out space for notes in a certain field.
+1. As an educator, Lee would like to enter the final diagnoses for the patient on student diagnoses as a way of marking and providing feedback on student notes.
+2. As a student, Tony would like to extend canvas on each page of the patient diagnoses template so that he does not run out of space for notes in a certain field.
 3. As a student, Stephen would like to return to the main menu on any page in the patient template in order to save time.
-4. As a medical student, Damian would like to organize his patient interview notes into individual patient profiles so that he can clearly outline the characteristics of each patient in an easily accessible way. 
-5. As a medical student, Kyle would like to customize the default patient profile layout so that it can fit his personal organizational standards. 
-6. As a medical student, Anna would like to use different color schemes to better visualise her notes. 
-7. As a medical student, Jamali would like to have intelligent forms to learn how different chemicals interact with each other.
-8. As a medical student, James would like to save his notes on his device and on the cloud so that he can access them anywhere.
+4. As a medical student, Damian would like to organize his patient interview notes into patient profiles that clearly outline the characteristics of each patient in an easily accessible way so that he could efficiently access the required patient information.
+5. As a medical student, Kyle would like to be able to choose between different templates for patient profiles layout to fit his personal organizational standards.
+6. As a medical student, Anna would like to use different color schemes for the stylus in order to better visualise her notes.
+7. As a medical student, Jamali would like to have intelligent forms so that she can focus on her patient without having to worry about contradictory inputs.
+8. As a medical student, James would like to save his notes on his device and on the cloud so that he can have convenient access to them whenever he needs them.
 9. As a medical student, Peter would like to have the notes he writes with a stylus be automatically parsed into English so that he could organize his notes into text documents.
 10. As a researcher, Alexander would need to create class information in order to manage different offerings of classes.
 11. As a researcher, Alexander would need to add students to classes in order to track students who enroll in different classes.
-12. As a student, Kenneth would like to swipe left and right to view different pages in order to more easily switch between notes.
+12. As a student, Kenneth would like to swipe left and right to view different pages to more easily switch between notes.
 13. As a researcher, Timothy would like to log the note diffs (student note taking progress) at short regular intervals in order to track student progress over time, a valuable research metric.
 14. As a student, Tahani would like to parse templates which show different fields for different studies in order to more easily organize different types of patient diagnoses.
 15. As a researcher, Lilith would like to parse student notes and match it with the Isabel API in order to better identify trends in student note-taking abilities and provide a metric for their growth.
 16. As an educator, Yiping would like to annotate and comment on student notes in order to provide more extensive feedback on the students’ work directly.
 17. As a student, Charlie would like to be able to get hints and tips on the fly from the Harvard medical database in order to aid his diagnoses based on symptoms
-18. As an educator, Eddie wants to be able to lock the helps and tips feature for certain students so that newer students can practice their diagnoses decision skills without assistance.
-19. As an educator, Fred wants to be able to email the student conveniently through the application so that he can easily contact them about their work if he has any pressing questions or important feedback.
+18. As an educator, Robere wants to be able to restrict access to the helps and tips feature from certain students so that newer students can practice their diagnosis without any external assistance.
+19. As an educator, Henry wants to have convenient access to students’ emails so that he could easily give feedback to his students.
+
  
 # Process Details
 ## Q6: What are the roles & responsibilities on the team?

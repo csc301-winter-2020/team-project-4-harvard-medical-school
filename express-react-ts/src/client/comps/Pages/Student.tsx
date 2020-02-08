@@ -98,11 +98,21 @@ export const Student: React.FC = () => {
     createToast.success("⚠️ GAMER DETECTED!!!!!! ");
   };
 
-  let inputRef;
+  let inputRef:any;
+  function clearCanvas() {
+    inputRef.clear();
+  }
+
+  function saveCanvas() {
+    let image:any = inputRef.canvas.drawing.toDataURL("image/png").replace("image/png", "image/octet-stream");
+    window.location.href = image;
+  }
+
   return (
     <Fragment>
       <CanvasDraw ref={canvasDraw => (inputRef = canvasDraw)} canvasWidth={window.innerWidth - 50} canvasHeight={window.innerHeight - 50} lazyRadius={0} brushRadius={1}></CanvasDraw>
-      <button onClick={a}>Hiho</button>
+      <button onClick={clearCanvas}>Clear</button>
+      <button onClick={saveCanvas}>Save</button>
       {!isPortraitMode && <Footer />}
     </Fragment>
   );

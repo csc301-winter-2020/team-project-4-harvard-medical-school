@@ -1,3 +1,5 @@
+.idea/
+*.js
 node_modules/
 dist/
 public/js/app.js

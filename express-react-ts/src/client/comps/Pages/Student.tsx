@@ -87,8 +87,10 @@ export const Student: React.FC = () => {
     const handleResize = () =>
       dispatch({ type: "resize", value: String(window.innerWidth) });
     window.addEventListener("resize", handleResize);
+    window.addEventListener("keydown", handleUndo);
     return () => {
       window.removeEventListener("resize", handleResize);
+      window.removeEventListener("keydown", handleUndo);
     };
   });
 
@@ -99,13 +101,23 @@ export const Student: React.FC = () => {
   };
 
   let inputRef:any;
-  function clearCanvas() {
-    inputRef.clear();
-  }
-
   function saveCanvas() {
     let image:any = inputRef.canvas.drawing.toDataURL("image/png").replace("image/png", "image/octet-stream");
     window.location.href = image;
+  }
+
+  function clearCanvas() {
+      inputRef.clear();
+  }
+
+  function undoCanvas() {
+      inputRef.undo();
+  }
+
+  function handleUndo(event) {
+    if (event.ctrlKey && event.keyCode === 90) {
+        inputRef.undo();
+    }
   }
 
   return (
@@ -113,6 +125,7 @@ export const Student: React.FC = () => {
       <CanvasDraw ref={canvasDraw => (inputRef = canvasDraw)} canvasWidth={window.innerWidth - 50} canvasHeight={window.innerHeight - 50} lazyRadius={0} brushRadius={1}></CanvasDraw>
       <button onClick={clearCanvas}>Clear</button>
       <button onClick={saveCanvas}>Save</button>
+      <button onClick={undoCanvas}>Undo</button>
       {!isPortraitMode && <Footer />}
     </Fragment>
   );

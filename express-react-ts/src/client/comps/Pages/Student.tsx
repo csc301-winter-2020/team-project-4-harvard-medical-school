@@ -55,7 +55,8 @@ export const Student: React.FC = () => {
     inputRef.undo();
   }
 
-  function handleUndo(event) {
+  function handleUndo(event: KeyboardEvent) {
+    // Listens to ctrl+z
     if (event.ctrlKey && event.keyCode === 90) {
       inputRef.undo();
     }

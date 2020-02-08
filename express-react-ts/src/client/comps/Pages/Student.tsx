@@ -64,7 +64,7 @@ export const Student: React.FC = () => {
 
   return (
     <Fragment>
-      <CanvasDraw ref={canvasDraw => (inputRef = canvasDraw)} canvasWidth={window.innerWidth - 50} canvasHeight={window.innerHeight - 50} lazyRadius={0} brushRadius={1}></CanvasDraw>
+      <CanvasDraw ref={(canvasDraw: any) => (inputRef = canvasDraw)} canvasWidth={window.innerWidth - 50} canvasHeight={window.innerHeight - 50} lazyRadius={0} brushRadius={1}/>
       <button onClick={clearCanvas}>Clear</button>
       <button onClick={saveCanvas}>Save</button>
       <button onClick={undoCanvas}>Undo</button>

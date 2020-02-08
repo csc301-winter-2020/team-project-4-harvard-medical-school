@@ -4,6 +4,8 @@
 
 $our-font: "Comic-Sans MS", sans-serif;
 $sans-serif-font: "Libre Franklin", sans-serif;
+$color-primary-very-light: #e2566a;
+$color-primary-light: #c22138;
 $color-primary: #a51c30;
 $color-primary-dim: #791523;
 $imported-font: "Poppins", sans-serif;
@@ -14,7 +16,6 @@ $serif-font: "Roboto Slab", serif;
   margin: 0;
   font-family: $imported-font;
 }
-
 
 .my-class {
   font-size: 100px;

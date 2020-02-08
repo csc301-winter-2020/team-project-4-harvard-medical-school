@@ -7,11 +7,12 @@ import { App } from "./App";
 import {
   faCheckSquare,
   faCoffee,
-  faSignInAlt
+  faSignInAlt,
+  faSearch
 } from "@fortawesome/free-solid-svg-icons";
 
 const myLibrary: any = library;
-myLibrary.add(fab, faCheckSquare, faCoffee, faSignInAlt);
+myLibrary.add(fab, faCheckSquare, faCoffee, faSignInAlt, faSearch);
 
 /**
  * This is the component that appears in the index.html file.

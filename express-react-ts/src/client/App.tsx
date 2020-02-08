@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { LoginPage } from "./comps/Pages/LoginPage";
 import { Error } from "./comps/Pages/Errors/Error";
+import { HomePage } from "./comps/Pages/HomePage";
 
 /**
  * This is a browser router that
@@ -14,6 +15,7 @@ export const App: React.FC = ({}) => {
     <BrowserRouter>
       <Switch>
         <Route exact path="/" component={LoginPage} />
+        <Route exact path="/home" component={HomePage} />
         <Route render={() => <Error errNo={404} />} />
       </Switch>
     </BrowserRouter>

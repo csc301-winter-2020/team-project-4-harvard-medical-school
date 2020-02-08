@@ -4,9 +4,13 @@
 
 ## 1. What are you planning to build?
 
-Our product will be a web application that allows medical students to draft their notes as they interview patients in clinical settings; these notes will be actively processed and searched against a list of medical symptoms and key terms every given time interval.
+Our product will be a web application that allows medical students to draft their notes as they interview and diagnose patients in clinical settings; these notes will be actively processed and searched against a list of medical symptoms and key terms every given time interval.
 
-With this information, we can gain a better understanding of how medical students learn and how their understanding of clinical concepts evolves throughout their medical education.
+As of now, not much research has been done on how students approach diagnosis decision making, and there isn't any concrete empirical data that helps indicate how students come to a final patient diagnosis.
+
+With the information that our app provides, we can curate and collect statistics about how medical students approach clinical problems in the context of the broader medical curriculum, as well as gain a better understanding of how a their understanding of clinical concepts evolves throughout their medical education.
+
+Additionally, the current method of how medical students organize and submit their notes for academic purposes is unstandardized and needlessly inconvenient; our product aims to speed this process up to make note-taking and submission easier.
 
 The web application has three main interfaces for each kind of our target users: medical students, medical school administrators, and medical educators.
 

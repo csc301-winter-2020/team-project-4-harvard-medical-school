@@ -122,12 +122,12 @@ Our application will also integrate with the Isabel Health Care API, which will 
 | Name               | Description                                                 | Strengths                                              | Weaknesses                                      |
 |--------------------|-------------------------------------------------------------|--------------------------------------------------------|-------------------------------------------------|
 | Sanggon Choi       | Backend developer; mostly database and API development      | SQL databases, JavaScript, Project management          | UI/UX design, React, macOS development          |
-| Robert Tan         | Backend developer (APIs)                                    | Object Oriented Programming, Documentation, Javascript | Algorithms, React, DevOPs                       |
+| Robert Tan         | Backend developer (APIs)                                    | Object Oriented Programming, Documentation, Javascript | Algorithms, React, DevOps                       |
 | Qingyuan Qie       | Backend developer                                           | JavaScript, Linux, SQL databases                       | UI design, React, project management            |
-| Chris Koehler      | Full stack developer (primarily frontend)                   | C++, Java, Databases                                   | UI, CSS, Authentication                         |
+| Chris Koehler      | Full stack developer (primarily frontend)                   | Node.js, Express, MySQL                                   | UI design, CSS, Session & Authentication                         |
 | Lance Oribello     | Frontend developer, UI/UX design                            | JavaScript, React, Product management                  | Databases, Express, System design               |
-| Christopher Marcok | Full stack developer with emphasis on front-end development | NoSQL, Frontend design, Express                        | Algorithms, System design, Mobile development   |
-| Steven Kang        | Full stack developer (primarily backend)                    | Scripting, Express, SQL                                | Web interfaces, Deployment, Agile methodologies |
+| Chris Marcok | Full stack developer with emphasis on front-end development | NoSQL, React, DevOps                        | Responsive Layouts, TypeScript, Express   |
+| Steven Kang        | Full stack developer (primarily backend)                    | Scripting, Express, SQL                                | Web sockets, Deployment, Agile methodologies |
 
 
 ## Q7: What operational events will you have as a team?

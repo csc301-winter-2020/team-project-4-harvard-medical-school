@@ -188,9 +188,8 @@ Describe meetings (and other events) you are planning to have.
 
 ## Q8: What artifacts will you use to self-organize?
 1. Trello
-2. Slack
 
-We are using Trello to maintain a checklist of tasks, which is updated continuously as we progress through the project. This is further enhanced by the plug-in we are using which integrates Trello into Slack, which allows us to readily receive notifications whenever any change is made on the Trello board.
+We are using Trello to maintain a checklist of tasks, which is updated continuously as we progress through the project.  Trello is further enhanced by the plug-in we are using that integrates Trello into Slack, which allows us to readily receive notifications whenever any change is made on the Trello board.
 
 Tasks get assigned to team members depending on the roles that we have already assigned to each person: we will first figure out what skills are needed to complete the task, and hand it off to a teammate with the appropriate skills. However, if one person is getting too much work, then we distribute the work among the others depending on the nature of the work (basically the next suitable person).
 
@@ -201,15 +200,20 @@ We determine the status of work of completion by having 3 other members on the t
 3. Once another member has checked the work, they will mark down that the work is confirmed by them.
 4. When 3 people have confirmed the task, then it is moved into the ‘completed’ section.
 
+Below is a link to a screenshot of our current Trello board.
+[Trello Screenshot](pics/trello.png)
+
 We picked Trello because:
 
-1. Many of our members were familiar with it, and we thought it was easy to learn how to use it, for those who did not have previous experiences with it
-2. We don’t have to meet in person (it’s inconvenient to have to gather for meetings every time we have some progress on the project
-3. It integrates well with Slack, which is our primary form of communication.
+1. Many of our members are already familiar with Trello, and we also thought those inexperienced with it would have no trouble in learning it.
+2. We don’t have to meet in person to discuss minute changes (it’s inconvenient to have to gather for meetings every time we have some progress on the project
+3. Trello integrates well with Slack, which is our primary form of communication. This integration allows us to be informed on development updates in real time, as we are notified on any device that has Slack installed.
+4.Trello allows for greater flexibility in planning out features, which is helpful as many members of our team have rigid schedules that make it hard to strictly set out when a feature should be implmented.
+5. Trello allows us to easily see a general overview of the progress of development, as well as see which member of the team is working on a given feature without having to directly ask each other about what work we are doing.
 
 ## Q9: What are the rules regarding how your team works?
 ### Communications:
-We will be communicating over the internet via Slack. We believe that Slack’s abilities to pin items, create private chats, facilitate calls and its integration with other apps (Trello) will be able to fulfill our communication needs. Should we need to break off into teams, it will be useful to utilize Slack’s multiple text channels to organize communications between individual teams.
+We will be communicating over the internet via Slack. We believe that Slack’s abilities to pin items, create private chats, facilitate calls and its integration with other apps (Trello) will be able to fulfill our communication needs. Should we need to break off into teams, it will be useful to utilize Slack’s multiple text channels to organize communications between individual teams. We will also use Slack’s multiple text channels to break off into a backend and frontend division to better organize our communication for specific features.
 
 We will expect to communicate on a day-by-day basis to organize the team’s needs and objectives. Team members should check Slack on a daily basis to keep up to date about issues and current events. We do not expect to be using phone calls or SMS messaging to communicate amongst each other.
 
@@ -240,10 +244,8 @@ We decided to use Typescript instead of Javascript to increase code readability 
 ### Google Handwriting Api
 We need to use a third party service to help us parse student handwriting. We decided to use Google’s Handwriting Api due to the brand’s reliability, the API’s intuitive design and because we have free Google Service credits. Other solutions we considered were Tesseract.js, which we found unsuitable as it expected typed text rather than handwriting. We also considered ocrad.js but discovered during the demo that it failed to recognize basic handwriting inputs.
 ### Slack > Discord
-We decided to use Slack instead of discord as our main pipeline of communication due to its increased connotation of professionalism. Many of us use discord for recreational activities, so we thought Slack would be more appropriate to induce a working environment. 
-### Kanban > Scrum
-We chose Kanban over Scrum because of inexperience with planning how long it might take to complete a feature. Kanban should give us more freedom when it comes to completing features which could all take a variable amount of time. 
+We decided to use Slack instead of discord as our main pipeline of communication due to its increased connotation of professionalism. Many of us use discord for recreational activities, so we thought Slack would be more appropriate to induce a working environment.  
 ### Trello > Github Projects
-After trying both Trello and Github Projects, we decided to choose Trello as it seemed more intuitive and supported a wide variety of plugins to enhance and customize our experience. While Github Projects does have native Github integration, our team was unfamiliar with it and did not feel that there was substantial value in learning the new platform.
+After trying both Trello and Github Projects, we decided to choose Trello as it seemed more intuitive and supported a wide variety of plugins to enhance and customize our experience. While Github Projects does have native Github integration, our team was unfamiliar with it and did not feel that there was substantial value in learning the new platform. 
 ### React > Angular
 We decided to use React due to the fact that it is quick to pick up for people who already know Javascript and many of our group members were already familiar with the framework. By choosing a framework we are comfortable with, we will be able to spend more time implementing features for the MVP.

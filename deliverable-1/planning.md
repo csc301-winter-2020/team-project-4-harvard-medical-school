@@ -131,29 +131,35 @@ Our application will also integrate with the Isabel Health Care API, which will 
 
 ## Q7: What operational events will you have as a team?
 
-Describe meetings (and other events) you are planning to have.
-* When and where? Recurring or ad hoc? In-person or online?
-    - At least once a week on Slack and/or in person, aiming for everyone to attend in person but people who cannot be there in person will connect remotely online
-    - Meeting days will vary per each week based on project partner availability, but each week will have one or more meetings
-    - Any other events are ad hoc and as needed, and students actively check the Slack channel to communicate with each other on a consistent basis
-    - Code reviews are done online, preferably in 24 hours of each pull request
-* What's the purpose of each meeting?
-    - To share the weekly status updates among each other (students) and make sure everything is progressing correctly
-    - Any issues that arise can be discussed at length here, however we will try to resolve any potential roadblocks as they come up rather than wait until the meeting to discuss them
-    - To update the project partner with our progress
-* You must have at least 2 meetings with your project partner (if you have one). Describe them here:
-    - Please see the minutes of our meeting below. We only were able to schedule one meeting with our partner.
-* What did you discuss during the meetings?
-    - The goal of this product and what its future is
-    - Various constraints on the project (ex: that it is an MVP)
-    - What the UI was to look like and the flow of various views that the project partner wanted
-    - The functionality of all the components at a high level
-    - How we will be using the APIs they provide us
-* What were the outcomes of each meeting?
-    - To make sure everyone is on the same page and that everyone has the high level view of the product to be created
-    - Discuss with the project partner about our design choices and project tech stack choice
-    - Confirmation with the project partner that they are on board with the direction it is being taken with respect to all of the above
-* You must provide meeting minutes.
+1. Team Meetings
+    - When and where? Recurring or ad hoc? In-person or online?
+        - Meetings are generally ad hoc and as needed, and team members will actively check the Slack channel to communicate with each other on a consistent basis
+        - Code reviews are done online, preferably in 24 hours of each pull request
+    - What's the purpose of each meeting?
+        - To share the weekly status updates among each other (students) and make sure everything is progressing correctly
+    - What did you discuss during the meetings?
+        - How we will be using the APIs they provide us
+    - What were the outcomes of each meeting?
+        - To make sure everyone is on the same page and that everyone has the high level view of the product to be created
+2. Partner Meetings
+    - When and where? Recurring or ad hoc? In-person or online?
+        - At least once a week on Slack and/or in person, aiming for everyone to attend in person but people who cannot be there in person will connect remotely online
+        - Meeting days will vary per each week based on project partner availability, but each week will have one or more meetings
+    - What's the purpose of each meeting?
+        - To update the project partner with our progress
+        - Ask questions about any unclear instructions or major decisions which involve our partner
+        - Any issues that arise can be discussed at length here, however we will try to resolve any potential roadblocks as they come up rather than wait until the meeting to discuss them
+    - You must have at least 2 meetings with your project partner (if you have one). Describe them here:
+        - Please see the minutes of our meeting below. We only were able to schedule one meeting with our partner.
+    - What did you discuss during the meetings?
+        - The goal of this product and what its future is
+        - Various constraints on the project (ex: that it is an MVP)
+        - What the UI was to look like and the flow of various views that the project partner wanted
+        - The functionality of all the components at a high level
+    - What were the outcomes of each meeting?
+        - Discuss with the project partner about our design choices and project tech stack choice
+        - Confirmation with the project partner that they are on board with the direction it is being taken with respect to all of the above
+    - You must provide meeting minutes.
 
 **Note:** these minutes are a condensed version of what was recorded during the meeting
 ##### 5:00 - 5:15pm: Partner went over a general overview of the project

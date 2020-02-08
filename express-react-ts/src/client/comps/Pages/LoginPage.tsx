@@ -93,9 +93,8 @@ export const LoginPage: React.FC = () => {
   });
 
   const onSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
-    e.preventDefault(); // Disabling this will cause the POST request to fire. Also allows the form to say "Please fill this field" if the user didn't.
     dispatch({ type: "login" });
-    createToast.success("⚠️ GAMER DETECTED!!!!!! ");
+    // createToast.success("⚠️ GAMER DETECTED!!!!!! ");
   };
 
   return (
@@ -119,7 +118,7 @@ export const LoginPage: React.FC = () => {
                 <h1 className="login-form-header">
                   {!isRegisterMode ? "Login" : "Register"}
                 </h1>
-                <form className="login-form">
+                <form className="login-form" action="/login" method="post">
                   <FormGroup
                     dispatch={dispatch}
                     id="login-username"

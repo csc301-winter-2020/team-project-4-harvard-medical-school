@@ -53,6 +53,7 @@
     "@types/express-session": "^1.15.16",
     "@types/jest": "^25.1.2",
     "@types/passport": "^1.0.2",
+    "@types/passport-local": "^1.0.33",
     "@types/react-fontawesome": "^1.6.4",
     "chalk": "^3.0.0",
     "jest": "^25.1.0",

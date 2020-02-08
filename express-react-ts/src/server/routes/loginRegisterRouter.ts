@@ -1,4 +1,6 @@
 import * as express from 'express';
+import * as passport from 'passport';
+import * as path from 'path';
 
 type Router = express.Router;
 type Request = express.Request;
@@ -7,13 +9,17 @@ type NextFunction = express.NextFunction;
 
 const router:Router = express.Router();
 
+//Auth
+const { checkAuthenticated, checkGuest } = require('../auth/authCheck');
+
 /**
- * TODO: Log in the user.
+ * Route to accept login POST requests.
+ * TODO: Redirect to home on success, send a HTTP error code on failure, instead of redirect again to root.
  */
-router.post('/login', (req:Request, res:Response, next:NextFunction) => {
-  //Use passport.authenticate.
-  res.sendStatus(200);
-});
+router.post('/login', passport.authenticate('local', {
+  successRedirect: '/home',
+  failureRedirect: '/',
+}));
 
 /**
  * TODO: Register a user
@@ -23,10 +29,12 @@ router.post('/register', (req:Request, res:Response, next:NextFunction) => {
 });
 
 /**
- * TODO: Logout the user. Make sure the user is logged in first.
+ * Logs out a user.
  */
-router.get('/logout', (req:Request, res:Response, next:NextFunction) => {
-  res.sendStatus(200);
+router.get('/logout', checkAuthenticated, (req:Request, res:Response, next:NextFunction) => {
+  console.log(`A user has been logged out.`);
+  req.logout();
+  res.redirect("/");
 });
 
 /**

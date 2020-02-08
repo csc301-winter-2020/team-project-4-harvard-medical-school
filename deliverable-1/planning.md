@@ -162,37 +162,6 @@ Our application will also integrate with the Isabel Health Care API, which will 
     - You must provide meeting minutes.
         - [Link to meeting minutes](https://docs.google.com/document/d/1tmxcsp7aGkf7UtewsgJIl2fs81tNbaZXUXOSjGiX2xI/edit?usp=sharing)
 
-**Note:** these minutes are a condensed version of what was recorded during the meeting
-##### 5:00 - 5:15pm: Partner went over a general overview of the project
-* Specified that it is a proof of concept
-* A “glorified web form”
-* Wants a measure of how effective medical students are
-* Wants a history of revisions and changes
-* Stores the ‘delta’ for every patient’s notes over time
-* What symptoms they narrow down to first
-* A web application gives more empirical data on how students learn
-##### 5:15 - 5:25pm: Partner went into technical requirements
-* Overview of the Isabel API
-* A “glorified webmd” used by legitimate doctors
-* Takes in symptoms and keywords, outputs disease differentials
-* We will receive specific instructions on how to use Isabel
-* Important to find a good handwriting processing library
-##### 5:30 - 5:55pm: Partner went into feature specifications
-* In going through the specifications, we illustrated diagrams to help visualize the views the partner requested
-* We only need to hardcode the userbase
-* Instructor’s should be able to search through the student database
-* Look at a student’s profile, emphasized a ‘read-only’ look at their notes
-* Instructor can enter a final diagnosis for the patient - note, we do not have to connect this diagnosis with any other infrastructure (ex. school grading portal)
-* Students can add new patients/templates, as well as export their notes locally
-* Partner presented the various different pages students have access to and the different forms of each page
-* Expanded on having a ‘Helps and Tips’ allowing students to query Isabel
-* Partner outline 3 major undertakings: providing the “glorified form” aspect of the application, having good handwriting processing, and using Isabel properly
-##### 5:55 - 6:00pm
-* Minor clarifications
-* Established slack communication
-* Confirmed next meeting to be next week Friday (after the deliverable deadline unfortunately)
-* Established a weekly meeting time of Fridays at 6:00pm
-
 ## Q8: What artifacts will you use to self-organize?
 1. Trello
 
@@ -238,16 +207,16 @@ Should a team member consistently not make an effort to attend meetings or compl
 ### Conflict Resolution:
 | Conflict                                                                                                                                                                                                                                            | Resolution                                                                                                                                                                                                                                       |
 |-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Disagreement on implementation of features                                                                                                                                                                                                          | We will try to reach unanimous decisions when possible, otherwise we will default to a majority vote on decisions. If there is still not a clear decision, we will ask our partner to have the final call.                                       |
-| A team member is not responding to communications                                                                                                                                                                                                   | If a team member stops attending lectures and does not respond to communications via Slack then we will discuss further actions with a TA. Otherwise we should just remind the unresponsive team member during lecture/tutorial about the issue. |
-| A team member attempts to take control of the group and make decisions for everyone. This could include re-implementing/designing other people's work without notice, etc. Sometimes this situation can occur without the team member realizing it. | We will remind the team members to stick tot he work they are responsible for and to bring up other concerns to the group for discussion.                                                                                                        |
+| Disagreement on implementation of features                                                                                                                                                                                                          | We will try to reach unanimous decisions when possible, otherwise we will default to a majority vote. On especially important features, we would have the the pros and cons of each argument be presented before of the team before calling the majority vote. If there is a split decision, we will ask our partner to break the tie.                                       |
+| A team member is not responding to communications                                                                                                                                                                                                   | If a team member stops attending lectures and does not respond to communications via Slack then we will discuss further action with a TA. Otherwise we should just remind the unresponsive team member during lecture/tutorial about the issue. |
+| A team member acts too abrasively or unprofessionally in group environments. This could include name-calling, talking over others, refusing to consider the perspective others, or immediately shutting down suggestions. | We will approach the team member as a group and directly point out his unruly behaviour. We will remind him that we take this work seriously, and expect him to be collaborative and professional in his conduct. If his behaviour continues, we will resort to contacting the TA.                                                                                                        |
 
 # Highlights
 ### Express > Django
 We decided to use Express over Django based on our team’s familiarity and confidence with Express. We believe that with such a large project, we would like to spend as little time as possible setting up our project so that we would have as much time as possible developing. 
 ### Typescript > Javascript
 We decided to use Typescript instead of Javascript to increase code readability and clarity due to its superior linter and ability to catch issues during transpilation. Using Typescript should also allow users unfamiliar with code another team member wrote to get a quick understanding of how to use their code, by being able to view meaningful function headers and return types.
-### Google Handwriting Api
+### Google Handwriting API
 We need to use a third party service to help us parse student handwriting. We decided to use Google’s Handwriting Api due to the brand’s reliability, the API’s intuitive design and because we have free Google Service credits. Other solutions we considered were Tesseract.js, which we found unsuitable as it expected typed text rather than handwriting. We also considered ocrad.js but discovered during the demo that it failed to recognize basic handwriting inputs.
 ### Slack > Discord
 We decided to use Slack instead of discord as our main pipeline of communication due to its increased connotation of professionalism. Many of us use discord for recreational activities, so we thought Slack would be more appropriate to induce a working environment.  

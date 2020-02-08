@@ -36,14 +36,6 @@ Or view on github:
 
 [Student View](pics/student_app_design.jpg)
 
-i need to get a better sense of their frustrations or friction points. There's a natural flow of negative and positive in Q1 and Q2:
-
-negatives : overall problems followed by user pain points
-
-positves: overall solution followed by user goals and motivations
-
-Then Q3 ties it together as needed
-
 ## 2. Who are your target users?
 * Harvard medical students (all years)
     - **Name**: Nick Sanders
@@ -92,9 +84,10 @@ Our application will require an OCR solution to recognize user handwriting. We p
 Our application will also integrate with the Isabel Health Care API, which will give clients information about potential diagnoses, disease predictions, and suggestions to further patient interviews.
 
 ## 5. What are the user stories that make up the MVP?
-2. As a medical science educator, Dave would like a Chrome compatible web application to view and manage student patient diagnoses  in order to streamline the teaching process.
-3. As a medical researcher, Samson would like a way to collect student diagnoses notes to be used for research purposes in order to advance pedagogy in the medical sciences.
-4. As a medical student, Damian would like to organize his patient interview notes into patient profiles that clearly outline the characteristics of each patient in an easily accessible way. 
+1. As a medical educator, Lee would like to be able enter the final diagnoses for a patient on student diagnoses as a way of marking and providing feedback on student notes.
+2. As a medical student, Tony would like to extend the canvas of each page of the patient diagnoses template in case he runs out space for notes in a certain field.
+3. As a student, Stephen would like to return to the main menu on any page in the patient template in order to save time.
+4. As a medical student, Damian would like to organize his patient interview notes into individual patient profiles that clearly outline the characteristics of each patient in an easily accessible way. 
 5. As a medical student, Kyle would like to customize the default patient profile layout to fit his personal organizational standards. 
 6. As a medical student, Anna would like to use different color schemes to better visualise her notes. 
 7. As a medical student, Jamali would like to have intelligent forms to learn how different chemicals interact with each other.
@@ -108,11 +101,8 @@ Our application will also integrate with the Isabel Health Care API, which will 
 15. As a researcher, Lilith would like to parse student notes and match it with the Isabel API in order to better identify trends in student note-taking abilities and provide a metric for their growth.
 16. As an educator, Yiping would like to annotate and comment on student notes in order to provide more extensive feedback on the students’ work directly.
 17. As a student, Charlie would like to be able to get hints and tips on the fly from the Harvard medical database in order to aid his diagnoses based on symptoms
-18. As an educator, I want to be able to lock helps and tips to certain students so newer students can practice their diagnosis, but allow aid upper year students who already have the abilities by allowing them to get help.
-19. As an educator, I want to email the student if I need to contact them about their work if I have any questions or need to get in touch with them.
-20. As an educator, Lee would like to enter the final diagnoses for the patient on student diagnoses as a way of marking and providing feedback on student notes.
-21. As a student, Tony would like to extend canvas on each page of the patient diagnoses template in case he runs out space for notes in a certain field.
-22. As a student, Stephen would like to return to the main menu on any page in the patient template in order to save time.
+18. As an educator, Eddie wants to be able to lock the helps and tips feature for certain students so that newer students can practice their diagnoses decision skills without assistance.
+19. As an educator, Fred wants to be able to email the student conveniently through the application so that he can easily contact them about their work if he has any pressing questions or important feedback.
  
 # Process Details
 ## Q6: What are the roles & responsibilities on the team?

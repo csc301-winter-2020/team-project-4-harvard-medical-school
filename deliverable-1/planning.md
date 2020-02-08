@@ -20,17 +20,9 @@ Within each patient profile are various pages corresponding to the patient’s b
 
 Each page of a patient profile is essentially a blank canvas, where students can write their notes via stylus or type information as they interview a patient. Depending on the pages, there may be specific fields that the student must fill out for that page - ex. on the demographics page, the student must specify the patient’s age, gender, and country of residence.
 
-As mentioned, we intend to generate a list of medical terms and a list of predicted diseases from the parsed student notes every given time interval (perhaps every 60 seconds or so), which will then be searched against a list of medical symptoms and key terms (using Isabel, a partner-provided medical API). 
-
-This generated list is accessible only from the administrator-facing side of the application. For example, the administrator is able to view:
-* Student A for Patient X at 1 minute:
-   - List of Terms:
-   - List of diseases with attributes:
-* Student A for Patient X at 2 minutes:
-   - List of Terms:
-   - List of diseases with attributes:
-
 The educator-facing side of the application will allow educators to review patient profiles created by their specific students. Educators will be able to enter a correct diagnosis for a given patient profile (hidden from the student, but can be revealed later). 
+
+The administrator-facing side of the application is able to access the generated list of medical terms and predicted diseases, derived from parsed student notes every given time-interval.
 
 Enclosed within the repository are diagrams of our proposed view for each interface of the application, as determined during our first partner meeting.
 
@@ -38,9 +30,7 @@ Enclosed within the repository are diagrams of our proposed view for each interf
 * Harvard medical students (all years)
     - **Name**: Nick Sanders
     - **Age**: 21
-    - **Background**: Current 1st year Harvard Medical School student
-    - **Family status**: Single
-    - **Background**: A hardworking and curious Harvard Medical School student eager to apply his course knowledge to the field via patient diagnoses.
+    - **Background**: A hardworking and curious 2nd year Harvard Medical School student eager to apply his course knowledge to the field via patient diagnoses.
     - **User Environment**: Uses an iPad Pro to take notes and record patient diagnoses.
     - **End Goal**: To be able to take patient diagnoses notes in a more convenient, readable, and elegant way.
 * Medical Educators
@@ -69,18 +59,17 @@ Administrators using the application are also able to view the list of medical t
 By understanding how students approach diagnosis decision making, we can learn to prevent medical errors, as well as better guide students in their medical education. 
 
 ## 4. How will you build it?
-Our plan is to deploy an Express + React Node.js application. We have decided to use TypeScript to maintain our Express and React files to maintain code quality and make it easier for team members to pick up the technology that they are unfamiliar with (via VSCode’s intellisense and autocomplete). 
+Our plan is to deploy an Express + React Node.js application on Heroku. We have decided to use TypeScript to maintain our Express and React files to maintain code quality and make it easier for team members to pick up any technology that they are unfamiliar with (via VSCode’s intellisense and autocomplete). 
 
-The majority of our team is already well acquainted with Express, React, Node.js, and TypeScript, having used it to develop web applications in previous courses (mainly CSC309).
+The majority of our team is already well acquainted with Express, React, Node.js, TypeScript, and Heroku, having used such technologies to develop web applications in previous courses (mainly CSC309).
 
-For our database solution we have decided to use MySQL via Google’s Cloud services, as our designated database architect has extensive experience with this technology.
+We have decided to host our application's database on AWS, as our designated database architect has extensive experience with this technology. Our partner has notified us that he is willing to pay the costs of maintaining our AWS database while the product is under development. 
 
 Our application will require an OCR solution to recognize user handwriting. We plan to use Google’s Cloud Vision API, as we have personally tested it as a team and deemed it accurate enough in handling our inputs. Amazon S3 Object Storage will be used for image storage.
 
 Our application will also integrate with the Isabel Health Care API, which will give clients information about potential diagnoses, disease predictions, and suggestions to further patient interviews.
 
 ## 5. What are the user stories that make up the MVP?
-1. As a medical student, Nick would like a seamless note taking experience to organize his notes in an easily accessible format so that he can save time and paper.
 2. As a medical science educator, Dave would like a Chrome compatible web application to view and manage student patient diagnoses  in order to streamline the teaching process.
 3. As a medical researcher, Samson would like a way to collect student diagnoses notes to be used for research purposes in order to advance pedagogy in the medical sciences.
 4. As a medical student, Damian would like to organize his patient interview notes into patient profiles that clearly outline the characteristics of each patient in an easily accessible way. 

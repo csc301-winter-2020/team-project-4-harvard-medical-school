@@ -9,6 +9,8 @@ import * as chalk from "chalk";
 import apiRouter from "./routes/apiRouter";
 import loginRegisterRouter from "./routes/loginRegisterRouter";
 import {Pool, Client} from "pg";
+import vision from "@google-cloud/vision";
+import Any = jasmine.Any;
 dotenv.config();
 
 // Alias our types
@@ -22,6 +24,16 @@ pool.query('SELECT NOW()').then((res, err) => {
     console.log(res, err);
     pool.end();
 });
+
+// Google Cloud vision API example usage
+const vision_client: vision.ImageAnnotatorClient = new vision.ImageAnnotatorClient();
+const fileName: string = "/Users/will/Downloads/20200208_173237.jpg";
+vision_client.documentTextDetection(fileName).then((result) => {
+    console.log(result);
+}).catch((err: Error) => {
+    console.log(err);
+});
+
 
 
 // Create our express app

@@ -8,12 +8,21 @@ import * as bodyParser from "body-parser";
 import * as chalk from "chalk";
 import apiRouter from "./routes/apiRouter";
 import loginRegisterRouter from "./routes/loginRegisterRouter";
+import {Pool, Client} from "pg";
 dotenv.config();
 
 // Alias our types
 type Application = express.Application;
 type Request = express.Request;
 type Response = express.Response;
+
+// Database Connection
+const pool: Pool = new Pool();
+pool.query('SELECT NOW()').then((res, err) => {
+    console.log(res, err);
+    pool.end();
+});
+
 
 // Create our express app
 const app: Application = express();

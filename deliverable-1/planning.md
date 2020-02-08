@@ -94,25 +94,15 @@ Our application will also integrate with the Isabel Health Care API, which will 
  
 # Process Details
 ## Q6: What are the roles & responsibilities on the team?
-Roles:
-1. Database architect (Qingyuan Qie)
-Responsible for designing the tables and their columns to store the persisting data in a meaningful and efficient way.
-2. React Frontend Developer (Christopher Marcok, Chris Koehler, Lance Oribello)
-Responsible for creating the Components the clients will see and interact with on the front-end. Components must be styled to support an intuitive experience in both portrait and landscape modes.
-3. Backend developer (Robert Tan, Sanggon Choi, Steven Kang, Qingyuan Qie)
-    - API development (Sanggon Choi)
-    - Handwriting OCR, Isabel API calls (Robert Tan)
-    - Express Developer (Christopher Marcok, Qingyuan Qie)
-Create and manage the backend infrastructure for the web application. Responsibilities include API development, interacting with public libraries/APIs, and handling requests from the frontend. In particular, the backend developers must write maintainable and testable code built using Node.js & Express.js.
-4. UI/UX Design (Lance Oribello)
-Determines the graphical layout of the application; this encompasses the display layout, interface animations, view transitions, and any sort of visual interactions or elements included within the application.
-Also ensures the user’s experience of the app feels like it proceeds in an intuitive and logical manner. Responsible for making the navigation of the app as smooth as possible.
-This role will work in close partnership with front-end development.
-5. QA Tester/Software Developer in Test (Steven Kang)
-Ensures that the product is working as intended; tests possible user interactions with the feature in order to confirm the function and/or discover issues that must be resolved.
-7. Product Manager (Lance Oribello)
-Facilitates the organization of the group, dealing with team logistics, feature specification, timeline management, and partner communication.
-Additionally, all group members will take on full stack development roles as needed.
+| Role Title                           | Description                                                                                                                                                                                                                                                                                                                                                   | Members Assigned                                    |
+|--------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------|
+| Database Architect                   | Responsible for designing the tables and their columns to store the persisting data in a meaningful and efficient way.                                                                                                                                                                                                                                        | Qingyuan Qie                                        |
+| React Frontend Developer             | Responsible for creating the Components the clients will see and interact with on the front-end. Components must be styled to support an intuitive experience in both portrait and landscape modes.                                                                                                                                                           | Christopher Marcok, Chris Koehler, Lance Oribello   |
+| Backend Developer                    | Responsible for API development, Handwriting OCR, Isabel API calls, interacting with public libraries/APIs, handling requests from the frontend, and management of the backend infrastructure for the web application. In particular, the backend developers must write maintainable and testable code built using Node.js & Express.js.                      | Sanggon Choi, Steven Kang, Robert Tan, Qingyuan Qie |
+| UI/UX Design                         | Responsible for determining the graphical layout of the application; this encompasses the display layout, interface animation, view transitions, and other visual interactions. Also ensures the user's experience of the app feels like it proceeds in an intuitive and logical manner. This role will work in close partnership with front-end development. | Lance Oribello                                      |
+| QA Tester/Software Developer in Test | Responsible for ensuring that the product is working as intended; tests possible user interactions with the feature in order to confirm the function and/or discover issues that must be resolved.                                                                                                                                                            | Steven Kang                                         |
+| Product Manager                      | Responsible for facilitating the organization of the group, dealing with team logistics, feature specification, timeline management, and partner communication.                                                                                                                                                                                               | Lance Oribello                                      |
+| Full Stack Developer                 | All group members will take on full stack development as needed.                                                                                                                                                                                                                                                                                              | Lance Oribello                                      |
 
 | Name               | Description                                                 | Strengths                                              | Weaknesses                                      |
 |--------------------|-------------------------------------------------------------|--------------------------------------------------------|-------------------------------------------------|

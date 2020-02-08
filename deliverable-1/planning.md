@@ -24,27 +24,47 @@ The educator-facing side of the application will allow educators to review patie
 
 The administrator-facing side of the application is able to access the generated list of medical terms and predicted diseases, derived from parsed student notes every given time-interval.
 
-Enclosed within the repository are diagrams of our proposed view for each interface of the application, as determined during our first partner meeting.
+Below are the diagrams of our proposed views for each interface of the application, as determined during our first partner meeting.
+
+Imgur album: `https://imgur.com/a/Pxl9fiJ`
+
+Or view on github:
+
+[Administrator View](pics/administrator_app_design.jpg)
+
+[Instructor View](pics/intructor_app_design.jpg)
+
+[Student View](pics/student_app_design.jpg)
+
+i need to get a better sense of their frustrations or friction points. There's a natural flow of negative and positive in Q1 and Q2:
+
+negatives : overall problems followed by user pain points
+
+positves: overall solution followed by user goals and motivations
+
+Then Q3 ties it together as needed
 
 ## 2. Who are your target users?
 * Harvard medical students (all years)
     - **Name**: Nick Sanders
     - **Age**: 21
-    - **Background**: A hardworking and curious 2nd year Harvard Medical School student eager to apply his course knowledge to the field via patient diagnoses.
     - **User Environment**: Uses an iPad Pro to take notes and record patient diagnoses.
-    - **End Goal**: To be able to take patient diagnoses notes in a more convenient, readable, and elegant way.
+    - **Background**: Nick is a hardworking and curious 1st year Harvard Medical School student eager to apply his medical course knowledge to the field via patient diagnoses. While he is glad his instructors allow him to use his iPad during patient interviews, he is frustrated that he must submit his iPad notes to his instructor through a clunky and outdated student submission portal. Nick wishes there was a more streamlined note-taking and submission process.
+    - **End Goal**: To be able to take and submit patient notes more conveniently without any other external applications.
 * Medical Educators
     - **Name**: Dave Billinger
     - **Age**: 69
-    - **Background**: A recently tenured professor of medical sciences at Harvard Medical School. Dave is always looking for ways to make his teaching experience more streamlined.
     - **User Environment**: Uses a desktop PC running Windows 10 to grade and view student submissions (of patient diagnoses). 
-    - **End Goal**: To enhance and improve instructor marking efficiency and student convenience for medical student fieldwork submissions.
+    - **Background**: Dave is a recently tenured professor of medical sciences at Harvard Medical School who is always looking to make his teaching process more streamlined. While he is happy to allow his students to take their notes with any device of their choosing, Dave is frustrated at the lack of a conveniently accessible and clearly organized repository through he which he can view his students' notes for grading. Dave wishes his students' submissions were easier to browse through, regardless of what device they were taken on.
+    - **End Goal**: To enhance and improve instructor marking efficiency through enhanced organization and browsability of student note submissions.
 * Medical Administrators/Researchers
     - **Name**: Samson Liang
     - **Age**: 30
-    - **Background**: A post-grad medical researcher currently conducting research pertaining to pedagogical advancements in the medical sciences.
-    - **User Environment**: Uses a desktop PC running Windows 10 to compile and process medical students’ notes. 
-    - **End Goal**: To advance pedagogical medical sciences through researching trends in student diagnoses over several years of medical schooling.
+    - **User Environment**: Uses a desktop PC running Windows 10 to compile and process the notes of medical students. 
+    - **Background**: Samson is a post-grad medical researcher conducting research pertaining to pedagogical advancements in the medical sciences. Currently, he is frustrated with the limited amount of empirical data involving diagnosis decision-making during the patient interview process. Samson wishes there was a concrete way to gain insight on how medical students come to their final diagnoses as they take notes and interview patients.
+    - **End Goal**: To gain concrete empirical data regarding how medical students make diagnoses decisions.
+    
+    To advance pedagogical medical sciences through researching trends in student diagnoses over several years of medical schooling.
 
 ## 3. Why would users choose your product? What are they using today to solve their problem/need
 
@@ -64,6 +84,8 @@ Our plan is to deploy an Express + React Node.js application on Heroku. We have 
 The majority of our team is already well acquainted with Express, React, Node.js, TypeScript, and Heroku, having used such technologies to develop web applications in previous courses (mainly CSC309).
 
 We have decided to host our application's database on AWS, as our designated database architect has extensive experience with this technology. Our partner has notified us that he is willing to pay the costs of maintaining our AWS database while the product is under development. 
+
+We plan to test our application mainly through manual QA, Jest JavaScript Testing, and React Testing Library because these were the most recommended and oft-used testing libraries for the technologies we are using.
 
 Our application will require an OCR solution to recognize user handwriting. We plan to use Google’s Cloud Vision API, as we have personally tested it as a team and deemed it accurate enough in handling our inputs. Amazon S3 Object Storage will be used for image storage.
 
@@ -94,6 +116,7 @@ Our application will also integrate with the Isabel Health Care API, which will 
  
 # Process Details
 ## Q6: What are the roles & responsibilities on the team?
+### Roles and Assignments
 | Role Title                           | Description                                                                                                                                                                                                                                                                                                                                                   | Members Assigned                                    |
 |--------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------|
 | Database Architect                   | Responsible for designing the tables and their columns to store the persisting data in a meaningful and efficient way.                                                                                                                                                                                                                                        | Qingyuan Qie                                        |
@@ -102,6 +125,8 @@ Our application will also integrate with the Isabel Health Care API, which will 
 | UI/UX Design                         | Responsible for determining the graphical layout of the application; this encompasses the display layout, interface animation, view transitions, and other visual interactions. Also ensures the user's experience of the app feels like it proceeds in an intuitive and logical manner. This role will work in close partnership with front-end development. | Lance Oribello                                      |
 | QA Tester/Software Developer in Test | Responsible for ensuring that the product is working as intended; tests possible user interactions with the feature in order to confirm the function and/or discover issues that must be resolved.                                                                                                                                                            | Steven Kang                                         |
 | Product Manager                      | Responsible for facilitating the organization of the group, dealing with team logistics, feature specification, timeline management, and partner communication.                                                                                                                                                                                               | Lance Oribello                                      |
+
+### Individual Strengths and Weaknesses
 
 | Name               | Description                                                 | Strengths                                              | Weaknesses                                      |
 |--------------------|-------------------------------------------------------------|--------------------------------------------------------|-------------------------------------------------|
@@ -232,15 +257,3 @@ We chose Kanban over Scrum because of inexperience with planning how long it mig
 After trying both Trello and Github Projects, we decided to choose Trello as it seemed more intuitive and supported a wide variety of plugins to enhance and customize our experience. While Github Projects does have native Github integration, our team was unfamiliar with it and did not feel that there was substantial value in learning the new platform.
 ### React > Angular
 We decided to use React due to the fact that it is quick to pick up for people who already know Javascript and many of our group members were already familiar with the framework. By choosing a framework we are comfortable with, we will be able to spend more time implementing features for the MVP.
-
-## Pictures
-Imgur album: `https://imgur.com/a/Pxl9fiJ`
-
-Or view on github:
-
-[Administrator View](pics/administrator_app_design.jpg)
-
-[Instructor View](pics/intructor_app_design.jpg)
-
-[Student View](pics/student_app_design.jpg)
-

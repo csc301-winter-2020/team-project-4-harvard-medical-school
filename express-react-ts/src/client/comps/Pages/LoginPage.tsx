@@ -1,4 +1,4 @@
-import React, { useReducer, Fragment, useState, useEffect } from "react";
+import React, { useReducer, Fragment, useEffect } from "react";
 import "../../scss/login/login";
 import "../../scss/login/inputboxes";
 import { ScribeSVG } from "../SubComponents/ScribeSVG";
@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ToastContainer, toast } from "react-toastify";
 import "!style-loader!css-loader!react-toastify/dist/ReactToastify.css";
 import { Footer } from "../SubComponents/Footer";
-import { FormGroup } from "../SubComponents/Login/FormGroup";
+import { LoginForm } from "../SubComponents/Login/LoginForm";
 
 const createToast: any = toast;
 
@@ -27,17 +27,17 @@ function reducer(
     case "field":
       return {
         ...state,
-        [action.fieldName]: action.value
+        [action.fieldName]: action.value,
       };
     case "login":
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
       };
     case "resize":
       return {
         ...state,
-        isPortraitMode: parseInt(action.value) < 1024
+        isPortraitMode: parseInt(action.value) < 1024,
       };
     case "start register":
       return {
@@ -45,7 +45,7 @@ function reducer(
         isRegisterMode: true,
         isLoading: false,
         username: "",
-        password: ""
+        password: "",
       };
     case "stop register":
       return {
@@ -54,7 +54,7 @@ function reducer(
         isLoading: false,
         username: "",
         password: "",
-        repassword: ""
+        repassword: "",
       };
 
     default:
@@ -68,11 +68,13 @@ const initialState: LoginState = {
   repassword: "",
   isLoading: false,
   isPortraitMode: false,
-  isRegisterMode: false
+  isRegisterMode: false,
 };
 
 export const LoginPage: React.FC = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {});
 
   const {
     username,
@@ -80,7 +82,7 @@ export const LoginPage: React.FC = () => {
     repassword,
     isLoading,
     isPortraitMode,
-    isRegisterMode
+    isRegisterMode,
   } = state;
 
   useEffect(() => {
@@ -105,7 +107,6 @@ export const LoginPage: React.FC = () => {
             <div className="login-page-left-content">
               <ScribeSVG color="white" />
               <h1>Is our cool app</h1>
-
               <p>destroy steven kang</p>
             </div>
           </div>
@@ -115,67 +116,14 @@ export const LoginPage: React.FC = () => {
                 {isPortraitMode && (
                   <h1 className="login-portrait-title">Scribe</h1>
                 )}
-                <h1 className="login-form-header">
-                  {!isRegisterMode ? "Login" : "Register"}
-                </h1>
-                <form className="login-form" action="/login" method="post">
-                  <FormGroup
-                    dispatch={dispatch}
-                    id="login-username"
-                    label="Username or Email"
-                    value={username}
-                    type="text"
-                    name="username"
-                  />
-
-                  <FormGroup
-                    dispatch={dispatch}
-                    id="login-password"
-                    label="Password"
-                    value={password}
-                    type="password"
-                    name="password"
-                  />
-
-                  {isRegisterMode && (
-                    <FormGroup
-                      dispatch={dispatch}
-                      id="login-repassword"
-                      label="Confirm Password"
-                      value={repassword}
-                      type="password"
-                      name="repassword"
-                    />
-                  )}
-
-                  <button className="login-btn" onClick={e => onSubmit(e)}>
-                    {!isRegisterMode ? "Login" : "Register"}
-                    <span style={{ marginLeft: "10px" }}>
-                      <FontAwesomeIcon icon="sign-in-alt" />
-                    </span>
-                  </button>
-                </form>
-                {!isRegisterMode ? (
-                  <p className="login-register-small-text">
-                    Haven't made an account yet?{" "}
-                    <span
-                      className="login-register-span"
-                      onClick={() => dispatch({ type: "start register" })}
-                    >
-                      Register.
-                    </span>
-                  </p>
-                ) : (
-                  <p className="login-register-small-text">
-                    Already have an account?{" "}
-                    <span
-                      className="login-register-span"
-                      onClick={() => dispatch({ type: "stop register" })}
-                    >
-                      Log In.
-                    </span>
-                  </p>
-                )}
+                <LoginForm
+                  dispatch={dispatch}
+                  isRegisterMode={isRegisterMode}
+                  onSubmit={onSubmit}
+                  username={username}
+                  repassword={repassword}
+                  password={password}
+                />
                 {isLoading && <p>Loading...</p>}
               </div>
             </div>

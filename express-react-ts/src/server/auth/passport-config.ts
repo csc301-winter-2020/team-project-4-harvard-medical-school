@@ -1,12 +1,7 @@
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 import * as passport from "passport";
-
-type User = {
-  id: number,
-  username: string,
-  password: string,
-}
+import { User } from '../server';
 
 const dummyUsers:User[] = [
   {
@@ -74,7 +69,7 @@ function initialize(passport: passport.PassportStatic){
       console.log(failureMsg)
       return done(null, false);
     }
-    
+    console.log(`Expecting password to be ${user.password}`);
     if (password === user.password) {
       const successMsg = "LOGIN: SUCCESS: User and password match - Successful login.";
       console.log(successMsg);

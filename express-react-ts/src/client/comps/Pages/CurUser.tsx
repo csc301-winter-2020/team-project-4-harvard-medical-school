@@ -1,22 +1,20 @@
-import React, { useContext } from "react";
-import { UserContext } from "../../Contexts/userContext";
+import React from "react";
+import {User} from '../../../server/server';
 
-interface CurUserProps {}
+export const CurUser: React.FC = ({}) => {
 
-export const CurUser: React.FC<CurUserProps> = ({}) => {
-  //   const { user, setUser } = useContext(UserContext);
-  const msg = useContext(UserContext);
+  const user:User = JSON.parse(localStorage.getItem("user"));
+
   return (
     <div>
-      {/* {user.firstName} {user.lastName} {user.username}
+      {user.username}
       <button
         onClick={() =>
-          setUser({ firstName: "Joe", lastName: "Bob", username: "joebob" })
+          localStorage.clear()
         }
       >
-        CLick me
-      </button> */}
-      {msg}
+        Logout
+      </button>
     </div>
   );
 };

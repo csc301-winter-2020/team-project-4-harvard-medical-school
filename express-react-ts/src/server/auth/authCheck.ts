@@ -12,7 +12,7 @@ function checkAuthenticated(req: Request, res: Response, next:NextFunction){
     return next();
   } else {
     //If the user is not authenticated, then redirect them to the root (login) page (so they can log in.)
-    res.redirect('/');
+    res.sendStatus(403);
   }
 }
 

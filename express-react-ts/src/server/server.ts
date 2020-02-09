@@ -15,6 +15,12 @@ type Application = express.Application;
 type Request = express.Request;
 type Response = express.Response;
 
+export interface User extends Express.User {
+  id: number;
+  username: string;
+  password: string;
+}
+
 // Create our express app
 const app: Application = express();
 

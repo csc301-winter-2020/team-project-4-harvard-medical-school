@@ -1,14 +1,24 @@
-import React from "react";
-import { ExampleComp } from "../SubComponents/ExampleComp";
+import React, { useEffect } from "react";
+const Axios = require('axios').default;
 
-interface PageProps {}
+export const Page: React.FC = ({}) => {
+  
+  useEffect(() => {
+    const getLoggedInUser = async () => {
+      try{
+        const result:any = await Axios.get(`/api/me`);
+        console.log(JSON.stringify(result.data));
+        localStorage.setItem("user", JSON.stringify(result.data));
+      }catch {
+        console.log(`No logged in user found.`);
+      }
+    }
+    getLoggedInUser();
+  });
 
-export const Page: React.FC<PageProps> = ({}) => {
   return (
     <div className="my-class">
       Page
-      <ExampleComp age={4} name="Jim" />
-      <ExampleComp age={123} name="Joe" myBool={true} />
     </div>
   );
 };

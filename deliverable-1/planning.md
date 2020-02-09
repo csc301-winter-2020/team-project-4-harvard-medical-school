@@ -84,25 +84,28 @@ Our application will require an OCR solution to recognize user handwriting. We p
 Our application will also integrate with the Isabel Health Care API, which will give clients information about potential diagnoses, disease predictions, and suggestions to further patient interviews.
 
 ## 5. What are the user stories that make up the MVP?
-1. As an educator, Lee would like to enter the final diagnoses for the patient on student diagnoses as a way of marking and providing feedback on student notes.
-2. As a student, Tony would like to extend canvas on each page of the patient diagnoses template so that he does not run out of space for notes in a certain field.
-3. As a student, Stephen would like to return to the main menu on any page in the patient template in order to save time.
-4. As a medical student, Damian would like to organize his patient interview notes into patient profiles that clearly outline the characteristics of each patient in an easily accessible way so that he could efficiently access the required patient information.
-5. As a medical student, Kyle would like to be able to choose between different templates for patient profiles layout to fit his personal organizational standards.
-6. As a medical student, Anna would like to use different color schemes for the stylus in order to better visualise her notes.
-7. As a medical student, Jamali would like to have intelligent forms so that she can focus on her patient without having to worry about contradictory inputs.
-8. As a medical student, James would like to save his notes on his device and on the cloud so that he can have convenient access to them whenever he needs them.
-9. As a medical student, Peter would like to have the notes he writes with a stylus be automatically parsed into English so that he could organize his notes into text documents.
-10. As a researcher, Alexander would need to create class information in order to manage different offerings of classes.
-11. As a researcher, Alexander would need to add students to classes in order to track students who enroll in different classes.
+1. As an educator, Lee needs to be able to enter the correct diagnoses for each of the patients interviewed by his students so that he can affirm whether or not a student's diagnosis was correct.
+2. As a student, Tony would like to extend canvas on each page of the patient's profile so that he does not run out of space for more notes on that page.
+3. As a student, Stephen would like to return to the main menu on any page of a patient's profile in order to save time.
+4. As an educator, Lee would like to be able to leave comments on selected parts of a student's notes so that he can be more specific in his feedback to the student.
+5. As a student, Kyle would like to be able to choose between different templates for the layout of his patient profiles to better fit his personal organizational standards.
+6. As a medical student, Anna would like to use different color schemes for her notes in order to better organize them visually.
+7. As a student, Jamali would like to have intelligent forms so that she can focus on her patient without having to worry about contradictory inputs.
+8. As a student, James would like to save his notes on his device and on the cloud so that he can have convenient access to them whenever he needs them.
+9. As a student, Peter would like to have the notes he writes with a stylus be automatically parsed into English so that he could organize his notes into his own external text documents.
+10. As an educator, Alexander would like to be able to easilly switch between the notes of one student to another so that he can more efficiently compare how different students come to their diagnoses decisions.
+11. As a researcher, Benny needs to be able see a generated list of disease predictions derived from parsed student input, so that he can better gauge how close a student is to arriving at a correct diagnosis.
 12. As a student, Kenneth would like to swipe left and right to view different pages to more easily switch between notes.
-13. As a researcher, Timothy would like to log the note diffs (student note taking progress) at short regular intervals in order to track student progress over time, a valuable research metric.
-14. As a student, Tahani would like to parse templates which show different fields for different studies in order to more easily organize different types of patient diagnoses.
-15. As a researcher, Lilith would like to parse student notes and match it with the Isabel API in order to better identify trends in student note-taking abilities and provide a metric for their growth.
-16. As an educator, Yiping would like to annotate and comment on student notes in order to provide more extensive feedback on the students’ work directly.
-17. As a student, Charlie would like to be able to get hints and tips on the fly from the Harvard medical database in order to aid his diagnoses based on symptoms
-18. As an educator, Robere wants to be able to restrict access to the helps and tips feature from certain students so that newer students can practice their diagnosis without any external assistance.
-19. As an educator, Henry wants to have convenient access to students’ emails so that he could easily give feedback to his students.
+13. As a researcher, Timothy would like to be able to see images of a student's notes as they are added upon in regular mnute-to-minute intervals, in order to track the student's progress over time.
+14. As a student, Tahani wants to be able to choose different patient profile templates that are more specific to each patient's particular ailment, so that she can focus on what is necessary to take notes on without having to view irrelevant input fields.
+15. As a researcher, Lilith would like to see what is input from the parsed student notes to the Isabel API in order to better identify trends in student note-taking.
+16. As an educator, Yiping would like to directly write on a student's notes in order to provide more extensive feedback to his students.
+17. As a student, Charlie would like to be able to directly view what is output from Isabel based on his parsed notes so that he can have some assistance in coming to a final diagnosis.
+18. As an educator, Rob wants to be able to restrict access to the helps and tips feature for certain students so that newer students can practice their diagnosis decision skills without any external assistance.
+19. As an educator, Henry wants to be able to view his students' emails so that he could more easily provide feedback to his students.
+20. As a student, Phillip wants to be able to create blank pages for new notes so that he can add information about a patient that does not specifically pertain to any of the pages in the initial patient profile template.
+21. As an educator, Gerald wants to be able to view a generalized overview of each of a student's patient profiles (pertaining to basic identifying information like a patient's name, key symptoms, the student's final diagnosis, etc.) so that he can more efficiently sort through and browse his students' notes.
+22. As an educator, Gerald wants to be able to directly jump to a specific page of a student's patient profile without having to scroll through it all so that he can more efficiently sort through and browse his student's notes.
 
  
 # Process Details
@@ -121,12 +124,12 @@ Our application will also integrate with the Isabel Health Care API, which will 
 
 | Name               | Description                                                 | Strengths                                              | Weaknesses                                      |
 |--------------------|-------------------------------------------------------------|--------------------------------------------------------|-------------------------------------------------|
-| Sanggon Choi       | Backend developer; mostly database and API development      | SQL databases, JavaScript, Project management          | UI/UX design, React, macOS development          |
+| Sanggon Choi       | Backend developer; mostly database and API development      | SQL databases, JavaScript, Product management          | UI/UX design, React, macOS development          |
 | Robert Tan         | Backend developer (APIs)                                    | Object Oriented Programming, Documentation, Javascript | Algorithms, React, DevOps                       |
-| Qingyuan Qie       | Backend developer                                           | JavaScript, Linux, SQL databases                       | UI design, React, project management            |
+| Qingyuan Qie       | Backend developer, Database Architect                                           | JavaScript, Linux, SQL databases                       | UI design, React, product management            |
 | Chris Koehler      | Full stack developer (primarily frontend)                   | Node.js, Express, MySQL                                   | UI design, CSS, Session & Authentication                         |
 | Lance Oribello     | Frontend developer, UI/UX design, Product Manager                            | JavaScript, React, Product management                  | Databases, Express, System design               |
-| Chris Marcok | Full stack developer with emphasis on front-end development | NoSQL, React, DevOps                        | Responsive Layouts, TypeScript, Express   |
+| Chris Marcok | Full stack developer (primarily frontend) | Object Oriented Programming, React, DevOps                        | Responsive Layouts, TypeScript, Express   |
 | Steven Kang        | Full stack developer (primarily backend)                    | Scripting, Express, SQL                                | Web sockets, Deployment, Agile methodologies |
 
 

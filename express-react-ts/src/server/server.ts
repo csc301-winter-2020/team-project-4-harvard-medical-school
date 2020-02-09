@@ -1,6 +1,6 @@
 // Require our dependencies.
-import express = require("express");
-import session = require("express-session");
+import * as express from 'express';
+import * as session from "express-session";
 import * as path from "path";
 import * as passport from "passport";
 import * as dotenv from "dotenv";

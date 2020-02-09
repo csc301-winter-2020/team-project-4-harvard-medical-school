@@ -25,6 +25,7 @@
     "@types/react": "^16.9.19",
     "@types/react-dom": "^16.9.5",
     "@types/react-router-dom": "^5.1.3",
+    "aws-sdk": "^2.614.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "css-loader": "^1.0.1",

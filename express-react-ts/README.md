@@ -28,6 +28,13 @@ be shutdown if no one is using it. Let `@Qingyuan Qie` know if you can not conne
 In addition, the Google Cloud Vision API need a environmental variable `GOOGLE_APPLICATION_CREDENTIALS`, which is a
 path to a json file that stored the credential. The credential file will be posted in Slack `@private` Channel.
 
+# AWS S3
+AWS S3 requires yet two more environmental variables.
+`AWSKEYID`: This is the ID of the aws access key.
+`AWSKEY`: This is the key of the corresponding ID.
+
+Please see Slack Channel @private for the values.
+
 # Server
 The server build process compiles the TypeScript files found in `/src/server` into a single bundled JavaScript file located in the `/dist` directory.
 

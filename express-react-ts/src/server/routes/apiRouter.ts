@@ -1,4 +1,5 @@
 import * as express from 'express';
+const { checkAuthenticated, checkGuest } = require('../auth/authCheck');
 
 type Router = express.Router;
 type Request = express.Request;
@@ -15,11 +16,10 @@ const router:Router = express.Router();
 /**
  * TODO: Get the details of the current logged in user in JSON
  */
-router.get('/api/me', (req:Request, res:Response, next:NextFunction) => {
-    res.status(200).json({
-        example: "hello",
-        example2: "world"
-    });
+router.get('/api/me', checkAuthenticated, (req:Request, res:Response, next:NextFunction) => {
+    const user:any = req.user;
+    user.password = undefined; //Dont send password with JSON.
+    res.status(200).json(req.user);
 });
 
 /**

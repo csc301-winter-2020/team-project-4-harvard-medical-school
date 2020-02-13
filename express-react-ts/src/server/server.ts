@@ -1,7 +1,7 @@
 // Require our dependencies.
-import * as express from "express";
-import * as path from "path";
+import * as express from 'express';
 import * as session from "express-session";
+import * as path from "path";
 import * as passport from "passport";
 import * as dotenv from "dotenv";
 import * as bodyParser from "body-parser";
@@ -19,6 +19,7 @@ dotenv.config();
 type Application = express.Application;
 type Request = express.Request;
 type Response = express.Response;
+
 
 // Database Connection
 const pool: Pool = new Pool();
@@ -69,8 +70,22 @@ fs.readFile(uploadFilename, (err, data) => {
     });
 });
 
+export interface User extends Express.User {
+  id: number;
+  username: string;
+  password: string;
+}
+
+
 // Create our express app
 const app: Application = express();
+
+//Passport Authentication
+const initializePassport = require('./auth/passport-config');
+initializePassport(passport);
+
+//Bring in our authentication check middleware functions.
+const { checkAuthenticated, checkGuest } = require('./auth/authCheck');
 
 /* Bring the middleware in for our express app */
 // Use the static directory "public" to deliver js, css, html, etc.
@@ -87,15 +102,19 @@ app.use(
 );
 
 // Initialize passport middleware for user authentication.
-/* TODO: Enable passport local strategy */
-// app.use(passport.initialize());
-// app.use(passport.session());
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Bring in our routes.
 app.use(apiRouter);
 app.use(loginRegisterRouter);
 
 // Setup default routes for the server.
+
+// TODO: for some reason this isnt working!!!!!!!!! it should only let you go to '/' if you are not logged in already
+app.get('/', checkGuest, (req, res) => {
+  res.sendFile(path.resolve(__dirname + "/../public/index.html"))
+});
 
 // Catchall route for anything not caught in the above routes. Will load the corresponding react page if possible, otherwise will load the react 404 page.
 app.get("*", (req: Request, res: Response) => {

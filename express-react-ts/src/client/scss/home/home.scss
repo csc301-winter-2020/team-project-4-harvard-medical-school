@@ -33,14 +33,19 @@
 }
 
 .home-page-header-search-bar {
-  margin: auto;
+  position: absolute;
+  left: 15%;
   height: 50px;
-  width: 80%;
+  width: 70%;
   margin-top: 5px;
   margin-bottom: 5px;
   background-color: $color-primary-light;
   border-radius: 3px;
   padding-left: 10px;
+}
+
+.home-page-header-search-bar > input::placeholder {
+  color: $color-primary-dim;
 }
 
 .home-page-header-search-bar > input {
@@ -68,34 +73,210 @@ input:focus {
 }
 
 .home-page-header-user-avatar {
-  margin-top: 5px;
-  height: 50px;
-  width: 50px;
+  cursor: pointer;
+  position: absolute;
+  right: 5px;
+  margin-top: 8px;
+  height: 45px;
+  width: 45px;
   border-radius: 50%;
   background-image: url("https://api.adorable.io/avatars/50/17");
+  background-size: contain;
 }
 
-.home-page-content {
-  width: 800px;
+.home-page-header-avatar-popup-container{
+  position: absolute;
+  right: 0;
+  top: 60px;
+  background-color: $color-primary;
+  width: 250px;
+  height: 150px;
+  padding: 3px;
+  border-bottom-left-radius: 5px;
+}
+
+.home-page-header-avatar-drop-name{
+  color: white;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  text-align: center;
+  font-size: 2rem;
+}
+
+.home-page-header-avatar-drop-logout{
+  width: 90%;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 3px;
+  background-color: white;
+  margin: auto;
+  text-align: center;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: $color-primary;
+}
+
+.home-page-content-container {
+  width: 70%;
   margin: auto;
 }
 
+.home-page-your-patients-title {
+  margin-top: 20px;
+  margin-left: 10px;
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.home-page-content {
+  overflow-y: scroll;
+  max-height: calc(100% - 190px);
+}
+
+.home-page-separator-line {
+  width: calc(100% - 25px);
+  height: 6px;
+  background-color: #555;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+
 .home-patient-profile-container {
-  background-color: #ccc;
+  background-color: #eee;
   border-radius: 3px;
   margin: 10px;
-  cursor: pointer;
   padding: 10px;
   transition: all 0.2s ease;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+}
+
+.home-patient-profile-name-col {
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+
+.home-patient-profile-date-col {
+  grid-column-start: 2;
+  grid-column-end: 3;
+}
+
+.home-patient-profile-last-modified-col {
+  grid-column-start: 3;
+  grid-column-end: 4;
+}
+
+.home-page-patient-header-grid {
+  margin-left: 10px;
+  margin-right: 10px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 40px;
+  height: 20px;
+  color: #999;
+  margin-bottom: 10px;
+}
+
+.home-page-patient-header-grid-name-col {
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+
+.home-page-patient-header-grid-created-col {
+  grid-column-start: 2;
+  grid-column-end: 3;
+}
+
+.home-page-patient-header-grid-last-modified-col {
+  grid-column-start: 3;
+  grid-column-end: 4;
+}
+
+.home-patient-profile-info-btn {
+  grid-column-start: 4;
+  grid-column-end: 5;
+  color: $color-primary;
+  margin-top: -10px;
+  margin-right: -10px;
+  height: 35px;
+  width: 40px;
+  cursor: pointer;
+}
+
+.home-patient-profile-info-icon {
+  margin-left: 10px;
+  margin-top: 16px;
+}
+
+.home-patient-profile-name-col {
+  font-size: 1.2rem;
+}
+
+.home-patient-profile-date-col {
+  color: #999;
+}
+
+.home-patient-profile-last-modified-col {
+  color: #999;
 }
 
 .home-patient-profile-container:hover {
-  background-color: #aaa;
+  background-color: #ccc;
   transition: all 0.05s ease;
 }
 
+.home-patient-profile-container:hover .home-patient-profile-last-modified-col {
+  color: black;
+}
+
+.home-patient-profile-container:hover .home-patient-profile-date-col {
+  color: black;
+}
+
+.home-patient-profile-info-container{
+  margin-left: 20px;
+}
+
+.home-page-create-new-patient-btn, .home-page-create-template-btn{
+  position: fixed;
+  background-color: $color-primary;
+  border-radius: 3px;
+  color: white;
+  font-size: 1.5rem;
+  bottom: 140px;
+  right: 20px;
+  padding: 20px;
+  width: 185px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.home-page-create-template-btn{
+  bottom: 20px;
+}
+
+.home-page-content-whitespace-logo{
+  height: 400px;
+  width: 400px;
+  margin: auto;
+  margin-top: 200px;
+  background-image: url("https://i.imgur.com/mRCLv1T.png");
+  background-size: contain;
+}
+
+.home-page-create-new-patient-btn:hover, .home-page-create-template-btn:hover{
+  background-color: $color-primary-dim;
+  transition: all 0.1s ease;
+}
+
 @media only screen and (max-width: 1023px) {
-  .home-page-content {
+  .home-page-content-container {
     width: 100%;
+  }
+}
+
+@media only screen and (max-width: 1400px) {
+  .home-page-header-logo-text {
+    display: none;
   }
 }

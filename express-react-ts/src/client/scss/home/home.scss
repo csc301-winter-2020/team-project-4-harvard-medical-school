@@ -322,3 +322,22 @@ input:focus {
     display: none;
   }
 }
+
+
+.fade-slide-down-enter {
+  opacity: 0;
+  transform: translateY(-100px);
+}
+.fade-slide-down-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 300ms, transform 300ms;
+}
+.fade-slide-down-exit {
+  opacity: 1;
+}
+.fade-slide-down-exit-active {
+  opacity: 0;
+  transform: translateY(-100px);
+  transition: opacity 300ms, transform 300ms;
+}

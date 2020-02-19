@@ -4,6 +4,7 @@ import { HomeHeader } from "../SubComponents/Home/HomeHeader";
 import { HomePatientProfile } from "../SubComponents/Home/HomePatientProfile";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+
 interface HomePageProps {}
 
 type PatientProfile = {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../../scss/home/hamburgers.scss";
+import { CSSTransition } from "react-transition-group";
 
 interface HomeHeaderProps {
   isAvatarPopup: boolean;
@@ -50,7 +51,14 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
         </div>
       </div>
 
-      {isAvatarPopup && (
+        <CSSTransition
+        in={isAvatarPopup}
+        unmountOnExit
+        timeout={600}
+        onEnter={() => setIsAvatarPopup(true)}
+        onExited={() => setIsAvatarPopup(false)}
+        classNames="fade-slide-down">
+
         <div className="home-page-header-avatar-popup-container">
 
           <div className="home-page-header-avatar-image"></div>
@@ -64,7 +72,7 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
             Logout
           </div>
         </div>
-      )}
+      </CSSTransition>
     </div>
   );
 };

@@ -33,37 +33,32 @@ export const HomeHeader: React.FC<HomeHeaderProps> = ({
         <FontAwesomeIcon icon="search" />
         <input type="text" placeholder="Search Patients"></input>
       </div>
-
-      {/* <div className="home-page-header-user-avatar" onClick={() => setIsAvatarPopup(!isAvatarPopup)}></div> */}
       <div
         className="home-page-hamburger-container"
         onClick={() => {
           setIsAvatarPopup(!isAvatarPopup);
         }}
       >
-        <div
-          id="header-hamburger-btn"
-          className="hamburger hamburger--slider"
-        >
+        <div id="header-hamburger-btn" className="hamburger hamburger--slider">
           <span className="hamburger-box">
             <span className="hamburger-inner"></span>
           </span>
         </div>
       </div>
 
-        <CSSTransition
+      <CSSTransition
         in={isAvatarPopup}
         unmountOnExit
         timeout={600}
         onEnter={() => setIsAvatarPopup(true)}
         onExited={() => setIsAvatarPopup(false)}
-        classNames="fade-slide-down">
-
+        classNames="fade-slide-down"
+      >
         <div className="home-page-header-avatar-popup-container">
-
           <div className="home-page-header-avatar-image"></div>
           <div className="home-page-header-avatar-drop-name">
             Student Profile
+            <p>1st Year</p>
           </div>
           <div
             className="home-page-header-avatar-drop-logout"

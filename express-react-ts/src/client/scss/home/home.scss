@@ -101,7 +101,7 @@ input:focus {
   top: 60px;
   background-color: $color-primary;
   width: 250px;
-  height: 230px;
+  height: 245px;
   padding: 3px;
   border-bottom-left-radius: 5px;
 }
@@ -111,6 +111,10 @@ input:focus {
   margin-bottom: 30px;
   text-align: center;
   font-size: 2rem;
+
+  p {
+    font-size: 1rem;
+  }
 }
 
 .home-page-header-avatar-drop-logout{
@@ -157,6 +161,7 @@ input:focus {
 }
 
 .home-patient-profile-container {
+  cursor: pointer;
   background-color: #eee;
   border-radius: 3px;
   margin: 10px;
@@ -311,9 +316,44 @@ input:focus {
   transition: all 0.1s ease;
 }
 
-@media only screen and (max-width: 1023px) {
+@media only screen and (max-width: 1080px) {
   .home-page-content-container {
     width: 100%;
+  }
+
+  .home-patient-profile-name-col, .home-patient-profile-date-col, .home-patient-profile-last-modified-col{
+    font-size: 2.1rem;
+  }
+
+  .home-patient-profile-info-btn{
+    height: 54px;
+    width: 55px;
+  }
+
+  .home-patient-profile-info-export-btn, .home-patient-profile-info-delete-btn{
+    font-size: 1.5rem;
+  }
+
+  .home-patient-profile-info-quick-info-container{
+    width: calc(100% - 300px);
+  }
+  .home-patient-profile-info-btn-container{
+    width: 300px;
+  }
+
+  .home-patient-profile-info-quick-info-container{
+    h2 {
+      font-size: 1.8rem;
+    }
+    p {
+      font-size: 1.5rem;
+    }
+  }
+
+  .home-page-patient-header-grid{
+    p{
+      font-size: 1.3rem;
+    }
   }
 }
 
@@ -322,7 +362,6 @@ input:focus {
     display: none;
   }
 }
-
 
 .fade-slide-down-enter {
   opacity: 0;

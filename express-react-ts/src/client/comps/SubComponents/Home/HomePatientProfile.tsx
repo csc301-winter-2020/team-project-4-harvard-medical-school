@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const dateFormat = require("dateformat");
 const dateString = "mmmm d, yyyy";
+const dateStringCompact = "m/d/yyyy";
 
 interface HomePatientProfileProps {
   title?: string;
@@ -31,6 +32,26 @@ export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
   country,
 }) => {
   const [isShowingInfo, setIsShowingInfo] = useState(false);
+  const [isPortraitMode, setIsPortraitMode] = useState(window.innerWidth < 1080);
+  const [createdDate, setCreatedDate] = useState(dateFormat(new Date(date), isPortraitMode ? dateStringCompact : dateString));
+  const [modifiedDate, setModifiedDate] = useState(dateFormat(new Date(lastModified), isPortraitMode ? dateStringCompact : dateString));
+  useEffect(() => {
+    const handleResize = () =>{
+      if (window.innerWidth < 1080){
+        setIsPortraitMode(true);
+        setCreatedDate(dateFormat(new Date(date), dateStringCompact));
+        setModifiedDate(dateFormat(new Date(lastModified), dateStringCompact));
+      } else {
+        setIsPortraitMode(false);
+        setCreatedDate(dateFormat(new Date(date), dateString));
+        setModifiedDate(dateFormat(new Date(lastModified), dateString));
+      }
+    }
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  });
 
   return (
     <>
@@ -39,24 +60,24 @@ export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
           {lastName}, {firstName}
         </div>
         <div className="home-patient-profile-date-col">
-          {dateFormat(new Date(date), dateString)}
+          {createdDate}
         </div>
         <div className="home-patient-profile-last-modified-col">
-          {dateFormat(new Date(lastModified), dateString)}
+          {modifiedDate}
         </div>
         <div
           className="home-patient-profile-info-btn"
           onClick={() => setIsShowingInfo(!isShowingInfo)}
         >
           <div className="home-patient-profile-info-icon">
-            <FontAwesomeIcon icon="info-circle" />
+            <FontAwesomeIcon icon="info-circle" size={isPortraitMode ? "2x" : "1x"}/>
           </div>
         </div>
       </div>
       {isShowingInfo && (
         <div className="home-patient-profile-info-container">
           <div className="home-patient-profile-info-quick-info-container">
-            <h2>Quick Info</h2>
+            <h2>Demographics</h2>
             <p>
               <span className="bold-span">Age:</span> {age}
             </p>

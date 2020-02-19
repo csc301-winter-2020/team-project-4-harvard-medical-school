@@ -12,10 +12,23 @@ import {
   faUser,
   faInfo,
   faInfoCircle,
+  faChevronDown,
+  faChevronUp,
 } from "@fortawesome/free-solid-svg-icons";
 
 const myLibrary: any = library;
-myLibrary.add(fab, faCheckSquare, faCoffee, faSignInAlt, faSearch, faUser, faInfo, faInfoCircle);
+myLibrary.add(
+  fab,
+  faCheckSquare,
+  faCoffee,
+  faSignInAlt,
+  faSearch,
+  faUser,
+  faInfo,
+  faInfoCircle,
+  faChevronDown,
+  faChevronUp
+);
 
 /**
  * This is the component that appears in the index.html file.

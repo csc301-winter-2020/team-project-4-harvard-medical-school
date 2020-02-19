@@ -55,27 +55,38 @@ export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
       </div>
       {isShowingInfo && (
         <div className="home-patient-profile-info-container">
-          <p>
-            <span className="bold-span">Age:</span> {age}
-          </p>
-          <p>
-            <span className="bold-span">Sex:</span> {sex}
-          </p>
-          {isPregnant !== null ? (
+          <div className="home-patient-profile-info-quick-info-container">
+            <h2>Quick Info</h2>
             <p>
-              <span className="bold-span">Pregnant:</span> {isPregnant}
+              <span className="bold-span">Age:</span> {age}
             </p>
-          ) : null}
-          <p>
-            <span className="bold-span">Country:</span> {country}
-          </p>
-          <p>
-            <span className="bold-span">Ethnicity:</span> {ethnicity}
-          </p>
-          <p>
-            <span className="bold-span">Date Of Birth:</span>{" "}
-            {dateFormat(new Date(dateOfBirth), dateString)}
-          </p>
+            <p>
+              <span className="bold-span">Sex:</span> {sex}
+            </p>
+            {isPregnant !== null ? (
+              <p>
+                <span className="bold-span">Pregnant:</span> {isPregnant}
+              </p>
+            ) : null}
+            <p>
+              <span className="bold-span">Country:</span> {country}
+            </p>
+            <p>
+              <span className="bold-span">Ethnicity:</span> {ethnicity}
+            </p>
+            <p>
+              <span className="bold-span">Date Of Birth:</span>{" "}
+              {dateFormat(new Date(dateOfBirth), dateString)}
+            </p>
+          </div>
+          <div className="home-patient-profile-info-btn-container">
+            <div className="home-patient-profile-info-export-btn">
+              Export Patient as PDF
+            </div>
+            <div className="home-patient-profile-info-delete-btn">
+              Delete Patient Profile
+            </div>
+          </div>
         </div>
       )}
     </>

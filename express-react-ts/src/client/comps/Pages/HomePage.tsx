@@ -1,7 +1,8 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useReducer, useEffect } from "react";
 import "../../scss/home/home";
 import { HomeHeader } from "../SubComponents/Home/HomeHeader";
 import { HomePatientProfile } from "../SubComponents/Home/HomePatientProfile";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface HomePageProps {}
 
@@ -17,6 +18,72 @@ type PatientProfile = {
   dateOfBirth: number;
   isPregnant: string | null;
   ethnicity: string;
+};
+
+type HomePageState = {
+  nameSort: null | "ASC" | "DESC";
+  createdSort: null | "ASC" | "DESC";
+  lastModifiedSort: null | "ASC" | "DESC";
+};
+
+const initialState: HomePageState = {
+  nameSort: null,
+  createdSort: null,
+  lastModifiedSort: "DESC",
+};
+
+function reducer(
+  state: HomePageState,
+  action: { type: "NAME_SORT" | "CREATED_SORT" | "LAST_MODIFIED_SORT" }
+): HomePageState {
+  switch (action.type) {
+    case "NAME_SORT":
+      return {
+        nameSort:
+          state.nameSort == "ASC" || state.nameSort == null ? "DESC" : "ASC",
+        createdSort: null,
+        lastModifiedSort: null,
+      };
+    case "CREATED_SORT":
+      return {
+        nameSort: null,
+        createdSort:
+          state.createdSort == "ASC" || state.createdSort == null
+            ? "DESC"
+            : "ASC",
+        lastModifiedSort: null,
+      };
+    case "LAST_MODIFIED_SORT":
+      return {
+        nameSort: null,
+        createdSort: null,
+        lastModifiedSort:
+          state.lastModifiedSort == "ASC" || state.lastModifiedSort == null
+            ? "DESC"
+            : "ASC",
+      };
+    default:
+      throw new Error("Invalid type on action.");
+  }
+}
+
+const nameSorterAsc = (a: PatientProfile, b: PatientProfile) => {
+  return a.lastName.toUpperCase() < b.lastName.toUpperCase() ? 1 : -1;
+};
+const nameSorterDesc = (a: PatientProfile, b: PatientProfile) => {
+  return a.lastName.toUpperCase() > b.lastName.toUpperCase() ? 1 : -1;
+};
+const createdSorterAsc = (a: PatientProfile, b: PatientProfile) => {
+  return a.date < b.date ? 1 : -1;
+};
+const createdSorterDesc = (a: PatientProfile, b: PatientProfile) => {
+  return a.date > b.date ? 1 : -1;
+};
+const lastModSorterAsc = (a: PatientProfile, b: PatientProfile) => {
+  return a.lastModified < b.lastModified ? 1 : -1;
+};
+const lastModSorterDesc = (a: PatientProfile, b: PatientProfile) => {
+  return a.lastModified > b.lastModified ? 1 : -1;
 };
 
 export const HomePage: React.FC<HomePageProps> = ({}) => {
@@ -322,27 +389,100 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
       country: "Canada",
     },
   ];
+
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { nameSort, createdSort, lastModifiedSort } = state;
+  const [patientsList, setPatientsList] = useState(patients);
+
+  useEffect(() => {
+    if (nameSort !== null) {
+      if (nameSort === "ASC") {
+        setPatientsList(patientsList.sort(nameSorterAsc));
+      } else {
+        setPatientsList(patientsList.sort(nameSorterDesc));
+      }
+    } else if (createdSort !== null) {
+      if (createdSort === "ASC") {
+        setPatientsList(patientsList.sort(createdSorterAsc));
+      } else {
+        setPatientsList(patientsList.sort(createdSorterDesc));
+      }
+    } else if (lastModifiedSort !== null) {
+      if (lastModifiedSort === "ASC") {
+        setPatientsList(patientsList.sort(lastModSorterAsc));
+      } else {
+        setPatientsList(patientsList.sort(lastModSorterDesc));
+      }
+    } else {
+      console.log(`All sorts are null. Something has gone wrong!`);
+      setPatientsList(patientsList.sort(lastModSorterDesc));
+    }
+  }, [nameSort, createdSort, lastModifiedSort]);
+
   return (
     <Fragment>
-      <div className="home-page-outermost" onClick={(e:any) => {
-          if (isAvatarPopup && !e.target.className.includes("home-page-header-avatar")){
+      <div
+        className="home-page-outermost"
+        onClick={(e: any) => {
+          if (
+            isAvatarPopup &&
+            !e.target.className.includes("home-page-header-avatar")
+          ) {
             setIsAvatarPopup(false);
           }
-        }}>
-        <HomeHeader isAvatarPopup={isAvatarPopup} setIsAvatarPopup={setIsAvatarPopup}/>
+        }}
+      >
+        <HomeHeader
+          isAvatarPopup={isAvatarPopup}
+          setIsAvatarPopup={setIsAvatarPopup}
+        />
         <div className="home-page-content-container">
           <div className="home-page-your-patients-title">Your Patients</div>
           <div className="home-page-separator-line"></div>
           <div className="home-page-patient-header-grid">
-            <p className="home-page-patient-header-grid-name-col">Name</p>
-            <p className="home-page-patient-header-grid-created-col">Created</p>
-            <p className="home-page-patient-header-grid-last-modified-col">
+            <p
+              className="home-page-patient-header-grid-name-col"
+              onClick={() => {
+                dispatch({ type: "NAME_SORT" });
+              }}
+            >
+              Name
+              {nameSort == null || nameSort == "ASC" ? (
+                <FontAwesomeIcon icon="chevron-up" />
+              ) : (
+                <FontAwesomeIcon icon="chevron-down" />
+              )}
+            </p>
+            <p
+              className="home-page-patient-header-grid-created-col"
+              onClick={() => {
+                dispatch({ type: "CREATED_SORT" });
+              }}
+            >
+              Created
+              {createdSort == null || createdSort == "ASC" ? (
+                <FontAwesomeIcon icon="chevron-up" />
+              ) : (
+                <FontAwesomeIcon icon="chevron-down" />
+              )}
+            </p>
+            <p
+              className="home-page-patient-header-grid-last-modified-col"
+              onClick={() => {
+                dispatch({ type: "LAST_MODIFIED_SORT" });
+              }}
+            >
               Last Modified
+              {lastModifiedSort == null || lastModifiedSort == "ASC" ? (
+                <FontAwesomeIcon icon="chevron-up" />
+              ) : (
+                <FontAwesomeIcon icon="chevron-down" />
+              )}
             </p>
           </div>
           <div className="home-page-content">
-            {patients.map(p => {
+            {patientsList.map(p => {
               return (
                 <HomePatientProfile
                   firstName={p.firstName}
@@ -359,8 +499,11 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
                 />
               );
             })}
-            <div className="home-page-content-whitespace" style={{height: (window.innerHeight - 400)}}>
-            <div className="home-page-content-whitespace-logo"></div>
+            <div
+              className="home-page-content-whitespace"
+              style={{ height: window.innerHeight - 400 }}
+            >
+              <div className="home-page-content-whitespace-logo"></div>
             </div>
           </div>
           <div className="home-page-create-new-patient-btn">

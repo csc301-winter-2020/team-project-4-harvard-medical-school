@@ -72,16 +72,27 @@ input:focus {
   color: $color-primary-dim;
 }
 
-.home-page-header-user-avatar {
+.home-page-hamburger-container {
   cursor: pointer;
   position: absolute;
-  right: 5px;
-  margin-top: 8px;
+  right: 25px;
   height: 45px;
   width: 45px;
-  border-radius: 50%;
-  background-image: url("https://api.adorable.io/avatars/50/17");
   background-size: contain;
+}
+
+.home-page-header-avatar-image{
+  height: 100px;
+  width: 100px;
+  background-image: url("https://randomuser.me/api/portraits/men/43.jpg");
+  background-size: contain;
+  border-radius: 50%;
+  margin: auto;
+  transition: all 0.1s ease;
+}
+
+.home-page-header-avatar-image:hover{
+  box-shadow: 0 0 0 6px rgba(0,0,0,0.08);
 }
 
 .home-page-header-avatar-popup-container{
@@ -90,14 +101,13 @@ input:focus {
   top: 60px;
   background-color: $color-primary;
   width: 250px;
-  height: 150px;
+  height: 230px;
   padding: 3px;
   border-bottom-left-radius: 5px;
 }
 
 .home-page-header-avatar-drop-name{
   color: white;
-  margin-top: 30px;
   margin-bottom: 30px;
   text-align: center;
   font-size: 2rem;
@@ -114,6 +124,11 @@ input:focus {
   cursor: pointer;
   font-size: 1.5rem;
   color: $color-primary;
+  transition: all 0.15s ease;
+}
+
+.home-page-header-avatar-drop-logout:hover{
+  background-color: $color-primary-very-very-light;
 }
 
 .home-page-content-container {
@@ -174,6 +189,10 @@ input:focus {
   height: 20px;
   color: #999;
   margin-bottom: 10px;
+
+  p {
+    cursor: pointer;
+  }
 }
 
 .home-page-patient-header-grid-name-col {
@@ -234,6 +253,29 @@ input:focus {
 
 .home-patient-profile-info-container{
   margin-left: 20px;
+}
+.home-patient-profile-info-quick-info-container{
+  width: calc(100% - 200px);
+  display: inline-block;
+}
+
+.home-patient-profile-info-btn-container{
+  display: inline-block;
+  width: 200px;
+
+  div {
+    cursor: pointer;
+    margin: 5px;
+    padding: 10px;
+    background-color: $color-primary;
+    transition: all 0.15s ease;
+    color: white;
+    text-align: center;
+    border-radius: 3px;
+  }
+  div:hover{
+    background-color: $color-primary-dim;
+  }
 }
 
 .home-page-create-new-patient-btn, .home-page-create-template-btn{

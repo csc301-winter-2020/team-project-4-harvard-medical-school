@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useReducer, useEffect } from "react";
 import "../../scss/home/home";
-import { HomeHeader } from "../SubComponents/Home/HomeHeader";
+import { Header } from "../SubComponents/Header";
 import { HomePatientProfile } from "../SubComponents/Home/HomePatientProfile";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -434,9 +434,10 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
           }
         }}
       >
-        <HomeHeader
+        <Header
           isAvatarPopup={isAvatarPopup}
           setIsAvatarPopup={setIsAvatarPopup}
+          showSearch={true}
         />
         <div className="home-page-content-container">
           <div className="home-page-your-patients-title">Your Patients</div>

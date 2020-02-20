@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useHistory } from "react-router-dom";
 const dateFormat = require("dateformat");
 const dateString = "mmmm d, yyyy";
 const dateStringCompact = "m/d/yyyy";
@@ -31,13 +32,24 @@ export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
   ethnicity,
   country,
 }) => {
+  const history = useHistory();
   const [isShowingInfo, setIsShowingInfo] = useState(false);
-  const [isPortraitMode, setIsPortraitMode] = useState(window.innerWidth < 1080);
-  const [createdDate, setCreatedDate] = useState(dateFormat(new Date(date), isPortraitMode ? dateStringCompact : dateString));
-  const [modifiedDate, setModifiedDate] = useState(dateFormat(new Date(lastModified), isPortraitMode ? dateStringCompact : dateString));
+  const [isPortraitMode, setIsPortraitMode] = useState(
+    window.innerWidth < 1080
+  );
+  const [createdDate, setCreatedDate] = useState(
+    dateFormat(new Date(date), isPortraitMode ? dateStringCompact : dateString)
+  );
+  const [modifiedDate, setModifiedDate] = useState(
+    dateFormat(
+      new Date(lastModified),
+      isPortraitMode ? dateStringCompact : dateString
+    )
+  );
+
   useEffect(() => {
-    const handleResize = () =>{
-      if (window.innerWidth < 1080){
+    const handleResize = () => {
+      if (window.innerWidth < 1080) {
         setIsPortraitMode(true);
         setCreatedDate(dateFormat(new Date(date), dateStringCompact));
         setModifiedDate(dateFormat(new Date(lastModified), dateStringCompact));
@@ -46,7 +58,7 @@ export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
         setCreatedDate(dateFormat(new Date(date), dateString));
         setModifiedDate(dateFormat(new Date(lastModified), dateString));
       }
-    }
+    };
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -55,13 +67,16 @@ export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
 
   return (
     <>
-      <div className="home-patient-profile-container">
+      <div
+        className="home-patient-profile-container"
+        onClick={() => {
+          history.push("/patient/8675309");
+        }}
+      >
         <div className="home-patient-profile-name-col">
           {lastName}, {firstName}
         </div>
-        <div className="home-patient-profile-date-col">
-          {createdDate}
-        </div>
+        <div className="home-patient-profile-date-col">{createdDate}</div>
         <div className="home-patient-profile-last-modified-col">
           {modifiedDate}
         </div>
@@ -70,7 +85,10 @@ export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
           onClick={() => setIsShowingInfo(!isShowingInfo)}
         >
           <div className="home-patient-profile-info-icon">
-            <FontAwesomeIcon icon="info-circle" size={isPortraitMode ? "2x" : "1x"}/>
+            <FontAwesomeIcon
+              icon="info-circle"
+              size={isPortraitMode ? "2x" : "1x"}
+            />
           </div>
         </div>
       </div>

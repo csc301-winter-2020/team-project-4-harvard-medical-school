@@ -43,6 +43,37 @@
   color: white;
 }
 
+.patient-profile-page-page-content{
+  height: calc(100% - 60px);
+  float: left;
+}
+
+.patient-profile-page-dots-container{
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+$dot-size: 15px;
+
+.patient-profile-page-dot{
+  width: $dot-size;
+  height: $dot-size;
+  margin: 5px;
+  background-color: #ccc;
+  border-radius: 50%;
+  display: inline-block;
+  transition: all 0.15s ease;
+}
+
+.patient-profile-page-dot--active{
+  background-color: $color-primary-dim;
+}
+
+
+
+
 @media only screen and (max-height: 750px) {
   .patient-profile-sidebar-contents{
     position: static;

@@ -48,6 +48,8 @@ const initNavDots = () => {
 
 // Length of page transitions in ms. Should match the transition time in the SCSS.
 const transitionDuration: number = 300;
+const swipeDistanceThreshold: number = 300;
+let xcoord = 0;
 
 export const PatientProfilePage: React.FC<PatientProfilePageProps> = ({}) => {
   const [currentPage, setCurrentPage] = useState<contentType>("Demographics");
@@ -56,6 +58,19 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = ({}) => {
   const [transitionName, setTransitionName] = useState("slide-left");
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
 
+  const incrementPage = () => {
+    const index = contents.indexOf(currentPage);
+    const newIndex = index === contents.length - 1 ? 0 : index + 1;
+    setCurrentPage(contents[newIndex]);
+  };
+
+  const decrementPage = () => {
+    const index = contents.indexOf(currentPage);
+    const newIndex = index === 0 ? contents.length - 1 : index - 1;
+    setCurrentPage(contents[newIndex]);
+  };
+
+  // Component did mount use effect for nav bar.
   useEffect(() => {
     setPrevPage(currentPage);
     const sidebarItems = document.querySelectorAll(
@@ -80,6 +95,40 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = ({}) => {
       "patient-profile-page-dot patient-profile-page-dot--active";
   }, [currentPage]);
 
+  // Component did mount for swipe listners
+  useEffect(() => {
+    const container = document.querySelector(
+      ".patient-profile-page-page-content"
+    );
+
+    function touchEnd(e: any) {
+      container.removeEventListener("touchmove", touchMove);
+    }
+
+    function touchMove(e: any) {
+      if (e.touches[0].screenX - xcoord > swipeDistanceThreshold) {
+        incrementPage();
+        container.removeEventListener("touchmove", touchMove);
+      } else if (e.touches[0].screenX - xcoord < -swipeDistanceThreshold) {
+        decrementPage();
+        container.removeEventListener("touchmove", touchMove);
+      }
+    }
+
+    function touchStart(e: any) {
+      xcoord = e.touches[0].screenX;
+      container.addEventListener("touchmove", touchMove);
+    }
+
+    container.addEventListener("touchstart", touchStart);
+    container.addEventListener("touchend", touchEnd);
+
+    return () => {
+      container.removeEventListener("touchstart", touchStart);
+      container.removeEventListener("touchend", touchEnd);
+    };
+  });
+
   return (
     <>
       <Header
@@ -88,8 +137,10 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = ({}) => {
         showSearch={false}
       />
       <div className="patient-profile-page-outermost-container">
-
-        <nav className="patient-profile-page-sidebar-container" style={{marginLeft: isShowingSidebar ? "0" : "-250px"}}>
+        <nav
+          className="patient-profile-page-sidebar-container"
+          style={{ marginLeft: isShowingSidebar ? "0" : "-250px" }}
+        >
           <div className="patient-profile-sidebar-contents">
             {contents.map(c => {
               return (
@@ -104,10 +155,14 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = ({}) => {
             })}
           </div>
         </nav>
-        
-        
+
         <div className="patient-profile-page-page-content">
-          <div className="patient-profile-sidebar-hide-btn" onClick={() => setIsShowingSidebar(!isShowingSidebar)}>{isShowingSidebar ? "Hide" : "Show"}</div>
+          <div
+            className="patient-profile-sidebar-hide-btn"
+            onClick={() => setIsShowingSidebar(!isShowingSidebar)}
+          >
+            {isShowingSidebar ? "Hide" : "Show"}
+          </div>
           <DemographicsPage
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}

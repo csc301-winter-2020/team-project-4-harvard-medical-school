@@ -14,8 +14,9 @@ export const FamilyHistoryPage: React.FC<FamilyHistoryPageProps> = ({
   transitionDuration,
   transitionName,
 }) => {
+  
   useEffect(() => {
-    document.title = "Patient Profile: Social History";
+    document.title = "Patient Profile: Family History";
   });
   return (
     <>

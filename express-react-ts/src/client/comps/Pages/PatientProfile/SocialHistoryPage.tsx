@@ -15,6 +15,7 @@ export const SocialHistoryPage: React.FC<SocialHistoryPageProps> = ({
   transitionDuration,
   transitionName,
 }) => {
+  
   useEffect(() => {
     document.title = "Patient Profile: Social History";
   });

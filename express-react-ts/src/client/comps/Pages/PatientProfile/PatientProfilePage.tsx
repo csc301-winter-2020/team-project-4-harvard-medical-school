@@ -51,7 +51,8 @@ const transitionDuration: number = 300;
 
 export const PatientProfilePage: React.FC<PatientProfilePageProps> = ({}) => {
   const [currentPage, setCurrentPage] = useState<contentType>("Demographics");
-  const [prevPage, setPrevPage] = useState<contentType|null>(null);
+  const [isShowingSidebar, setIsShowingSidebar] = useState(true);
+  const [prevPage, setPrevPage] = useState<contentType | null>(null);
   const [transitionName, setTransitionName] = useState("slide-left");
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
 
@@ -87,7 +88,8 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = ({}) => {
         showSearch={false}
       />
       <div className="patient-profile-page-outermost-container">
-        <nav className="patient-profile-page-sidebar-container">
+
+        <nav className="patient-profile-page-sidebar-container" style={{marginLeft: isShowingSidebar ? "0" : "-250px"}}>
           <div className="patient-profile-sidebar-contents">
             {contents.map(c => {
               return (
@@ -102,7 +104,10 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = ({}) => {
             })}
           </div>
         </nav>
+        
+        
         <div className="patient-profile-page-page-content">
+          <div className="patient-profile-sidebar-hide-btn" onClick={() => setIsShowingSidebar(!isShowingSidebar)}>{isShowingSidebar ? "Hide" : "Show"}</div>
           <DemographicsPage
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}

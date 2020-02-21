@@ -5,6 +5,7 @@
 }
 
 .patient-profile-page-sidebar-container{
+  z-index: 1;
   width: 250px;
   float: left;
   height: calc(100% - 60px);
@@ -46,6 +47,8 @@
 .patient-profile-page-page-content{
   height: calc(100% - 60px);
   float: left;
+  overflow: hidden;
+  width: calc(100% - 250px);
 }
 
 .patient-profile-page-dots-container{
@@ -71,8 +74,51 @@ $dot-size: 15px;
   background-color: $color-primary-dim;
 }
 
+.patient-profile-page-title{
+  font-size: 2rem;
+  font-weight: bold;
+  p{
+    font-size: 1.2rem;
+  }
+}
 
 
+.slide-right-enter {
+  transform: translateX(-100vw);
+}
+.slide-right-enter-active {
+  transform: translateX(0);
+  transition: transform 300ms;
+}
+.slide-right-exit {
+  transform: translateX(0);
+}
+.slide-right-exit-active {
+  transform: translateX(100vw);
+  transition: transform 300ms;
+}
+
+.patient-profile-window{
+  position: absolute;
+  top: 60px;
+  left: 250px;
+  
+}
+
+.slide-left-enter {
+  transform: translateX(100vw);
+}
+.slide-left-enter-active {
+  transform: translateX(0);
+  transition: transform 300ms;
+}
+.slide-left-exit {
+  transform: translateX(0);
+}
+.slide-left-exit-active {
+  transform: translateX(-100vw);
+  transition: transform 300ms;
+}
 
 @media only screen and (max-height: 750px) {
   .patient-profile-sidebar-contents{

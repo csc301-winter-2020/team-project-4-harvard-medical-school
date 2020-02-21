@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { DemographicsPage } from "./DemographicsPage";
 import "../../../scss/patient-profiles/patient-profiles.scss";
 import { Header } from "../../SubComponents/Header";
+import { SocialHistoryPage } from "./SocialHistoryPage";
+import { CSSTransition } from "react-transition-group";
+import { FamilyHistoryPage } from "./FamilyHistoryPage";
 
 interface PatientProfilePageProps {}
 
@@ -43,11 +46,17 @@ const initNavDots = () => {
   return container;
 };
 
+// Length of page transitions in ms. Should match the transition time in the SCSS.
+const transitionDuration: number = 300;
+
 export const PatientProfilePage: React.FC<PatientProfilePageProps> = ({}) => {
   const [currentPage, setCurrentPage] = useState<contentType>("Demographics");
+  const [prevPage, setPrevPage] = useState<contentType|null>(null);
+  const [transitionName, setTransitionName] = useState("slide-left");
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
 
   useEffect(() => {
+    setPrevPage(currentPage);
     const sidebarItems = document.querySelectorAll(
       ".patient-profile-page-sidebar-item"
     );
@@ -94,7 +103,27 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = ({}) => {
           </div>
         </nav>
         <div className="patient-profile-page-page-content">
-          <DemographicsPage />
+          <DemographicsPage
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            transitionDuration={transitionDuration}
+            transitionName={transitionName}
+          />
+
+          <SocialHistoryPage
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            transitionDuration={transitionDuration}
+            transitionName={transitionName}
+          />
+
+          <FamilyHistoryPage
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            transitionDuration={transitionDuration}
+            transitionName={transitionName}
+          />
+
           <div className="patient-profile-page-dots-container">
             {initNavDots()}
           </div>

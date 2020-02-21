@@ -19,6 +19,10 @@ $merriweather-font: "Merriweather", serif;
   font-family: $serif-font;
 }
 
+body {
+  overflow: hidden;
+}
+
 .my-class {
   font-size: 100px;
   font-family: $our-font;

@@ -86,31 +86,36 @@ const initNavDots = () => {
 // Length of page transitions in ms. Should match the transition time in the SCSS.
 const transitionDuration: number = 300;
 const swipeDistanceThreshold: number = 300;
-let xcoord = 0;
+let xcoord:number = 0;
+let transitionName: "slide-left" | "slide-right" = "slide-left";
 
 export const PatientProfilePage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<contentType>("Demographics");
   const [isShowingSidebar, setIsShowingSidebar] = useState(true);
   const [prevPage, setPrevPage] = useState<contentType | null>(null);
-  const [transitionName, setTransitionName] = useState<
-    "slide-left" | "slide-right"
-  >("slide-left");
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
 
   const incrementPage = () => {
+    transitionName = "slide-left";
     const index = contents.indexOf(currentPage);
     const newIndex = index === contents.length - 1 ? 0 : index + 1;
     setCurrentPage(contents[newIndex]);
   };
 
   const decrementPage = () => {
+    transitionName = "slide-right";
     const index = contents.indexOf(currentPage);
     const newIndex = index === 0 ? contents.length - 1 : index - 1;
     setCurrentPage(contents[newIndex]);
   };
 
-  // Component did mount use effect for nav bar.
+  // Observer for currentPage
   useEffect(() => {
+    if (contents.indexOf(prevPage) < contents.indexOf(currentPage)){
+      transitionName = "slide-left";
+    } else {
+      transitionName = "slide-right";
+    }
     setPrevPage(currentPage);
     const sidebarItems = document.querySelectorAll(
       ".patient-profile-page-sidebar-item"

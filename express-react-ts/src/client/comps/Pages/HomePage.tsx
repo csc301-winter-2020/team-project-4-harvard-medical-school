@@ -484,9 +484,10 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
             </p>
           </div>
           <div className="home-page-content">
-            {patientsList.map(p => {
+            {patientsList.map( (p, index) => {
               return (
                 <HomePatientProfile
+                  key={index}
                   firstName={p.firstName}
                   lastName={p.lastName}
                   title={p.title}

@@ -69,8 +69,11 @@ export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
     <>
       <div
         className="home-patient-profile-container"
-        onClick={() => {
-          history.push("/patient/8675309");
+        onClick={(e:any) => {
+          // Only redirect if we are clicking on the container, not the icon.
+          if (e.target.className !== "home-patient-profile-info-btn" && e.target.className !== "home-patient-profile-info-icon" && e.target.nodeName !== "path" && e.target.nodeName !== "svg"){
+            history.push("/patient/8675309");
+          }
         }}
       >
         <div className="home-patient-profile-name-col">
@@ -91,7 +94,8 @@ export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
             />
           </div>
         </div>
-      </div>
+      </div> {/** END GREY BAR DIV */}
+
       {isShowingInfo && (
         <div className="home-patient-profile-info-container">
           <div className="home-patient-profile-info-quick-info-container">

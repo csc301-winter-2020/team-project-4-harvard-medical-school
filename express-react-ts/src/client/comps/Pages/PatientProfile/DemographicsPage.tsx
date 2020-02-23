@@ -1,36 +1,32 @@
 import React, { useEffect, useState } from "react";
 import "../../../scss/patient-profiles/demographics.scss";
 import { CSSTransition } from "react-transition-group";
+import { IndividualPatientProfile } from "./PatientProfilePage";
 
-interface DemographicsPageProps {
-  currentPage: string;
-  setCurrentPage: Function;
-  transitionDuration: number;
-  transitionName: string;
-}
-
-export const DemographicsPage: React.FC<DemographicsPageProps> = ({
+export const DemographicsPage: IndividualPatientProfile = ({
+  pageName,
   currentPage,
   setCurrentPage,
   transitionDuration,
   transitionName,
 }) => {
-
   useEffect(() => {
-    document.title = "Patient Profile: Demographics";
-  });
+    if (currentPage === pageName) {
+      document.title = `Patient Profile: ${pageName}`;
+    }
+  }, [currentPage]);
   return (
     <>
       <CSSTransition
-        in={currentPage === "Demographics"}
+        in={currentPage === pageName}
         unmountOnExit
         timeout={transitionDuration}
-        onEnter={() => setCurrentPage("Demographics")}
+        onEnter={() => setCurrentPage(pageName)}
         classNames={transitionName}
       >
         <div className="demographics-page-outermost-container patient-profile-window">
           <div className="patient-profile-page-title">
-            <h1>Demographics</h1>
+            <h1>{pageName}</h1>
             <p>
               Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil,
               sequi cupiditate amet ab fuga assumenda illum excepturi laboriosam

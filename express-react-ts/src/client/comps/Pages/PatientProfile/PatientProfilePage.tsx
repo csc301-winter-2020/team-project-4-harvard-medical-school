@@ -1,12 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { DemographicsPage } from "./DemographicsPage";
 import "../../../scss/patient-profiles/patient-profiles.scss";
 import { Header } from "../../SubComponents/Header";
 import { SocialHistoryPage } from "./SocialHistoryPage";
-import { CSSTransition } from "react-transition-group";
 import { FamilyHistoryPage } from "./FamilyHistoryPage";
+import { PastMedicalHistoryPage } from "./PastMedicalHistoryPage";
+import { CCHPIPage } from "./CCPHIPage";
+import { ReviewOfSystemsPage } from "./ReviewOfSystemsPage";
+import { PhysicalExaminationPage } from "./PhysicalExaminationPage";
+import { ImagingResultsPage } from "./ImagingResultsPage";
+import { LabResultsPage } from "./LabResultsPage";
+import { DifferentialClinicalScoresPage } from "./DifferentialClinicalScoresPage";
 
-interface PatientProfilePageProps {}
+/**
+ * To create a new type of page, firstly make the react FC and then import it here.
+ * Then add the string to the contentType type.
+ * Then add the string to the const contents array.
+ * Then add the react component to the contentsPages component array.
+ * */
 
 type contentType =
   | "Demographics"
@@ -33,11 +44,37 @@ const contents: contentType[] = [
   "Differential & Clinical Scores",
 ];
 
+const contentsPages: IndividualPatientProfile[] = [
+  DemographicsPage,
+  CCHPIPage,
+  PastMedicalHistoryPage,
+  SocialHistoryPage,
+  FamilyHistoryPage,
+  ReviewOfSystemsPage,
+  PhysicalExaminationPage,
+  ImagingResultsPage,
+  LabResultsPage,
+  DifferentialClinicalScoresPage,
+];
+
+interface IndividualPatientProfilePageProps {
+  pageName: contentType;
+  currentPage: contentType;
+  setCurrentPage: Function;
+  transitionDuration: number;
+  transitionName: string;
+}
+
+export type IndividualPatientProfile = React.FC<
+  IndividualPatientProfilePageProps
+>;
+
 const initNavDots = () => {
   const container = [];
   for (let i = 0; i < contents.length; i++) {
     container.push(
       <div
+        key={i}
         id={`patient-profile-page-dot-${i}`}
         className="patient-profile-page-dot"
       ></div>
@@ -51,11 +88,13 @@ const transitionDuration: number = 300;
 const swipeDistanceThreshold: number = 300;
 let xcoord = 0;
 
-export const PatientProfilePage: React.FC<PatientProfilePageProps> = ({}) => {
+export const PatientProfilePage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<contentType>("Demographics");
   const [isShowingSidebar, setIsShowingSidebar] = useState(true);
   const [prevPage, setPrevPage] = useState<contentType | null>(null);
-  const [transitionName, setTransitionName] = useState("slide-left");
+  const [transitionName, setTransitionName] = useState<
+    "slide-left" | "slide-right"
+  >("slide-left");
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
 
   const incrementPage = () => {
@@ -145,6 +184,7 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = ({}) => {
             {contents.map(c => {
               return (
                 <div
+                  key={contents.indexOf(c)}
                   id={`sidebar-item-${contents.indexOf(c)}`}
                   className="patient-profile-page-sidebar-item"
                   onClick={() => setCurrentPage(c)}
@@ -163,26 +203,19 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = ({}) => {
           >
             {isShowingSidebar ? "Hide" : "Show"}
           </div>
-          <DemographicsPage
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            transitionDuration={transitionDuration}
-            transitionName={transitionName}
-          />
 
-          <SocialHistoryPage
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            transitionDuration={transitionDuration}
-            transitionName={transitionName}
-          />
-
-          <FamilyHistoryPage
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            transitionDuration={transitionDuration}
-            transitionName={transitionName}
-          />
+          {contentsPages.map((Comp: IndividualPatientProfile, index) => {
+            return (
+              <Comp
+                key={index}
+                pageName={contents[index]}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                transitionDuration={transitionDuration}
+                transitionName={transitionName}
+              />
+            );
+          })}
 
           <div className="patient-profile-page-dots-container">
             {initNavDots()}

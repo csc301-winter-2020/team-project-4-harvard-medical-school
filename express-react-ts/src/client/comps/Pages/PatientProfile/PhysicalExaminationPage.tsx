@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
 import { CSSTransition } from "react-transition-group";
-import "../../../scss/patient-profiles/social-history.scss";
 import { IndividualPatientProfile } from "./PatientProfilePage";
 
-export const SocialHistoryPage: IndividualPatientProfile = ({
+export const PhysicalExaminationPage: IndividualPatientProfile = ({
   pageName,
   currentPage,
   setCurrentPage,
@@ -24,7 +23,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
         onEnter={() => setCurrentPage(pageName)}
         classNames={transitionName}
       >
-        <div className="social-history-page-outermost-container patient-profile-window">
+        <div className="physical-examination-history-page-outermost-container patient-profile-window">
           <div className="patient-profile-page-title">
             <h1>{pageName}</h1>
             <p>

@@ -1,30 +1,33 @@
 import React, { useEffect } from "react";
 import { CSSTransition } from "react-transition-group";
-import "../../../scss/patient-profiles/social-history.scss";
 import { IndividualPatientProfile } from "./PatientProfilePage";
 
-export const SocialHistoryPage: IndividualPatientProfile = ({
+export const CCHPIPage: IndividualPatientProfile = ({
   pageName,
   currentPage,
   setCurrentPage,
   transitionDuration,
   transitionName,
 }) => {
+
   useEffect(() => {
-    if (currentPage === pageName) {
+    if (currentPage === pageName){
       document.title = `Patient Profile: ${pageName}`;
     }
   }, [currentPage]);
+  
   return (
     <>
       <CSSTransition
         in={currentPage === pageName}
         unmountOnExit
         timeout={transitionDuration}
-        onEnter={() => setCurrentPage(pageName)}
+        onEnter={() =>
+          setCurrentPage(pageName)
+        }
         classNames={transitionName}
       >
-        <div className="social-history-page-outermost-container patient-profile-window">
+        <div className="cc-hpi-page-outermost-container patient-profile-window">
           <div className="patient-profile-page-title">
             <h1>{pageName}</h1>
             <p>

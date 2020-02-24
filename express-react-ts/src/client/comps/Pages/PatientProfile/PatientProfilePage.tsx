@@ -63,6 +63,7 @@ interface IndividualPatientProfilePageProps {
   setCurrentPage: Function;
   transitionDuration: number;
   transitionName: string;
+  isShowingSidebar: boolean;
 }
 
 export type IndividualPatientProfile = React.FC<
@@ -201,7 +202,8 @@ export const PatientProfilePage: React.FC = () => {
           </div>
         </nav>
 
-        <div className="patient-profile-page-page-content">
+        <div className="patient-profile-page-page-content"
+        style={{ width: isShowingSidebar ? "calc(100% - 250px)" : "100%" }}>
           <div
             className="patient-profile-sidebar-hide-btn"
             onClick={() => setIsShowingSidebar(!isShowingSidebar)}
@@ -212,6 +214,7 @@ export const PatientProfilePage: React.FC = () => {
           {contentsPages.map((Comp: IndividualPatientProfile, index) => {
             return (
               <Comp
+                isShowingSidebar={isShowingSidebar}
                 key={index}
                 pageName={contents[index]}
                 currentPage={currentPage}

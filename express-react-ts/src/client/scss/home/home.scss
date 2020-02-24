@@ -97,6 +97,7 @@ input:focus {
 }
 
 .home-page-header-avatar-popup-container{
+  z-index: 99;
   position: absolute;
   right: 0;
   top: 60px;

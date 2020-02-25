@@ -16,10 +16,9 @@ export const App: React.FC = ({}) => {
     <BrowserRouter>
         <Switch>
           <Route exact path="/" component={LoginPage} />
-          <Route exact path="/home" component={Page} />
-          <Route exact path="/loader" component={HelixLoader} />
           <Route exact path="/curUser" component={CurUser} />
           <Route render={() => <Error errNo={404} />} />
+          </Switch>
     </BrowserRouter>
   );
 };

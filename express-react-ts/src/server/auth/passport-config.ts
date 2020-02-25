@@ -3,6 +3,21 @@ const bcrypt = require('bcryptjs');
 import * as passport from "passport";
 import { User } from '../server';
 
+import {Pool, Client} from "pg";
+
+const pool: Pool = new Pool();
+// pool.query('SET SEARCH_PATH TO csc301db')
+// .then((res, err) => {
+//   if (err) {
+//     console.log(err);
+//   } else {
+//     console.log(res);
+//   }
+// }).catch((err) => {
+//   console.log(err);
+// });
+
+
 const dummyUsers:User[] = [
   {
     id: 0,
@@ -28,15 +43,31 @@ const dummyUsers:User[] = [
 function getUserByUsername(username: string) {
   console.log(`LOGIN: Trying to log in username: ${username}`);
   
-  const usersWithThisUsername: User[]= dummyUsers.filter(u => u.username === username);
+  return new Promise<User>((resolve, reject) => {
+    pool.connect().then((client: any) => {
+      const query: string = 'SELECT id, username, password FROM csc301db.users WHERE username = $1';
+      return client.query(query, [username]);
+    }).then((result: any) => {
+      if (result.rowCount == 1) {
+        resolve({
+          id: result.rows[0].id,
+          username: result.rows[0].username,
+          password: result.rows[0].password
+        });
+      } else {
+        reject();
+      }
+    })
+  });
   
   // IF there is not exactly one user with this username (because there are 0 users with this username)
-  if (usersWithThisUsername.length !== 1){
-    return null;
-  } else {
-    return usersWithThisUsername[0];
-  }
+  // if (usersWithThisUsername.length !== 1){
+  //   return null;
+  // } else {
+  //   return usersWithThisUsername[0];
+  // }
 }
+// getUserByUsername('will');
 
 /**
  * * TODO: Change from dummy data to PSQL query.
@@ -63,23 +94,23 @@ function initialize(passport: passport.PassportStatic){
   
   // The authenticateUser funciton will be async when run with PSQL
   const authenticateUser = (username:string, password:string, done: (arg0: Error, arg1: boolean | User) => any) => {
-    const user = getUserByUsername(username);
-    if (user == null){
-      const failureMsg = "LOGIN: FAIL: No User with that username.";
-      console.log(failureMsg)
-      return done(null, false);
-    }
-    console.log(`Expecting password to be ${user.password}`);
-    if (password === user.password) {
-      const successMsg = "LOGIN: SUCCESS: User and password match - Successful login.";
-      console.log(successMsg);
-      return done(null, user)
-    } else {
-      const failureMsg = "LOGIN: FAIL: Password did not match";
-      console.log(failureMsg)
-      return done(null, false)
-    }
-    
+    getUserByUsername(username).then((user: User) => {
+      if (user == null){
+        const failureMsg = "LOGIN: FAIL: No User with that username.";
+        console.log(failureMsg)
+        return done(null, false);
+      }
+      console.log(`Expecting password to be ${user.password}`);
+      if (password === user.password) {
+        const successMsg = "LOGIN: SUCCESS: User and password match - Successful login.";
+        console.log(successMsg);
+        return done(null, user)
+      } else {
+        const failureMsg = "LOGIN: FAIL: Password did not match";
+        console.log(failureMsg)
+        return done(null, false)
+      }
+    }); 
   }
   passport.use(new LocalStrategy( {
     usernameField: 'username'

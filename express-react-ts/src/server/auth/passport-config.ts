@@ -6,35 +6,6 @@ import { User } from '../server';
 import {Pool, Client} from "pg";
 
 const pool: Pool = new Pool();
-// pool.query('SET SEARCH_PATH TO csc301db')
-// .then((res, err) => {
-//   if (err) {
-//     console.log(err);
-//   } else {
-//     console.log(res);
-//   }
-// }).catch((err) => {
-//   console.log(err);
-// });
-
-
-const dummyUsers:User[] = [
-  {
-    id: 0,
-    username: "student",
-    password: "student"
-  }, 
-  {
-    id: 1,
-    username: "instructor",
-    password: "instructor"
-  }, 
-  {
-    id: 2,
-    username: "admin",
-    password: "admin"
-  }, 
-];
 
 /**
  * TODO: Change from dummy data to PSQL query.
@@ -55,7 +26,7 @@ function getUserByUsername(username: string) {
           password: result.rows[0].password
         });
       } else {
-        reject();
+        resolve(null);
       }
     })
   });

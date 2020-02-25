@@ -47,15 +47,22 @@ function getUserByUsername(username: string) {
 function getUserById(id: number) {
   console.log(`LOGIN: Trying to log in user with ID: ${id}`);
   
-  const usersWithThisId: User[]= dummyUsers.filter(u => u.id === id);
-  
-  // IF there is not exactly one user with this username (because there are 0 users with this username)
-  if (usersWithThisId.length !== 1){
-    console.log(`LOGIN: FAIL: No User with that id.`)
-    return null;
-  } else {
-    return usersWithThisId[0];
-  }
+  return new Promise<User>((resolve, reject) => {
+    pool.connect().then((client: any) => {
+      const query: string = 'SELECT id, username, password FROM csc301db.users WHERE id = $1';
+      return client.query(query, [id]);
+    }).then((result: any) => {
+      if (result.rowCount == 1) {
+        resolve({
+          id: result.rows[0].id,
+          username: result.rows[0].username,
+          password: result.rows[0].password
+        });
+      } else {
+        resolve(null);
+      }
+    })
+  });
 }
 
 /**
@@ -90,8 +97,9 @@ function initialize(passport: passport.PassportStatic){
     done(null, user.id);
   });
   passport.deserializeUser((id:number, done: (arg0: any, arg1: User) => any) => {
-    const user = getUserById(id);
-    return done(null, user);
+    getUserById(id).then((user) => {
+      return done(null, user);
+    });
   });
 }
 

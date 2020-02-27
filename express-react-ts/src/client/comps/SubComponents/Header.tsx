@@ -8,12 +8,16 @@ interface HeaderProps {
   isAvatarPopup: boolean;
   setIsAvatarPopup: Function;
   showSearch: boolean;
+  searchValue?: string;
+  setSearchValue?: Function;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   isAvatarPopup,
   setIsAvatarPopup,
   showSearch,
+  searchValue,
+  setSearchValue,
 }) => {
   const history = useHistory();
   useEffect(() => {
@@ -39,7 +43,7 @@ export const Header: React.FC<HeaderProps> = ({
       {showSearch && (
         <div className="home-page-header-search-bar">
           <FontAwesomeIcon icon="search" />
-          <input type="text" placeholder="Search Patients"></input>
+          <input type="text" placeholder="Search Patients" value={searchValue} onChange={e => setSearchValue(e.target.value)}></input>
         </div>
       )}
 

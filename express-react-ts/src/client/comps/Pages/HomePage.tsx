@@ -4,7 +4,6 @@ import { Header } from "../SubComponents/Header";
 import { HomePatientProfile } from "../SubComponents/Home/HomePatientProfile";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-
 interface HomePageProps {}
 
 type PatientProfile = {
@@ -394,6 +393,7 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
   const [state, dispatch] = useReducer(reducer, initialState);
   const { nameSort, createdSort, lastModifiedSort } = state;
+  const [searchVal, setSearchVal] = useState("");
   const [patientsList, setPatientsList] = useState(patients);
 
   useEffect(() => {
@@ -421,6 +421,19 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
     }
   }, [nameSort, createdSort, lastModifiedSort]);
 
+  useEffect(() => {
+    if (searchVal !== "") {
+      const newPatients = patients.filter(p => {
+        return (
+          p.firstName.toLowerCase().includes(searchVal.toLowerCase()) || p.lastName.toLowerCase().includes(searchVal.toLowerCase())
+        );
+      });
+      setPatientsList(newPatients);
+    } else {
+      setPatientsList(patients);
+    }
+  }, [searchVal]);
+
   return (
     <Fragment>
       <div
@@ -438,6 +451,8 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
           isAvatarPopup={isAvatarPopup}
           setIsAvatarPopup={setIsAvatarPopup}
           showSearch={true}
+          searchValue={searchVal}
+          setSearchValue={setSearchVal}
         />
         <div className="home-page-content-container">
           <div className="home-page-your-patients-title">Your Patients</div>
@@ -484,7 +499,7 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
             </p>
           </div>
           <div className="home-page-content">
-            {patientsList.map( (p, index) => {
+            {patientsList.map((p, index) => {
               return (
                 <HomePatientProfile
                   key={index}

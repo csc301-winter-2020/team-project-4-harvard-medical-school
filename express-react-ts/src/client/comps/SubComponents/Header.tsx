@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../scss/home/hamburgers.scss";
 import { CSSTransition } from "react-transition-group";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 
 interface HeaderProps {
   isAvatarPopup: boolean;
@@ -27,18 +27,21 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <div className="home-page-header-container">
-      <div className="home-page-header-logo-container" onClick={() => history.push("/home")}>
+      <div
+        className="home-page-header-logo-container"
+        onClick={() => history.push("/home")}
+      >
         <div className="home-page-header-logo"></div>
         <p className="home-page-header-logo-text">
           <span style={{ color: "white" }}>S</span>cribe
         </p>
       </div>
-      { showSearch && 
+      {showSearch && (
         <div className="home-page-header-search-bar">
           <FontAwesomeIcon icon="search" />
           <input type="text" placeholder="Search Patients"></input>
         </div>
-      }
+      )}
 
       <div
         className="home-page-hamburger-container"
@@ -68,8 +71,14 @@ export const Header: React.FC<HeaderProps> = ({
             <p>1st Year</p>
           </div>
           <div
+            className="home-page-header-avatar-drop-settings"
+            onClick={() => history.push("/settings")}
+          >
+            Settings
+          </div>
+          <div
             className="home-page-header-avatar-drop-logout"
-            onClick={() => (window.location.href = "/logout")}
+            onClick={() => history.push("/logout")}
           >
             Logout
           </div>

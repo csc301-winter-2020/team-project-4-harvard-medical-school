@@ -20,6 +20,7 @@ import {
   faExpandArrowsAlt,
   faFont,
   faPencilAlt,
+  faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 
 const myLibrary: any = library;
@@ -39,7 +40,8 @@ myLibrary.add(
   faSave,
   faExpandArrowsAlt,
   faFont,
-  faPencilAlt
+  faPencilAlt,
+  faCheck,
 );
 
 /**

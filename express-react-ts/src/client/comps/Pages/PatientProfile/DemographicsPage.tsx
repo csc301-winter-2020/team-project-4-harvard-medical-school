@@ -2,7 +2,6 @@ import React, { useEffect, useReducer } from "react";
 import "../../../scss/patient-profiles/demographics.scss";
 import { CSSTransition } from "react-transition-group";
 import { IndividualPatientProfile } from "./PatientProfilePage";
-import { FormGroup } from "../../SubComponents/Login/FormGroup";
 import "../../../scss/login/inputboxes.scss";
 
 function reducer(
@@ -15,9 +14,31 @@ function reducer(
         ...state,
         [action.fieldName]: action.value,
       };
-    case "":
+    case "MALE":
       return {
         ...state,
+        sex: "M",
+        isPregnant: null,
+      };
+    case "FEMALE":
+      return {
+        ...state,
+        sex: "F",
+      };
+      case "PREGNANT":
+      return {
+        ...state,
+        isPregnant: "Y",
+      };
+      case "NOT_PREGNANT":
+      return {
+        ...state,
+        isPregnant: "N",
+      };
+      case "UNSURE_PREGNANT":
+      return {
+        ...state,
+        isPregnant: "UNSURE",
       };
 
     default:
@@ -28,14 +49,18 @@ function reducer(
 type DemographicsState = {
   firstName: string;
   lastName: string;
+  middleName: string;
   sex: "M" | "F" | null;
-  isPregnant: boolean | null;
+  age: string;
+  isPregnant: "Y" | "N" | "UNSURE" | null;
   country: string | null;
 };
 
 const initialState: DemographicsState = {
   firstName: "",
+  middleName: "",
   lastName: "",
+  age: "",
   sex: null,
   isPregnant: null,
   country: "",
@@ -56,7 +81,15 @@ export const DemographicsPage: IndividualPatientProfile = ({
   }, [currentPage]);
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const { firstName, lastName, sex, isPregnant, country } = state;
+  const {
+    firstName,
+    middleName,
+    lastName,
+    sex,
+    age,
+    isPregnant,
+    country,
+  } = state;
 
   return (
     <>
@@ -67,40 +100,151 @@ export const DemographicsPage: IndividualPatientProfile = ({
         onEnter={() => setCurrentPage(pageName)}
         classNames={transitionName}
       >
-        <div className="demographics-page-outermost-container patient-profile-window"
-        style={{ width: isShowingSidebar ? "calc(100% - 250px)" : "100%" }}>
-          <div className="patient-profile-small-container">
-            <div className="patient-profile-page-title">
-              <h1>{pageName}</h1>
+        <div
+          className="demographics-page-outermost-container patient-profile-window"
+          style={{ width: isShowingSidebar ? "calc(100% - 250px)" : "100%" }}
+        >
+          <div className="patient-profile-page-title">
+            <h1>{pageName}</h1>
+          </div>
+          <div className="demographics-form-container">
+            <h3>First Name</h3>
+            <input
+              value={firstName}
+              type="text"
+              name="firstName"
+              onChange={e =>
+                dispatch({
+                  type: "field",
+                  fieldName: e.target.name,
+                  value: e.target.value,
+                })
+              }
+            ></input>
+            <h3>Middle Name</h3>
+            <input
+              value={middleName}
+              type="text"
+              name="middleName"
+              onChange={e =>
+                dispatch({
+                  type: "field",
+                  fieldName: e.target.name,
+                  value: e.target.value,
+                })
+              }
+            ></input>
+            <h3>Last Name</h3>
+            <input
+              value={lastName}
+              type="text"
+              name="lastName"
+              onChange={e =>
+                dispatch({
+                  type: "field",
+                  fieldName: e.target.name,
+                  value: e.target.value,
+                })
+              }
+            ></input>
+            <h3>Age</h3>
+            <input
+              pattern="[0-9]*"
+              value={age}
+              type="number"
+              name="age"
+              min="0"
+              step="1"
+              max="120"
+              onChange={e =>
+                dispatch({
+                  type: "field",
+                  fieldName: e.target.name,
+                  value: e.target.value,
+                })
+              }
+            ></input>
+            <h3>Sex at Birth</h3>
+            <div className="radio-group">
+              <label>
+                <input
+                  type="radio"
+                  name="sex"
+                  checked={sex === "M"}
+                  onChange={() => {
+                    dispatch({ type: "MALE" });
+                  }}
+                />
+                <p>Male</p>
+              </label>
+
+              <label>
+                <input
+                  type="radio"
+                  name="sex"
+                  checked={sex === "F"}
+                  onChange={() => {
+                    dispatch({ type: "FEMALE" });
+                  }}
+                />
+                <p>Female</p>
+              </label>
             </div>
-            <div className="login-container">
-              <form className="demographics-form">
-                <FormGroup
-                  dispatch={dispatch}
-                  id="demographics-page-first-name-input"
-                  label="First Name"
-                  name="firstName"
-                  type="text"
-                  value={firstName}
+            {
+              sex === "F" && <>
+              <h3>Pregnant?</h3>
+              <div className="radio-group">
+              <label>
+                <input
+                  type="radio"
+                  name="pregnant"
+                  checked={isPregnant === "Y"}
+                  onChange={() => {
+                    dispatch({ type: "PREGNANT" });
+                  }}
                 />
-                <FormGroup
-                  dispatch={dispatch}
-                  id="demographics-page-last-name-input"
-                  label="Surname"
-                  name="lastName"
-                  type="text"
-                  value={lastName}
+                <p>Yes</p>
+              </label>
+
+              <label>
+                <input
+                  type="radio"
+                  name="pregnant"
+                  checked={isPregnant === "N"}
+                  onChange={() => {
+                    dispatch({ type: "NOT_PREGNANT" });
+                  }}
                 />
-                <FormGroup
-                  dispatch={dispatch}
-                  id="demographics-page-country-input"
-                  label="Country of Residence or Recently Visited"
-                  name="country"
-                  type="text"
-                  value={country}
+                <p>No</p>
+              </label>
+
+              <label>
+                <input
+                  type="radio"
+                  name="pregnant"
+                  checked={isPregnant === "UNSURE"}
+                  onChange={() => {
+                    dispatch({ type: "UNSURE_PREGNANT" });
+                  }}
                 />
-              </form>
+                <p>Unsure</p>
+              </label>
             </div>
+              </>
+            }
+            <h3>Country of Origin Or Recently Visited</h3>
+            <input
+              value={country}
+              type="text"
+              name="country"
+              onChange={e =>
+                dispatch({
+                  type: "field",
+                  fieldName: e.target.name,
+                  value: e.target.value,
+                })
+              }
+            ></input>
           </div>
         </div>
       </CSSTransition>

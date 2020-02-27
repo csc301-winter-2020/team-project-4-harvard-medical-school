@@ -1,8 +1,11 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import "../../../scss/patient-profiles/demographics.scss";
 import { CSSTransition } from "react-transition-group";
 import { IndividualPatientProfile } from "./PatientProfilePage";
+import { CanvasComp } from "../../SubComponents/CanvasComp";
 import "../../../scss/login/inputboxes.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CanvasTextToggleButtons } from "../../SubComponents/PatientProfile/CanvasTextToggleButtons";
 
 function reducer(
   state: DemographicsState,
@@ -25,22 +28,21 @@ function reducer(
         ...state,
         sex: "F",
       };
-      case "PREGNANT":
+    case "PREGNANT":
       return {
         ...state,
         isPregnant: "Y",
       };
-      case "NOT_PREGNANT":
+    case "NOT_PREGNANT":
       return {
         ...state,
         isPregnant: "N",
       };
-      case "UNSURE_PREGNANT":
+    case "UNSURE_PREGNANT":
       return {
         ...state,
         isPregnant: "UNSURE",
       };
-
     default:
       throw new Error("Invalid type on action.");
   }
@@ -80,6 +82,8 @@ export const DemographicsPage: IndividualPatientProfile = ({
     }
   }, [currentPage]);
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [showingFirstNameCanvas, setShowingFirstNameCanvas] = useState(true);
+  const [showingFirstNameText, setShowingFirstNameText] = useState(false);
 
   const {
     firstName,
@@ -109,18 +113,34 @@ export const DemographicsPage: IndividualPatientProfile = ({
           </div>
           <div className="demographics-form-container">
             <h3>First Name</h3>
-            <input
-              value={firstName}
-              type="text"
-              name="firstName"
-              onChange={e =>
-                dispatch({
-                  type: "field",
-                  fieldName: e.target.name,
-                  value: e.target.value,
-                })
-              }
-            ></input>
+            <CanvasTextToggleButtons 
+            isShowingCanvas={showingFirstNameCanvas}
+            setIsShowingCanvas={setShowingFirstNameCanvas} 
+            isShowingText={showingFirstNameText}
+            setIsShowingText={setShowingFirstNameText}
+            />
+            {showingFirstNameCanvas && (
+              <CanvasComp
+                id="country-canvas"
+                initialHeight={200}
+                initialWidth={600}
+              />
+            )}
+            {showingFirstNameText && (
+              <input
+                value={firstName}
+                type="text"
+                name="firstName"
+                onChange={e =>
+                  dispatch({
+                    type: "field",
+                    fieldName: e.target.name,
+                    value: e.target.value,
+                  })
+                }
+              />
+            )}
+            <div></div>
             <h3>Middle Name</h3>
             <input
               value={middleName}
@@ -190,49 +210,54 @@ export const DemographicsPage: IndividualPatientProfile = ({
                 <p>Female</p>
               </label>
             </div>
-            {
-              sex === "F" && <>
-              <h3>Pregnant?</h3>
-              <div className="radio-group">
-              <label>
-                <input
-                  type="radio"
-                  name="pregnant"
-                  checked={isPregnant === "Y"}
-                  onChange={() => {
-                    dispatch({ type: "PREGNANT" });
-                  }}
-                />
-                <p>Yes</p>
-              </label>
+            {sex === "F" && (
+              <>
+                <h3>Pregnant?</h3>
+                <div className="radio-group">
+                  <label>
+                    <input
+                      type="radio"
+                      name="pregnant"
+                      checked={isPregnant === "Y"}
+                      onChange={() => {
+                        dispatch({ type: "PREGNANT" });
+                      }}
+                    />
+                    <p>Yes</p>
+                  </label>
 
-              <label>
-                <input
-                  type="radio"
-                  name="pregnant"
-                  checked={isPregnant === "N"}
-                  onChange={() => {
-                    dispatch({ type: "NOT_PREGNANT" });
-                  }}
-                />
-                <p>No</p>
-              </label>
+                  <label>
+                    <input
+                      type="radio"
+                      name="pregnant"
+                      checked={isPregnant === "N"}
+                      onChange={() => {
+                        dispatch({ type: "NOT_PREGNANT" });
+                      }}
+                    />
+                    <p>No</p>
+                  </label>
 
-              <label>
-                <input
-                  type="radio"
-                  name="pregnant"
-                  checked={isPregnant === "UNSURE"}
-                  onChange={() => {
-                    dispatch({ type: "UNSURE_PREGNANT" });
-                  }}
-                />
-                <p>Unsure</p>
-              </label>
-            </div>
+                  <label>
+                    <input
+                      type="radio"
+                      name="pregnant"
+                      checked={isPregnant === "UNSURE"}
+                      onChange={() => {
+                        dispatch({ type: "UNSURE_PREGNANT" });
+                      }}
+                    />
+                    <p>Unsure</p>
+                  </label>
+                </div>
               </>
-            }
+            )}
             <h3>Country of Origin Or Recently Visited</h3>
+            <CanvasComp
+              id="country-canvas"
+              initialHeight={200}
+              initialWidth={600}
+            />
             <input
               value={country}
               type="text"

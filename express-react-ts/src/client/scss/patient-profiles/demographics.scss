@@ -12,10 +12,23 @@
     margin-bottom: 10px;
     font-weight: normal;
     font-size: 1.2rem;
+    display: inline-block;
+  }
+
+  .form-span-group{
+    margin-left: 10px;
+    display: inline-block;
+
+    span{
+      padding: 8px;
+      color: white;
+      background: $color-primary-light;
+    }
   }
 
   input[type="text"],
   input[type="number"] {
+    display: block;
     outline: 0;
     border-width: 0 0 2px;
     border-color: #ccc;

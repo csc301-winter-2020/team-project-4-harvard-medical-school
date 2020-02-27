@@ -14,6 +14,12 @@ import {
   faInfoCircle,
   faChevronDown,
   faChevronUp,
+  faTrash,
+  faUndo,
+  faSave,
+  faExpandArrowsAlt,
+  faFont,
+  faPencilAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
 const myLibrary: any = library;
@@ -27,7 +33,13 @@ myLibrary.add(
   faInfo,
   faInfoCircle,
   faChevronDown,
-  faChevronUp
+  faChevronUp,
+  faTrash,
+  faUndo,
+  faSave,
+  faExpandArrowsAlt,
+  faFont,
+  faPencilAlt
 );
 
 /**

@@ -1,0 +1,51 @@
+@import "./app.scss";
+
+.canvas-draw-outermost {
+  position: relative;
+
+  .canvas-draw-container {
+    cursor: none;
+  }
+
+  .canvas-draw-resize-btn {
+    $btn-size: 30px;
+    width: $btn-size;
+    border-radius: 3px;
+    height: $btn-size;
+    background-size: contain;
+    position: absolute;
+    color: white;
+    background-color: $color-primary-dim;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    margin: 3px;
+    cursor: nw-resize;
+    svg {
+      margin-top: 8px;
+      margin-left: 8px;
+    }
+  }
+
+  .canvas-draw-btn-group {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 100;
+
+    .canvas-draw-btn {
+      height: 30px;
+      width: 30px;
+      text-align: center;
+      color: white;
+      margin: 3px;
+      border-radius: 3px;
+      background-color: $color-primary-dim;
+      cursor: pointer;
+
+      svg {
+        margin-top: 7px;
+      }
+    }
+  }
+}

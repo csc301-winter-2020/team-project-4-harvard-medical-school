@@ -95,6 +95,7 @@ $dot-size: 15px;
   position: absolute;
   top: 60px;
   height: calc(100% - 145px);
+  overflow-y: scroll;
 }
 
 .patient-profile-small-container{

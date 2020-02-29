@@ -5,6 +5,13 @@
 
   .canvas-draw-container {
     cursor: none;
+
+    canvas {
+      border-style: solid;
+      border-color: #555;
+      border-radius: 3px;
+      border-width: 2px;
+    }
   }
 
   .canvas-draw-resize-btn {

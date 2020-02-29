@@ -106,7 +106,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
       >
         <div
           className="demographics-page-outermost-container patient-profile-window"
-          style={{ width: isShowingSidebar ? "calc(100% - 250px)" : "100%" }}
+          style={{ width: isShowingSidebar ? "calc(100% - 250px)" : "100%"}}
         >
           <div className="patient-profile-page-title">
             <h1>{pageName}</h1>
@@ -121,7 +121,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
             />
             {showingFirstNameCanvas && (
               <CanvasComp
-                id="country-canvas"
+                id="firstName"
                 initialHeight={200}
                 initialWidth={600}
               />
@@ -140,7 +140,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
                 }
               />
             )}
-            <div></div>
+            <div className="form-spacer"></div>
             <h3>Middle Name</h3>
             <input
               value={middleName}
@@ -254,7 +254,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
             )}
             <h3>Country of Origin Or Recently Visited</h3>
             <CanvasComp
-              id="country-canvas"
+              id="country"
               initialHeight={200}
               initialWidth={600}
             />
@@ -270,6 +270,8 @@ export const DemographicsPage: IndividualPatientProfile = ({
                 })
               }
             ></input>
+          </div>
+          <div className="form-whitespace">
           </div>
         </div>
       </CSSTransition>

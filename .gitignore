@@ -1,3 +1,4 @@
 /Test/node_modules
 /Test/client/node_modules
 /Test/config/keys.js
+*.DS_Store

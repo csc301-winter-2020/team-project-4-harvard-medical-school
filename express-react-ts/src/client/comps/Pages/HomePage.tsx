@@ -250,40 +250,14 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { nameSort, createdSort, lastModifiedSort, changed } = state;
   const [searchVal, setSearchVal] = useState("");
-
-  // console.log(nameSort);
-  // if (nameSort !== null) {
-  //   if (nameSort === "ASC") {
-  //     patients = patients.sort(nameSorterAsc);
-  //   } else {
-  //     patients = patients.sort(nameSorterDesc);
-  //   }
-  // } else if (createdSort !== null) {
-  //   if (createdSort === "ASC") {
-  //     patients = patients.sort(createdSorterAsc);
-  //   } else {
-  //     patients = patients.sort(createdSorterDesc);
-  //   }
-  // } else if (lastModifiedSort !== null) {
-  //   if (lastModifiedSort === "ASC") {
-  //     patients = patients.sort(lastModSorterAsc);
-  //   } else {
-  //     patients = patients.sort(lastModSorterDesc);
-  //   }
-  // } else {
-  //   console.log(`All sorts are null. Something has gone wrong!`);
-  // }
-
   const [patientsList, setPatientsList] = useState(patients);
 
   useEffect(() => {
     if (nameSort !== null) {
       if (nameSort === "ASC") {
         setPatientsList(patientsList.sort(nameSorterAsc));
-        console.log(patientsList);
       } else {
         setPatientsList(patientsList.sort(nameSorterDesc));
-        console.log(patientsList);
       }
     } else if (createdSort !== null) {
       if (createdSort === "ASC") {

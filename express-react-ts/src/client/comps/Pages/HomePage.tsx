@@ -24,17 +24,19 @@ type HomePageState = {
   nameSort: null | "ASC" | "DESC";
   createdSort: null | "ASC" | "DESC";
   lastModifiedSort: null | "ASC" | "DESC";
+  changed: boolean;
 };
 
 const initialState: HomePageState = {
   nameSort: null,
   createdSort: null,
   lastModifiedSort: "DESC",
+  changed: true,
 };
 
 function reducer(
   state: HomePageState,
-  action: { type: "NAME_SORT" | "CREATED_SORT" | "LAST_MODIFIED_SORT" }
+  action: { type: "NAME_SORT" | "CREATED_SORT" | "LAST_MODIFIED_SORT" | "CHANGED" }
 ): HomePageState {
   switch (action.type) {
     case "NAME_SORT":
@@ -43,6 +45,7 @@ function reducer(
           state.nameSort == "ASC" || state.nameSort == null ? "DESC" : "ASC",
         createdSort: null,
         lastModifiedSort: null,
+        changed: true,
       };
     case "CREATED_SORT":
       return {
@@ -52,6 +55,7 @@ function reducer(
             ? "DESC"
             : "ASC",
         lastModifiedSort: null,
+        changed: true
       };
     case "LAST_MODIFIED_SORT":
       return {
@@ -61,6 +65,14 @@ function reducer(
           state.lastModifiedSort == "ASC" || state.lastModifiedSort == null
             ? "DESC"
             : "ASC",
+        changed: true,
+      };
+    case "CHANGED":
+      return {
+        nameSort: state.nameSort,
+        createdSort: state.createdSort,
+        lastModifiedSort: state.lastModifiedSort,
+        changed: false,
       };
     default:
       throw new Error("Invalid type on action.");
@@ -88,7 +100,7 @@ const lastModSorterDesc = (a: PatientProfile, b: PatientProfile) => {
 
 export const HomePage: React.FC<HomePageProps> = ({}) => {
   // Dummy data while we dont have API calls
-  const patients: PatientProfile[] = [
+  let patients: PatientProfile[] = [
     {
       title: "Patient1",
       date: 456789456,
@@ -220,188 +232,58 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
       country: "Canada",
     },
     {
-      title: "Patient10",
-      date: 200123556789456,
-      lastModified: 123456999456,
-      firstName: "Garrosh",
-      lastName: "Hellscream",
+      title: "Patient11",
+      date: (new Date()).getTime(),
+      lastModified: (new Date()).getTime(),
+      firstName: "AAaaaaa",
+      lastName: "A",
       sex: "M",
-      dateOfBirth: 987456789456,
+      dateOfBirth: (new Date()).getTime(),
       isPregnant: null,
-      ethnicity: "Orc",
+      ethnicity: "aaaaaaa",
       age: 20,
-      country: "Canada",
-    },
-    {
-      title: "Patient10",
-      date: 200123556789456,
-      lastModified: 123456999456,
-      firstName: "Garrosh",
-      lastName: "Hellscream",
-      sex: "M",
-      dateOfBirth: 987456789456,
-      isPregnant: null,
-      ethnicity: "Orc",
-      age: 20,
-      country: "Canada",
-    },
-    {
-      title: "Patient10",
-      date: 200123556789456,
-      lastModified: 123456999456,
-      firstName: "Garrosh",
-      lastName: "Hellscream",
-      sex: "M",
-      dateOfBirth: 987456789456,
-      isPregnant: null,
-      ethnicity: "Orc",
-      age: 20,
-      country: "Canada",
-    },
-    {
-      title: "Patient10",
-      date: 200123556789456,
-      lastModified: 123456999456,
-      firstName: "Garrosh",
-      lastName: "Hellscream",
-      sex: "M",
-      dateOfBirth: 987456789456,
-      isPregnant: null,
-      ethnicity: "Orc",
-      age: 20,
-      country: "Canada",
-    },
-    {
-      title: "Patient10",
-      date: 200123556789456,
-      lastModified: 123456999456,
-      firstName: "Garrosh",
-      lastName: "Hellscream",
-      sex: "M",
-      dateOfBirth: 987456789456,
-      isPregnant: null,
-      ethnicity: "Orc",
-      age: 20,
-      country: "Canada",
-    },
-    {
-      title: "Patient10",
-      date: 200123556789456,
-      lastModified: 123456999456,
-      firstName: "Garrosh",
-      lastName: "Hellscream",
-      sex: "M",
-      dateOfBirth: 987456789456,
-      isPregnant: null,
-      ethnicity: "Orc",
-      age: 20,
-      country: "Canada",
-    },
-    {
-      title: "Patient10",
-      date: 200123556789456,
-      lastModified: 123456999456,
-      firstName: "Garrosh",
-      lastName: "Hellscream",
-      sex: "M",
-      dateOfBirth: 987456789456,
-      isPregnant: null,
-      ethnicity: "Orc",
-      age: 20,
-      country: "Canada",
-    },
-    {
-      title: "Patient10",
-      date: 200123556789456,
-      lastModified: 123456999456,
-      firstName: "Garrosh",
-      lastName: "Hellscream",
-      sex: "M",
-      dateOfBirth: 987456789456,
-      isPregnant: null,
-      ethnicity: "Orc",
-      age: 20,
-      country: "Canada",
-    },
-    {
-      title: "Patient10",
-      date: 200123556789456,
-      lastModified: 123456999456,
-      firstName: "Garrosh",
-      lastName: "Hellscream",
-      sex: "M",
-      dateOfBirth: 987456789456,
-      isPregnant: null,
-      ethnicity: "Orc",
-      age: 20,
-      country: "Canada",
-    },
-    {
-      title: "Patient10",
-      date: 200123556789456,
-      lastModified: 123456999456,
-      firstName: "Garrosh",
-      lastName: "Hellscream",
-      sex: "M",
-      dateOfBirth: 987456789456,
-      isPregnant: null,
-      ethnicity: "Orc",
-      age: 20,
-      country: "Canada",
-    },
-    {
-      title: "Patient10",
-      date: 200123556789456,
-      lastModified: 123456999456,
-      firstName: "Garrosh",
-      lastName: "Hellscream",
-      sex: "M",
-      dateOfBirth: 987456789456,
-      isPregnant: null,
-      ethnicity: "Orc",
-      age: 20,
-      country: "Canada",
-    },
-    {
-      title: "Patient10",
-      date: 200123556789456,
-      lastModified: 123456999456,
-      firstName: "Garrosh",
-      lastName: "Hellscream",
-      sex: "M",
-      dateOfBirth: 987456789456,
-      isPregnant: null,
-      ethnicity: "Orc",
-      age: 20,
-      country: "Canada",
-    },
-    {
-      title: "Patient10",
-      date: 200123556789456,
-      lastModified: 123456999456,
-      firstName: "Garrosh",
-      lastName: "Hellscream",
-      sex: "M",
-      dateOfBirth: 987456789456,
-      isPregnant: null,
-      ethnicity: "Orc",
-      age: 20,
-      country: "Canada",
+      country: "aaaaaa",
     },
   ];
 
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { nameSort, createdSort, lastModifiedSort } = state;
+  const { nameSort, createdSort, lastModifiedSort, changed } = state;
   const [searchVal, setSearchVal] = useState("");
+
+  // console.log(nameSort);
+  // if (nameSort !== null) {
+  //   if (nameSort === "ASC") {
+  //     patients = patients.sort(nameSorterAsc);
+  //   } else {
+  //     patients = patients.sort(nameSorterDesc);
+  //   }
+  // } else if (createdSort !== null) {
+  //   if (createdSort === "ASC") {
+  //     patients = patients.sort(createdSorterAsc);
+  //   } else {
+  //     patients = patients.sort(createdSorterDesc);
+  //   }
+  // } else if (lastModifiedSort !== null) {
+  //   if (lastModifiedSort === "ASC") {
+  //     patients = patients.sort(lastModSorterAsc);
+  //   } else {
+  //     patients = patients.sort(lastModSorterDesc);
+  //   }
+  // } else {
+  //   console.log(`All sorts are null. Something has gone wrong!`);
+  // }
+
   const [patientsList, setPatientsList] = useState(patients);
 
   useEffect(() => {
     if (nameSort !== null) {
       if (nameSort === "ASC") {
         setPatientsList(patientsList.sort(nameSorterAsc));
+        console.log(patientsList);
       } else {
         setPatientsList(patientsList.sort(nameSorterDesc));
+        console.log(patientsList);
       }
     } else if (createdSort !== null) {
       if (createdSort === "ASC") {
@@ -418,6 +300,10 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
     } else {
       console.log(`All sorts are null. Something has gone wrong!`);
       setPatientsList(patientsList.sort(lastModSorterDesc));
+    }
+
+    if (changed) {
+      dispatch({ type: "CHANGED"});
     }
   }, [nameSort, createdSort, lastModifiedSort]);
 

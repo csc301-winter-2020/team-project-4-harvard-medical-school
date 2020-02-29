@@ -48,6 +48,9 @@ export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
   );
 
   useEffect(() => {
+    setCreatedDate(dateFormat(new Date(date), dateString));
+    setModifiedDate(dateFormat(new Date(lastModified), dateString));
+
     const handleResize = () => {
       if (window.innerWidth < 1080) {
         setIsPortraitMode(true);

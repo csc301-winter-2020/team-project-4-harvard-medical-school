@@ -6,7 +6,7 @@ import { Header } from "../../SubComponents/Header";
 import { SocialHistoryPage } from "./SocialHistoryPage";
 import { FamilyHistoryPage } from "./FamilyHistoryPage";
 import { PastMedicalHistoryPage } from "./PastMedicalHistoryPage";
-import { CCHPIPage } from "./CCPHIPage";
+import { CCHPIPage } from "./CCHPI";
 import { ReviewOfSystemsPage } from "./ReviewOfSystemsPage";
 import { PhysicalExaminationPage } from "./PhysicalExaminationPage";
 import { ImagingResultsPage } from "./ImagingResultsPage";

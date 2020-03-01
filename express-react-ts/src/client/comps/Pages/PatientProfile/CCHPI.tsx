@@ -103,6 +103,9 @@ export const CCHPIPage: IndividualPatientProfile = ({
               isTextArea={true}
             />
           </div>
+          <div className="form-whitespace">
+            <div className="home-page-content-whitespace-logo"></div>
+          </div>
         </div>
       </CSSTransition>
     </>

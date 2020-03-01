@@ -4,6 +4,7 @@ import { Header } from "../SubComponents/Header";
 import { HomePatientProfile } from "../SubComponents/Home/HomePatientProfile";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { now, max } from "../../utils/utils";
+import { useHistory } from "react-router";
 
 interface HomePageProps {}
 
@@ -248,7 +249,6 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
       country: "aaaaaa",
     },
   ];
-
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
   const [state, dispatch] = useReducer(reducer, initialState);
   const { nameSort, createdSort, lastModifiedSort, changed } = state;
@@ -257,6 +257,7 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
+    document.title = "Scribe: Home";
     const handleResize = () =>
       setWindowWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);

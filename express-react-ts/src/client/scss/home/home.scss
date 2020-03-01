@@ -386,3 +386,59 @@ input:focus {
   transform: translateY(-100px);
   transition: opacity 300ms, transform 300ms;
 }
+
+
+#modal-container {
+  font-size: 12px;
+  background-color: white;
+  cursor: default;
+  margin: 0;
+  color: black;
+  padding: 0;
+
+  #modal-header {
+    margin: 0;
+    border-bottom: 1px solid gray;
+    background-color: white;
+    font-size: 1.5rem;
+    text-align: center;
+    padding: 5px;
+    color: black;
+    cursor: default;
+  }
+  #modal-content {
+    margin: 0;
+    cursor: default;
+    padding: 10px 5px;
+    background-color: white;
+    color: black;
+    font-size: 1rem;
+
+    #modal-btn-container{
+      background-color: white;
+      color: black;
+      cursor: default;
+  
+      button{
+        background-color: $color-primary-light;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 5px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        border-radius: 3px;
+      }
+      button:hover{
+        background-color: $color-primary;
+      }
+    }
+  }
+
+  
+}
+

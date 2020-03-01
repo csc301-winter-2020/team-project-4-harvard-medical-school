@@ -36,7 +36,9 @@ const initialState: HomePageState = {
 
 function reducer(
   state: HomePageState,
-  action: { type: "NAME_SORT" | "CREATED_SORT" | "LAST_MODIFIED_SORT" | "CHANGED" }
+  action: {
+    type: "NAME_SORT" | "CREATED_SORT" | "LAST_MODIFIED_SORT" | "CHANGED";
+  }
 ): HomePageState {
   switch (action.type) {
     case "NAME_SORT":
@@ -55,7 +57,7 @@ function reducer(
             ? "DESC"
             : "ASC",
         lastModifiedSort: null,
-        changed: true
+        changed: true,
       };
     case "LAST_MODIFIED_SORT":
       return {
@@ -233,12 +235,12 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
     },
     {
       title: "Patient11",
-      date: (new Date()).getTime(),
-      lastModified: (new Date()).getTime(),
+      date: new Date().getTime(),
+      lastModified: new Date().getTime(),
       firstName: "AAaaaaa",
       lastName: "A",
       sex: "M",
-      dateOfBirth: (new Date()).getTime(),
+      dateOfBirth: new Date().getTime(),
       isPregnant: null,
       ethnicity: "aaaaaaa",
       age: 20,
@@ -277,7 +279,7 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
     }
 
     if (changed) {
-      dispatch({ type: "CHANGED"});
+      dispatch({ type: "CHANGED" });
     }
   }, [nameSort, createdSort, lastModifiedSort]);
 
@@ -285,7 +287,20 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
     if (searchVal !== "") {
       const newPatients = patients.filter(p => {
         return (
-          p.firstName.toLowerCase().includes(searchVal.toLowerCase()) || p.lastName.toLowerCase().includes(searchVal.toLowerCase())
+          p.firstName.toLowerCase().includes(searchVal.toLowerCase()) ||
+          p.lastName.toLowerCase().includes(searchVal.toLowerCase()) ||
+          `${p.lastName} ${p.firstName}`
+            .toLowerCase()
+            .includes(searchVal.toLowerCase()) ||
+          `${p.firstName} ${p.lastName}`
+            .toLowerCase()
+            .includes(searchVal.toLowerCase()) ||
+          `${p.firstName}, ${p.lastName}`
+            .toLowerCase()
+            .includes(searchVal.toLowerCase()) ||
+          `${p.lastName}, ${p.firstName}`
+            .toLowerCase()
+            .includes(searchVal.toLowerCase())
         );
       });
       setPatientsList(newPatients);

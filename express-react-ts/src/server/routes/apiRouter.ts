@@ -1,7 +1,5 @@
 import * as express from 'express';
 const { checkAuthenticated, checkGuest } = require('../auth/authCheck');
-import * as aws from "aws-sdk";
-import * as fs from "fs";
 import * as dotenv from "dotenv";
 dotenv.config();
 type Router = express.Router;
@@ -64,27 +62,30 @@ router.get('/api/patientprofile/:patientId', (req:Request, res:Response, next:Ne
     // res.status(200).json('');
 });
 
+const aws: any = require('aws-sdk');
+aws.config.update({accessKeyId: process.env.AWSKEYID, secretAccessKey: process.env.AWSKEY});
+const s3 = new aws.S3();
+const bucket: string = 'csc301';
 
-// function save_to_aws(data: any, key: string): any {
-//     const params:any = {
-//         Bucker: bucket,
-//         Key: "djddjdjjd",
-//         Body: JSON.stringify(data, null, 2)
-//     };
-//     return new Promise((resolve, reject) => {
-//         s3.upload(params, function(err, data) {
-//             console.log("upload success");
-//             if (err) {
-//                 console.log("FUCKED");
-//                 console.log(err);
-//                 reject();
-//             } else {
-//                 console.log("Success");
-//                 resolve("KEY"+key);
-//             }
-//         });
-//     });
-// }
+function save_to_aws(data: any, key: string): any {
+    const params:any = {
+        Bucket: bucket,
+        Key: key,
+        Body: JSON.stringify(data, null, 2)
+    };
+    return new Promise((resolve, reject) => {
+        s3.upload(params, function(err, data) {
+            console.log("upload success");
+            if (err) {
+                console.log(err);
+                reject();
+            } else {
+                console.log("Success");
+                resolve("CANVAS"+key);
+            }
+        });
+    });
+}
 
 /**
  * Create a new patient profile for patient <patientId>
@@ -110,9 +111,9 @@ router.post('/api/patientprofile/:patientId', (req:Request, res:Response, next:N
             const time: number = Date.now();
             const key_name: string = `canvas_${patientId}_${req.user}_${attributes[i]}_${time}`;
             console.log(key_name);
-            // upload_promise.push(
-            //     save_to_aws(new_patient[attributes[i]].value, key_name));
-            upload_promise.push(Promise.resolve("CANVAS"+new_patient[attributes[i]].value));
+            upload_promise.push(
+                save_to_aws(new_patient[attributes[i]].value, key_name));
+            // upload_promise.push(Promise.resolve("CANVAS"+new_patient[attributes[i]].value));
         } else if (new_patient[attributes[i]].type === 'text') {
             upload_promise.push(Promise.resolve("TEXT"+new_patient[attributes[i]].value));
         } else {

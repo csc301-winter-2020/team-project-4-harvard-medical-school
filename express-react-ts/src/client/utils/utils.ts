@@ -36,3 +36,50 @@ export function max(a: number, b: number): number {
 export function now(): number {
   return new Date().getTime();
 }
+
+
+
+/**
+ * For templates customization
+ */
+
+/**
+ * Reorders a genericly typed list.
+ * @param list The list to reorder
+ */
+export function reorder<T> (list:T[], startIndex:number, endIndex:number):T[] {
+  const result:T[] = Array.from(list);
+  const [removed]:T[] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+
+  return result;
+};
+
+const grid = 6;
+export const getItemStyle = (isDragging:boolean, draggableStyle:any) => {
+  return {
+    // some basic styles to make the items look a bit nicer
+    userSelect: "none",
+    padding: grid * 2,
+    margin: `0 0 ${grid}px 0`,
+    textAlign: "right",
+
+    // change background colour if dragging
+    background: isDragging ? "lightgreen" : "white",
+
+    // styles we need to apply on draggables
+    ...draggableStyle
+  };
+};
+
+export const getQuestionListStyle = (isDraggingOver:boolean) => ({
+  background: isDraggingOver ? "lightblue" : "#efefef",
+  padding: 8,
+  width: 350
+});
+
+export const getAnswerListStyle = (isDraggingOver:boolean) => ({
+  background: isDraggingOver ? "lightblue" : "lightgrey",
+  padding: 4,
+  width: 250
+});

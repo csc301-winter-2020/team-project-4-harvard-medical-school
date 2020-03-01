@@ -79,7 +79,9 @@ export const DemographicsPage: IndividualPatientProfile = ({
   useEffect(() => {
     if (currentPage === pageName) {
       document.title = `Patient Profile: ${pageName}`;
-      history.push(`/patient/${patientID}/demographics`);
+      if (!window.location.href.includes("demographics")){
+        history.push(`/patient/${patientID}/demographics`);
+      }
     }
   }, [currentPage]);
   const [state, dispatch] = useReducer(reducer, initialState);

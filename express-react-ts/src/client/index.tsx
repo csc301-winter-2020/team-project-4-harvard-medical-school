@@ -25,6 +25,7 @@ import {
   faArrowLeft,
   faKeyboard,
   faEraser,
+  faGripVertical,
 } from "@fortawesome/free-solid-svg-icons";
 
 const myLibrary: any = library;
@@ -50,6 +51,7 @@ myLibrary.add(
   faArrowLeft,
   faKeyboard,
   faEraser,
+  faGripVertical,
 );
 
 /**

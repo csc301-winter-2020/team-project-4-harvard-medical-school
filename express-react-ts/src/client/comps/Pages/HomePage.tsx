@@ -255,6 +255,7 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
   const [searchVal, setSearchVal] = useState("");
   const [patientsList, setPatientsList] = useState(patients);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const history = useHistory();
 
   useEffect(() => {
     document.title = "Scribe: Home";
@@ -415,7 +416,9 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
           <div className="home-page-create-new-patient-btn">
             <p>Add Patient</p>
           </div>
-          <div className="home-page-create-template-btn">
+          <div className="home-page-create-template-btn" onClick={()=>{
+            history.push("/templates");
+          }}>
             <p>Add/Customize Template</p>
           </div>
         </div>

@@ -50,7 +50,7 @@ export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
               e.target.nodeName !== "path" &&
               e.target.nodeName !== "svg"
             ) {
-              history.push("/patient/8675309");
+              history.push("/patient/8675309/demographics");
             }
           }}
         >

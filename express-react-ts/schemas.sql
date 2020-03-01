@@ -45,13 +45,28 @@ CREATE TABLE patient_profile (
      age INT NOT NULL CHECK ( age > 0 AND age < 100 ),
      gender_at_birth SEX_AT_BIRTH,
      gender TEXT NOT NULL,
+
      pregnant TEXT,
+     pregnant_canvas text,
+
      country_residence TEXT,
+     country_residence_canvas TEXT,
+
      country_visited TEXT,
+     country_visited_canvas TEXT,
+
      complaint TEXT ,
+     complaint_canvas TEXT,
+
      medical_history TEXT,
+     medical_history_canvas TEXT,
+
      social_history TEXT,
-     family_history TEXT
+     social_history_canvas TEXT,
+
+     family_history TEXT,
+     family_history_canvas text
+
 );
 INSERT INTO users (name, email, password, year, user_type, date_create)
 VALUES ('will', 'willqie@gmail.com', 'will', 1, 'Student', '20190101');

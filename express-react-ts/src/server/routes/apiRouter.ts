@@ -34,7 +34,16 @@ router.get('/api/me', checkAuthenticated, (req:Request, res:Response, next:NextF
  */
 router.get('/api/student/:userId/patientprofiles', (req:Request, res:Response, next:NextFunction) => {
     const userId = req.params.userId;
-    res.status(200).json('');
+    pool.connect().then((client) => {
+        const query_string: string = "SELECT * FROM csc301db.patient_profile WHERE student_id = $1";
+        return client.query(query_string, [parseInt(userId)]);
+    }).then((query_result => {
+        if (query_result.rowCount === 0) {
+            res.status(404).send();
+        } else {
+            res.status(200).json(query_result.rows);
+        }
+    }));
 });
 
 /**

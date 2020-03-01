@@ -11,6 +11,7 @@ import { PhysicalExaminationPage } from "./PhysicalExaminationPage";
 import { ImagingResultsPage } from "./ImagingResultsPage";
 import { LabResultsPage } from "./LabResultsPage";
 import { DifferentialClinicalScoresPage } from "./DifferentialClinicalScoresPage";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 /**
  * To create a new type of page, firstly make the react FC and then import it here.
@@ -87,7 +88,7 @@ const initNavDots = () => {
 // Length of page transitions in ms. Should match the transition time in the SCSS.
 const transitionDuration: number = 300;
 const swipeDistanceThreshold: number = 300;
-let xcoord:number = 0;
+let xcoord: number = 0;
 let transitionName: "slide-left" | "slide-right" = "slide-left";
 
 export const PatientProfilePage: React.FC = () => {
@@ -112,11 +113,6 @@ export const PatientProfilePage: React.FC = () => {
 
   // Observer for currentPage
   useEffect(() => {
-    if (contents.indexOf(prevPage) < contents.indexOf(currentPage)){
-      transitionName = "slide-left";
-    } else {
-      transitionName = "slide-right";
-    }
     setPrevPage(currentPage);
     const sidebarItems = document.querySelectorAll(
       ".patient-profile-page-sidebar-item"
@@ -193,7 +189,14 @@ export const PatientProfilePage: React.FC = () => {
                   key={contents.indexOf(c)}
                   id={`sidebar-item-${contents.indexOf(c)}`}
                   className="patient-profile-page-sidebar-item"
-                  onClick={() => setCurrentPage(c)}
+                  onClick={() => {
+                    setCurrentPage(c);
+                    if (contents.indexOf(prevPage) < contents.indexOf(c)) {
+                      transitionName = "slide-left";
+                    } else {
+                      transitionName = "slide-right";
+                    }
+                  }}
                 >
                   {c}
                 </div>
@@ -202,8 +205,10 @@ export const PatientProfilePage: React.FC = () => {
           </div>
         </nav>
 
-        <div className="patient-profile-page-page-content"
-        style={{ width: isShowingSidebar ? "calc(100% - 250px)" : "100%" }}>
+        <div
+          className="patient-profile-page-page-content"
+          style={{ width: isShowingSidebar ? "calc(100% - 250px)" : "100%" }}
+        >
           <div
             className="patient-profile-sidebar-hide-btn"
             onClick={() => setIsShowingSidebar(!isShowingSidebar)}
@@ -227,6 +232,25 @@ export const PatientProfilePage: React.FC = () => {
 
           <div className="patient-profile-page-dots-container">
             {initNavDots()}
+          </div>
+          <div className="patient-profile-nav-btns">
+            <div className="nav-btn-save"><FontAwesomeIcon icon="save" size="2x" /></div>
+            <div
+              className="nav-btn-left"
+              onClick={() => {
+                decrementPage();
+              }}
+            >
+              <FontAwesomeIcon icon="arrow-left" size="2x" />
+            </div>
+            <div
+              className="nav-btn-right"
+              onClick={() => {
+                incrementPage();
+              }}
+            >
+              <FontAwesomeIcon icon="arrow-right" size="2x" />
+            </div>
           </div>
         </div>
       </div>

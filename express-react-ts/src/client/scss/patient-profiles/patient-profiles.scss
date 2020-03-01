@@ -89,6 +89,7 @@ $dot-size: 15px;
   font-size: 2rem;
   font-weight: bold;
   margin: 26px;
+  
 }
 
 .patient-profile-window{
@@ -96,13 +97,13 @@ $dot-size: 15px;
   top: 60px;
   height: calc(100% - 145px);
   overflow-y: scroll;
+  width: calc(100% - 250px);
 }
 
-.patient-profile-small-container{
-  height: 100%;
-  width: 700px;
-  margin: auto;
+.width-100{
+  width: 100%;
 }
+
 
 .slide-right-enter {
   transform: translateX(-100vw);
@@ -140,4 +141,36 @@ $dot-size: 15px;
     transform: none;
   }
 
+}
+
+.patient-profile-nav-btns{
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+
+  .nav-btn-left, .nav-btn-save, .nav-btn-right{
+    color: white;
+    background-color: $color-primary-dim;
+    height: 40px;
+    width: 50px;
+    display: inline-block;
+    text-align: center;
+    padding-top: 6px;
+    cursor: pointer;
+    transition: all .15s ease;
+  }
+
+  .nav-btn-save{
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+
+  .nav-btn-right{
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+
+  .nav-btn-left:hover, .nav-btn-save:hover, .nav-btn-right:hover{
+    background-color: $color-primary;
+  }
 }

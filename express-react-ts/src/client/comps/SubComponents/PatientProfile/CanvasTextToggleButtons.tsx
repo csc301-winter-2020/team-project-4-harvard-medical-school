@@ -36,7 +36,7 @@ export const CanvasTextToggleButtons: React.FC<CanvasTextToggleButtonsProps> = (
         }}
         onClick={() => setIsShowingText(!isShowingText)}
       >
-        <FontAwesomeIcon icon="font" />
+        <FontAwesomeIcon icon="keyboard" />
       </span>
     </div>
   );

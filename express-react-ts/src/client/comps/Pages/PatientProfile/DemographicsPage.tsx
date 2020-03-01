@@ -1,11 +1,9 @@
 import React, { useEffect, useReducer, useState } from "react";
-import "../../../scss/patient-profiles/demographics.scss";
+import "../../../scss/patient-profiles/patient-profile-form.scss";
 import { CSSTransition } from "react-transition-group";
 import { IndividualPatientProfile } from "./PatientProfilePage";
-import { CanvasComp } from "../../SubComponents/CanvasComp";
 import "../../../scss/login/inputboxes.scss";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CanvasTextToggleButtons } from "../../SubComponents/PatientProfile/CanvasTextToggleButtons";
+import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 
 function reducer(
   state: DemographicsState,
@@ -51,7 +49,6 @@ function reducer(
 type DemographicsState = {
   firstName: string;
   lastName: string;
-  middleName: string;
   sex: "M" | "F" | null;
   age: string;
   isPregnant: "Y" | "N" | "UNSURE" | null;
@@ -60,13 +57,14 @@ type DemographicsState = {
 
 const initialState: DemographicsState = {
   firstName: "",
-  middleName: "",
   lastName: "",
   age: "",
   sex: null,
   isPregnant: null,
   country: "",
 };
+
+
 
 export const DemographicsPage: IndividualPatientProfile = ({
   pageName,
@@ -76,6 +74,14 @@ export const DemographicsPage: IndividualPatientProfile = ({
   transitionName,
   isShowingSidebar,
 }) => {
+
+
+  const getInitialCanvasWidth = ():number => {
+    const width:number = window.innerWidth;
+    const extra:number = isShowingSidebar ? 250 : 0;
+    return width - 175 - extra;
+  }
+
   useEffect(() => {
     if (currentPage === pageName) {
       document.title = `Patient Profile: ${pageName}`;
@@ -84,10 +90,15 @@ export const DemographicsPage: IndividualPatientProfile = ({
   const [state, dispatch] = useReducer(reducer, initialState);
   const [showingFirstNameCanvas, setShowingFirstNameCanvas] = useState(true);
   const [showingFirstNameText, setShowingFirstNameText] = useState(false);
+  const [showingLastNameCanvas, setShowingLastNameCanvas] = useState(true);
+  const [showingLastNameText, setShowingLastNameText] = useState(false);
+  const [showingAgeCanvas, setShowingAgeCanvas] = useState(true);
+  const [showingAgeText, setShowingAgeText] = useState(false);
+  const [showingCountryCanvas, setShowingCountryCanvas] = useState(true);
+  const [showingCountryText, setShowingCountryText] = useState(false);
 
   const {
     firstName,
-    middleName,
     lastName,
     sex,
     age,
@@ -104,86 +115,54 @@ export const DemographicsPage: IndividualPatientProfile = ({
         onEnter={() => setCurrentPage(pageName)}
         classNames={transitionName}
       >
-        <div
-          className="demographics-page-outermost-container patient-profile-window"
-          style={{ width: isShowingSidebar ? "calc(100% - 250px)" : "100%"}}
-        >
+        <div className={ isShowingSidebar ? "patient-profile-window" : "patient-profile-window width-100"}>
           <div className="patient-profile-page-title">
             <h1>{pageName}</h1>
           </div>
-          <div className="demographics-form-container">
-            <h3>First Name</h3>
-            <CanvasTextToggleButtons 
-            isShowingCanvas={showingFirstNameCanvas}
-            setIsShowingCanvas={setShowingFirstNameCanvas} 
-            isShowingText={showingFirstNameText}
-            setIsShowingText={setShowingFirstNameText}
+          <div className="patient-profile-form-container">
+            <PatientFormInput
+              dispatch={dispatch}
+              id={"firstName"}
+              inputType={"text"}
+              inputVal={firstName}
+              placeholder={"Ex. John"}
+              title={"First Name"}
+              isShowingCanvas={showingFirstNameCanvas}
+              isShowingText={showingFirstNameText}
+              setIsShowingCanvas={setShowingFirstNameCanvas}
+              setIsShowingText={setShowingFirstNameText}
+              canvasHeight={200}
+              canvasWidth={600}
             />
-            {showingFirstNameCanvas && (
-              <CanvasComp
-                id="firstName"
-                initialHeight={200}
-                initialWidth={600}
-              />
-            )}
-            {showingFirstNameText && (
-              <input
-                value={firstName}
-                type="text"
-                name="firstName"
-                onChange={e =>
-                  dispatch({
-                    type: "field",
-                    fieldName: e.target.name,
-                    value: e.target.value,
-                  })
-                }
-              />
-            )}
-            <div className="form-spacer"></div>
-            <h3>Middle Name</h3>
-            <input
-              value={middleName}
-              type="text"
-              name="middleName"
-              onChange={e =>
-                dispatch({
-                  type: "field",
-                  fieldName: e.target.name,
-                  value: e.target.value,
-                })
-              }
-            ></input>
-            <h3>Last Name</h3>
-            <input
-              value={lastName}
-              type="text"
-              name="lastName"
-              onChange={e =>
-                dispatch({
-                  type: "field",
-                  fieldName: e.target.name,
-                  value: e.target.value,
-                })
-              }
-            ></input>
-            <h3>Age</h3>
-            <input
-              pattern="[0-9]*"
-              value={age}
-              type="number"
-              name="age"
-              min="0"
-              step="1"
-              max="120"
-              onChange={e =>
-                dispatch({
-                  type: "field",
-                  fieldName: e.target.name,
-                  value: e.target.value,
-                })
-              }
-            ></input>
+
+            <PatientFormInput
+              dispatch={dispatch}
+              id={"lastName"}
+              inputType={"text"}
+              inputVal={lastName}
+              placeholder={"Ex. Doe"}
+              title={"Last Name"}
+              isShowingCanvas={showingLastNameCanvas}
+              isShowingText={showingLastNameText}
+              setIsShowingCanvas={setShowingLastNameCanvas}
+              setIsShowingText={setShowingLastNameText}
+              canvasHeight={200}
+              canvasWidth={600}
+            />
+            <PatientFormInput
+              dispatch={dispatch}
+              id={"age"}
+              inputType={"number"}
+              inputVal={age}
+              placeholder={"Ex. 18"}
+              title={"Age"}
+              isShowingCanvas={showingAgeCanvas}
+              isShowingText={showingAgeText}
+              setIsShowingCanvas={setShowingAgeCanvas}
+              setIsShowingText={setShowingAgeText}
+              canvasHeight={200}
+              canvasWidth={600}
+            />
             <h3>Sex at Birth</h3>
             <div className="radio-group">
               <label>
@@ -252,27 +231,22 @@ export const DemographicsPage: IndividualPatientProfile = ({
                 </div>
               </>
             )}
-            <h3>Country of Origin Or Recently Visited</h3>
-            <CanvasComp
-              id="country"
-              initialHeight={200}
-              initialWidth={600}
+            <PatientFormInput
+              dispatch={dispatch}
+              id={"country"}
+              inputType={"text"}
+              inputVal={country}
+              placeholder={"Ex. Canada"}
+              title={"Country of Origin or Recently Visited"}
+              isShowingCanvas={showingCountryCanvas}
+              isShowingText={showingCountryText}
+              setIsShowingCanvas={setShowingCountryCanvas}
+              setIsShowingText={setShowingCountryText}
+              canvasHeight={200}
+              canvasWidth={600}
             />
-            <input
-              value={country}
-              type="text"
-              name="country"
-              onChange={e =>
-                dispatch({
-                  type: "field",
-                  fieldName: e.target.name,
-                  value: e.target.value,
-                })
-              }
-            ></input>
           </div>
-          <div className="form-whitespace">
-          </div>
+          <div className="form-whitespace"></div>
         </div>
       </CSSTransition>
     </>

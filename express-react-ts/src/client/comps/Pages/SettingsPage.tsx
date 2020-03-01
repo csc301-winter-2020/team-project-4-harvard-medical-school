@@ -9,8 +9,8 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({}) => {
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState("Danny Heap");
-  const [defaultMode, setDefaultMode] = useState<"tablet" | "desktop">(
-    "tablet"
+  const [defaultMode, setDefaultMode] = useState<"typing" | "both" | "writing">(
+    "writing"
   );
 
   return (
@@ -35,29 +35,41 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({}) => {
             </div>
           </div>
           <div className="settings-bottom-container">
-            <h3>Default Mode</h3>
+            <h3>Default Input Mode</h3>
             <label>
               <input
                 type="radio"
                 name="defaultMode"
-                checked={defaultMode === "tablet"}
+                checked={defaultMode === "writing"}
                 onChange={() => {
-                  setDefaultMode("tablet");
+                  setDefaultMode("writing");
                 }}
               />
-              <p>Tablet</p>
+              <p>Writing</p>
             </label>
 
             <label>
               <input
                 type="radio"
                 name="defaultMode"
-                checked={defaultMode === "desktop"}
+                checked={defaultMode === "typing"}
                 onChange={() => {
-                  setDefaultMode("desktop");
+                  setDefaultMode("typing");
                 }}
               />
-              <p>Desktop</p>
+              <p>Typing</p>
+            </label>
+
+            <label>
+              <input
+                type="radio"
+                name="defaultMode"
+                checked={defaultMode === "both"}
+                onChange={() => {
+                  setDefaultMode("both");
+                }}
+              />
+              <p>Show Both</p>
             </label>
           </div>
         </div>

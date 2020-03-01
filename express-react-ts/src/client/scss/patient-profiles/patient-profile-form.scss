@@ -1,16 +1,12 @@
 @import "../app.scss";
 
-.demographics-page-outermost-container {
-  display: block;
-}
-
-.demographics-form-container {
+.patient-profile-form-container {
   padding-left: 100px;
 
   // Titles for each field
   h3 {
     margin-bottom: 10px;
-    font-weight: normal;
+    
     font-size: 1.2rem;
     display: inline-block;
   }
@@ -34,7 +30,6 @@
     height: 24px;
     font-size: 1rem;
     transition: all 0.15s ease;
-    margin-bottom: 16px;
   }
   input[type="text"]:hover,
   input[type="number"]:hover{
@@ -77,12 +72,15 @@
   }
 }
 
-
 .form-whitespace{
   width: 1px;
   height: 400px;
 }
 
 .form-spacer{
-  height: 10px;
+  height: 30px;
+}
+
+.form-input-short{
+  margin-top: 20px;
 }

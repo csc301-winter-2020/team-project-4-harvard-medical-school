@@ -47,6 +47,18 @@ router.get('/api/student/:userId/patientprofiles', (req:Request, res:Response, n
             const attributes: Array<string> =
             ['pregnant', 'country_residence', 'country_visited', 'complaint',
             'medical_history', 'social_history', 'family_history'];
+            for (let i = 0; i < query_result.rowCount; i++) {
+                for (let i = 0; i < attributes.length; i++) {
+                    const this_attribute = attributes[i] + '_canvas';
+                    if (query_result.rows[this_attribute] !== null) {
+                        query_result.rows[this_attribute] = s3.getSignedUrl('getObject', {
+                            Bucket: bucket,
+                            Key: query_result.rows[this_attribute],
+                            Expires: urlExpiredTime
+                        });
+                    }
+                }
+            }
             res.status(200).json(query_result.rows);
         }
     }));
@@ -68,12 +80,13 @@ router.get('/api/patientprofile/:patientId', (req:Request, res:Response, next:Ne
             const attributes: Array<string> =
             ['pregnant', 'country_residence', 'country_visited', 'complaint',
             'medical_history', 'social_history', 'family_history'];
+            // the for loop to translate key into url
             for (let i = 0; i < attributes.length; i++) {
-                const prefix = result[attributes[i]].slice(0, 6);
-                if (prefix === 'CANVAS') {
-                    result[attributes[i]] = s3.getSignedUrl('getObject', {
+                const this_attribute = attributes[i] + '_canvas';
+                if (result[this_attribute] !== null) {
+                    result[this_attribute] = s3.getSignedUrl('getObject', {
                         Bucket: bucket,
-                        Key: result[attributes[i]].slice(6),
+                        Key: result[this_attribute],
                         Expires: urlExpiredTime
                     });
                 }
@@ -125,17 +138,17 @@ router.post('/api/patientprofile/:patientId', (req:Request, res:Response, next:N
     ['pregnant', 'country_residence', 'country_visited', 'complaint',
     'medical_history', 'social_history', 'family_history'];
     for (let i = 0; i < attributes.length; i++) {
-        if (new_patient[attributes[i]].type === 'canvas') {
-            const time: number = Date.now();
-            const key_name: string = `canvas_${patientId}_${req.user}_${attributes[i]}_${time}`;
-            console.log(key_name);
-            upload_promise.push(
-                save_to_aws(new_patient[attributes[i]].value, key_name));
-            // upload_promise.push(Promise.resolve("CANVAS"+new_patient[attributes[i]].value));
-        } else if (new_patient[attributes[i]].type === 'text') {
-            upload_promise.push(Promise.resolve("TEXT"+new_patient[attributes[i]].value));
+        params_arr.push(new_patient[attributes[i]]);
+    }
+    for (let i = 0; i < attributes.length; i++) {
+        const time: number = Date.now();
+        const key_name: string = `canvas_${patientId}_${req.user}_${attributes[i]}_${time}`;
+        console.log(key_name);
+        if (new_patient[attributes[i]+"_canvas"] === null) {
+            upload_promise.push(Promise.resolve(null));
         } else {
-            return Promise.reject(400);
+            upload_promise.push(
+                save_to_aws(new_patient[attributes[i]+"_canvas"], key_name));
         }
     }
     console.log(upload_promise);
@@ -147,8 +160,10 @@ router.post('/api/patientprofile/:patientId', (req:Request, res:Response, next:N
         const insert_query: string = "INSERT INTO csc301db.patient_profile \
             (student_id, patient_id, first_name, family_name, age, gender_at_birth\
             ,gender, pregnant, country_residence, country_visited, complaint, medical_history,\
-            social_history, family_history) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9\
-                ,$10, $11, $12, $13, $14);";
+            social_history, family_history, pregnant_canvas,country_residence_canvas, \
+            country_visited_canvas, complaint_canvas, medical_history_canvas,\
+            social_history_canvas, family_history_canvas  ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9\
+                ,$10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21);";
         return pool.query(insert_query, params_arr);
     }).then((result) => {
         res.status(200).send();

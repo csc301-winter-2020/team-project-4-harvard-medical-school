@@ -6,32 +6,18 @@
     "age": 20,
     "gender_at_birth": "Male",
     "gender": "Male",
-    "pregnant": {
-        "value": "Either a text or serialized canvas",
-        "type": "canvas"
-    },
-    "country_residence": {
-        "value": "Either a text or serialized canvas",
-        "type": "canvas"
-    },
-    "country_visited": {
-        "value": "Either a text or serialized canvas",
-        "type": "text"
-    },
-    "complaint": {
-        "value": "Either a text or serialized canvas",
-        "type": "canvas"
-    },
-    "medical_history": {
-        "value": "Either a text or serialized canvas",
-        "type": "text"
-    },
-    "social_history": {
-        "value": "Either a text or serialized canvas",
-        "type": "text"
-    },
-    "family_history": {
-        "value": "Either a text or serialized canvas",
-        "type": "text"
-    }
+    "pregnant": "A text value",
+    "country_residence": "A text VALUE",
+    "country_visited": "A text value",
+    "complaint": "A text value",
+    "medical_history": "A text value",
+    "social_history": "A text value",
+    "family_history":"A text value",
+    "pregnant_canvas": "A canvas text or null",
+    "country_residence_canvas": null,
+    "country_visited_canvas": "A canvas text",
+    "complaint_canvas": null,
+    "medical_history_canvas": "A canvas text",
+    "social_history_canvas": "A canvas text",
+    "family_history_canvas":"A canvas text"
 }

@@ -1,4 +1,5 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
+import { RouteComponentProps } from "react-router";
 import { DemographicsPage } from "./DemographicsPage";
 import "../../../scss/patient-profiles/patient-profiles.scss";
 import { Header } from "../../SubComponents/Header";
@@ -65,6 +66,7 @@ interface IndividualPatientProfilePageProps {
   transitionDuration: number;
   transitionName: string;
   isShowingSidebar: boolean;
+  patientID: number;
 }
 
 export type IndividualPatientProfile = React.FC<
@@ -85,14 +87,42 @@ const initNavDots = () => {
   return container;
 };
 
+interface PatientProfilePageProps extends RouteComponentProps {
+  initialPage: contentType;
+  id?: string;
+}
+
+const urlToName: { [url: string]: contentType } = {
+  "demographics": "Demographics",
+  "cchpi": "Chief Complaint & History of Present Illness",
+  "pastmedical": "Past Medical History",
+  "social": "Social History",
+  "family": "Family History",
+  "reviewofsystems": "Review of Systems",
+  "physical": "Physical Examination",
+  "imaging": "Imaging Results",
+  "lab": "Lab Results",
+  "dcs": "Differential & Clinical Scores",
+};
+
 // Length of page transitions in ms. Should match the transition time in the SCSS.
 const transitionDuration: number = 300;
 const swipeDistanceThreshold: number = 300;
 let xcoord: number = 0;
 let transitionName: "slide-left" | "slide-right" = "slide-left";
 
-export const PatientProfilePage: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState<contentType>("Demographics");
+export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
+  props: PatientProfilePageProps
+) => {
+  const myProps: any = props;
+  const thisPatientID = myProps.match.params.id;
+  const initialPage =
+    "pageName" in myProps.match.params &&
+    myProps.match.params.pageName in urlToName
+      ? urlToName[myProps.match.params.pageName]
+      : "Demographics";
+  
+  const [currentPage, setCurrentPage] = useState<contentType>(initialPage);
   const [isShowingSidebar, setIsShowingSidebar] = useState(true);
   const [prevPage, setPrevPage] = useState<contentType | null>(null);
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
@@ -219,6 +249,7 @@ export const PatientProfilePage: React.FC = () => {
           {contentsPages.map((Comp: IndividualPatientProfile, index) => {
             return (
               <Comp
+                patientID={thisPatientID}
                 isShowingSidebar={isShowingSidebar}
                 key={index}
                 pageName={contents[index]}
@@ -234,7 +265,9 @@ export const PatientProfilePage: React.FC = () => {
             {initNavDots()}
           </div>
           <div className="patient-profile-nav-btns">
-            <div className="nav-btn-save"><FontAwesomeIcon icon="save" size="2x" /></div>
+            <div className="nav-btn-save">
+              <FontAwesomeIcon icon="save" size="2x" />
+            </div>
             <div
               className="nav-btn-left"
               onClick={() => {

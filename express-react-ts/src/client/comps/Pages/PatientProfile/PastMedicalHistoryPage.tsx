@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { CSSTransition } from "react-transition-group";
 import { IndividualPatientProfile } from "./PatientProfilePage";
+import { useHistory } from "react-router";
 
 export const PastMedicalHistoryPage: IndividualPatientProfile = ({
   pageName,
@@ -8,10 +9,13 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
   setCurrentPage,
   transitionDuration,
   transitionName,
+  patientID
 }) => {
+  const history = useHistory();
   useEffect(() => {
     if (currentPage === pageName) {
       document.title = `Patient Profile: ${pageName}`;
+      history.push(`/patient/${patientID}/pastmedical`);
     }
   }, [currentPage]);
   return (

@@ -20,7 +20,7 @@ export const App: React.FC = ({}) => {
         <Route exact path="/home" component={HomePage} />
         <Route
           exact
-          path="/patient/:id"
+          path={["/patient/:id", "/patient/:id/:pageName"]}
           component={PatientProfilePage}
         />
         <Route exact path="/settings" component={SettingsPage} />

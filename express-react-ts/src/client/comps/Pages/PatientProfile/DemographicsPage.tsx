@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer, useState } from "react";
 import "../../../scss/patient-profiles/patient-profile-form.scss";
+import { useHistory } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
 import { IndividualPatientProfile } from "./PatientProfilePage";
 import "../../../scss/login/inputboxes.scss";
@@ -64,8 +65,6 @@ const initialState: DemographicsState = {
   country: "",
 };
 
-
-
 export const DemographicsPage: IndividualPatientProfile = ({
   pageName,
   currentPage,
@@ -73,18 +72,14 @@ export const DemographicsPage: IndividualPatientProfile = ({
   transitionDuration,
   transitionName,
   isShowingSidebar,
+  patientID,
 }) => {
-
-
-  const getInitialCanvasWidth = ():number => {
-    const width:number = window.innerWidth;
-    const extra:number = isShowingSidebar ? 250 : 0;
-    return width - 175 - extra;
-  }
+  const history = useHistory();
 
   useEffect(() => {
     if (currentPage === pageName) {
       document.title = `Patient Profile: ${pageName}`;
+      history.push(`/patient/${patientID}/demographics`);
     }
   }, [currentPage]);
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -97,14 +92,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
   const [showingCountryCanvas, setShowingCountryCanvas] = useState(true);
   const [showingCountryText, setShowingCountryText] = useState(false);
 
-  const {
-    firstName,
-    lastName,
-    sex,
-    age,
-    isPregnant,
-    country,
-  } = state;
+  const { firstName, lastName, sex, age, isPregnant, country } = state;
 
   return (
     <>
@@ -115,7 +103,13 @@ export const DemographicsPage: IndividualPatientProfile = ({
         onEnter={() => setCurrentPage(pageName)}
         classNames={transitionName}
       >
-        <div className={ isShowingSidebar ? "patient-profile-window" : "patient-profile-window width-100"}>
+        <div
+          className={
+            isShowingSidebar
+              ? "patient-profile-window"
+              : "patient-profile-window width-100"
+          }
+        >
           <div className="patient-profile-page-title">
             <h1>{pageName}</h1>
           </div>

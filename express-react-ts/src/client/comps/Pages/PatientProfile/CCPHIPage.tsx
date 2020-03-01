@@ -2,6 +2,7 @@ import React, { useEffect, useState, useReducer } from "react";
 import { CSSTransition } from "react-transition-group";
 import { IndividualPatientProfile } from "./PatientProfilePage";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
+import { useHistory } from "react-router";
 
 function reducer(
   state: CCHPI_State,
@@ -35,10 +36,13 @@ export const CCHPIPage: IndividualPatientProfile = ({
   transitionDuration,
   transitionName,
   isShowingSidebar,
+  patientID
 }) => {
+  const history = useHistory();
   useEffect(() => {
     if (currentPage === pageName) {
       document.title = `Patient Profile: ${pageName}`;
+      history.push(`/patient/${patientID}/cchpi`);
     }
   }, [currentPage]);
   const [state, dispatch] = useReducer(reducer, initialState);

@@ -55,4 +55,24 @@
       }
     }
   }
+
+  .canvas-draw-colors {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 100;
+
+    .canvas-draw-btn {
+      height: 30px;
+      width: 30px;
+      text-align: center;
+      margin: 5px;
+      border-radius: 50%;
+      cursor: pointer;
+
+      svg {
+        margin-top: 7px;
+      }
+    }
+  }
 }

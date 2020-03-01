@@ -56,26 +56,26 @@ router.get('/api/patientprofile/:patientId', (req:Request, res:Response, next:Ne
 });
 
 
-function save_to_aws(data: any, key: string): any {
-    const params:any = {
-        Bucker: bucket,
-        Key: "djddjdjjd",
-        Body: JSON.stringify(data, null, 2)
-    };
-    return new Promise((resolve, reject) => {
-        s3.upload(params, function(err, data) {
-            console.log("upload success");
-            if (err) {
-                console.log("FUCKED");
-                console.log(err);
-                reject();
-            } else {
-                console.log("Success");
-                resolve("KEY"+key);
-            }
-        });
-    });
-}
+// function save_to_aws(data: any, key: string): any {
+//     const params:any = {
+//         Bucker: bucket,
+//         Key: "djddjdjjd",
+//         Body: JSON.stringify(data, null, 2)
+//     };
+//     return new Promise((resolve, reject) => {
+//         s3.upload(params, function(err, data) {
+//             console.log("upload success");
+//             if (err) {
+//                 console.log("FUCKED");
+//                 console.log(err);
+//                 reject();
+//             } else {
+//                 console.log("Success");
+//                 resolve("KEY"+key);
+//             }
+//         });
+//     });
+// }
 
 /**
  * Create a new patient profile for patient <patientId>

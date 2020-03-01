@@ -23,16 +23,10 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
 }) => {
   const [canvasHeight, setCanvasHeight] = useState(initialHeight);
   const [canvasWidth, setCanvasWidth] = useState(initialWidth);
+  const [brushRadius, setBrushRadius] = useState(3);
+  const [brushColor, setBrushColor] = useState('#444');
   const [lastDrag, setLastDrag] = useState((new Date()).getTime());
   
-
-  useEffect(() => {
-    window.addEventListener("keydown", handleUndo);
-    
-    return () => {
-      window.removeEventListener("keydown", handleUndo);
-    };
-  });
 
   let inputRef: any;
   function saveCanvas() {
@@ -46,14 +40,16 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
     inputRef.clear();
   }
 
-  function undoCanvas() {
-    inputRef.undo();
-  }
-
-  function handleUndo(event: KeyboardEvent) {
-    // Listens to ctrl+z
-    if (event.ctrlKey && event.keyCode === 90) {
-      inputRef.undo();
+  function toggleErase() {
+    let ctx = inputRef.canvas['drawing'].getContext('2d');
+    if (ctx.globalCompositeOperation === 'destination-out') {
+      ctx.globalCompositeOperation = 'source-over';
+      setBrushRadius(3);
+      setBrushColor("#444");
+    } else {
+      ctx.globalCompositeOperation = 'destination-out';
+      setBrushRadius(12);
+      setBrushColor("rgba(250,250,250,1)");
     }
   }
 
@@ -86,7 +82,8 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
             canvasWidth={canvasWidth}
             canvasHeight={canvasHeight}
             lazyRadius={0}
-            brushRadius={3}
+            brushRadius={brushRadius}
+            brushColor={brushColor}
           />
         </div>
         <div
@@ -100,11 +97,8 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
           <div className="canvas-draw-btn" onClick={clearCanvas}>
             <FontAwesomeIcon icon="trash" size="1x" />
           </div>
-          <div className="canvas-draw-btn" onClick={saveCanvas}>
-            <FontAwesomeIcon icon="save" size="1x" />
-          </div>
-          <div className="canvas-draw-btn" onClick={undoCanvas}>
-            <FontAwesomeIcon icon="undo" size="1x" />
+          <div className="canvas-draw-btn" onClick={toggleErase}>
+            <FontAwesomeIcon icon="eraser" size="1x" />
           </div>
         </div>
       </div>

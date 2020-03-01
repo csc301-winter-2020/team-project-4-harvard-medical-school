@@ -21,6 +21,7 @@ import {
   faFont,
   faPencilAlt,
   faCheck,
+  faEraser,
 } from "@fortawesome/free-solid-svg-icons";
 
 const myLibrary: any = library;
@@ -42,6 +43,7 @@ myLibrary.add(
   faFont,
   faPencilAlt,
   faCheck,
+  faEraser,
 );
 
 /**

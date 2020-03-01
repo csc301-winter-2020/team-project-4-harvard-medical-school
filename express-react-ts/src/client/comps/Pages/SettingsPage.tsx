@@ -12,6 +12,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({}) => {
   const [defaultMode, setDefaultMode] = useState<"typing" | "both" | "writing">(
     "writing"
   );
+  const [showSidebarDefault, setShowSidebarDefault] = useState<boolean>(true);
 
   return (
     <>
@@ -28,7 +29,12 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({}) => {
               {!isEditing ? (
                 <h1>{name}</h1>
               ) : (
-                <input type="text" placeholder="Enter your name..." value={name} onChange={e => setName(e.target.value)} />
+                <input
+                  type="text"
+                  placeholder="Enter your name..."
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                />
               )}
               <h3>1st Year Student</h3>
               <h3>Toronto General Hospital</h3>
@@ -70,6 +76,31 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({}) => {
                 }}
               />
               <p>Show Both</p>
+            </label>
+
+            <h3>Show Sidebar by Default</h3>
+            <label>
+              <input
+                type="radio"
+                name="sidebarDefault"
+                checked={showSidebarDefault}
+                onChange={() => {
+                  setShowSidebarDefault(true);
+                }}
+              />
+              <p>Yes</p>
+            </label>
+
+            <label>
+              <input
+                type="radio"
+                name="sidebarDefault"
+                checked={!showSidebarDefault}
+                onChange={() => {
+                  setShowSidebarDefault(false);
+                }}
+              />
+              <p>No</p>
             </label>
           </div>
         </div>

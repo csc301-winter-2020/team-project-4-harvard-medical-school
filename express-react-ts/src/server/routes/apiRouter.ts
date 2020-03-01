@@ -10,8 +10,13 @@ type NextFunction = express.NextFunction;
 const router:Router = express.Router();
 
 import {Pool, Client} from "pg";
-
 const pool: Pool = new Pool();
+
+const aws: any = require('aws-sdk');
+aws.config.update({accessKeyId: process.env.AWSKEYID, secretAccessKey: process.env.AWSKEY});
+const s3 = new aws.S3();
+const bucket: string = 'csc301';
+const urlExpiredTime: number = 10;
 
 /**
  * The router for our API calls. Make sure to always send the appropriate HTTP status when
@@ -39,6 +44,9 @@ router.get('/api/student/:userId/patientprofiles', (req:Request, res:Response, n
         if (query_result.rowCount === 0) {
             res.status(404).send();
         } else {
+            const attributes: Array<string> =
+            ['pregnant', 'country_residence', 'country_visited', 'complaint',
+            'medical_history', 'social_history', 'family_history'];
             res.status(200).json(query_result.rows);
         }
     }));
@@ -56,16 +64,26 @@ router.get('/api/patientprofile/:patientId', (req:Request, res:Response, next:Ne
         if (query_result.rowCount === 0) {
             res.status(404).send();
         } else {
-            res.status(200).json(query_result.rows[0]);
+            const result: any = query_result.rows[0]
+            const attributes: Array<string> =
+            ['pregnant', 'country_residence', 'country_visited', 'complaint',
+            'medical_history', 'social_history', 'family_history'];
+            for (let i = 0; i < attributes.length; i++) {
+                const prefix = result[attributes[i]].slice(0, 6);
+                if (prefix === 'CANVAS') {
+                    result[attributes[i]] = s3.getSignedUrl('getObject', {
+                        Bucket: bucket,
+                        Key: result[attributes[i]].slice(6),
+                        Expires: urlExpiredTime
+                    });
+                }
+            }
+            res.status(200).json(result);
         }
     }));
     // res.status(200).json('');
 });
 
-const aws: any = require('aws-sdk');
-aws.config.update({accessKeyId: process.env.AWSKEYID, secretAccessKey: process.env.AWSKEY});
-const s3 = new aws.S3();
-const bucket: string = 'csc301';
 
 function save_to_aws(data: any, key: string): any {
     const params:any = {

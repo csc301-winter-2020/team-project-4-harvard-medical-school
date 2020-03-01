@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router-dom";
-const dateFormat = require("dateformat");
-const dateString = "mmmm d, yyyy";
-const dateStringCompact = "m/d/yyyy";
+import { dateFormatFull, dateFormatCompact } from "../../../utils/utils";
 
 interface HomePatientProfileProps {
   title?: string;
@@ -17,10 +15,11 @@ interface HomePatientProfileProps {
   isPregnant: string | null;
   ethnicity: string;
   country: string;
+  isPortraitMode: boolean;
 }
 
 export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
-  title,
+  title, //unused
   date,
   lastModified,
   firstName,
@@ -31,42 +30,10 @@ export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
   isPregnant,
   ethnicity,
   country,
+  isPortraitMode,
 }) => {
   const history = useHistory();
   const [isShowingInfo, setIsShowingInfo] = useState(false);
-  const [isPortraitMode, setIsPortraitMode] = useState(
-    window.innerWidth < 1080
-  );
-  const [createdDate, setCreatedDate] = useState(
-    dateFormat(new Date(date), isPortraitMode ? dateStringCompact : dateString)
-  );
-  const [modifiedDate, setModifiedDate] = useState(
-    dateFormat(
-      new Date(lastModified),
-      isPortraitMode ? dateStringCompact : dateString
-    )
-  );
-
-  useEffect(() => {
-    setCreatedDate(dateFormat(new Date(date), dateString));
-    setModifiedDate(dateFormat(new Date(lastModified), dateString));
-
-    const handleResize = () => {
-      if (window.innerWidth < 1080) {
-        setIsPortraitMode(true);
-        setCreatedDate(dateFormat(new Date(date), dateStringCompact));
-        setModifiedDate(dateFormat(new Date(lastModified), dateStringCompact));
-      } else {
-        setIsPortraitMode(false);
-        setCreatedDate(dateFormat(new Date(date), dateString));
-        setModifiedDate(dateFormat(new Date(lastModified), dateString));
-      }
-    };
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  });
 
   return (
     <>
@@ -82,9 +49,9 @@ export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
         <div className="home-patient-profile-name-col">
           {lastName}, {firstName}
         </div>
-        <div className="home-patient-profile-date-col">{createdDate}</div>
+        <div className="home-patient-profile-date-col">{isPortraitMode ? dateFormatCompact(date) : dateFormatFull(date)}</div>
         <div className="home-patient-profile-last-modified-col">
-          {modifiedDate}
+          {isPortraitMode ? dateFormatCompact(lastModified) : dateFormatFull(lastModified)}
         </div>
         <div
           className="home-patient-profile-info-btn"
@@ -122,7 +89,7 @@ export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
             </p>
             <p>
               <span className="bold-span">Date Of Birth:</span>{" "}
-              {dateFormat(new Date(dateOfBirth), dateString)}
+              {dateFormatFull(dateOfBirth)}
             </p>
           </div>
           <div className="home-patient-profile-info-btn-container">

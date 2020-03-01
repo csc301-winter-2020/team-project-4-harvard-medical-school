@@ -1,19 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import CanvasDraw from "react-canvas-draw";
 import "../../scss/canvas-draw.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { max, now } from "../../utils/utils";
 
 interface CanvasCompProps {
   initialHeight: number;
   initialWidth: number;
   id: string;
-}
-
-function max(a: number, b: number): number {
-  if (a < b) {
-    return b;
-  }
-  return a;
 }
 
 export const CanvasComp: React.FC<CanvasCompProps> = ({
@@ -28,7 +22,7 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
   const [brushColor, setBrushColor] = useState("black");
   const [lastBrushColor, setLastBrushColor] = useState("black");
   const [catenaryColor, setCatenaryColor] = useState("black");
-  const [lastDrag, setLastDrag] = useState(new Date().getTime());
+  const [lastDrag, setLastDrag] = useState(now());
 
   let inputRef: any;
   function saveCanvas() {
@@ -67,8 +61,8 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
   }
 
   function dragging(event: any) {
-    if (new Date().getTime() - lastDrag > 10) {
-      setLastDrag(new Date().getTime());
+    if (now() - lastDrag > 10) {
+      setLastDrag(now());
       if (event.clientX !== 0 && event.clientY !== 0) {
         const boundingRect = document
           .querySelector(`#canvas-draw-container-${id}`)

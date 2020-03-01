@@ -3,6 +3,7 @@ import "../../scss/home/home";
 import { Header } from "../SubComponents/Header";
 import { HomePatientProfile } from "../SubComponents/Home/HomePatientProfile";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { now, max } from "../../utils/utils";
 
 interface HomePageProps {}
 
@@ -235,12 +236,12 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
     },
     {
       title: "Patient11",
-      date: new Date().getTime(),
-      lastModified: new Date().getTime(),
+      date: now(),
+      lastModified: now(),
       firstName: "AAaaaaa",
       lastName: "A",
       sex: "M",
-      dateOfBirth: new Date().getTime(),
+      dateOfBirth: now(),
       isPregnant: null,
       ethnicity: "aaaaaaa",
       age: 20,
@@ -253,6 +254,16 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
   const { nameSort, createdSort, lastModifiedSort, changed } = state;
   const [searchVal, setSearchVal] = useState("");
   const [patientsList, setPatientsList] = useState(patients);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () =>
+      setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  });
 
   useEffect(() => {
     if (nameSort !== null) {
@@ -378,6 +389,7 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
               return (
                 <HomePatientProfile
                   key={index}
+                  isPortraitMode={windowWidth < 1080}
                   firstName={p.firstName}
                   lastName={p.lastName}
                   title={p.title}
@@ -394,7 +406,7 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
             })}
             <div
               className="home-page-content-whitespace"
-              style={{ height: window.innerHeight - 400 }}
+              style={{ height: max(window.innerHeight - 400, 0) }}
             >
               <div className="home-page-content-whitespace-logo"></div>
             </div>

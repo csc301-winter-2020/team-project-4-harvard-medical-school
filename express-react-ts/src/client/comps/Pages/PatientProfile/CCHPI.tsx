@@ -46,15 +46,13 @@ export const CCHPIPage: IndividualPatientProfile = ({
     }
   }, [currentPage]);
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [
-    showingChiefComplaintCanvas,
-    setShowingChiefComplaintCanvas,
-  ] = useState(true);
-  const [showingChiefComplaintText, setShowingChiefComplaintText] = useState(
-    false
-  );
+
+  const [showingChiefComplaintCanvas, setShowingChiefComplaintCanvas] = useState(true);
+  const [showingChiefComplaintText, setShowingChiefComplaintText] = useState(false);
+
   const [showingHPICanvas, setShowingHPICanvas] = useState(true);
   const [showingHPIText, setShowingHPIText] = useState(false);
+  
   const { chiefComplaint, HPI } = state;
 
   return (

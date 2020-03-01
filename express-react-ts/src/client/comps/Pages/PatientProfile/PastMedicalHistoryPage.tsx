@@ -1,7 +1,37 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useReducer } from "react";
 import { CSSTransition } from "react-transition-group";
 import { IndividualPatientProfile } from "./PatientProfilePage";
+import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { useHistory } from "react-router";
+
+function reducer(
+  state: PMH_State,
+  action: { type: string; fieldName?: string; value?: string }
+): PMH_State {
+  switch (action.type) {
+    case "field":
+      return {
+        ...state,
+        [action.fieldName]: action.value,
+      };
+    default:
+      throw new Error("Invalid type on action.");
+  }
+}
+
+type PMH_State = {
+  pastMedHist: string;
+  pastHospits: string;
+  medications: string;
+  allergies: string;
+}
+
+const initialState: PMH_State = {
+  pastMedHist: "",
+  pastHospits: "", 
+  medications: "",
+  allergies: "",
+};
 
 export const PastMedicalHistoryPage: IndividualPatientProfile = ({
   pageName,
@@ -9,6 +39,7 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
   setCurrentPage,
   transitionDuration,
   transitionName,
+  isShowingSidebar,
   patientID
 }) => {
   const history = useHistory();
@@ -18,6 +49,23 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
       history.push(`/patient/${patientID}/pastmedical`);
     }
   }, [currentPage]);
+
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const [showingPastMedHistCanvas, setShowingPastMedHistCanvas] = useState(true);
+  const [showingPastMedHistText, setShowingPastMedHistText] = useState(false);
+
+  const [showingPastHospitsCanvas, setShowingPastHospitsCanvas] = useState(true);
+  const [showingPastHospitsText, setShowingPastHospitsText] = useState(false);
+
+  const [showingMedicationsCanvas, setShowingMedicationsCanvas] = useState(true);
+  const [showingMedicationsText, setShowingMedicationsText] = useState(false);
+
+  const [showingAllergiesCanvas, setShowingAllergiesCanvas] = useState(true);
+  const [showingAllergiesText, setShowingAllergiesText] = useState(false);
+  
+  const { pastMedHist, pastHospits, medications, allergies } = state;
+
   return (
     <>
       <CSSTransition
@@ -27,71 +75,77 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
         onEnter={() => setCurrentPage(pageName)}
         classNames={transitionName}
       >
-        <div className="past-medical-history-page-outermost-container patient-profile-window">
+        <div className={ isShowingSidebar ? "patient-profile-window" : "patient-profile-window width-100"}>
           <div className="patient-profile-page-title">
-            <h1>{pageName}</h1>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum
-              repellat explicabo iste neque? Fugit sint voluptate temporibus
-              vero debitis qui recusandae neque labore? Odio saepe, vel
-              voluptatum nam mollitia magnam atque nobis, explicabo rem vitae ab
-              ut neque accusantium quo eligendi in provident eos! Facere,
-              tempore distinctio non minima suscipit amet quos expedita
-              dignissimos autem aspernatur molestiae? Dolorem veniam odit iste
-              fugiat repellat quo ducimus eum, earum dolores corrupti incidunt?
-              Dolores quas architecto veritatis eius exercitationem, beatae
-              maxime laborum. Nemo, blanditiis corrupti ducimus reiciendis
-              nesciunt temporibus, natus, perferendis id non animi illo placeat
-              aliquid. Dignissimos, dolorem officiis a tempore ducimus quibusdam
-              ratione quos nostrum accusamus illo iste harum quidem eum? Nemo
-              quidem distinctio magnam iste fugit delectus illum, omnis,
-              reprehenderit, fuga quibusdam facere odio. Ad nesciunt recusandae
-              eaque iure omnis sed laudantium id dolorem beatae esse, repellat
-              temporibus et, numquam mollitia nostrum ducimus sequi est.
-              Laudantium aliquid facilis natus eaque, assumenda pariatur
-              quisquam delectus ea magnam error at odio sunt quod quidem
-              temporibus! Corporis error perspiciatis facilis, repellat tenetur
-              natus pariatur ipsam? Maxime sint labore ducimus voluptates?
-              Aspernatur placeat quisquam consequatur nobis assumenda rem sunt,
-              fugiat ut atque nisi! Repellat non doloribus dolores fuga error,
-              officia, adipisci rem corrupti corporis velit quisquam sunt nobis
-              animi eius rerum incidunt accusantium quibusdam. Accusantium at,
-              necessitatibus rerum libero, perspiciatis aspernatur sit
-              reprehenderit cum, impedit quis pariatur laboriosam voluptas
-              dolore et voluptatibus sint unde esse. Neque officiis, iure
-              ducimus optio rem ab veritatis iste sapiente inventore, id
-              necessitatibus aperiam ipsum deserunt dolores cupiditate, delectus
-              esse eaque molestiae animi explicabo qui consectetur cumque
-              aliquam quos. Ab ex recusandae eligendi similique, autem doloribus
-              dignissimos deleniti repudiandae reiciendis delectus error sed
-              odio. Id delectus tempore alias ea neque reiciendis a ut est quia
-              rerum dolores suscipit, provident explicabo excepturi totam veniam
-              quo consequuntur quisquam illum eum! Culpa, ut non. Explicabo
-              adipisci numquam perferendis dolore nemo natus vel at possimus
-              voluptas blanditiis, eos iste quasi ipsum inventore amet
-              praesentium, perspiciatis tenetur dolorem est non vero laudantium
-              debitis nobis pariatur! Ipsum, est. Enim cumque et eligendi
-              dolores laborum pariatur eius cum consectetur cupiditate animi!
-              Esse ipsam, officiis necessitatibus dolore iste exercitationem
-              sapiente voluptatem tempore illum eum optio, explicabo veniam
-              consectetur ea tenetur, nihil similique molestias blanditiis
-              facilis consequatur possimus expedita nostrum nam. Corrupti,
-              dolorem! Modi et consequatur corporis ullam sint blanditiis? Nemo
-              dolore voluptatem, corporis temporibus voluptas voluptatum odit
-              repellendus tempora commodi quia cum nesciunt vitae beatae quae
-              vel. Asperiores, minima consequuntur? Itaque architecto tenetur
-              molestias sunt cupiditate nesciunt, maiores sed obcaecati
-              asperiores odit magnam temporibus incidunt nobis assumenda eos,
-              fuga eum animi voluptatum facere in quo at tempore aspernatur.
-              Dolor laudantium impedit nostrum rerum quo at libero eius tenetur
-              dolorem non laborum ipsum tempora amet veniam sed enim quos nisi
-              adipisci placeat, nulla assumenda in inventore unde mollitia! Nisi
-              odio suscipit dolores laudantium ut omnis, illo, cumque incidunt
-              ab similique iure consequuntur placeat qui odit. Atque placeat quo
-              quidem maxime iusto ducimus minus consequuntur sequi deleniti
-              numquam exercitationem ut delectus eius possimus eligendi, quam ab
-              sapiente! Sapiente, voluptate.
-            </p>
+            <h2>{pageName}</h2>
+          </div>
+          <div className="patient-profile-form-container">
+            <PatientFormInput
+              dispatch={dispatch}
+              id={"pastMedHist"}
+              inputType={"text"}
+              inputVal={pastMedHist}
+              placeholder={`Enter text here`}
+              title={"Past Medical History"}
+              isShowingCanvas={showingPastMedHistCanvas}
+              isShowingText={showingPastMedHistText}
+              setIsShowingCanvas={setShowingPastMedHistCanvas}
+              setIsShowingText={setShowingPastMedHistText}
+              canvasHeight={600}
+              canvasWidth={600}
+              isTextArea={true}
+            />
+
+            <PatientFormInput
+              dispatch={dispatch}
+              id={"pastHospits"}
+              inputType={"text"}
+              inputVal={pastHospits}
+              placeholder={`Enter text here`}
+              title={"Past Hospitalizations/Surgical History"}
+              isShowingCanvas={showingPastHospitsCanvas}
+              isShowingText={showingPastHospitsText}
+              setIsShowingCanvas={setShowingPastHospitsCanvas}
+              setIsShowingText={setShowingPastHospitsText}
+              canvasHeight={600}
+              canvasWidth={600}
+              isTextArea={true}
+            />
+
+            <PatientFormInput
+              dispatch={dispatch}
+              id={"medications"}
+              inputType={"text"}
+              inputVal={medications}
+              placeholder={`Enter text here`}
+              title={"Medications"}
+              isShowingCanvas={showingMedicationsCanvas}
+              isShowingText={showingMedicationsText}
+              setIsShowingCanvas={setShowingMedicationsCanvas}
+              setIsShowingText={setShowingMedicationsText}
+              canvasHeight={600}
+              canvasWidth={600}
+              isTextArea={true}
+            />
+
+            <PatientFormInput
+              dispatch={dispatch}
+              id={"allergies"}
+              inputType={"text"}
+              inputVal={allergies}
+              placeholder={`Enter text here`}
+              title={"Allergies"}
+              isShowingCanvas={showingAllergiesCanvas}
+              isShowingText={showingAllergiesText}
+              setIsShowingCanvas={setShowingAllergiesCanvas}
+              setIsShowingText={setShowingAllergiesText}
+              canvasHeight={600}
+              canvasWidth={600}
+              isTextArea={true}
+            />
+          </div>
+          <div className="form-whitespace">
+            <div className="home-page-content-whitespace-logo"></div>
           </div>
         </div>
       </CSSTransition>

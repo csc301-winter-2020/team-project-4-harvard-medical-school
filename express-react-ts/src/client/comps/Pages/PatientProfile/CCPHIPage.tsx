@@ -80,6 +80,7 @@ export const CCHPIPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingChiefComplaintText}
               canvasHeight={600}
               canvasWidth={600}
+              isTextArea={true}
             />
 
             <PatientFormInput
@@ -95,6 +96,7 @@ export const CCHPIPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingHPIText}
               canvasHeight={600}
               canvasWidth={600}
+              isTextArea={true}
             />
           </div>
         </div>

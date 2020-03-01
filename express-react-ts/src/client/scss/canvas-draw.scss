@@ -56,19 +56,26 @@
     }
   }
 
+
   .canvas-draw-colors {
     position: absolute;
     left: 0;
     top: 0;
     z-index: 100;
 
+    .canvas-draw-btn:hover{
+      opacity: 1;
+    }
+
     .canvas-draw-btn {
+      transition: all 0.15s ease;
       height: 30px;
       width: 30px;
       text-align: center;
       margin: 5px;
       border-radius: 50%;
       cursor: pointer;
+      opacity: 0.2;
 
       svg {
         margin-top: 7px;

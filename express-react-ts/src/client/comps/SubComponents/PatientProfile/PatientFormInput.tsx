@@ -15,6 +15,7 @@ interface PatientFormInputProps {
   id: string;
   canvasHeight: number;
   canvasWidth: number;
+  isTextArea: boolean;
 }
 
 export const PatientFormInput: React.FC<PatientFormInputProps> = ({
@@ -29,6 +30,7 @@ export const PatientFormInput: React.FC<PatientFormInputProps> = ({
   dispatch,
   setIsShowingText,
   canvasHeight,
+  isTextArea,
   canvasWidth,
 }) => {
   return (
@@ -41,9 +43,13 @@ export const PatientFormInput: React.FC<PatientFormInputProps> = ({
         setIsShowingText={setIsShowingText}
       />
       {isShowingCanvas && (
-        <CanvasComp id={id} initialHeight={canvasHeight} initialWidth={canvasWidth} />
+        <CanvasComp
+          id={id}
+          initialHeight={canvasHeight}
+          initialWidth={canvasWidth}
+        />
       )}
-      {isShowingText && (
+      {isShowingText && !isTextArea && (
         <input
           className="form-input-short"
           placeholder={placeholder}
@@ -58,6 +64,23 @@ export const PatientFormInput: React.FC<PatientFormInputProps> = ({
             })
           }
         />
+      )}
+
+      {isShowingText && isTextArea && (
+        <textarea
+          className="patient-form-textarea"
+          value={inputVal}
+          name={id}
+          placeholder={placeholder}
+          onChange={e =>
+            dispatch({
+              type: "field",
+              fieldName: e.target.name,
+              value: e.target.value,
+            })
+          }
+          
+        ></textarea>
       )}
       <div className="form-spacer"></div>
     </>

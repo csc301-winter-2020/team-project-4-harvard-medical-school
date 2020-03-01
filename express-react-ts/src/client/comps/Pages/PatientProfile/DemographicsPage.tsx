@@ -133,6 +133,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingFirstNameText}
               canvasHeight={200}
               canvasWidth={600}
+              isTextArea={false}
             />
 
             <PatientFormInput
@@ -148,6 +149,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingLastNameText}
               canvasHeight={200}
               canvasWidth={600}
+              isTextArea={false}
             />
             <PatientFormInput
               dispatch={dispatch}
@@ -162,6 +164,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingAgeText}
               canvasHeight={200}
               canvasWidth={600}
+              isTextArea={false}
             />
             <h3>Sex at Birth</h3>
             <div className="radio-group">
@@ -244,6 +247,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingCountryText}
               canvasHeight={200}
               canvasWidth={600}
+              isTextArea={false}
             />
           </div>
           <div className="form-whitespace"></div>

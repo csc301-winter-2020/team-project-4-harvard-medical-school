@@ -1,0 +1,37 @@
+{
+    "student_id": 0,
+    "patient_id": 0,
+    "first_name": "will",
+    "family_name": "Qie",
+    "age": 20,
+    "gender_at_birth": "Male",
+    "gender": "Male",
+    "pregnant": {
+        "value": "Either a text or serialized canvas",
+        "type": "canvas"
+    },
+    "country_residence": {
+        "value": "Either a text or serialized canvas",
+        "type": "canvas"
+    },
+    "country_visited": {
+        "value": "Either a text or serialized canvas",
+        "type": "text"
+    },
+    "complaint": {
+        "value": "Either a text or serialized canvas",
+        "type": "canvas"
+    },
+    "medical_history": {
+        "value": "Either a text or serialized canvas",
+        "type": "text"
+    },
+    "social_history": {
+        "value": "Either a text or serialized canvas",
+        "type": "text"
+    },
+    "family_history": {
+        "value": "Either a text or serialized canvas",
+        "type": "text"
+    }
+}

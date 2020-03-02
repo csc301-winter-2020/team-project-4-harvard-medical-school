@@ -58,6 +58,7 @@
         background-color: #ddd;
         transition: all 0.15 ease;
         border-radius: 50%;
+        vertical-align: middle;
       }
       input[type="radio"]:hover{
         background-color: $color-primary-very-light;

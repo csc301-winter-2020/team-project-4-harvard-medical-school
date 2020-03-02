@@ -86,10 +86,11 @@
 }
 
 .patient-form-textarea{
-  margin-top: 20px;
+  margin-top: 15px;
   font-size: 1rem;
   width: 600px;
-  height: 500px;
+  min-width: 600px;
+  height: 300px;
   border-style: solid;
   border-color: #555;
   border-radius: 3px;

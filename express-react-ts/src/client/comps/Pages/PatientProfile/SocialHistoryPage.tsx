@@ -137,7 +137,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
               isShowingText={showingWorkText}
               setIsShowingCanvas={setShowingWorkCanvas}
               setIsShowingText={setShowingWorkText}
-              canvasHeight={200}
+              canvasHeight={600}
               canvasWidth={600}
               isTextArea={true}
             />
@@ -153,7 +153,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
               isShowingText={showingLivingConditionsText}
               setIsShowingCanvas={setShowingLivingConditionsCanvas}
               setIsShowingText={setShowingLivingConditionsText}
-              canvasHeight={200}
+              canvasHeight={600}
               canvasWidth={600}
               isTextArea={true}
             />
@@ -169,7 +169,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
               isShowingText={showingSexualHistoryText}
               setIsShowingCanvas={setShowingSexualHistoryCanvas}
               setIsShowingText={setShowingSexualHistoryText}
-              canvasHeight={200}
+              canvasHeight={600}
               canvasWidth={600}
               isTextArea={true}
             />
@@ -187,7 +187,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
               isShowingText={showingEtOHText}
               setIsShowingCanvas={setShowingEtOHCanvas}
               setIsShowingText={setShowingEtOHText}
-              canvasHeight={200}
+              canvasHeight={600}
               canvasWidth={600}
               isTextArea={true}
             />
@@ -203,7 +203,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
               isShowingText={showingDrinksPerWeekText}
               setIsShowingCanvas={setShowingDrinksPerWeekCanvas}
               setIsShowingText={setShowingDrinksPerWeekText}
-              canvasHeight={200}
+              canvasHeight={300}
               canvasWidth={600}
               isTextArea={false}
             />
@@ -258,7 +258,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
                   isShowingText={showingLastTimeSmokedText}
                   setIsShowingCanvas={setShowingLastTimeSmokedCanvas}
                   setIsShowingText={setShowingLastTimeSmokedText}
-                  canvasHeight={200}
+                  canvasHeight={300}
                   canvasWidth={600}
                   isTextArea={false}
                 />
@@ -274,7 +274,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
                   isShowingText={showingPacksPerDayText}
                   setIsShowingCanvas={setShowingPacksPerDayCanvas}
                   setIsShowingText={setShowingPacksPerDayText}
-                  canvasHeight={200}
+                  canvasHeight={300}
                   canvasWidth={600}
                   isTextArea={false}
                 />
@@ -292,7 +292,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
               isShowingText={showingOtherSubstancesText}
               setIsShowingCanvas={setShowingOtherSubstancesCanvas}
               setIsShowingText={setShowingOtherSubstancesText}
-              canvasHeight={200}
+              canvasHeight={600}
               canvasWidth={600}
               isTextArea={true}
             />

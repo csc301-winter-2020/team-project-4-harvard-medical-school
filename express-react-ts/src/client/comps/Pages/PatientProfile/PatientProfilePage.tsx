@@ -11,7 +11,7 @@ import { ReviewOfSystemsPage } from "./ReviewOfSystemsPage";
 import { PhysicalExaminationPage } from "./PhysicalExaminationPage";
 import { ImagingResultsPage } from "./ImagingResultsPage";
 import { LabResultsPage } from "./LabResultsPage";
-import { DifferentialClinicalScoresPage } from "./DifferentialClinicalScoresPage";
+import { AssessmentAndPlanPage } from "./AssessmentAndPlanPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 /**
@@ -31,7 +31,7 @@ type contentType =
   | "Physical Examination"
   | "Imaging Results"
   | "Lab Results"
-  | "Differential & Clinical Scores";
+  | "Assessment & Plan";
 
 const contents: contentType[] = [
   "Demographics",
@@ -43,7 +43,7 @@ const contents: contentType[] = [
   "Physical Examination",
   "Imaging Results",
   "Lab Results",
-  "Differential & Clinical Scores",
+  "Assessment & Plan",
 ];
 
 const contentsPages: IndividualPatientProfile[] = [
@@ -56,7 +56,7 @@ const contentsPages: IndividualPatientProfile[] = [
   PhysicalExaminationPage,
   ImagingResultsPage,
   LabResultsPage,
-  DifferentialClinicalScoresPage,
+  AssessmentAndPlanPage,
 ];
 
 interface IndividualPatientProfilePageProps {
@@ -102,7 +102,7 @@ const urlToName: { [url: string]: contentType } = {
   "physical": "Physical Examination",
   "imaging": "Imaging Results",
   "lab": "Lab Results",
-  "dcs": "Differential & Clinical Scores",
+  "assessment": "Assessment & Plan",
 };
 
 // Length of page transitions in ms. Should match the transition time in the SCSS.

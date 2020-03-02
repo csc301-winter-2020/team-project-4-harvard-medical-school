@@ -123,7 +123,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
           }
         >
           <div className="patient-profile-page-title">
-            <h1>{pageName}</h1>
+            <h2>{pageName}</h2>
           </div>
           <div className="patient-profile-form-container">
             <PatientFormInput

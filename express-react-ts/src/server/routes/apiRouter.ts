@@ -112,7 +112,7 @@ function save_to_aws(data: any, key: string): any {
                 reject();
             } else {
                 console.log("Success");
-                resolve("CANVAS"+key);
+                resolve(key);
             }
         });
     });

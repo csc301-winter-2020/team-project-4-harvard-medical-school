@@ -1,7 +1,96 @@
-import React, { useEffect } from "react";
+import React, {useEffect, useReducer} from "react";
 import { CSSTransition } from "react-transition-group";
 import { IndividualPatientProfile } from "./PatientProfilePage";
 import { useHistory } from "react-router";
+
+type PhysicalExamVital = {
+  name: string,
+  value: string
+};
+
+// The 'status' is what we add as a customization when we do not want the
+// default value. This means `isDefault` will be true if status is null, and
+// false if status has a string.
+//
+// The `isDefault` allows us to tell whether a new entry should be added into
+// the database or not. We may wish to just enter in everything though, and in
+// such a case then we should remove this field.
+//
+// `defaultStatus` is what the textbox/placeholder should read if it is to be
+// grayed out.
+type PhysicalExamComponent = {
+  bodyPart: string;
+  status?: string;
+  isDefault: boolean;
+  defaultStatus: string;
+}
+
+type PhysicalExamState = {
+  vitals: PhysicalExamVital[];
+  components: PhysicalExamComponent[];
+};
+
+const initialState: PhysicalExamState = {
+  vitals: [
+    {
+      name: "Blood pressure",
+      value: "120 / 80"
+    },
+    {
+      name: "Heart rate",
+      value: "70 bpm"
+    }
+  ],
+  components: [
+    {
+      bodyPart: "Head",
+      isDefault: true,
+      defaultStatus: "Normocephalic"
+    },
+    {
+      bodyPart: "Eyes",
+      isDefault: true,
+      defaultStatus: "Accommodate to light"
+    }
+  ]
+};
+
+function reducer(
+  state: PhysicalExamState,
+  action: { type: string; fieldName?: string; value?: string }
+): PhysicalExamState {
+  // TODO: Can we make fieldName non-nullable? Or is this a design requirement for a reducer?
+  if (action.fieldName === null) {
+    throw new Error("Invalid field name when trying to update it.");
+  }
+  // TODO: Should we be deep copying?
+  let newState: PhysicalExamState = JSON.parse(JSON.stringify(state));
+  switch (action.type) {
+    case "updateVital":
+      if (action.fieldName in state.vitals) {
+        newState.vitals[action.fieldName] = action.value;
+        return newState;
+      }
+      throw new Error(`Unable to find field: ${action.fieldName}`);
+    case "createComponent":
+      newState.components.push({
+        bodyPart: action.fieldName,
+        status: "New",
+        isDefault: false,
+        defaultStatus: ""
+      });
+      return newState;
+    case "updateComponent":
+      newState.components.forEach(c => {
+        if (c.bodyPart === action.fieldName) {
+          c.status = action.value;
+        }
+      });
+      return newState;
+    default:
+      throw new Error("Invalid type on action.");
+  }
+}
 
 export const PhysicalExaminationPage: IndividualPatientProfile = ({
   pageName,
@@ -18,6 +107,9 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
       history.push(`/patient/${patientID}/physical`);
     }
   }, [currentPage]);
+
+  const [state, dispatch] = useReducer(reducer, initialState);
+
   return (
     <>
       <CSSTransition
@@ -30,68 +122,47 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
         <div className="physical-examination-history-page-outermost-container patient-profile-window">
           <div className="patient-profile-page-title">
             <h1>{pageName}</h1>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum
-              repellat explicabo iste neque? Fugit sint voluptate temporibus
-              vero debitis qui recusandae neque labore? Odio saepe, vel
-              voluptatum nam mollitia magnam atque nobis, explicabo rem vitae ab
-              ut neque accusantium quo eligendi in provident eos! Facere,
-              tempore distinctio non minima suscipit amet quos expedita
-              dignissimos autem aspernatur molestiae? Dolorem veniam odit iste
-              fugiat repellat quo ducimus eum, earum dolores corrupti incidunt?
-              Dolores quas architecto veritatis eius exercitationem, beatae
-              maxime laborum. Nemo, blanditiis corrupti ducimus reiciendis
-              nesciunt temporibus, natus, perferendis id non animi illo placeat
-              aliquid. Dignissimos, dolorem officiis a tempore ducimus quibusdam
-              ratione quos nostrum accusamus illo iste harum quidem eum? Nemo
-              quidem distinctio magnam iste fugit delectus illum, omnis,
-              reprehenderit, fuga quibusdam facere odio. Ad nesciunt recusandae
-              eaque iure omnis sed laudantium id dolorem beatae esse, repellat
-              temporibus et, numquam mollitia nostrum ducimus sequi est.
-              Laudantium aliquid facilis natus eaque, assumenda pariatur
-              quisquam delectus ea magnam error at odio sunt quod quidem
-              temporibus! Corporis error perspiciatis facilis, repellat tenetur
-              natus pariatur ipsam? Maxime sint labore ducimus voluptates?
-              Aspernatur placeat quisquam consequatur nobis assumenda rem sunt,
-              fugiat ut atque nisi! Repellat non doloribus dolores fuga error,
-              officia, adipisci rem corrupti corporis velit quisquam sunt nobis
-              animi eius rerum incidunt accusantium quibusdam. Accusantium at,
-              necessitatibus rerum libero, perspiciatis aspernatur sit
-              reprehenderit cum, impedit quis pariatur laboriosam voluptas
-              dolore et voluptatibus sint unde esse. Neque officiis, iure
-              ducimus optio rem ab veritatis iste sapiente inventore, id
-              necessitatibus aperiam ipsum deserunt dolores cupiditate, delectus
-              esse eaque molestiae animi explicabo qui consectetur cumque
-              aliquam quos. Ab ex recusandae eligendi similique, autem doloribus
-              dignissimos deleniti repudiandae reiciendis delectus error sed
-              odio. Id delectus tempore alias ea neque reiciendis a ut est quia
-              rerum dolores suscipit, provident explicabo excepturi totam veniam
-              quo consequuntur quisquam illum eum! Culpa, ut non. Explicabo
-              adipisci numquam perferendis dolore nemo natus vel at possimus
-              voluptas blanditiis, eos iste quasi ipsum inventore amet
-              praesentium, perspiciatis tenetur dolorem est non vero laudantium
-              debitis nobis pariatur! Ipsum, est. Enim cumque et eligendi
-              dolores laborum pariatur eius cum consectetur cupiditate animi!
-              Esse ipsam, officiis necessitatibus dolore iste exercitationem
-              sapiente voluptatem tempore illum eum optio, explicabo veniam
-              consectetur ea tenetur, nihil similique molestias blanditiis
-              facilis consequatur possimus expedita nostrum nam. Corrupti,
-              dolorem! Modi et consequatur corporis ullam sint blanditiis? Nemo
-              dolore voluptatem, corporis temporibus voluptas voluptatum odit
-              repellendus tempora commodi quia cum nesciunt vitae beatae quae
-              vel. Asperiores, minima consequuntur? Itaque architecto tenetur
-              molestias sunt cupiditate nesciunt, maiores sed obcaecati
-              asperiores odit magnam temporibus incidunt nobis assumenda eos,
-              fuga eum animi voluptatum facere in quo at tempore aspernatur.
-              Dolor laudantium impedit nostrum rerum quo at libero eius tenetur
-              dolorem non laborum ipsum tempora amet veniam sed enim quos nisi
-              adipisci placeat, nulla assumenda in inventore unde mollitia! Nisi
-              odio suscipit dolores laudantium ut omnis, illo, cumque incidunt
-              ab similique iure consequuntur placeat qui odit. Atque placeat quo
-              quidem maxime iusto ducimus minus consequuntur sequi deleniti
-              numquam exercitationem ut delectus eius possimus eligendi, quam ab
-              sapiente! Sapiente, voluptate.
-            </p>
+            {/* TODO: Convert into a component! */}
+            <b>Vitals</b>
+            <table>
+              <thead>
+                <tr>
+                  <td>Vital</td>
+                  <td>Value</td>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  state.vitals.map(vital => {
+                    return <tr>
+                      <td>{vital.name}</td>
+                      <td>{vital.value}</td>
+                    </tr>
+                  })
+                }
+              </tbody>
+            </table>
+            {/* TODO: Convert into a component! */}
+            <b>Findings</b>
+            <table>
+              <thead>
+                <tr>
+                  <td>Component</td>
+                  <td>Value</td>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  state.components.map(c => {
+                    return <tr>
+                      <td>{c.bodyPart}</td>
+                      <td>{c.isDefault ? c.defaultStatus : c.status}</td>
+                    </tr>
+                  })
+                }
+              </tbody>
+            </table>
+            <button>Add Physical Component</button>
           </div>
         </div>
       </CSSTransition>

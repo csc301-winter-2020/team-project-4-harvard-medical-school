@@ -1,0 +1,176 @@
+@import "../app.scss";
+
+.patient-profile-page-outermost-container{
+  display: block;
+}
+
+.patient-profile-page-sidebar-container{
+  z-index: 1;
+  width: 250px;
+  float: left;
+  height: calc(100% - 60px);
+  background-color: #f2f2f2;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 8px 10px 0 rgba(0, 0, 0, 0.1);
+  overflow-y: scroll;
+  overflow-x: hidden;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.patient-profile-sidebar-contents{
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 100%;
+}
+
+.patient-profile-sidebar-hide-btn{
+  position: absolute;
+  cursor: pointer;
+  background-color: lightgray;
+  padding: 3px;
+  bottom: 20px;
+  width: 50px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  color: white;
+}
+
+
+.patient-profile-page-sidebar-item{
+  width: calc(100% - 32px);
+  padding: 18px;
+  text-align: left;
+  font-size: 1.2rem;
+  color: black;
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.patient-profile-page-sidebar-item:hover{
+  color: $color-primary-dim;
+  background-color: #ddd;
+}
+
+.patient-profile-page-sidebar-item--active{
+  background-color: $color-primary-dim;
+  color: white;
+}
+
+.patient-profile-page-page-content{
+  height: calc(100% - 60px);
+  float: left;
+  
+}
+
+.patient-profile-page-dots-container{
+  position: relative;
+  text-align: center;
+  margin-top: calc(100vh - 90px);
+}
+
+$dot-size: 15px;
+
+.patient-profile-page-dot{
+  width: $dot-size;
+  height: $dot-size;
+  margin: 5px;
+  background-color: #ccc;
+  border-radius: 50%;
+  display: inline-block;
+  transition: all 0.15s ease;
+}
+
+.patient-profile-page-dot--active{
+  background-color: $color-primary-dim;
+}
+
+.patient-profile-page-title{
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 26px;
+  
+}
+
+.patient-profile-window{
+  position: absolute;
+  top: 60px;
+  height: calc(100% - 145px);
+  overflow-y: scroll;
+  width: calc(100% - 250px);
+}
+
+.width-100{
+  width: 100%;
+}
+
+
+.slide-right-enter {
+  transform: translateX(-100vw);
+}
+.slide-right-enter-active {
+  transform: translateX(0);
+  transition: transform 300ms;
+}
+.slide-right-exit {
+  transform: translateX(0);
+}
+.slide-right-exit-active {
+  transform: translateX(100vw);
+  transition: transform 300ms;
+}
+
+.slide-left-enter {
+  transform: translateX(100vw);
+}
+.slide-left-enter-active {
+  transform: translateX(0);
+  transition: transform 300ms;
+}
+.slide-left-exit {
+  transform: translateX(0);
+}
+.slide-left-exit-active {
+  transform: translateX(-100vw);
+  transition: transform 300ms;
+}
+
+@media only screen and (max-height: 750px) {
+  .patient-profile-sidebar-contents{
+    position: static;
+    transform: none;
+  }
+
+}
+
+.patient-profile-nav-btns{
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+
+  .nav-btn-left, .nav-btn-save, .nav-btn-right{
+    color: white;
+    background-color: $color-primary-dim;
+    height: 40px;
+    width: 50px;
+    display: inline-block;
+    text-align: center;
+    padding-top: 6px;
+    cursor: pointer;
+    transition: all .15s ease;
+  }
+
+  .nav-btn-save{
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+
+  .nav-btn-right{
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+
+  .nav-btn-left:hover, .nav-btn-save:hover, .nav-btn-right:hover{
+    background-color: $color-primary;
+  }
+}

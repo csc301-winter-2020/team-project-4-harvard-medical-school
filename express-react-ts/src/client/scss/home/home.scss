@@ -1,0 +1,444 @@
+//This file is imported in HomePage.tsx
+
+@import "../app.scss";
+
+.home-page-header-container {
+  width: 100%;
+  height: 60px;
+  background-color: $color-primary;
+  display: grid;
+  grid-template-columns: 200px 1fr 60px;
+  grid-template-rows: 50px;
+}
+
+.home-page-header-logo-container {
+  cursor: pointer;
+  height: 50px;
+  width: 300px;
+}
+
+.home-page-header-logo-text {
+  font-size: 3rem;
+  color: $color-primary-very-light;
+  font-family: $serif-font;
+  display: inline-block;
+}
+
+.home-page-header-logo {
+  margin-top: 5px;
+  float: left;
+  height: 50px;
+  width: 50px;
+  background-image: url("https://i.imgur.com/QZfkCwR.png");
+  background-size: contain;
+}
+
+.home-page-header-search-bar {
+  position: absolute;
+  left: 15%;
+  height: 50px;
+  width: 70%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  background-color: $color-primary-light;
+  border-radius: 3px;
+  padding-left: 10px;
+}
+
+.home-page-header-search-bar > input::placeholder {
+  color: $color-primary-dim;
+}
+
+.home-page-header-search-bar > input {
+  height: 50px;
+  width: calc(100% - 50px);
+  line-height: 50px;
+  font-size: 1.25rem;
+  color: white;
+  background-color: $color-primary-light;
+  margin-left: 17px;
+  font-family: $serif-font;
+}
+input,
+input:focus {
+  border-width: 0px;
+  outline: 0; /* I have also tried outline:none */
+  -webkit-appearance: none;
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
+.fa-search > path {
+  color: $color-primary-dim;
+}
+
+.home-page-hamburger-container {
+  cursor: pointer;
+  position: absolute;
+  right: 25px;
+  height: 45px;
+  width: 45px;
+  background-size: contain;
+}
+
+.home-page-header-avatar-image{
+  height: 100px;
+  width: 100px;
+  background-image: url("https://i1.rgstatic.net/ii/profile.image/273584577880065-1442239054184_Q512/Danny_Heap.jpg");
+  background-size: contain;
+  border-radius: 50%;
+  margin: auto;
+  transition: all 0.1s ease;
+}
+
+.home-page-header-avatar-image:hover{
+  box-shadow: 0 0 0 6px rgba(0,0,0,0.08);
+}
+
+.home-page-header-avatar-popup-container{
+  z-index: 99;
+  position: absolute;
+  right: 0;
+  top: 60px;
+  background-color: $color-primary;
+  width: 250px;
+  height: 300px;
+  padding: 3px;
+  border-bottom-left-radius: 5px;
+}
+
+.home-page-header-avatar-drop-name{
+  color: white;
+  margin-bottom: 30px;
+  text-align: center;
+  font-size: 2rem;
+
+  p {
+    font-size: 1rem;
+  }
+}
+
+.home-page-header-avatar-drop-logout, .home-page-header-avatar-drop-settings{
+  width: 90%;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 3px;
+  background-color: white;
+  margin: auto;
+  text-align: center;
+  cursor: pointer;
+  font-size: 1.5rem;
+  color: $color-primary;
+  transition: all 0.15s ease;
+}
+
+.home-page-header-avatar-drop-settings{
+  margin-bottom: 15px;
+}
+
+.home-page-header-avatar-drop-logout:hover, .home-page-header-avatar-drop-settings:hover {
+  background-color: $color-primary-very-very-light;
+}
+
+.home-page-content-container {
+  width: 70%;
+  margin: auto;
+}
+
+.home-page-your-patients-title {
+  margin-top: 20px;
+  margin-left: 10px;
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.home-page-content {
+  overflow-y: scroll;
+  max-height: calc(100% - 190px);
+}
+
+.home-page-separator-line {
+  width: calc(100% - 25px);
+  height: 6px;
+  background-color: #555;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+
+.home-patient-profile-container {
+  cursor: pointer;
+  background-color: #eee;
+  border-radius: 3px;
+  margin: 10px;
+  padding: 10px;
+  transition: all 0.2s ease;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+}
+
+.home-patient-profile-name-col {
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+
+.home-patient-profile-date-col {
+  grid-column-start: 2;
+  grid-column-end: 3;
+}
+
+.home-patient-profile-last-modified-col {
+  grid-column-start: 3;
+  grid-column-end: 4;
+}
+
+.home-page-patient-header-grid {
+  margin-left: 10px;
+  margin-right: 10px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 40px;
+  height: 20px;
+  color: #999;
+  margin-bottom: 10px;
+
+  p {
+    cursor: pointer;
+  }
+}
+
+.home-page-patient-header-grid-name-col {
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+
+.home-page-patient-header-grid-created-col {
+  grid-column-start: 2;
+  grid-column-end: 3;
+}
+
+.home-page-patient-header-grid-last-modified-col {
+  grid-column-start: 3;
+  grid-column-end: 4;
+}
+
+.home-patient-profile-info-btn {
+  grid-column-start: 4;
+  grid-column-end: 5;
+  color: $color-primary;
+  margin-top: -10px;
+  margin-right: -10px;
+  height: 35px;
+  width: 40px;
+  cursor: pointer;
+}
+
+.home-patient-profile-info-icon {
+  margin-left: 10px;
+  margin-top: 16px;
+}
+
+.home-patient-profile-name-col {
+  font-size: 1.2rem;
+}
+
+.home-patient-profile-date-col {
+  color: #999;
+}
+
+.home-patient-profile-last-modified-col {
+  color: #999;
+}
+
+.home-patient-profile-container:hover {
+  background-color: #ccc;
+  transition: all 0.05s ease;
+}
+
+.home-patient-profile-container:hover .home-patient-profile-last-modified-col {
+  color: black;
+}
+
+.home-patient-profile-container:hover .home-patient-profile-date-col {
+  color: black;
+}
+
+.home-patient-profile-info-container{
+  margin-left: 20px;
+}
+.home-patient-profile-info-quick-info-container{
+  width: calc(100% - 200px);
+  display: inline-block;
+}
+
+.home-patient-profile-info-btn-container{
+  display: inline-block;
+  width: 200px;
+
+  div {
+    cursor: pointer;
+    margin: 5px;
+    padding: 10px;
+    background-color: $color-primary;
+    transition: all 0.15s ease;
+    color: white;
+    text-align: center;
+    border-radius: 3px;
+  }
+  div:hover{
+    background-color: $color-primary-dim;
+  }
+}
+
+.home-page-create-new-patient-btn, .home-page-create-template-btn{
+  position: fixed;
+  background-color: $color-primary;
+  border-radius: 3px;
+  color: white;
+  font-size: 1.5rem;
+  bottom: 140px;
+  right: 20px;
+  padding: 20px;
+  width: 185px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.home-page-create-template-btn{
+  bottom: 20px;
+}
+
+.home-page-content-whitespace-logo{
+  height: 400px;
+  width: 400px;
+  margin: auto;
+  margin-top: 200px;
+  background-image: url("https://i.imgur.com/mRCLv1T.png");
+  background-size: contain;
+}
+
+.home-page-create-new-patient-btn:hover, .home-page-create-template-btn:hover{
+  background-color: $color-primary-dim;
+  transition: all 0.1s ease;
+}
+
+@media only screen and (max-width: 1080px) {
+  .home-page-content-container {
+    width: 100%;
+  }
+
+  .home-patient-profile-name-col, .home-patient-profile-date-col, .home-patient-profile-last-modified-col{
+    font-size: 2.1rem;
+  }
+
+  .home-patient-profile-info-btn{
+    height: 54px;
+    width: 55px;
+  }
+
+  .home-patient-profile-info-export-btn, .home-patient-profile-info-delete-btn{
+    font-size: 1.5rem;
+  }
+
+  .home-patient-profile-info-quick-info-container{
+    width: calc(100% - 300px);
+  }
+  .home-patient-profile-info-btn-container{
+    width: 300px;
+  }
+
+  .home-patient-profile-info-quick-info-container{
+    h2 {
+      font-size: 1.8rem;
+    }
+    p {
+      font-size: 1.5rem;
+    }
+  }
+
+  .home-page-patient-header-grid{
+    p{
+      font-size: 1.3rem;
+    }
+  }
+}
+
+@media only screen and (max-width: 1400px) {
+  .home-page-header-logo-text {
+    display: none;
+  }
+}
+
+.fade-slide-down-enter {
+  opacity: 0;
+  transform: translateY(-100px);
+}
+.fade-slide-down-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 300ms, transform 300ms;
+}
+.fade-slide-down-exit {
+  opacity: 1;
+}
+.fade-slide-down-exit-active {
+  opacity: 0;
+  transform: translateY(-100px);
+  transition: opacity 300ms, transform 300ms;
+}
+
+
+#modal-container {
+  font-size: 12px;
+  background-color: white;
+  cursor: default;
+  margin: 0;
+  color: black;
+  padding: 0;
+
+  #modal-header {
+    margin: 0;
+    border-bottom: 1px solid gray;
+    background-color: white;
+    font-size: 1.5rem;
+    text-align: center;
+    padding: 5px;
+    color: black;
+    cursor: default;
+  }
+  #modal-content {
+    margin: 0;
+    cursor: default;
+    padding: 10px 5px;
+    background-color: white;
+    color: black;
+    font-size: 1rem;
+
+    #modal-btn-container{
+      background-color: white;
+      color: black;
+      cursor: default;
+  
+      button{
+        background-color: $color-primary-light;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 5px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        border-radius: 3px;
+      }
+      button:hover{
+        background-color: $color-primary;
+      }
+    }
+  }
+
+  
+}
+

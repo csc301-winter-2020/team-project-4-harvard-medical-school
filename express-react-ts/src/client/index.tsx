@@ -7,11 +7,52 @@ import { App } from "./App";
 import {
   faCheckSquare,
   faCoffee,
-  faSignInAlt
+  faSignInAlt,
+  faSearch,
+  faUser,
+  faInfo,
+  faInfoCircle,
+  faChevronDown,
+  faChevronUp,
+  faTrash,
+  faUndo,
+  faSave,
+  faExpandArrowsAlt,
+  faFont,
+  faPencilAlt,
+  faCheck,
+  faArrowRight,
+  faArrowLeft,
+  faKeyboard,
+  faEraser,
+  faGripVertical,
 } from "@fortawesome/free-solid-svg-icons";
 
 const myLibrary: any = library;
-myLibrary.add(fab, faCheckSquare, faCoffee, faSignInAlt);
+myLibrary.add(
+  fab,
+  faCheckSquare,
+  faCoffee,
+  faSignInAlt,
+  faSearch,
+  faUser,
+  faInfo,
+  faInfoCircle,
+  faChevronDown,
+  faChevronUp,
+  faTrash,
+  faUndo,
+  faSave,
+  faExpandArrowsAlt,
+  faFont,
+  faPencilAlt,
+  faCheck,
+  faArrowRight,
+  faArrowLeft,
+  faKeyboard,
+  faEraser,
+  faGripVertical,
+);
 
 /**
  * This is the component that appears in the index.html file.

@@ -1,20 +1,27 @@
 // This file is imported in index.tsx
 
-@import url("https://fonts.googleapis.com/css?family=Libre+Franklin|Roboto+Slab|Poppins&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Merriweather|Libre+Franklin|Roboto+Slab|Poppins&display=swap");
 
 $our-font: "Comic-Sans MS", sans-serif;
 $sans-serif-font: "Libre Franklin", sans-serif;
+$color-primary-very-very-light: #e7cbcf;
+$color-primary-very-light: #ec9da9;
+$color-primary-light: #c22138;
 $color-primary: #a51c30;
 $color-primary-dim: #791523;
 $imported-font: "Poppins", sans-serif;
 $serif-font: "Roboto Slab", serif;
+$merriweather-font: "Merriweather", serif;
 
 * {
   padding: 0;
   margin: 0;
-  font-family: $imported-font;
+  font-family: $serif-font;
 }
 
+body{
+  overflow-x: hidden;
+}
 
 .my-class {
   font-size: 100px;
@@ -24,6 +31,10 @@ $serif-font: "Roboto Slab", serif;
 
 .app-error-page {
   text-align: center;
+}
+
+.bold-span{
+  font-weight: bold;
 }
 
 // Scrollbar

@@ -107,7 +107,6 @@ export const LoginPage: React.FC = () => {
             <div className="login-page-left-content">
               <ScribeSVG color="white" />
               <h1>Is our cool app</h1>
-              <p>destroy steven kang</p>
             </div>
           </div>
           <div className="login-page-right-section">

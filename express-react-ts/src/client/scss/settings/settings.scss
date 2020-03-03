@@ -1,0 +1,117 @@
+@import "../app.scss";
+
+.settings-outermost {
+  background-color: #ccc;
+}
+
+.settings-main-container {
+  position: relative;
+  padding: 50px;
+  margin: auto;
+  width: 900px;
+  height: calc(100% - 160px);
+  overflow-y: scroll;
+  background-color: white;
+  box-shadow: 12px 0 15px -4px rgba(0, 0, 0, 0.1),
+    -12px 0 8px -4px rgba(0, 0, 0, 0.1);
+
+  .settings-avatar {
+    background-image: url("https://i1.rgstatic.net/ii/profile.image/273584577880065-1442239054184_Q512/Danny_Heap.jpg");
+    height: 300px;
+    width: 300px;
+    background-size: contain;
+    border-radius: 3px;
+    float: left;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 8px 10px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  .settings-top-info {
+    float: right;
+    height: 300px;
+    width: 560px;
+    text-align: left;
+
+    h1 {
+      font-size: 3rem;
+    }
+    h3 {
+      font-size: 1.4rem;
+      font-weight: normal;
+    }
+
+    input[type="text"] {
+      height: 60px;
+      width: 420px;
+      font-size: 3rem;
+      outline: 0;
+      border-width: 0 0 2px;
+      border-color: #ccc;
+    }
+    input[type="text"]:hover,
+    input[type="number"]:hover{
+      border-color: $color-primary-very-light;
+    }
+    input[type="text"]:focus,
+    input[type="number"]:focus {
+      border-color: $color-primary-light;
+    }
+  }
+
+  .settings-bottom-container {
+    margin-top: 325px;
+
+    h3 {
+      margin-bottom: 10px;
+      margin-top: 10px;
+    }
+
+    label {
+      p {
+        display: inline-block;
+        margin-left: 6px;
+        margin-right: 10px;
+      }
+    }
+
+    input[type="radio"] {
+      width: 20px;
+      height: 20px;
+      margin-right: 5px;
+      background-color: #ddd;
+      transition: all 0.15 ease;
+      border-radius: 50%;
+    }
+    input[type="radio"]:hover {
+      background-color: $color-primary-very-light;
+    }
+    input[type="radio"]:checked {
+      width: 20px;
+      height: 20px;
+      margin-right: 5px;
+      background-color: $color-primary-light;
+    }
+  }
+}
+
+.settings-toggle-edit-btn{
+  height: 70px;
+  width: 70px;
+  border-radius: 50%;
+  background-color: $color-primary;
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  color: white;
+  text-align: center;
+  line-height: 70px;
+  transition: all 0.15s ease;
+  cursor: pointer;
+
+  svg {
+    margin-top: 16px;
+  } 
+}
+
+.settings-toggle-edit-btn:hover{
+  background-color: $color-primary-light;
+}

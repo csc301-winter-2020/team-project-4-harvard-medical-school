@@ -5,6 +5,8 @@ dist/
 public/js/app.js
 .env
 
+gcp_credential.json
+
 # Logs
 logs
 *.log

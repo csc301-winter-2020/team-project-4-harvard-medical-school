@@ -9,8 +9,8 @@ type NextFunction = express.NextFunction;
 
 const router:Router = express.Router();
 
-import {Pool, Client} from "pg";
-const pool: Pool = new Pool();
+const {Pool, Client} = require("pg");
+const pool: any = new Pool();
 
 const aws: any = require('aws-sdk');
 aws.config.update({accessKeyId: process.env.AWSKEYID, secretAccessKey: process.env.AWSKEY});
@@ -37,10 +37,10 @@ router.get('/api/me', checkAuthenticated, (req:Request, res:Response, next:NextF
  */
 router.get('/api/student/:userId/patientprofiles', (req:Request, res:Response, next:NextFunction) => {
     const userId = req.params.userId;
-    pool.connect().then((client) => {
+    pool.connect().then((client: { query: (arg0: string, arg1: number[]) => any; }) => {
         const query_string: string = "SELECT * FROM csc301db.patient_profile WHERE student_id = $1";
         return client.query(query_string, [parseInt(userId)]);
-    }).then((query_result => {
+    }).then(((query_result: { rowCount: number; rows: { [x: string]: any; }; }) => {
         if (query_result.rowCount === 0) {
             res.status(404).send();
         } else {
@@ -69,10 +69,10 @@ router.get('/api/student/:userId/patientprofiles', (req:Request, res:Response, n
  */
 router.get('/api/patientprofile/:patientId', (req:Request, res:Response, next:NextFunction) => {
     const patientId:string = req.params.patientId;
-    pool.connect().then((client) => {
+    pool.connect().then((client: { query: (arg0: string, arg1: number[]) => any; }) => {
         const query_string: string = "SELECT * FROM csc301db.patient_profile WHERE patient_id = $1";
         return client.query(query_string, [parseInt(patientId)]);
-    }).then((query_result => {
+    }).then(((query_result: { rowCount: number; rows: any[]; }) => {
         if (query_result.rowCount === 0) {
             res.status(404).send();
         } else {
@@ -105,7 +105,7 @@ function save_to_aws(data: any, key: string): any {
         Body: JSON.stringify(data, null, 2)
     };
     return new Promise((resolve, reject) => {
-        s3.upload(params, function(err, data) {
+        s3.upload(params, function(err: any, data: any) {
             console.log("upload success");
             if (err) {
                 console.log(err);
@@ -172,6 +172,35 @@ router.post('/api/patientprofile/:patientId', (req:Request, res:Response, next:N
         res.status(500).send();
     });  
 })
+
+/**
+ * TODO: Return all templates for a user
+ */
+router.get('/api/student/:userId/templates', (req:Request, res:Response, next:NextFunction) => {
+    const userId = req.params.userId;
+    res.status(200).json('');
+});
+
+router.post('/api/student/:userId/templates/new', (req:Request, res:Response, next:NextFunction) => {
+    const userId = req.params.userId;
+    res.status(200).json('');
+});
+
+// const example_template_json = {
+//     "user_id": 1,
+//     "template_name": "MyNewTemplate",
+//     "date_millis": 123123123123123,
+//     "template": [
+//         {
+//             "title": "Social History",
+//             "fields": ["Work"]
+//         },
+//         {
+//             "title": "Demographics",
+//             "fields": ["sexAtBirth", "lastName", "firstname"],
+//         },
+//     ],
+// }
 
 /**
  * TODO: Return all the classes this user (student) is in

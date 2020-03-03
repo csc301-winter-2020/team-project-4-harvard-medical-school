@@ -52,7 +52,7 @@ export const CCHPIPage: IndividualPatientProfile = ({
 
   const [showingHPICanvas, setShowingHPICanvas] = useState(true);
   const [showingHPIText, setShowingHPIText] = useState(false);
-  
+
   const { chiefComplaint, HPI } = state;
 
   return (
@@ -74,7 +74,7 @@ export const CCHPIPage: IndividualPatientProfile = ({
               id={"chiefComplaint"}
               inputType={"text"}
               inputVal={chiefComplaint}
-              placeholder={`Ex. "Insane in the membrane"`}
+              placeholder={`Enter text here`}
               title={"Chief Complaint"}
               isShowingCanvas={showingChiefComplaintCanvas}
               isShowingText={showingChiefComplaintText}
@@ -90,7 +90,7 @@ export const CCHPIPage: IndividualPatientProfile = ({
               id={"HPI"}
               inputType={"text"}
               inputVal={HPI}
-              placeholder={`Ex. Diagnosed with eczema in July of 2012`}
+              placeholder={`Enter text here`}
               title={"History of Present Illness"}
               isShowingCanvas={showingHPICanvas}
               isShowingText={showingHPIText}

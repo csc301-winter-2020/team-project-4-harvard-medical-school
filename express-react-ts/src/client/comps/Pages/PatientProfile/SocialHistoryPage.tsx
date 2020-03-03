@@ -197,13 +197,13 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
               id={"drinksPerWeek"}
               inputType={"number"}
               inputVal={drinksPerWeek}
-              placeholder={"Enter text here"}
+              placeholder={"Ex. 5"}
               title={"Number of Drinks/Week"}
               isShowingCanvas={showingDrinksPerWeekCanvas}
               isShowingText={showingDrinksPerWeekText}
               setIsShowingCanvas={setShowingDrinksPerWeekCanvas}
               setIsShowingText={setShowingDrinksPerWeekText}
-              canvasHeight={300}
+              canvasHeight={200}
               canvasWidth={600}
               isTextArea={false}
             />
@@ -252,13 +252,13 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
                   id={"lastTimeSmoked"}
                   inputType={"text"}
                   inputVal={lastTimeSmoked}
-                  placeholder={"Enter text here"}
+                  placeholder={"Ex. 3 years ago"}
                   title={"Last time smoked"}
                   isShowingCanvas={showingLastTimeSmokedCanvas}
                   isShowingText={showingLastTimeSmokedText}
                   setIsShowingCanvas={setShowingLastTimeSmokedCanvas}
                   setIsShowingText={setShowingLastTimeSmokedText}
-                  canvasHeight={300}
+                  canvasHeight={200}
                   canvasWidth={600}
                   isTextArea={false}
                 />
@@ -268,19 +268,21 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
                   id={"packsPerDay"}
                   inputType={"text"}
                   inputVal={packsPerDay}
-                  placeholder={"Enter text here"}
+                  placeholder={"Ex. 2"}
                   title={"Packs/Day"}
                   isShowingCanvas={showingPacksPerDayCanvas}
                   isShowingText={showingPacksPerDayText}
                   setIsShowingCanvas={setShowingPacksPerDayCanvas}
                   setIsShowingText={setShowingPacksPerDayText}
-                  canvasHeight={300}
+                  canvasHeight={200}
                   canvasWidth={600}
                   isTextArea={false}
                 />
                 
               </>
             )}
+
+            <br></br>
             <PatientFormInput
               dispatch={dispatch}
               id={"otherSubstances"}

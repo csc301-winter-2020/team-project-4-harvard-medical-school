@@ -3,6 +3,7 @@ import { CSSTransition } from "react-transition-group";
 import { IndividualPatientProfile } from "./PatientProfilePage";
 import { useHistory } from "react-router";
 import '../../../scss/patient-profiles/patient-physical-form.scss'
+import {PatientFormInput} from "../../SubComponents/PatientProfile/PatientFormInput";
 
 type PhysicalExamVital = {
   name: string,
@@ -60,7 +61,12 @@ const initialState: PhysicalExamState = {
       status: "Broken lateral incisor",
       isDefault: false,
       defaultStatus: ""
-    }
+    },
+    {
+      bodyPart: "Arms",
+      isDefault: true,
+      defaultStatus: "Normal"
+    },
   ]
 };
 
@@ -101,6 +107,39 @@ function reducer(
   }
 }
 
+// Converts a name to a usable ID name. This is needed for when the body part
+// that comes from the database has to have a name. Note: This does not
+// guarantee uniqueness. It is up to the caller to make sure of this.
+function nameToID(name) {
+  return name.toLowerCase().replace(' ', '-');
+}
+
+function createFindingFromComponent(c, dispatch) {
+  if (c.isDefault) {
+    return <b>{c.defaultStatus}</b>;
+  }
+
+  return <PatientFormInput
+      dispatch={dispatch}
+      id={nameToID(c.bodyPart)}
+      inputType={"text"}
+      inputVal={""}
+      placeholder={"Enter text here"}
+      title={""}
+      isShowingCanvas={true}
+      isShowingText={false}
+      setIsShowingCanvas={() => {}}
+      setIsShowingText={() => {}}
+      canvasHeight={200}
+      canvasWidth={800}
+      isTextArea={true}
+    />;
+}
+
+function addNewFinding() {
+
+}
+
 export const PhysicalExaminationPage: IndividualPatientProfile = ({
   pageName,
   currentPage,
@@ -131,7 +170,6 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
         <div className="physical-examination-history-page-outermost-container patient-profile-window">
           <div className="patient-profile-page-title">
             <h1>{pageName}</h1>
-            <div className="physical-exam-table-title">Vitals</div>
             <table id="physical-exam-vitals-table" className="physical-exam-table">
               <thead>
                 <tr>
@@ -150,12 +188,12 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
                 }
               </tbody>
             </table>
-            {/* TODO: Convert into a component? */}
-            <div className="physical-exam-table-title">Findings</div>
+            <br/>
+            <br/>
             <table id="physical-exam-findings-table" className="physical-exam-table">
               <thead>
                 <tr>
-                  <td>Component</td>
+                  <td>Body Part</td>
                   <td>Value</td>
                   <td>Edit</td>
                 </tr>
@@ -166,9 +204,9 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
                     return <tr>
                       <td>{c.bodyPart}</td>
                       <td className={"physical-exam-findings-value" + (c.isDefault ? " physical-exam-grayed-out" : "")}>
-                        {c.isDefault ? c.defaultStatus : c.status}
+                        {createFindingFromComponent(c, dispatch)}
                       </td>
-                      <td>{c.isDefault && <button onClick={() => alert("To be implemented!")}>Customize</button>}</td>
+                      <td>{c.isDefault && <button onClick={addNewFinding}>Customize</button>}</td>
                     </tr>;
                   })
                 }

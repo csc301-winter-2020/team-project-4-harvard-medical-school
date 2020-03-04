@@ -2,29 +2,22 @@ import React, {useEffect, useReducer} from "react";
 import { CSSTransition } from "react-transition-group";
 import { IndividualPatientProfile } from "./PatientProfilePage";
 import { useHistory } from "react-router";
+import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import '../../../scss/patient-profiles/patient-physical-form.scss'
-import {PatientFormInput} from "../../SubComponents/PatientProfile/PatientFormInput";
 
 type PhysicalExamVital = {
   name: string,
   value: string
 };
 
-// The 'status' is what we add as a customization when we do not want the
-// default value. This means `isDefault` will be true if status is null, and
-// false if status has a string.
-//
-// The `isDefault` allows us to tell whether a new entry should be added into
-// the database or not. We may wish to just enter in everything though, and in
-// such a case then we should remove this field.
-//
-// `defaultStatus` is what the textbox/placeholder should read if it is to be
-// grayed out.
+// An empty string for the body part and status is allowed, and implies it may
+// be edited by a textbox/canvas (and we are in the process of figuring out
+// what the body part is).
 type PhysicalExamComponent = {
   bodyPart: string;
-  status?: string;
-  isDefault: boolean;
-  defaultStatus: string;
+  status: string;
+  custom: boolean;
+  editable: boolean;
 }
 
 type PhysicalExamState = {
@@ -46,79 +39,73 @@ const initialState: PhysicalExamState = {
   components: [
     {
       bodyPart: "Head",
-      isDefault: true,
-      defaultStatus: "Normocephalic"
+      status: "Normocephalic",
+      custom: false,
+      editable: false
     },
     {
       bodyPart: "Eyes",
-      isDefault: true,
-      defaultStatus: "Accommodate to light"
-    },
-    // Note: This is temporary and just for demonstrations, we don't want a
-    // custom element present in the final product.
-    {
-      bodyPart: "Mouth",
-      status: "Broken lateral incisor",
-      isDefault: false,
-      defaultStatus: ""
-    },
-    {
-      bodyPart: "Arms",
-      isDefault: true,
-      defaultStatus: "Normal"
-    },
+      status: "Accommodate to light",
+      custom: false,
+      editable: false
+    }
   ]
 };
 
 function reducer(
   state: PhysicalExamState,
-  action: { type: string; fieldName?: string; value?: string }
+  action: { type: string; bodyPart: string }
 ): PhysicalExamState {
-  // TODO: Can we make fieldName non-nullable? Or is this a design requirement for a reducer?
-  if (action.fieldName === null) {
-    throw new Error("Invalid field name when trying to update it.");
-  }
-  // TODO: Should we be deep copying?
   let newState: PhysicalExamState = JSON.parse(JSON.stringify(state));
+  let successfulAction = false;
+
   switch (action.type) {
-    case "updateVital":
-      if (action.fieldName in state.vitals) {
-        newState.vitals[action.fieldName] = action.value;
-        return newState;
-      }
-      throw new Error(`Unable to find field: ${action.fieldName}`);
-    case "createComponent":
+    case 'newBodyPart':
       newState.components.push({
-        bodyPart: action.fieldName,
-        status: "Fill in",
-        isDefault: false,
-        defaultStatus: ""
+        bodyPart: "",
+        status: "",
+        custom: true,
+        editable: true
       });
-      return newState;
-    case "updateComponent":
+      successfulAction = true;
+      break;
+    case 'makeEditable':
       newState.components.forEach(c => {
-        if (c.bodyPart === action.fieldName) {
-          c.status = action.value;
+        if (c.bodyPart === action.bodyPart) {
+          c.status = '';
+          c.editable = true;
+          successfulAction = true;
         }
       });
-      return newState;
+      break;
     default:
-      throw new Error("Invalid type on action.");
+      break;
   }
+
+  // This is primarily in case a mistake is made and action is given to a body
+  // part that does not exist (ex: someone wants to edit an `Eyes` body part
+  // but no such one exists). This should only be triggered on developer error.
+  if (!successfulAction) {
+    throw new Error('Action was missing required elements.');
+  }
+
+  return newState;
 }
 
 // Converts a name to a usable ID name. This is needed for when the body part
 // that comes from the database has to have a name. Note: This does not
 // guarantee uniqueness. It is up to the caller to make sure of this.
+// TODO: This might have to be removed since it may end up being pointless.
 function nameToID(name) {
   return name.toLowerCase().replace(' ', '-');
 }
 
-function createFindingFromComponent(c, dispatch) {
-  if (c.isDefault) {
-    return <b>{c.defaultStatus}</b>;
+function createFindingFromComponent(dispatch, c: PhysicalExamComponent) {
+  if (c.status !== '') {
+    return <b>{c.status}</b>;
   }
 
+  // TODO: Note that the bodyPart is probably empty, which affects the ID.
   return <PatientFormInput
       dispatch={dispatch}
       id={nameToID(c.bodyPart)}
@@ -136,8 +123,37 @@ function createFindingFromComponent(c, dispatch) {
     />;
 }
 
-function addNewFinding() {
+function addNewFinding(dispatch, c: PhysicalExamComponent) {
+  dispatch({ type: 'makeEditable', bodyPart: c.bodyPart });
+}
 
+function addPhysicalComponent(dispatch) {
+  dispatch({ type: 'newBodyPart', bodyPart: '' });
+}
+
+function getBodyPartCell(dispatch, c: PhysicalExamComponent) {
+  if (c.custom) {
+    // TODO: Note that the bodyPart can be empty, which may affect the ID.
+    return <span>
+      <PatientFormInput
+        dispatch={dispatch}
+        id={nameToID(c.bodyPart)}
+        inputType={"text"}
+        inputVal={""}
+        placeholder={"Enter text here"}
+        title={""}
+        isShowingCanvas={true}
+        isShowingText={false}
+        setIsShowingCanvas={() => {}}
+        setIsShowingText={() => {}}
+        canvasHeight={200}
+        canvasWidth={400}
+        isTextArea={true}
+      />
+    </span>
+  }
+
+  return <span>{c.bodyPart}</span>;
 }
 
 export const PhysicalExaminationPage: IndividualPatientProfile = ({
@@ -193,7 +209,7 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
             <table id="physical-exam-findings-table" className="physical-exam-table">
               <thead>
                 <tr>
-                  <td>Body Part</td>
+                  <td className="physical-exam-table-right-align">Body Part</td>
                   <td>Value</td>
                   <td>Edit</td>
                 </tr>
@@ -202,17 +218,21 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
                 {
                   state.components.map(c => {
                     return <tr>
-                      <td>{c.bodyPart}</td>
-                      <td className={"physical-exam-findings-value" + (c.isDefault ? " physical-exam-grayed-out" : "")}>
-                        {createFindingFromComponent(c, dispatch)}
+                      <td className="physical-exam-table-right-align">
+                        {getBodyPartCell(dispatch, c)}
                       </td>
-                      <td>{c.isDefault && <button onClick={addNewFinding}>Customize</button>}</td>
+                      <td className={"physical-exam-findings-value" + (!c.editable ? " physical-exam-grayed-out" : "")}>
+                        {createFindingFromComponent(dispatch, c)}
+                      </td>
+                      <td>
+                        {!c.editable && <button onClick={(e) => addNewFinding(dispatch, c)}>Customize</button>}
+                      </td>
                     </tr>;
                   })
                 }
               </tbody>
             </table>
-            <button className="physical-exam-button">Add Physical Component</button>
+            <button className="physical-exam-button" onClick={(e) => addPhysicalComponent(dispatch)}>Add Physical Component</button>
           </div>
         </div>
       </CSSTransition>

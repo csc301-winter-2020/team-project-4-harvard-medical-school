@@ -13,6 +13,10 @@ type PhysicalExamVital = {
 // An empty string for the body part and status is allowed, and implies it may
 // be edited by a textbox/canvas (and we are in the process of figuring out
 // what the body part is).
+//
+// Further, an empty string for the status means that a textbox/canvas will be
+// placed in the appropriate cell so the user can edit it. This may need to be
+// changed in the future.
 type PhysicalExamComponent = {
   bodyPart: string;
   status: string;
@@ -123,21 +127,21 @@ function createFindingFromComponent(dispatch, c: PhysicalExamComponent) {
     />;
 }
 
-function addNewFinding(dispatch, c: PhysicalExamComponent) {
-  dispatch({ type: 'makeEditable', bodyPart: c.bodyPart });
+function addNewFinding(dispatch, physicalComp: PhysicalExamComponent) {
+  dispatch({ type: 'makeEditable', bodyPart: physicalComp.bodyPart });
 }
 
 function addPhysicalComponent(dispatch) {
   dispatch({ type: 'newBodyPart', bodyPart: '' });
 }
 
-function getBodyPartCell(dispatch, c: PhysicalExamComponent) {
-  if (c.custom) {
+function getBodyPartCell(dispatch, physicalComp: PhysicalExamComponent) {
+  if (physicalComp.custom) {
     // TODO: Note that the bodyPart can be empty, which may affect the ID.
     return <span>
       <PatientFormInput
         dispatch={dispatch}
-        id={nameToID(c.bodyPart)}
+        id={nameToID(physicalComp.bodyPart)}
         inputType={"text"}
         inputVal={""}
         placeholder={"Enter text here"}
@@ -153,7 +157,7 @@ function getBodyPartCell(dispatch, c: PhysicalExamComponent) {
     </span>
   }
 
-  return <span>{c.bodyPart}</span>;
+  return <span>{physicalComp.bodyPart}</span>;
 }
 
 export const PhysicalExaminationPage: IndividualPatientProfile = ({

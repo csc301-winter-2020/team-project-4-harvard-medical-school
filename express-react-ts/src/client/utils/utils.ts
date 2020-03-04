@@ -1,6 +1,9 @@
+import { contentType } from "./types";
+
 const dateFormat = require("dateformat");
 const dateStringFull = "mmmm d, yyyy";
 const dateStringCompact = "m/d/yyyy";
+
 
 /**
  * Formats the date to a string like this: "12/31/2018"
@@ -75,11 +78,25 @@ export const getItemStyle = (isDragging:boolean, draggableStyle:any) => {
 export const getQuestionListStyle = (isDraggingOver:boolean) => ({
   background: isDraggingOver ? "lightblue" : "#efefef",
   padding: 8,
-  width: 350
+  width: "calc(100% - 18px)"
 });
 
 export const getAnswerListStyle = (isDraggingOver:boolean) => ({
   background: isDraggingOver ? "lightblue" : "lightgrey",
   padding: 4,
-  width: 250
+  marginTop: 10,
+  width: "calc(100% - 40px)";
 });
+
+export const urlToName: { [url: string]: contentType } = {
+  "demographics": "Demographics",
+  "cchpi": "Chief Complaint & History of Present Illness",
+  "pastmedical": "Past Medical History",
+  "social": "Social History",
+  "family": "Family History",
+  "reviewofsystems": "Review of Systems",
+  "physical": "Physical Examination",
+  "imaging": "Imaging Results",
+  "lab": "Lab Results",
+  "assessment": "Assessment & Plan",
+};

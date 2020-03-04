@@ -336,6 +336,7 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
         }}
       >
         <Header
+          placeholder={"Search Patients"}
           isAvatarPopup={isAvatarPopup}
           setIsAvatarPopup={setIsAvatarPopup}
           showSearch={true}

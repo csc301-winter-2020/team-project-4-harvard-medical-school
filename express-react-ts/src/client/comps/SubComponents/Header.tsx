@@ -10,6 +10,7 @@ interface HeaderProps {
   showSearch: boolean;
   searchValue?: string;
   setSearchValue?: Function;
+  placeholder: string;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -18,6 +19,7 @@ export const Header: React.FC<HeaderProps> = ({
   showSearch,
   searchValue,
   setSearchValue,
+  placeholder,
 }) => {
   const history = useHistory();
   useEffect(() => {
@@ -43,7 +45,7 @@ export const Header: React.FC<HeaderProps> = ({
       {showSearch && (
         <div className="home-page-header-search-bar">
           <FontAwesomeIcon icon="search" />
-          <input type="text" placeholder="Search Patients" value={searchValue} onChange={e => setSearchValue(e.target.value)}></input>
+          <input type="text" placeholder={placeholder} value={searchValue} onChange={e => setSearchValue(e.target.value)}></input>
         </div>
       )}
 

@@ -1,0 +1,31 @@
+@import "../app.scss";
+
+.templates-outermost{
+  background-color: #ccc; 
+}
+
+.templates-main-container{
+  position: relative;
+  padding: 50px;
+  margin: auto;
+  width: 900px;
+  height: calc(100% - 160px);
+  background-color: white;
+  box-shadow: 12px 0 15px -4px rgba(0, 0, 0, 0.1),
+    -12px 0 8px -4px rgba(0, 0, 0, 0.1);
+}
+
+.templates-title {
+  h1 {
+    margin-left: 10px;
+    margin-bottom: 16px;
+    font-size: 3rem;
+  }
+}
+
+.templates-scroller{
+  overflow-y: scroll;
+  height: calc(100% - 80px);
+}
+
+

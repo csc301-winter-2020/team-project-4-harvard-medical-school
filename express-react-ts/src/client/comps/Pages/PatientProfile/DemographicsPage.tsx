@@ -8,13 +8,23 @@ import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientForm
 
 function reducer(
   state: DemographicsState,
-  action: { type: string; fieldName?: string; value?: string }
+  action: {
+    type: string;
+    fieldName?: string;
+    value?: string|boolean|number|null;
+    newState?: { [key: string]: string|boolean|number|null };
+  }
 ): DemographicsState {
   switch (action.type) {
     case "field":
       return {
         ...state,
         [action.fieldName]: action.value,
+      };
+    case "many_fields":
+      return {
+        ...state,
+        ...action.newState,
       };
     case "MALE":
       return {
@@ -79,7 +89,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
   useEffect(() => {
     if (currentPage === pageName) {
       document.title = `Patient Profile: ${pageName}`;
-      if (!window.location.href.includes("demographics")){
+      if (!window.location.href.includes("demographics")) {
         history.push(`/patient/${patientID}/demographics`);
       }
     }

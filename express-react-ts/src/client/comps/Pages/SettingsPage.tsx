@@ -17,6 +17,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({}) => {
   return (
     <>
       <Header
+        placeholder=""
         isAvatarPopup={isAvatarPopup}
         setIsAvatarPopup={setIsAvatarPopup}
         showSearch={false}

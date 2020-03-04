@@ -13,6 +13,8 @@ import { ImagingResultsPage } from "./ImagingResultsPage";
 import { LabResultsPage } from "./LabResultsPage";
 import { AssessmentAndPlanPage } from "./AssessmentAndPlanPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { contentType, contents } from "../../../utils/types";
+import { urlToName } from "../../../utils/utils";
 
 /**
  * To create a new type of page, firstly make the react FC and then import it here.
@@ -20,31 +22,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
  * Then add the string to the const contents array.
  * Then add the react component to the contentsPages component array.
  * */
-
-type contentType =
-  | "Demographics"
-  | "Chief Complaint & History of Present Illness"
-  | "Past Medical History"
-  | "Social History"
-  | "Family History"
-  | "Review of Systems"
-  | "Physical Examination"
-  | "Imaging Results"
-  | "Lab Results"
-  | "Assessment & Plan";
-
-const contents: contentType[] = [
-  "Demographics",
-  "Chief Complaint & History of Present Illness",
-  "Past Medical History",
-  "Social History",
-  "Family History",
-  "Review of Systems",
-  "Physical Examination",
-  "Imaging Results",
-  "Lab Results",
-  "Assessment & Plan",
-];
 
 const contentsPages: IndividualPatientProfile[] = [
   DemographicsPage,
@@ -91,19 +68,6 @@ interface PatientProfilePageProps extends RouteComponentProps {
   initialPage: contentType;
   id?: string;
 }
-
-const urlToName: { [url: string]: contentType } = {
-  "demographics": "Demographics",
-  "cchpi": "Chief Complaint & History of Present Illness",
-  "pastmedical": "Past Medical History",
-  "social": "Social History",
-  "family": "Family History",
-  "reviewofsystems": "Review of Systems",
-  "physical": "Physical Examination",
-  "imaging": "Imaging Results",
-  "lab": "Lab Results",
-  "assessment": "Assessment & Plan",
-};
 
 // Length of page transitions in ms. Should match the transition time in the SCSS.
 const transitionDuration: number = 300;
@@ -203,6 +167,7 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
   return (
     <>
       <Header
+        placeholder={""}
         isAvatarPopup={isAvatarPopup}
         setIsAvatarPopup={setIsAvatarPopup}
         showSearch={false}

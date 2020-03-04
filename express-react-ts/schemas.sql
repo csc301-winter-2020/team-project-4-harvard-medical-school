@@ -10,14 +10,16 @@ CREATE TYPE default_modes AS ENUM('Both', 'Canvas', 'text');
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
+    username VARCHAR(50) NOT NULL,
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL,
     email VARCHAR(50) NOT NULL,
     password TEXT NOT NULL,
     year INT,
     user_type Valid_user_types,
     date_create DATE NOT NULL,
     default_mode default_modes NOT NULL DEFAULT 'Both',
-    default_sidebad BOOLEAN DEFAULT TRUE
+    default_sidebar BOOLEAN DEFAULT TRUE
 );
 
 -- CREATE TABLE class (
@@ -71,8 +73,8 @@ CREATE TABLE patient_profile (
      family_history_canvas text
 
 );
-INSERT INTO users (name, email, password, year, user_type, date_create)
-VALUES ('will', 'willqie@gmail.com', 'will', 1, 'Student', '20190101');
+INSERT INTO users (username, first_name, last_name, email, password, year, user_type, date_create)
+VALUES ('will', 'will', 'qie', 'willqie@gmail.com', 'will', 1, 'Student', '20190101');
 INSERT INTO patients (lab_result)
 VALUES (NULL);
 INSERT INTO patient_profile (student_id, patient_id, first_name, family_name, age, gender_at_birth, gender, pregnant, country_residence, country_visited, complaint, medical_history, social_history, family_history)

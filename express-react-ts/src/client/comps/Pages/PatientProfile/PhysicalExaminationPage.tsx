@@ -52,6 +52,14 @@ const initialState: PhysicalExamState = {
       bodyPart: "Eyes",
       isDefault: true,
       defaultStatus: "Accommodate to light"
+    },
+    // Note: This is temporary and just for demonstrations, we don't want a
+    // custom element present in the final product.
+    {
+      bodyPart: "Mouth",
+      status: "Broken lateral incisor",
+      isDefault: false,
+      defaultStatus: ""
     }
   ]
 };

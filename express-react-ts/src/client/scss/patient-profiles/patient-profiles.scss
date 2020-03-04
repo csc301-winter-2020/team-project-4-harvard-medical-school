@@ -148,7 +148,7 @@ $dot-size: 15px;
   bottom: 20px;
   right: 20px;
 
-  .nav-btn-left, .nav-btn-save, .nav-btn-right{
+  .nav-btn{
     color: white;
     background-color: $color-primary-dim;
     height: 40px;
@@ -160,17 +160,19 @@ $dot-size: 15px;
     transition: all .15s ease;
   }
 
-  .nav-btn-save{
+  .nav-btn-help{
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
   }
+
 
   .nav-btn-right{
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
   }
 
-  .nav-btn-left:hover, .nav-btn-save:hover, .nav-btn-right:hover{
+  .nav-btn:hover{
     background-color: $color-primary;
   }
 }
+

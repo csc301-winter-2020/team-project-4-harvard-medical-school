@@ -85,7 +85,7 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
     myProps.match.params.pageName in urlToName
       ? urlToName[myProps.match.params.pageName]
       : "Demographics";
-  
+
   const [currentPage, setCurrentPage] = useState<contentType>(initialPage);
   const [isShowingSidebar, setIsShowingSidebar] = useState(true);
   const [prevPage, setPrevPage] = useState<contentType | null>(null);
@@ -230,11 +230,14 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
             {initNavDots()}
           </div>
           <div className="patient-profile-nav-btns">
-            <div className="nav-btn-save">
+            <div className="nav-btn-help nav-btn">
+              <FontAwesomeIcon icon="question-circle" size="2x" />
+            </div>
+            <div className="nav-btn-save nav-btn">
               <FontAwesomeIcon icon="save" size="2x" />
             </div>
             <div
-              className="nav-btn-left"
+              className="nav-btn-left nav-btn"
               onClick={() => {
                 decrementPage();
               }}
@@ -242,7 +245,7 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
               <FontAwesomeIcon icon="arrow-left" size="2x" />
             </div>
             <div
-              className="nav-btn-right"
+              className="nav-btn-right nav-btn"
               onClick={() => {
                 incrementPage();
               }}

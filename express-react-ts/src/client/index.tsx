@@ -14,6 +14,8 @@ import {
   faInfoCircle,
   faChevronDown,
   faChevronUp,
+  faChevronLeft,
+  faChevronRight,
   faTrash,
   faUndo,
   faSave,
@@ -26,6 +28,8 @@ import {
   faKeyboard,
   faEraser,
   faGripVertical,
+  faQuestionCircle,
+  faQuestion,
 } from "@fortawesome/free-solid-svg-icons";
 
 const myLibrary: any = library;
@@ -40,6 +44,8 @@ myLibrary.add(
   faInfoCircle,
   faChevronDown,
   faChevronUp,
+  faChevronLeft,
+  faChevronRight,
   faTrash,
   faUndo,
   faSave,
@@ -52,6 +58,8 @@ myLibrary.add(
   faKeyboard,
   faEraser,
   faGripVertical,
+  faQuestionCircle,
+  faQuestion,
 );
 
 /**

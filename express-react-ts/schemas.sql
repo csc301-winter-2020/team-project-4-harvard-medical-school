@@ -6,6 +6,7 @@ SET SEARCH_PATH TO csc301db;
 
 CREATE TYPE Valid_user_types AS ENUM('Student', 'Educator', 'Admin');
 CREATE TYPE SEX_AT_BIRTH AS ENUM('Male', 'Female');
+CREATE TYPE default_modes AS ENUM('Both', 'Canvas', 'text');
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
@@ -14,7 +15,9 @@ CREATE TABLE users (
     password TEXT NOT NULL,
     year INT,
     user_type Valid_user_types,
-    date_create DATE NOT NULL
+    date_create DATE NOT NULL,
+    default_mode default_modes NOT NULL DEFAULT 'Both',
+    default_sidebad BOOLEAN DEFAULT TRUE
 );
 
 -- CREATE TABLE class (

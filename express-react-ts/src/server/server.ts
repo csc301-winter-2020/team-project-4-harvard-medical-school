@@ -73,6 +73,8 @@ export interface User extends Express.User {
   id: number;
   username: string;
   password: string;
+  default_sidebar: boolean;
+  default_mode: string;
 }
 
 // Create our express app

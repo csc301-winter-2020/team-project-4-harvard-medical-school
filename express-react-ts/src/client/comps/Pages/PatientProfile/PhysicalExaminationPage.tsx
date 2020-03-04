@@ -2,6 +2,7 @@ import React, {useEffect, useReducer} from "react";
 import { CSSTransition } from "react-transition-group";
 import { IndividualPatientProfile } from "./PatientProfilePage";
 import { useHistory } from "react-router";
+import '../../../scss/patient-profiles/patient-physical-form.scss'
 
 type PhysicalExamVital = {
   name: string,
@@ -75,7 +76,7 @@ function reducer(
     case "createComponent":
       newState.components.push({
         bodyPart: action.fieldName,
-        status: "New",
+        status: "Fill in",
         isDefault: false,
         defaultStatus: ""
       });
@@ -122,9 +123,8 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
         <div className="physical-examination-history-page-outermost-container patient-profile-window">
           <div className="patient-profile-page-title">
             <h1>{pageName}</h1>
-            {/* TODO: Convert into a component! */}
-            <b>Vitals</b>
-            <table>
+            <div className="physical-exam-table-title">Vitals</div>
+            <table id="physical-exam-vitals-table" className="physical-exam-table">
               <thead>
                 <tr>
                   <td>Vital</td>
@@ -137,18 +137,19 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
                     return <tr>
                       <td>{vital.name}</td>
                       <td>{vital.value}</td>
-                    </tr>
+                    </tr>;
                   })
                 }
               </tbody>
             </table>
-            {/* TODO: Convert into a component! */}
-            <b>Findings</b>
-            <table>
+            {/* TODO: Convert into a component? */}
+            <div className="physical-exam-table-title">Findings</div>
+            <table id="physical-exam-findings-table" className="physical-exam-table">
               <thead>
                 <tr>
                   <td>Component</td>
                   <td>Value</td>
+                  <td>Edit</td>
                 </tr>
               </thead>
               <tbody>
@@ -156,13 +157,16 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
                   state.components.map(c => {
                     return <tr>
                       <td>{c.bodyPart}</td>
-                      <td>{c.isDefault ? c.defaultStatus : c.status}</td>
-                    </tr>
+                      <td className={"physical-exam-findings-value" + (c.isDefault ? " physical-exam-grayed-out" : "")}>
+                        {c.isDefault ? c.defaultStatus : c.status}
+                      </td>
+                      <td>{c.isDefault && <button onClick={() => alert("To be implemented!")}>Customize</button>}</td>
+                    </tr>;
                   })
                 }
               </tbody>
             </table>
-            <button>Add Physical Component</button>
+            <button className="physical-exam-button">Add Physical Component</button>
           </div>
         </div>
       </CSSTransition>

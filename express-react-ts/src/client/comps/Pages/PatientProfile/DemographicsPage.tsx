@@ -8,12 +8,7 @@ import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientForm
 
 function reducer(
   state: DemographicsState,
-  action: {
-    type: string;
-    fieldName?: string;
-    value?: string|boolean|number|null;
-    newState?: { [key: string]: string|boolean|number|null };
-  }
+  action: { type: string; fieldName?: string; value?: string; newState?: {[key: string]: string |boolean|number|null} }
 ): DemographicsState {
   switch (action.type) {
     case "field":
@@ -91,6 +86,27 @@ export const DemographicsPage: IndividualPatientProfile = ({
       document.title = `Patient Profile: ${pageName}`;
       if (!window.location.href.includes("demographics")) {
         history.push(`/patient/${patientID}/demographics`);
+        
+        // Get request
+        const url = '/api/patientprofile/' + patientID;
+        fetch(url)
+          .then((res) => {
+            return res.json()
+          })
+          .then((jsonResult) => {
+            console.log("Get Demographics")
+            console.log(jsonResult)
+            dispatch({ type: "many_fields", newState:{
+              "firstName": jsonResult.first_name, 
+              "lastName": jsonResult.family_name, 
+              "sex": jsonResult.gender_at_birth, 
+              "age": jsonResult.age, 
+              "isPregnant": jsonResult.pregnant, 
+              "country": jsonResult.country_residence}});
+
+          }).catch((error) => {
+            console.log("An error occured with fetch:", error)
+          });
       }
     }
   }, [currentPage]);

@@ -6,13 +6,18 @@ import { useHistory } from "react-router";
 
 function reducer(
   state: ImagingResultsState,
-  action: { type: string; fieldName?: string; value?: string }
+  action: { type: string; fieldName?: string; value?: string; newState?: {[key: string]: string |boolean|number|null} }
 ): ImagingResultsState {
   switch (action.type) {
     case "field":
       return {
         ...state,
         [action.fieldName]: action.value,
+      };
+    case "many_fields":
+      return {
+        ...state,
+        ...action.newState,
       };
     default:
       throw new Error("Invalid type on action.");
@@ -41,6 +46,23 @@ export const ImagingResultsPage: IndividualPatientProfile = ({
     if (currentPage === pageName) {
       document.title = `Patient Profile: ${pageName}`;
       history.push(`/patient/${patientID}/imaging`);
+
+      // Get request
+      const url = '/api/patientprofile/' + patientID;
+      fetch(url)
+        .then((res) => {
+          return res.json()
+        })
+        .then((jsonResult) => {
+          console.log("Get Imaging")
+          console.log(jsonResult)
+          dispatch({ type: "many_fields", newState:{
+            "imagingResults": "ADD TO DB"}});
+
+        }).catch((error) => {
+          console.log("An error occured with fetch:", error)
+        });
+
     }
   }, [currentPage]);
 

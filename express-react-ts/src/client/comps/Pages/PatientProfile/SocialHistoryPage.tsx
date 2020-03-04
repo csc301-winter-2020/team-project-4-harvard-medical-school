@@ -7,13 +7,18 @@ import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientForm
 
 function reducer(
   state: SocialHistState,
-  action: { type: string; fieldName?: string; value?: string }
+  action: { type: string; fieldName?: string; value?: string; newState?: {[key: string]: string |boolean|number|null} }
 ): SocialHistState {
   switch (action.type) {
     case "field":
       return {
         ...state,
         [action.fieldName]: action.value,
+      };
+    case "many_fields":
+      return {
+        ...state,
+        ...action.newState,
       };
     case "NEVER":
       return {
@@ -75,6 +80,32 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
     if (currentPage === pageName) {
       document.title = `Patient Profile: ${pageName}`;
       history.push(`/patient/${patientID}/social`);
+
+      // Get request
+      const url = '/api/patientprofile/' + patientID;
+      fetch(url)
+        .then((res) => {
+          return res.json()
+        })
+        .then((jsonResult) => {
+          console.log("Get Social History")
+          console.log(jsonResult)
+          dispatch({ type: "many_fields", newState:{
+            "work": "NEED TO ADD TO DB",
+            "livingConditions": "NEED TO ADD TO DB", 
+            "sexualHistory": "NEED TO ADD TO DB",
+            "etOH": "NEED TO ADD TO DB",
+            "drinksPerWeek": "NEED TO ADD TO DB",
+            "smoker": "NEED TO ADD TO DB",
+            "lastTimeSmoked": "NEED TO ADD TO DB",
+            "packsPerDay": "NEED TO ADD TO DB",
+            "otherSubstances": "NEED TO ADD TO DB",}});
+
+        }).catch((error) => {
+          console.log("An error occured with fetch:", error)
+        });
+
+
     }
   }, [currentPage]);
 

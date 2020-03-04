@@ -6,13 +6,18 @@ import { useHistory } from "react-router";
 
 function reducer(
   state: PMH_State,
-  action: { type: string; fieldName?: string; value?: string }
+  action: { type: string; fieldName?: string; value?: string; newState?: {[key: string]: string |boolean|number|null} }
 ): PMH_State {
   switch (action.type) {
     case "field":
       return {
         ...state,
         [action.fieldName]: action.value,
+      };
+    case "many_fields":
+      return {
+        ...state,
+        ...action.newState,
       };
     default:
       throw new Error("Invalid type on action.");
@@ -47,6 +52,26 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
     if (currentPage === pageName) {
       document.title = `Patient Profile: ${pageName}`;
       history.push(`/patient/${patientID}/pastmedical`);
+
+      // Get request
+      const url = '/api/patientprofile/' + patientID;
+      fetch(url)
+        .then((res) => {
+          return res.json()
+        })
+        .then((jsonResult) => {
+          console.log("Get PMH")
+          console.log(jsonResult)
+          dispatch({ type: "many_fields", newState:{
+            "pastMedHist": jsonResult.medical_history,
+            "pastHospits": "NEED TO ADD PAST HOSPITALIZATIONS TO DB", 
+            "medications": "NEED TO ADD MEDICATIONS TO DB",
+            "allergies": "NEED TO ADD ALLERGIES TO DB",}});
+
+        }).catch((error) => {
+          console.log("An error occured with fetch:", error)
+        });
+
     }
   }, [currentPage]);
 

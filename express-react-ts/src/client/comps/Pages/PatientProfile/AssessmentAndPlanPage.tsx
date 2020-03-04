@@ -6,13 +6,18 @@ import { useHistory } from "react-router";
 
 function reducer(
   state: Assessment_State,
-  action: { type: string; fieldName?: string; value?: string }
+  action: { type: string; fieldName?: string; value?: string; newState?: {[key: string]: string |boolean|number|null} }
 ): Assessment_State {
   switch (action.type) {
     case "field":
       return {
         ...state,
         [action.fieldName]: action.value,
+      };
+    case "many_fields":
+      return {
+        ...state,
+        ...action.newState,
       };
     default:
       throw new Error("Invalid type on action.");
@@ -41,6 +46,22 @@ export const AssessmentAndPlanPage: IndividualPatientProfile = ({
     if (currentPage === pageName){
       document.title = `Patient Profile: ${pageName}`;
       history.push(`/patient/${patientID}/assessment`);
+
+      // Get request
+      const url = '/api/patientprofile/' + patientID;
+      fetch(url)
+        .then((res) => {
+          return res.json()
+        })
+        .then((jsonResult) => {
+          console.log("Get Assessment")
+          console.log(jsonResult)
+          dispatch({ type: "many_fields", newState:{
+            "assessment": "ADD TO DB"}});
+
+        }).catch((error) => {
+          console.log("An error occured with fetch:", error)
+        });
     }
   }, [currentPage]);
 

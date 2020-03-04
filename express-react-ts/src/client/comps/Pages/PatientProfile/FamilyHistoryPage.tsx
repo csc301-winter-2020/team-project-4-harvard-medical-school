@@ -6,13 +6,18 @@ import { useHistory } from "react-router";
 
 function reducer(
   state: Family_Hist_State,
-  action: { type: string; fieldName?: string; value?: string }
+  action: { type: string; fieldName?: string; value?: string; newState?: {[key: string]: string |boolean|number|null}}
 ): Family_Hist_State {
   switch (action.type) {
     case "field":
       return {
         ...state,
         [action.fieldName]: action.value,
+      };
+    case "many_fields":
+      return {
+        ...state,
+        ...action.newState,
       };
     default:
       throw new Error("Invalid type on action.");
@@ -41,6 +46,22 @@ export const FamilyHistoryPage: IndividualPatientProfile = ({
     if (currentPage === pageName) {
       document.title = `Patient Profile: ${pageName}`;
       history.push(`/patient/${patientID}/family`);
+
+      // Get request
+      const url = '/api/patientprofile/' + patientID;
+      fetch(url)
+        .then((res) => {
+          return res.json()
+        })
+        .then((jsonResult) => {
+          console.log("Get Family History")
+          console.log(jsonResult)
+          dispatch({ type: "many_fields", newState:{
+            "familyHist": jsonResult.family_history}});
+
+        }).catch((error) => {
+          console.log("An error occured with fetch:", error)
+        });
     }
   }, [currentPage]);
 

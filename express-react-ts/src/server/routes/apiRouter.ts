@@ -157,6 +157,10 @@ router.post('/api/patientprofile/:patientId', (req:Request, res:Response, next:N
             params_arr.push(values[i]);
         }
         console.log('upload sceesss');
+        return pool.query(
+            "DELETE FROM csc301db.patient_profile WHERE student_id = $1 AND patient_id = $2",
+        [new_patient.student_id, new_patient.patient_id]);
+    }).then((result) => {
         const insert_query: string = "INSERT INTO csc301db.patient_profile \
             (student_id, patient_id, first_name, family_name, age, gender_at_birth\
             ,gender, pregnant, country_residence, country_visited, complaint, medical_history,\

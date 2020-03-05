@@ -80,5 +80,16 @@ VALUES (NULL);
 INSERT INTO patient_profile (student_id, patient_id, first_name, family_name, age, gender_at_birth, gender, pregnant, country_residence, country_visited, complaint, medical_history, social_history, family_history)
 VALUES (1, 1, 'will', 'qie', 20, 'Male', 'Male', 'NO', 'CA', NULL, 'ddd', 'fff', 'zzz', 'vvv');
 
+CREATE TABLE templates (
+    user_id INT REFERENCES users(id) NOT NULL,
+    template_id INT NOT NULL,
+    UNIQUE (user_id, template_id),
+    template_name TEXT NOT NULL,
+    date_millis INT NOT NULL,
+    -- Gimmick, backend does not need to understand what is in the
+    -- template, just store as a plain text
+    template TEXT NOT NULL
+);
 
-
+INSERT INTO templates (user_id, template_id, template_name, date_millis, template)
+VALUES (1, 1, 'mynew template', 12345, 'ddddddd');

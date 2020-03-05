@@ -82,7 +82,7 @@ VALUES (1, 1, 'will', 'qie', 20, 'Male', 'Male', 'NO', 'CA', NULL, 'ddd', 'fff',
 
 CREATE TABLE templates (
     user_id INT REFERENCES users(id) NOT NULL,
-    template_id INT NOT NULL,
+    template_id SERIAL PRIMARY KEY,
     UNIQUE (user_id, template_id),
     template_name TEXT NOT NULL,
     date_millis INT NOT NULL,

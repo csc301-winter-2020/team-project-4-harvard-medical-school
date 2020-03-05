@@ -177,13 +177,40 @@ router.post('/api/patientprofile/:patientId', (req:Request, res:Response, next:N
  * TODO: Return all templates for a user
  */
 router.get('/api/student/:userId/templates', (req:Request, res:Response, next:NextFunction) => {
-    const userId = req.params.userId;
-    res.status(200).json('');
+    const userId: number = parseInt(req.params.userId);
+    pool.connect().then((client) => {
+        const query_string: string = "SELECT * FROM csc301db.templates WHERE user_id = $1";
+        return client.query(query_string, [userId]);
+    }).then((result) => {
+        if (result.rowCount === 0) {
+            res.status(404).send();
+        }
+        const template_arr: any = result.rows;
+        for (let i = 0; i < template_arr.length; i++) {
+            template_arr[i].template = JSON.parse(template_arr[i].template);
+        }
+        res.status(200).json(template_arr);
+    }).catch((err) => {
+        console.log(err);
+        res.status(500).send();
+    });
+
 });
 
 router.post('/api/student/:userId/templates/new', (req:Request, res:Response, next:NextFunction) => {
-    const userId = req.params.userId;
-    res.status(200).json('');
+    const userId: number = parseInt(req.params.userId);
+    const body: any = req.body;
+    pool.connect().then((client) => {
+        const insert_query: string = "INSERT INTO csc301db.templates(user_id, template_name,\
+            date_millis, template) VALUES ($1, $2, $3, $4)";
+        return client.query(insert_query, [userId, body.template_name,
+             body.date_millis, JSON.stringify(body.template)]);
+    }).then((result) => {
+        res.status(200).send();
+    }).catch((err) => {
+        console.log(err);
+        res.status(400).send();
+    });
 });
 
 // const example_template_json = {

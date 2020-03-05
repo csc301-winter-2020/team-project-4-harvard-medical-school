@@ -1,0 +1,60 @@
+@import "../app.scss";
+
+.lab-results-page-outermost-container {
+  display: block;
+  width: 100%;
+}
+
+.lab-results-page-title {
+  padding: 16px;
+}
+
+.lab-results-out-of-range-red {
+  color: red;
+  background-color: #ffdfdf;
+}
+
+.lab-results-table {
+  width: 100%;
+  margin-top: 24px;
+  margin-left: 16px;
+  padding: 32px;
+  border-collapse: collapse;
+}
+
+.lab-results-table-row {
+}
+
+.lab-results-table-title-cell {
+  font-weight: bold;
+  font-size: 30px;
+  padding-bottom: 12px;
+}
+
+.lab-results-table-cell {
+  font-size: 20px;
+  padding: 4px;
+}
+
+.lab-results-table-align-right {
+  text-align: right;
+}
+
+.lab-results-add-value-button {
+  background-color: $color-primary;
+  border-radius: 3px;
+  color: white;
+  font-size: 1.5rem;
+  padding: 10px;
+  margin-left: 24px;
+  margin-top: 12px;
+  width: 200px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.lab-results-add-value-button:hover {
+  background-color: $color-primary-dim;
+  transition: all 0.1s ease;
+}

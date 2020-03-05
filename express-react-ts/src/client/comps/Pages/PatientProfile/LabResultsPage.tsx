@@ -46,7 +46,7 @@ function reducer(
         value: 0,
         lower: 0,
         upper: 0,
-        scale: ""
+        scale: "mg/L"
       });
       break;
     case "updateName":
@@ -121,30 +121,33 @@ export const LabResultsPage: IndividualPatientProfile = ({
         <div className="lab-results-page-outermost-container patient-profile-window">
           <div className="patient-profile-page-title">
             <h1>{pageName}</h1>
-            <table className="lab-results-table">
+            <table id="labResultsTable" className="lab-results-table">
               <thead>
-              <tr className="lab-results-table-row">
-                <td className="lab-results-table-title-cell">Test</td>
-                <td className="lab-results-table-title-cell">Value</td>
-                <td className="lab-results-table-title-cell">Range</td>
-                <td className="lab-results-table-title-cell">Concentration</td>
-              </tr>
+                <tr>
+                  <td>Test</td>
+                  <td>Value</td>
+                  <td>Range</td>
+                  <td>Concentration</td>
+                </tr>
               </thead>
               <tbody>
               {state.data.map(row => {
                 const outOfRange = row.value < row.lower || row.value > row.upper;
                 const rowClass = outOfRange ? 'lab-results-out-of-range-red' : '';
                 return (
-                  <tr className={`lab-results-table-row ${rowClass}`} key={row.name}>
-                    <td className="lab-results-table-cell">{row.name}</td>
-                    <td className="lab-results-table-cell">{row.value}</td>
-                    <td className="lab-results-table-cell">{row.lower}, {row.upper}</td>
-                    <td className="lab-results-table-cell">{row.scale}</td>
+                  <tr className={`${rowClass}`} key={row.name}>
+                    <td>{row.name}</td>
+                    <td>{row.value}</td>
+                    <td>{row.lower}, {row.upper}</td>
+                    <td>{row.scale}</td>
                   </tr>
                 );
               })}
               </tbody>
             </table>
+            <button className="lab-results-add-value-button" onClick={() => dispatch({ type: 'addEntry', value: 'New' })}>
+              Add Lab Result
+            </button>
           </div>
         </div>
       </CSSTransition>

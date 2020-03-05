@@ -226,7 +226,7 @@ const initialEndo: endocrine = {
   chronicPain: false,
   fevers: false,
   chills: false,
-  sweats: false,
+  sweatsEndocrine: false,
   lossOfAppetite: false,
   heatIntolerance: false,
   coldIntolerance: false,
@@ -263,7 +263,7 @@ const initialHeadNeck: headNeck = {
 }
 
 const initialPulmonary: pulmonary = {
-  chestPain: false,
+  chestPainPulmonary: false,
   cough: false,
   haemoptysis: false,
   wheezing: false,
@@ -272,14 +272,14 @@ const initialPulmonary: pulmonary = {
 }
 
 const initialCardiovascular: cardiovascular = {
-  chestPain: false,
+  chestPainCardiovascular: false,
   chestPressure: false,
   shortBreathRest: false,
   shortBreathExertion: false,
   orthopnoea: false,
   paroxysmal: false,
   lowerOedema: false,
-  lossOfConsciousness: false,
+  lossOfConsciousnessCardiovascular: false,
   palpitation: false,
   legPain: false,
   legCramps: false,
@@ -314,7 +314,22 @@ const initialGynaecological: gynaecological = {
   incompleteEmptying: false,
   hesitance: false,
   decreasedForce: false,
-  needVoid: false
+  needVoid: false,
+  erectileDysfunction: false,
+  penileDischarge: false,
+  penilePain: false,
+  testicularPain: false,
+  testicularSwelling: false,
+  penileUlcers: false,
+  penileGrowths: false,
+  sweatsGynaecological: false,
+  pastPregnancies: false,
+  vaginalDischarge: false,
+  menstruationCessation: false,
+  menstruationIrregularity: false,
+  breastPain: false,
+  breastDischarge: false,
+  breastMass: false
 }
 
 //TODO: add for men/women
@@ -326,7 +341,7 @@ const initialHematology: hematology = {
 }
 
 const initialNeurological: neurological = {
-  lossOfConsciousness: false,
+  lossOfConsciousnessNeurological: false,
   seizureActivity: false,
   numbness: false,
   weakness: false,
@@ -405,7 +420,7 @@ type nameMap = {
   // chronicPain: string
   // fevers: string
   // chills: string
-  // sweats: string
+  // sweatsEndocrine: string
   // lossOfAppetite: string
   // heatIntolerance: string
   // coldIntolerance: string
@@ -432,19 +447,20 @@ type nameMap = {
   // hoarseness: string
   // toothPain: string
   // lumpInThroat: string
-  // chestPain: string
+  // chestPainPulmonary: string
   // cough: string
   // haemoptysis: string
   // wheezing: string
   // snoring: string
   // aponoea: string
+  // chestPainCardiovascular: string
   // chestPressure: string
   // shortBreathRest: string
   // shortBreathExertion: string
   // orthopnoea: string
   // paroxysmal: string
   // lowerOedema: string
-  // lossOfConsciousness: string
+  // lossOfConsciousnessCardiovascular: string
   // palpitation: string
   // legPain: string
   // legCramps: string
@@ -474,9 +490,25 @@ type nameMap = {
   // hesitance: string
   // decreasedForce: string
   // needVoid: string
+  // erectileDysfunction: string
+  // penileDischarge: string
+  // penilePain: string
+  // testicularPain: string
+  // testicularSwelling: string
+  // penileUlcers: string
+  // penileGrowths: string
+  // sweatsGynaecological: string
+  // pastPregnancies: string
+  // vaginalDischarge: string
+  // menstruationCessation: string
+  // menstruationIrregularity: string
+  // breastPain: string
+  // breastDischarge: string
+  // breastMass: string
   // abnormalBleeding: string
   // abnormalBruising: string
   // newLumps: string
+  // lossOfConsciousnessNeurological: string
   // seizureActivity: string
   // numbness: string
   // weakness: string
@@ -530,7 +562,7 @@ const nameMap: nameMap = {
   chronicPain: 'Chronic Pain',
   fevers: 'Fevers',
   chills: 'Chills',
-  sweats: 'Sweats',
+  sweatsEndocrine: 'Sweats',
   lossOfAppetite: 'Loss of Appetite',
   heatIntolerance: 'Heat Intolerance',
   coldIntolerance: 'Cold Intolerance',
@@ -557,19 +589,20 @@ const nameMap: nameMap = {
   hoarseness: 'Hoarseness',
   toothPain: 'Tooth Pain',
   lumpInThroat: 'Sense Of Lump With Swallowing',
-  chestPain: 'Chest Pain',
+  chestPainPulmonary: 'Chest Pain',
   cough: 'Coughs',
   haemoptysis: 'Haemoptysis',
   wheezing: 'Wheezing',
   snoring: 'Snoring',
   aponoea: 'Aponoea',
+  chestPainCardiovascular: 'ChestPain',
   chestPressure: 'Chest Pressure',
   shortBreathRest: 'Shortness Of Breath At Rest',
   shortBreathExertion: 'Shortness Of Breath With Exertion',
   orthopnoea: 'Orthopnoea',
   paroxysmal: 'Paroxysmal Nocturnal Dyspnoea',
   lowerOedema: 'Lower Extremity Oedema',
-  lossOfConsciousness: 'Sudden Loss Of Consciousness',
+  lossOfConsciousnessCardiovascular: 'Sudden Loss Of Consciousness',
   palpitation: 'Palpitations',
   legPain: 'Leg Pain With Ambulation',
   legCramps: 'Leg Cramps With Ambulation',
@@ -599,9 +632,25 @@ const nameMap: nameMap = {
   hesitance: 'Hesitance',
   decreasedForce: 'Decreased Force Of Stream',
   needVoid: 'Need To Void Soon After Urination',
+  erectileDysfunction: 'Erectile Dysfunction',
+  penileDischarge: 'Penile Discharge',
+  penilePain: 'Penile Pain',
+  testicularPain: 'Testicular Pain',
+  testicularSwelling: 'Testicular Swelling',
+  penileUlcers: 'Penile Ulcers',
+  penileGrowths: 'Penile Growths',
+  sweatsGynaecological: 'Sweats',
+  pastPregnancies: 'Past Pregnancies' ,
+  vaginalDischarge: 'Vaginal Discharge',
+  menstruationCessation: 'Cessation Of Menstruation',
+  menstruationIrregularity: 'Irregularity Of Menstruation',
+  breastPain: 'Breast Pain',
+  breastDischarge: 'Breast Discharge',
+  breastMass: 'Breast Mass',
   abnormalBleeding: 'Abnormal Bleeding',
   abnormalBruising: 'Abnormal Bruising',
   newLumps: 'New Lumps Or Bumps',
+  lossOfConsciousnessNeurological: 'AbruptLossOfConsciousness',
   seizureActivity: 'Witnessed Seizure Activity',
   numbness: 'Numbness',
   weakness: 'Weakness',
@@ -628,7 +677,7 @@ const nameMap: nameMap = {
   hairLoss: 'Hair Loss',
   skinEruptions: 'Skin Eruptions',
   rashes: 'Rashes',
-  growingSores: 'Sores That Grow/Dont\' Heal',
+  growingSores: 'Sores That Grow/Don\'t Heal',
   lesions: 'Lesions Changing In Size, Shape, Colour',
   itching: 'Itching'
 }

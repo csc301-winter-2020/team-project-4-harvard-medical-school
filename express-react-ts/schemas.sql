@@ -35,6 +35,8 @@ CREATE TABLE patients (
     lab_result INT
 );
 
+CREATE TYPE SMOKING_TYPE AS ENUM('NEVER', "EX", "CURRENT");
+
 CREATE TABLE patient_profile (
      id SERIAL PRIMARY KEY,
      student_id INT REFERENCES users(id),
@@ -45,6 +47,8 @@ CREATE TABLE patient_profile (
      age INT NOT NULL CHECK ( age > 0 AND age < 100 ),
      gender_at_birth SEX_AT_BIRTH,
      gender TEXT NOT NULL,
+     country TEXT,
+     country_canvas TEXT
 
      pregnant TEXT,
      pregnant_canvas text,
@@ -65,7 +69,45 @@ CREATE TABLE patient_profile (
      social_history_canvas TEXT,
 
      family_history TEXT,
-     family_history_canvas text
+     family_history_canvas TEXT,
+
+     HPI TEXT,
+     HPI_canvas TEXT,
+
+     hosptial_history TEXT,
+     hospital_history_canvas TEXT,
+
+     medications TEXT,
+     medications_canvas TEXT,
+
+     allergies TEXT,
+     allergies_canvas TEXT,
+
+     work TEXT,
+     work_canvas TEXT,
+
+     living_conditions TEXT,
+     living_conditions_canvas TEXT,
+
+     sexual_history TEXT,
+     sexual_history_canvas TEXT,
+
+     etOH TEXT,
+     etOH_canvas TEXT,
+
+     drinks_per_week TEXT,
+     drinks_per_week_canvas TEXT,
+
+     smoker SMOKING_TYPE,
+
+     last_time_smoked TEXT,
+     last_time_smoked_canvas TEXT,
+
+     packs_per_day TEXT,
+     packs_per_day_canvas TEXT,
+
+     other_substances TEXT,
+     other_substances_canvas TEXT,
 
 );
 INSERT INTO users (name, email, password, year, user_type, date_create)

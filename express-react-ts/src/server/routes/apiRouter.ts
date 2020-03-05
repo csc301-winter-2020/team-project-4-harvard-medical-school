@@ -76,14 +76,20 @@ router.get('/api/patientprofile/:patientId', (req:Request, res:Response, next:Ne
         if (query_result.rowCount === 0) {
             res.status(404).send();
         } else {
-            const result: any = query_result.rows[0]
+            const result: any = query_result.rows[0];
+            console.log(result);
+
             const attributes: Array<string> =
             ['pregnant', 'country_residence', 'country_visited', 'complaint',
-            'medical_history', 'social_history', 'family_history'];
+            'medical_history', 'social_history', 'family_history', 'country',
+            'hpi', 'hospital_history', 'medications', 'allergies', 'work', 
+            'living_conditions', 'sexual_history', 'etoh', 'drinks_per_week',
+            'last_time_smoked', 'packs_per_day', 'other_substances'];
             // the for loop to translate key into url
             for (let i = 0; i < attributes.length; i++) {
                 const this_attribute = attributes[i] + '_canvas';
                 if (result[this_attribute] !== null) {
+                    console.log(this_attribute);
                     result[this_attribute] = s3.getSignedUrl('getObject', {
                         Bucket: bucket,
                         Key: result[this_attribute],
@@ -93,7 +99,10 @@ router.get('/api/patientprofile/:patientId', (req:Request, res:Response, next:Ne
             }
             res.status(200).json(result);
         }
-    }));
+    })).catch((err) => {
+        console.log(err);
+        res.status(500).send();
+    });
     // res.status(200).json('');
 });
 
@@ -133,10 +142,14 @@ router.post('/api/patientprofile/:patientId', (req:Request, res:Response, next:N
     params_arr.push(new_patient.age);
     params_arr.push(new_patient.gender_at_birth);
     params_arr.push(new_patient.gender);
+    params_arr.push(new_patient.smoker);
     const upload_promise: any = [];
     const attributes: Array<string> =
-    ['pregnant', 'country_residence', 'country_visited', 'complaint',
-    'medical_history', 'social_history', 'family_history'];
+            ['pregnant', 'country_residence', 'country_visited', 'complaint',
+            'medical_history', 'social_history', 'family_history', 'country',
+            'hpi', 'hospital_history', 'medications', 'allergies', 'work', 
+            'living_conditions', 'sexual_history', 'etoh', 'drinks_per_week',
+            'last_time_smoked', 'packs_per_day', 'other_substances'];
     for (let i = 0; i < attributes.length; i++) {
         params_arr.push(new_patient[attributes[i]]);
     }
@@ -163,17 +176,35 @@ router.post('/api/patientprofile/:patientId', (req:Request, res:Response, next:N
     }).then((result) => {
         const insert_query: string = "INSERT INTO csc301db.patient_profile \
             (student_id, patient_id, first_name, family_name, age, gender_at_birth\
-            ,gender, pregnant, country_residence, country_visited, complaint, medical_history,\
-            social_history, family_history, pregnant_canvas,country_residence_canvas, \
-            country_visited_canvas, complaint_canvas, medical_history_canvas,\
-            social_history_canvas, family_history_canvas  ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9\
-                ,$10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21);";
+            ,gender, smoker, pregnant, country_residence, country_visited, complaint, medical_history,\
+            social_history, family_history, country, hpi, \
+            hospital_history, medications,\
+            allergies, work, \
+            living_conditions, sexual_history, \
+            etoh, drinks_per_week, \
+             last_time_smoked, \
+            packs_per_day, other_substances, \
+            pregnant_canvas, country_residence_canvas, country_visited_canvas,\
+            complaint_canvas, medical_history_canvas,\
+            social_history_canvas, family_history_canvas, country_canvas,\
+            hpi_canvas, \
+            hospital_history_canvas, medications_canvas,\
+            allergies_canvas, work_canvas, \
+            living_conditions_canvas, sexual_history_canvas, \
+            etoh_canvas, drinks_per_week_canvas, \
+             last_time_smoked_canvas, \
+            packs_per_day_canvas, other_substances_canvas \
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9\
+                ,$10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21,\
+                $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, \
+                $33, $34, $35, $36, $37, $38, $39, $40, $41, $42, $43, $44,\
+                $45, $46, $47, $48);"; 
         return pool.query(insert_query, params_arr);
     }).then((result) => {
         res.status(200).send();
     }).catch((err) => {
         console.log(err);
-        res.status(500).send();
+        res.status(400).json(err);
     });  
 })
 

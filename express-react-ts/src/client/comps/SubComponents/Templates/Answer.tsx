@@ -14,12 +14,13 @@ interface AnswerProps {
 export const Answers: React.FC<AnswerProps> = ({
   question,
   questionNum,
-  isShowing,
+  isShowing
 }) => {
-  const [disabled, setDisabled] = useState(false);
+  const [disabledArr, setDisabledArr] = useState<boolean[]>(
+    new Array(question.answers.length).fill(false)
+  );
 
   return (
-
     <Droppable droppableId={`droppable${question.id}`} type={`${questionNum}`}>
       {(provided, snapshot) =>
         isShowing && (
@@ -45,16 +46,20 @@ export const Answers: React.FC<AnswerProps> = ({
                       {...provided.dragHandleProps}
                     >
                       <span className="draggable-check">
-                        <input
-                          type="checkbox"
-                          name={answer}
-                          checked={!disabled}
-                          onChange={() => {
-                            setDisabled(!disabled);
-                          }}
-                        />
+                        <label>
+                          <input
+                            type="checkbox"
+                            name={answer}
+                            checked={!disabledArr[index]}
+                            onChange={() => {
+                              const newArr = [...disabledArr];
+                              newArr[index] = !disabledArr[index];
+                              setDisabledArr(newArr);
+                            }}
+                          />
+                          {answer}
+                        </label>
                       </span>
-                      {answer}
                     </div>
                   )}
                 </Draggable>

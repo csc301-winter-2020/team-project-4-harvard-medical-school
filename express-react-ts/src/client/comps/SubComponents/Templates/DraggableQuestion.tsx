@@ -15,14 +15,14 @@ interface DraggableQuestionProps {
 export const DraggableQuestion: React.FC<DraggableQuestionProps> = ({
   question,
   index,
-  changeFlag,
+  changeFlag
 }) => {
   const [isShowing, setIsShowing] = useState(false);
   const [disabled, setDisabled] = useState(false);
 
-  useEffect(() => {
-    setIsShowing(false);
-  }, [changeFlag]);
+  // useEffect(() => {
+  //   setIsShowing(false);
+  // }, [changeFlag]);
 
   return (
     <>

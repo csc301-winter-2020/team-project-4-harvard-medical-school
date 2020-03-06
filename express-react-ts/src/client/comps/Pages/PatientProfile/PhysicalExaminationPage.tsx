@@ -200,7 +200,7 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
               <tbody>
                 {
                   state.vitals.map(vital => {
-                    return <tr>
+                    return <tr key={vital.name}>
                       <td>{vital.name}</td>
                       <td>{vital.value}</td>
                     </tr>;
@@ -221,7 +221,7 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
               <tbody>
                 {
                   state.components.map(c => {
-                    return <tr>
+                    return <tr key={c.bodyPart}>
                       <td className="physical-exam-table-right-align">
                         {getBodyPartCell(dispatch, c)}
                       </td>

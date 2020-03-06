@@ -1,11 +1,10 @@
 @import "../app.scss";
 
-.templates-outermost{
-  background-color: $background-dim; 
-  
+.templates-outermost {
+  background-color: $background-dim;
 }
 
-.templates-main-container{
+.templates-main-container {
   position: relative;
   overflow-y: scroll;
   padding: 50px;
@@ -25,9 +24,37 @@
   }
 }
 
-.templates-scroller{
+.templates-scroller {
   overflow-y: scroll;
   height: calc(100% - 80px);
 }
 
+.chevron-style {
+  position: absolute;
+  right: 60px;
+  cursor: pointer;
+  z-index: 100;
+  padding: 10px;
+  padding-right: 16px;
+  margin-top: -10px;
+}
 
+.draggable-check {
+  input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-right: 20px;
+    position: relative;
+    top: -2px;
+    background-color: #ddd;
+    transition: all 0.15 ease;
+    border-radius: 3px;
+    vertical-align: middle;
+  }
+  input[type="checkbox"]:hover {
+    background-color: $color-primary-very-light;
+  }
+  input[type="checkbox"]:checked {
+    background-color: $color-primary-light;
+  }
+}

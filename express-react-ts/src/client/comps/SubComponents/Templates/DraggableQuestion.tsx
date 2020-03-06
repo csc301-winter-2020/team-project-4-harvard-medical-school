@@ -1,20 +1,29 @@
-import React, { useState } from "react";
-import { Draggable } from "react-beautiful-dnd";
+import React, { useState, useEffect } from "react";
+import { Draggable, DragDropContext } from "react-beautiful-dnd";
 import { nameToUrl, getItemStyle } from "../../../utils/utils";
 import { Answers } from "./Answer";
 import { Question } from "./Questions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { dummyTemplates } from "../../../utils/dummyTemplates";
 
 interface DraggableQuestionProps {
   question: Question;
   index: number;
+  changeFlag: boolean;
 }
 
 export const DraggableQuestion: React.FC<DraggableQuestionProps> = ({
   question,
   index,
+  changeFlag,
 }) => {
   const [isShowing, setIsShowing] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+
+  useEffect(() => {
+    setIsShowing(false);
+  }, [changeFlag]);
+
   return (
     <>
       <Draggable key={question.id} draggableId={question.id} index={index}>
@@ -29,15 +38,20 @@ export const DraggableQuestion: React.FC<DraggableQuestionProps> = ({
             )}
             {...provided.dragHandleProps}
           >
+            <span className="draggable-check">
+              <input
+                type="checkbox"
+                name={nameToUrl[question.content]}
+                checked={!disabled}
+                onChange={() => {
+                  setDisabled(!disabled);
+                }}
+              />
+            </span>
             {question.content}
 
             <span
-              style={{
-                position: "absolute",
-                right: "75px",
-                cursor: "pointer",
-                zIndex: 100,
-              }}
+              className="chevron-style"
               onClick={() => setIsShowing(!isShowing)}
             >
               {!isShowing ? (

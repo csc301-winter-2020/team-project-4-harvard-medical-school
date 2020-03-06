@@ -45,15 +45,17 @@ const getQuestions = (count: number): Question[] =>
 export const Questions: React.FC = () => {
   const [questions, setQuestions] = useState<Question[]>(getQuestions(10));
 
+  function onDragStart(result: DropResult, provided: ResponderProvided){
+    setChangeFlag(!changeFlag);
+  }
+
   function onDragEnd(result: DropResult, provided: ResponderProvided) {
     // dropped outside the list
     if (!result.destination) {
-      //console.log("no-change");
       return;
     }
 
     if (result.type === "QUESTIONS") {
-      console.log(result);
       setQuestions(
         reorder(questions, result.source.index, result.destination.index)
       );
@@ -72,6 +74,7 @@ export const Questions: React.FC = () => {
 
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
   const [searchVal, setSearchVal] = useState("");
+  const [changeFlag, setChangeFlag] = useState(false);
 
   useEffect(() => {
     const lower: string = searchVal.toLowerCase();
@@ -119,7 +122,7 @@ export const Questions: React.FC = () => {
           </div>
 
           <div className="home-page-separator-line"></div>
-          <DragDropContext onDragEnd={onDragEnd}>
+          <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
             <Droppable droppableId="droppable" type="QUESTIONS">
               {(provided, snapshot) => (
                 <div
@@ -127,7 +130,7 @@ export const Questions: React.FC = () => {
                   style={getQuestionListStyle(snapshot.isDraggingOver)}
                 >
                   {questions.map((question: Question, index: number) => (
-                    <DraggableQuestion question={question} index={index} key={index}/>
+                    <DraggableQuestion question={question} index={index} key={index} changeFlag={changeFlag}/>
                   ))}
                   {provided.placeholder}
                 </div>

@@ -1,7 +1,164 @@
-import React, { useEffect } from "react";
+import React, {useEffect, useReducer} from "react";
 import { CSSTransition } from "react-transition-group";
 import { IndividualPatientProfile } from "./PatientProfilePage";
 import { useHistory } from "react-router";
+import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
+import '../../../scss/patient-profiles/patient-physical-form.scss'
+
+type PhysicalExamVital = {
+  name: string,
+  value: string
+};
+
+// An empty string for the body part and status is allowed, and implies it may
+// be edited by a textbox/canvas (and we are in the process of figuring out
+// what the body part is).
+//
+// Further, an empty string for the status means that a textbox/canvas will be
+// placed in the appropriate cell so the user can edit it. This may need to be
+// changed in the future.
+type PhysicalExamComponent = {
+  bodyPart: string;
+  status: string;
+  custom: boolean;
+  editable: boolean;
+}
+
+type PhysicalExamState = {
+  vitals: PhysicalExamVital[];
+  components: PhysicalExamComponent[];
+};
+
+const initialState: PhysicalExamState = {
+  vitals: [
+    {
+      name: "Blood pressure",
+      value: "120 / 80"
+    },
+    {
+      name: "Heart rate",
+      value: "70 bpm"
+    }
+  ],
+  components: [
+    {
+      bodyPart: "Head",
+      status: "Normocephalic",
+      custom: false,
+      editable: false
+    },
+    {
+      bodyPart: "Eyes",
+      status: "Accommodate to light",
+      custom: false,
+      editable: false
+    }
+  ]
+};
+
+function reducer(
+  state: PhysicalExamState,
+  action: { type: string; bodyPart: string }
+): PhysicalExamState {
+  let newState: PhysicalExamState = JSON.parse(JSON.stringify(state));
+  let successfulAction = false;
+
+  switch (action.type) {
+    case 'newBodyPart':
+      newState.components.push({
+        bodyPart: "",
+        status: "",
+        custom: true,
+        editable: true
+      });
+      successfulAction = true;
+      break;
+    case 'makeEditable':
+      newState.components.forEach(c => {
+        if (c.bodyPart === action.bodyPart) {
+          c.status = '';
+          c.editable = true;
+          successfulAction = true;
+        }
+      });
+      break;
+    default:
+      break;
+  }
+
+  // This is primarily in case a mistake is made and action is given to a body
+  // part that does not exist (ex: someone wants to edit an `Eyes` body part
+  // but no such one exists). This should only be triggered on developer error.
+  if (!successfulAction) {
+    throw new Error('Action was missing required elements.');
+  }
+
+  return newState;
+}
+
+// Converts a name to a usable ID name. This is needed for when the body part
+// that comes from the database has to have a name. Note: This does not
+// guarantee uniqueness. It is up to the caller to make sure of this.
+// TODO: This might have to be removed since it may end up being pointless.
+function nameToID(name) {
+  return name.toLowerCase().replace(' ', '-');
+}
+
+function createFindingFromComponent(dispatch, c: PhysicalExamComponent) {
+  if (c.status !== '') {
+    return <b>{c.status}</b>;
+  }
+
+  // TODO: Note that the bodyPart is probably empty, which affects the ID.
+  return <PatientFormInput
+      dispatch={dispatch}
+      id={nameToID(c.bodyPart)}
+      inputType={"text"}
+      inputVal={""}
+      placeholder={"Enter text here"}
+      title={""}
+      isShowingCanvas={true}
+      isShowingText={false}
+      setIsShowingCanvas={() => {}}
+      setIsShowingText={() => {}}
+      canvasHeight={200}
+      canvasWidth={800}
+      isTextArea={true}
+    />;
+}
+
+function addNewFinding(dispatch, physicalComp: PhysicalExamComponent) {
+  dispatch({ type: 'makeEditable', bodyPart: physicalComp.bodyPart });
+}
+
+function addPhysicalComponent(dispatch) {
+  dispatch({ type: 'newBodyPart', bodyPart: '' });
+}
+
+function getBodyPartCell(dispatch, physicalComp: PhysicalExamComponent) {
+  if (physicalComp.custom) {
+    // TODO: Note that the bodyPart can be empty, which may affect the ID.
+    return <span>
+      <PatientFormInput
+        dispatch={dispatch}
+        id={nameToID(physicalComp.bodyPart)}
+        inputType={"text"}
+        inputVal={""}
+        placeholder={"Enter text here"}
+        title={""}
+        isShowingCanvas={true}
+        isShowingText={false}
+        setIsShowingCanvas={() => {}}
+        setIsShowingText={() => {}}
+        canvasHeight={200}
+        canvasWidth={400}
+        isTextArea={true}
+      />
+    </span>
+  }
+
+  return <span>{physicalComp.bodyPart}</span>;
+}
 
 export const PhysicalExaminationPage: IndividualPatientProfile = ({
   pageName,
@@ -18,6 +175,9 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
       history.push(`/patient/${patientID}/physical`);
     }
   }, [currentPage]);
+
+  const [state, dispatch] = useReducer(reducer, initialState);
+
   return (
     <>
       <CSSTransition
@@ -30,68 +190,53 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
         <div className="physical-examination-history-page-outermost-container patient-profile-window">
           <div className="patient-profile-page-title">
             <h1>{pageName}</h1>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum
-              repellat explicabo iste neque? Fugit sint voluptate temporibus
-              vero debitis qui recusandae neque labore? Odio saepe, vel
-              voluptatum nam mollitia magnam atque nobis, explicabo rem vitae ab
-              ut neque accusantium quo eligendi in provident eos! Facere,
-              tempore distinctio non minima suscipit amet quos expedita
-              dignissimos autem aspernatur molestiae? Dolorem veniam odit iste
-              fugiat repellat quo ducimus eum, earum dolores corrupti incidunt?
-              Dolores quas architecto veritatis eius exercitationem, beatae
-              maxime laborum. Nemo, blanditiis corrupti ducimus reiciendis
-              nesciunt temporibus, natus, perferendis id non animi illo placeat
-              aliquid. Dignissimos, dolorem officiis a tempore ducimus quibusdam
-              ratione quos nostrum accusamus illo iste harum quidem eum? Nemo
-              quidem distinctio magnam iste fugit delectus illum, omnis,
-              reprehenderit, fuga quibusdam facere odio. Ad nesciunt recusandae
-              eaque iure omnis sed laudantium id dolorem beatae esse, repellat
-              temporibus et, numquam mollitia nostrum ducimus sequi est.
-              Laudantium aliquid facilis natus eaque, assumenda pariatur
-              quisquam delectus ea magnam error at odio sunt quod quidem
-              temporibus! Corporis error perspiciatis facilis, repellat tenetur
-              natus pariatur ipsam? Maxime sint labore ducimus voluptates?
-              Aspernatur placeat quisquam consequatur nobis assumenda rem sunt,
-              fugiat ut atque nisi! Repellat non doloribus dolores fuga error,
-              officia, adipisci rem corrupti corporis velit quisquam sunt nobis
-              animi eius rerum incidunt accusantium quibusdam. Accusantium at,
-              necessitatibus rerum libero, perspiciatis aspernatur sit
-              reprehenderit cum, impedit quis pariatur laboriosam voluptas
-              dolore et voluptatibus sint unde esse. Neque officiis, iure
-              ducimus optio rem ab veritatis iste sapiente inventore, id
-              necessitatibus aperiam ipsum deserunt dolores cupiditate, delectus
-              esse eaque molestiae animi explicabo qui consectetur cumque
-              aliquam quos. Ab ex recusandae eligendi similique, autem doloribus
-              dignissimos deleniti repudiandae reiciendis delectus error sed
-              odio. Id delectus tempore alias ea neque reiciendis a ut est quia
-              rerum dolores suscipit, provident explicabo excepturi totam veniam
-              quo consequuntur quisquam illum eum! Culpa, ut non. Explicabo
-              adipisci numquam perferendis dolore nemo natus vel at possimus
-              voluptas blanditiis, eos iste quasi ipsum inventore amet
-              praesentium, perspiciatis tenetur dolorem est non vero laudantium
-              debitis nobis pariatur! Ipsum, est. Enim cumque et eligendi
-              dolores laborum pariatur eius cum consectetur cupiditate animi!
-              Esse ipsam, officiis necessitatibus dolore iste exercitationem
-              sapiente voluptatem tempore illum eum optio, explicabo veniam
-              consectetur ea tenetur, nihil similique molestias blanditiis
-              facilis consequatur possimus expedita nostrum nam. Corrupti,
-              dolorem! Modi et consequatur corporis ullam sint blanditiis? Nemo
-              dolore voluptatem, corporis temporibus voluptas voluptatum odit
-              repellendus tempora commodi quia cum nesciunt vitae beatae quae
-              vel. Asperiores, minima consequuntur? Itaque architecto tenetur
-              molestias sunt cupiditate nesciunt, maiores sed obcaecati
-              asperiores odit magnam temporibus incidunt nobis assumenda eos,
-              fuga eum animi voluptatum facere in quo at tempore aspernatur.
-              Dolor laudantium impedit nostrum rerum quo at libero eius tenetur
-              dolorem non laborum ipsum tempora amet veniam sed enim quos nisi
-              adipisci placeat, nulla assumenda in inventore unde mollitia! Nisi
-              odio suscipit dolores laudantium ut omnis, illo, cumque incidunt
-              ab similique iure consequuntur placeat qui odit. Atque placeat quo
-              quidem maxime iusto ducimus minus consequuntur sequi deleniti
-              numquam exercitationem ut delectus eius possimus eligendi, quam ab
-              sapiente! Sapiente, voluptate.
-            </p>
+            <table id="physical-exam-vitals-table" className="physical-exam-table">
+              <thead>
+                <tr>
+                  <td>Vital</td>
+                  <td>Value</td>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  state.vitals.map(vital => {
+                    return <tr>
+                      <td>{vital.name}</td>
+                      <td>{vital.value}</td>
+                    </tr>;
+                  })
+                }
+              </tbody>
+            </table>
+            <br/>
+            <br/>
+            <table id="physical-exam-findings-table" className="physical-exam-table">
+              <thead>
+                <tr>
+                  <td className="physical-exam-table-right-align">Body Part</td>
+                  <td>Value</td>
+                  <td>Edit</td>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  state.components.map(c => {
+                    return <tr>
+                      <td className="physical-exam-table-right-align">
+                        {getBodyPartCell(dispatch, c)}
+                      </td>
+                      <td className={"physical-exam-findings-value" + (!c.editable ? " physical-exam-grayed-out" : "")}>
+                        {createFindingFromComponent(dispatch, c)}
+                      </td>
+                      <td>
+                        {!c.editable && <button onClick={(e) => addNewFinding(dispatch, c)}>Customize</button>}
+                      </td>
+                    </tr>;
+                  })
+                }
+              </tbody>
+            </table>
+            <button className="physical-exam-button" onClick={(e) => addPhysicalComponent(dispatch)}>Add Physical Component</button>
           </div>
         </div>
       </CSSTransition>

@@ -1,0 +1,59 @@
+@import "../app.scss";
+
+.physical-exam-table-title {
+  font-weight: bold;
+  font-size: 30px;
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+
+.physical-exam-table {
+  // TODO
+}
+
+.physical-exam-table thead tr td {
+  padding: 8px;
+}
+
+.physical-exam-table tbody tr td {
+  font-size: 18px;
+  padding: 8px;
+}
+
+.physical-exam-table button {
+  font-size: 24px;
+  width: 200px;
+}
+
+.physical-exam-table thead {
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.physical-exam-table-right-align {
+  text-align: right;
+}
+
+.physical-exam-findings-value {
+  min-width: 400px;
+}
+
+.physical-exam-grayed-out {
+  background-color: lightgray;
+}
+
+.physical-exam-button {
+  color: white;
+  background-color: $color-primary-dim;
+  height: 90px;
+  width: 450px;
+  margin: 20px;
+  font-size: 35px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+
+.physical-exam-button:hover {
+  background-color: $color-primary;
+}

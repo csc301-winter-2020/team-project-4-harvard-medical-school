@@ -12,6 +12,7 @@ $color-primary-dim: #791523;
 $imported-font: "Poppins", sans-serif;
 $serif-font: "Roboto Slab", serif;
 $merriweather-font: "Merriweather", serif;
+$background-dim: #ccc;
 
 * {
   padding: 0;
@@ -20,7 +21,7 @@ $merriweather-font: "Merriweather", serif;
 }
 
 body{
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .my-class {

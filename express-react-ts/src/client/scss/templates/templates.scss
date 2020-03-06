@@ -1,11 +1,13 @@
 @import "../app.scss";
 
 .templates-outermost{
-  background-color: #ccc; 
+  background-color: $background-dim; 
+  
 }
 
 .templates-main-container{
   position: relative;
+  overflow-y: scroll;
   padding: 50px;
   margin: auto;
   width: 900px;

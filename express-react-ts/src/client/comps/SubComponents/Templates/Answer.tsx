@@ -8,13 +8,14 @@ import { Question } from "./Questions";
 interface AnswerProps {
   question: Question;
   questionNum: number;
+  isShowing: boolean;
 }
 
-export const Answers: React.FC<AnswerProps> = ({ question, questionNum }) => {
+export const Answers: React.FC<AnswerProps> = ({ question, questionNum, isShowing }) => {
   return (
     <Droppable droppableId={`droppable${question.id}`} type={`${questionNum}`}>
       {(provided, snapshot) => (
-        <div
+        (isShowing && <div
           ref={provided.innerRef}
           style={getAnswerListStyle(snapshot.isDraggingOver)}
         >
@@ -33,12 +34,9 @@ export const Answers: React.FC<AnswerProps> = ({ question, questionNum }) => {
                       snapshot.isDragging,
                       provided.draggableProps.style
                     )}
+                    {...provided.dragHandleProps}
                   >
-                    <span {...provided.dragHandleProps}>
-                      <span style={{ float: "left" }}>
-                        <FontAwesomeIcon icon={"grip-vertical"} />
-                      </span>
-                    </span>
+                    
                     {answer}
                   </div>
                 )}
@@ -46,7 +44,7 @@ export const Answers: React.FC<AnswerProps> = ({ question, questionNum }) => {
             );
           })}
           {provided.placeholder}
-        </div>
+        </div>)
       )}
     </Droppable>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   DragDropContext,
   Droppable,
@@ -10,16 +10,20 @@ import {
   reorder,
   getItemStyle,
   getQuestionListStyle,
+  nameToUrl,
+  scrollIntoView,
 } from "../../../utils/utils";
 import { Answers } from "./Answer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { dummyTemplates } from "../../../utils/dummyTemplates";
 import { TemplateAssignment } from "../../Pages/TemplatesPage";
 import { Header } from "../Header";
+import { contentType } from "../../../utils/types";
+import { DraggableQuestion } from "./DraggableQuestion";
 
 export type Question = {
   id: string;
-  content: string;
+  content: contentType;
   answers: string[];
 };
 
@@ -34,7 +38,7 @@ function getFieldNames(fields: TemplateAssignment[]): string[] {
 const getQuestions = (count: number): Question[] =>
   Array.from({ length: count }, (v, k) => k).map(k => ({
     id: `question-${k}`,
-    content: `${dummyTemplates[0].template[k].title}`,
+    content: dummyTemplates[0].template[k].title,
     answers: getFieldNames(dummyTemplates[0].template[k].fields),
   }));
 
@@ -67,59 +71,70 @@ export const Questions: React.FC = () => {
   }
 
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
+  const [searchVal, setSearchVal] = useState("");
+
+  useEffect(() => {
+    const lower: string = searchVal.toLowerCase();
+    if (lower === "") {
+    } else if ("demographics".includes(lower)) {
+      scrollIntoView("demographics");
+    } else if ("social history".includes(lower)) {
+      scrollIntoView("social");
+    } else if ("family history".includes(lower)) {
+      scrollIntoView("family");
+    } else if ("past medical history".includes(lower)) {
+      scrollIntoView("pastmedical");
+    } else if ("imaging results".includes(lower)) {
+      scrollIntoView("imaging");
+    } else if ("assessment and plan".includes(lower)) {
+      scrollIntoView("assessment");
+    } else if (
+      "chief complaint and history of present illness".includes(lower) ||
+      "cchpi".includes(lower)
+    ) {
+      scrollIntoView("cchpi");
+    } else if ("lab results".includes(lower)) {
+      scrollIntoView("lab");
+    } else if ("review of systems".includes(lower)) {
+      scrollIntoView("reviewofsystems");
+    } else if ("physical examination".includes(lower)) {
+      scrollIntoView("physical");
+    }
+  }, [searchVal]);
 
   return (
     <>
       <Header
         isAvatarPopup={isAvatarPopup}
-        placeholder=""
+        placeholder="Search Template Contents"
         setIsAvatarPopup={setIsAvatarPopup}
-        showSearch={false}
+        showSearch={true}
+        searchValue={searchVal}
+        setSearchValue={setSearchVal}
       />
-      <div className="templates-main-container">
-        <div className="templates-title">
-          <h1>{dummyTemplates[0].template_name}</h1>
-        </div>
+      <div className="templates-outermost">
+        <div className="templates-main-container">
+          <div className="templates-title">
+            <h1>{dummyTemplates[0].template_name}</h1>
+          </div>
 
-        <div className="home-page-separator-line"></div>
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="droppable" type="QUESTIONS">
-            {(provided, snapshot) => (
-              <div
-                ref={provided.innerRef}
-                style={getQuestionListStyle(snapshot.isDraggingOver)}
-              >
-                {questions.map((question: Question, index: number) => (
-                  <Draggable
-                    key={question.id}
-                    draggableId={question.id}
-                    index={index}
-                  >
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        style={getItemStyle(
-                          snapshot.isDragging,
-                          provided.draggableProps.style
-                        )}
-                      >
-                        {question.content}
-                        <span {...provided.dragHandleProps}>
-                          <span style={{ float: "left" }}>
-                            <FontAwesomeIcon icon={"grip-vertical"} />
-                          </span>
-                        </span>
-                        <Answers questionNum={index} question={question} />
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
+          <div className="home-page-separator-line"></div>
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="droppable" type="QUESTIONS">
+              {(provided, snapshot) => (
+                <div
+                  ref={provided.innerRef}
+                  style={getQuestionListStyle(snapshot.isDraggingOver)}
+                >
+                  {questions.map((question: Question, index: number) => (
+                    <DraggableQuestion question={question} index={index} key={index}/>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </div>
       </div>
     </>
   );

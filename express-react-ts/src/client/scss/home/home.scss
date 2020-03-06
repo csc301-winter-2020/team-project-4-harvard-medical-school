@@ -11,6 +11,10 @@
   grid-template-rows: 50px;
 }
 
+.home-page-outermost{
+  background-color: $background-dim;
+}
+
 .home-page-header-logo-container {
   cursor: pointer;
   height: 50px;
@@ -143,11 +147,15 @@ input:focus {
 
 .home-page-content-container {
   width: 70%;
-  margin: auto;
+  padding-right: 10px;
+  margin-left: 15%;
+  background-color: white;
+  padding-top: 20px;
+  box-shadow: 12px 0 15px -4px rgba(0, 0, 0, 0.1),
+    -12px 0 8px -4px rgba(0, 0, 0, 0.1);
 }
 
 .home-page-your-patients-title {
-  margin-top: 20px;
   margin-left: 10px;
   font-size: 3rem;
   font-weight: bold;

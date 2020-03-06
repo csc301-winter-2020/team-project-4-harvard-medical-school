@@ -1,4 +1,5 @@
 import { contentType } from "./types";
+import _ from "underscore";
 
 const dateFormat = require("dateformat");
 const dateStringFull = "mmmm d, yyyy";
@@ -65,7 +66,7 @@ export const getItemStyle = (isDragging:boolean, draggableStyle:any) => {
     userSelect: "none",
     padding: grid * 2,
     margin: `0 0 ${grid}px 0`,
-    textAlign: "right",
+    textAlign: "left",
 
     // change background colour if dragging
     background: isDragging ? "lightgreen" : "white",
@@ -100,3 +101,9 @@ export const urlToName: { [url: string]: contentType } = {
   "lab": "Lab Results",
   "assessment": "Assessment & Plan",
 };
+
+export const nameToUrl: {[name in contentType]: string} = _.invert(urlToName);
+
+export function scrollIntoView(id: string){
+  document.querySelector(`#${id}-draggable`).scrollIntoView();
+}

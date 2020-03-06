@@ -5,9 +5,17 @@ import { useHistory } from "react-router";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import '../../../scss/patient-profiles/patient-physical-form.scss'
 
-type PhysicalExamVital = {
-  name: string,
-  value: string
+type PhysicalExamVitals = {
+  bloodPressure: string,
+  heartRate: number,
+  oxygenSaturation: number,
+  temperature: number,
+  respiratoryRate: number,
+  oxygenSupplement?: string,
+  weight?: number,
+  height?: number,
+  bmi?: number,
+  painScore?: number
 };
 
 // An empty string for the body part and status is allowed, and implies it may
@@ -25,21 +33,19 @@ type PhysicalExamComponent = {
 }
 
 type PhysicalExamState = {
-  vitals: PhysicalExamVital[];
+  vitals: PhysicalExamVitals;
   components: PhysicalExamComponent[];
 };
 
 const initialState: PhysicalExamState = {
-  vitals: [
-    {
-      name: "Blood pressure",
-      value: "120 / 80"
-    },
-    {
-      name: "Heart rate",
-      value: "70 bpm"
-    }
-  ],
+  vitals: {
+    bloodPressure: "120 / 80",
+    heartRate: 70,
+    oxygenSaturation: 95.0,
+    temperature: 101.5,
+    respiratoryRate: 1,
+    bmi: 21
+  },
   components: [
     {
       bodyPart: "Head",
@@ -160,6 +166,17 @@ function getBodyPartCell(dispatch, physicalComp: PhysicalExamComponent) {
   return <span>{physicalComp.bodyPart}</span>;
 }
 
+function getVitalTableRow(name: string, value?: any, unit?: string) {
+  if (value) {
+    return <tr>
+      <td>{name}</td>
+      <td>{value} {unit || ''}</td>
+    </tr>
+  }
+
+  return <></>;
+}
+
 export const PhysicalExaminationPage: IndividualPatientProfile = ({
   pageName,
   currentPage,
@@ -198,14 +215,16 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
                 </tr>
               </thead>
               <tbody>
-                {
-                  state.vitals.map(vital => {
-                    return <tr key={vital.name}>
-                      <td>{vital.name}</td>
-                      <td>{vital.value}</td>
-                    </tr>;
-                  })
-                }
+                {getVitalTableRow('Blood Pressure', state.vitals.bloodPressure)}
+                {getVitalTableRow('Heart Rate', state.vitals.heartRate, 'bpm')}
+                {getVitalTableRow('Oxygen Saturation', state.vitals.oxygenSaturation, '%')}
+                {getVitalTableRow('Temperature', state.vitals.temperature, 'F')}
+                {getVitalTableRow('Respiratory Rate', state.vitals.respiratoryRate, '(unit)')}
+                {getVitalTableRow('Oxygen Supplement', state.vitals.oxygenSupplement)}
+                {getVitalTableRow('Weight', state.vitals.weight)}
+                {getVitalTableRow('Height', state.vitals.height)}
+                {getVitalTableRow('BMI', state.vitals.bmi)}
+                {getVitalTableRow('Pain Score', state.vitals.painScore)}
               </tbody>
             </table>
             <br/>

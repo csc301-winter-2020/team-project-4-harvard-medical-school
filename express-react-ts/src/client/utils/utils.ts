@@ -85,7 +85,7 @@ export const getAnswerListStyle = (isDraggingOver:boolean) => ({
   background: isDraggingOver ? "lightblue" : "lightgrey",
   padding: 4,
   marginTop: 10,
-  width: "calc(100% - 40px)";
+  width: "calc(100% - 40px)",
 });
 
 export const urlToName: { [url: string]: contentType } = {

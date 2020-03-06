@@ -1,24 +1,19 @@
 // Require our dependencies.
-import * as express from "express";
-import * as session from "express-session";
+import { Application, Response, Request } from "express";
 import * as path from "path";
 import * as passport from "passport";
 import * as dotenv from "dotenv";
 import * as bodyParser from "body-parser";
-import * as chalk from "chalk";
 import apiRouter from "./routes/apiRouter";
 import loginRegisterRouter from "./routes/loginRegisterRouter";
+const express = require("express");
+const session = require("express-session");
 const { Pool, Client } = require("pg");
 const vision = require("@google-cloud/vision");
-const aws = require("aws-sdk")
+const aws = require("aws-sdk");
 import * as fs from "fs";
 // import Any = jasmine.Any;
 dotenv.config();
-
-// Alias our types
-type Application = express.Application;
-type Request = express.Request;
-type Response = express.Response;
 
 // Database Connection
 // const pool: Pool = new Pool();
@@ -122,9 +117,5 @@ app.get("*", (req: Request, res: Response) => {
 // Listen on port 3000, or on process.env.PORT which will be set accordingly by heroku during deployment.
 const port: string | number = process.env.PORT || 3000;
 app.listen(port, () =>
-  console.log(
-    chalk.white.bgCyan.bold(
-      `Server listening on port ${port} in ${app.settings.env} mode.`
-    )
-  )
+  console.log(`Server listening on port ${port} in ${app.settings.env} mode.`)
 );

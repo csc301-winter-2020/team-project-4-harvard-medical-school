@@ -1,22 +1,27 @@
-import React, {useEffect, useReducer} from "react";
+import React, { useEffect, useReducer } from "react";
 import { CSSTransition } from "react-transition-group";
 import { IndividualPatientProfile } from "./PatientProfilePage";
 import { useHistory } from "react-router";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
-import '../../../scss/patient-profiles/patient-physical-form.scss'
+import "../../../scss/patient-profiles/patient-physical-form.scss";
 
 type PhysicalExamVitals = {
-  bloodPressure: string,
-  heartRate: number,
-  oxygenSaturation: number,
-  temperature: number,
-  respiratoryRate: number,
-  oxygenSupplement?: string,
-  weight?: number,
-  height?: number,
-  bmi?: number,
-  painScore?: number
+  bloodPressure: string;
+  heartRate: number;
+  oxygenSaturation: number;
+  temperature: number;
+  respiratoryRate: number;
+  oxygenSupplement?: string;
+  weight?: number;
+  height?: number;
+  bmi?: number;
+  painScore?: number;
 };
+
+type physicalExamDispatch = React.Dispatch<{
+  type: string;
+  bodyPart: string;
+}>;
 
 // An empty string for the body part and status is allowed, and implies it may
 // be edited by a textbox/canvas (and we are in the process of figuring out
@@ -30,7 +35,7 @@ type PhysicalExamComponent = {
   status: string;
   custom: boolean;
   editable: boolean;
-}
+};
 
 type PhysicalExamState = {
   vitals: PhysicalExamVitals;
@@ -44,22 +49,22 @@ const initialState: PhysicalExamState = {
     oxygenSaturation: 95.0,
     temperature: 101.5,
     respiratoryRate: 1,
-    bmi: 21
+    bmi: 21,
   },
   components: [
     {
       bodyPart: "Head",
       status: "Normocephalic",
       custom: false,
-      editable: false
+      editable: false,
     },
     {
       bodyPart: "Eyes",
       status: "Accommodate to light",
       custom: false,
-      editable: false
-    }
-  ]
+      editable: false,
+    },
+  ],
 };
 
 function reducer(
@@ -70,19 +75,19 @@ function reducer(
   let successfulAction = false;
 
   switch (action.type) {
-    case 'newBodyPart':
+    case "newBodyPart":
       newState.components.push({
         bodyPart: "",
         status: "",
         custom: true,
-        editable: true
+        editable: true,
       });
       successfulAction = true;
       break;
-    case 'makeEditable':
+    case "makeEditable":
       newState.components.forEach(c => {
         if (c.bodyPart === action.bodyPart) {
-          c.status = '';
+          c.status = "";
           c.editable = true;
           successfulAction = true;
         }
@@ -96,7 +101,7 @@ function reducer(
   // part that does not exist (ex: someone wants to edit an `Eyes` body part
   // but no such one exists). This should only be triggered on developer error.
   if (!successfulAction) {
-    throw new Error('Action was missing required elements.');
+    throw new Error("Action was missing required elements.");
   }
 
   return newState;
@@ -106,17 +111,18 @@ function reducer(
 // that comes from the database has to have a name. Note: This does not
 // guarantee uniqueness. It is up to the caller to make sure of this.
 // TODO: This might have to be removed since it may end up being pointless.
-function nameToID(name) {
-  return name.toLowerCase().replace(' ', '-');
+function nameToID(name:string) {
+  return name.toLowerCase().replace(" ", "-");
 }
 
-function createFindingFromComponent(dispatch, c: PhysicalExamComponent) {
-  if (c.status !== '') {
+function createFindingFromComponent(dispatch:physicalExamDispatch, c: PhysicalExamComponent) {
+  if (c.status !== "") {
     return <b>{c.status}</b>;
   }
 
   // TODO: Note that the bodyPart is probably empty, which affects the ID.
-  return <PatientFormInput
+  return (
+    <PatientFormInput
       dispatch={dispatch}
       id={nameToID(c.bodyPart)}
       inputType={"text"}
@@ -130,37 +136,46 @@ function createFindingFromComponent(dispatch, c: PhysicalExamComponent) {
       canvasHeight={200}
       canvasWidth={800}
       isTextArea={true}
-    />;
+    />
+  );
 }
 
-function addNewFinding(dispatch, physicalComp: PhysicalExamComponent) {
-  dispatch({ type: 'makeEditable', bodyPart: physicalComp.bodyPart });
+function addNewFinding(
+  dispatch: physicalExamDispatch,
+  physicalComp: PhysicalExamComponent
+) {
+  dispatch({ type: "makeEditable", bodyPart: physicalComp.bodyPart });
 }
 
-function addPhysicalComponent(dispatch) {
-  dispatch({ type: 'newBodyPart', bodyPart: '' });
+function addPhysicalComponent(dispatch: physicalExamDispatch) {
+  dispatch({ type: "newBodyPart", bodyPart: "" });
 }
 
-function getBodyPartCell(dispatch, physicalComp: PhysicalExamComponent) {
+function getBodyPartCell(
+  dispatch: physicalExamDispatch,
+  physicalComp: PhysicalExamComponent
+) {
   if (physicalComp.custom) {
     // TODO: Note that the bodyPart can be empty, which may affect the ID.
-    return <span>
-      <PatientFormInput
-        dispatch={dispatch}
-        id={nameToID(physicalComp.bodyPart)}
-        inputType={"text"}
-        inputVal={""}
-        placeholder={"Enter text here"}
-        title={""}
-        isShowingCanvas={true}
-        isShowingText={false}
-        setIsShowingCanvas={() => {}}
-        setIsShowingText={() => {}}
-        canvasHeight={200}
-        canvasWidth={400}
-        isTextArea={true}
-      />
-    </span>
+    return (
+      <span>
+        <PatientFormInput
+          dispatch={dispatch}
+          id={nameToID(physicalComp.bodyPart)}
+          inputType={"text"}
+          inputVal={""}
+          placeholder={"Enter text here"}
+          title={""}
+          isShowingCanvas={true}
+          isShowingText={false}
+          setIsShowingCanvas={() => {}}
+          setIsShowingText={() => {}}
+          canvasHeight={200}
+          canvasWidth={400}
+          isTextArea={true}
+        />
+      </span>
+    );
   }
 
   return <span>{physicalComp.bodyPart}</span>;
@@ -168,10 +183,14 @@ function getBodyPartCell(dispatch, physicalComp: PhysicalExamComponent) {
 
 function getVitalTableRow(name: string, value?: any, unit?: string) {
   if (value) {
-    return <tr>
-      <td>{name}</td>
-      <td>{value} {unit || ''}</td>
-    </tr>
+    return (
+      <tr>
+        <td>{name}</td>
+        <td>
+          {value} {unit || ""}
+        </td>
+      </tr>
+    );
   }
 
   return <></>;
@@ -183,7 +202,7 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
   setCurrentPage,
   transitionDuration,
   transitionName,
-  patientID
+  patientID,
 }) => {
   const history = useHistory();
   useEffect(() => {
@@ -207,7 +226,10 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
         <div className="physical-examination-history-page-outermost-container patient-profile-window">
           <div className="patient-profile-page-title">
             <h1>{pageName}</h1>
-            <table id="physical-exam-vitals-table" className="physical-exam-table">
+            <table
+              id="physical-exam-vitals-table"
+              className="physical-exam-table"
+            >
               <thead>
                 <tr>
                   <td>Vital</td>
@@ -215,21 +237,35 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
                 </tr>
               </thead>
               <tbody>
-                {getVitalTableRow('Blood Pressure', state.vitals.bloodPressure)}
-                {getVitalTableRow('Heart Rate', state.vitals.heartRate, 'bpm')}
-                {getVitalTableRow('Oxygen Saturation', state.vitals.oxygenSaturation, '%')}
-                {getVitalTableRow('Temperature', state.vitals.temperature, 'F')}
-                {getVitalTableRow('Respiratory Rate', state.vitals.respiratoryRate, '(unit)')}
-                {getVitalTableRow('Oxygen Supplement', state.vitals.oxygenSupplement)}
-                {getVitalTableRow('Weight', state.vitals.weight)}
-                {getVitalTableRow('Height', state.vitals.height)}
-                {getVitalTableRow('BMI', state.vitals.bmi)}
-                {getVitalTableRow('Pain Score', state.vitals.painScore)}
+                {getVitalTableRow("Blood Pressure", state.vitals.bloodPressure)}
+                {getVitalTableRow("Heart Rate", state.vitals.heartRate, "bpm")}
+                {getVitalTableRow(
+                  "Oxygen Saturation",
+                  state.vitals.oxygenSaturation,
+                  "%"
+                )}
+                {getVitalTableRow("Temperature", state.vitals.temperature, "F")}
+                {getVitalTableRow(
+                  "Respiratory Rate",
+                  state.vitals.respiratoryRate,
+                  "(unit)"
+                )}
+                {getVitalTableRow(
+                  "Oxygen Supplement",
+                  state.vitals.oxygenSupplement
+                )}
+                {getVitalTableRow("Weight", state.vitals.weight)}
+                {getVitalTableRow("Height", state.vitals.height)}
+                {getVitalTableRow("BMI", state.vitals.bmi)}
+                {getVitalTableRow("Pain Score", state.vitals.painScore)}
               </tbody>
             </table>
-            <br/>
-            <br/>
-            <table id="physical-exam-findings-table" className="physical-exam-table">
+            <br />
+            <br />
+            <table
+              id="physical-exam-findings-table"
+              className="physical-exam-table"
+            >
               <thead>
                 <tr>
                   <td className="physical-exam-table-right-align">Body Part</td>
@@ -238,24 +274,38 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
                 </tr>
               </thead>
               <tbody>
-                {
-                  state.components.map(c => {
-                    return <tr key={c.bodyPart}>
+                {state.components.map(c => {
+                  return (
+                    <tr key={c.bodyPart}>
                       <td className="physical-exam-table-right-align">
                         {getBodyPartCell(dispatch, c)}
                       </td>
-                      <td className={"physical-exam-findings-value" + (!c.editable ? " physical-exam-grayed-out" : "")}>
+                      <td
+                        className={
+                          "physical-exam-findings-value" +
+                          (!c.editable ? " physical-exam-grayed-out" : "")
+                        }
+                      >
                         {createFindingFromComponent(dispatch, c)}
                       </td>
                       <td>
-                        {!c.editable && <button onClick={(e) => addNewFinding(dispatch, c)}>Customize</button>}
+                        {!c.editable && (
+                          <button onClick={e => addNewFinding(dispatch, c)}>
+                            Customize
+                          </button>
+                        )}
                       </td>
-                    </tr>;
-                  })
-                }
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
-            <button className="physical-exam-button" onClick={(e) => addPhysicalComponent(dispatch)}>Add Physical Component</button>
+            <button
+              className="physical-exam-button"
+              onClick={e => addPhysicalComponent(dispatch)}
+            >
+              Add Physical Component
+            </button>
           </div>
         </div>
       </CSSTransition>

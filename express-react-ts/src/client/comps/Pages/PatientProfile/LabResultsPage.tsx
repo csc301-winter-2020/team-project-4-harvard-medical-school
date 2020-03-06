@@ -38,7 +38,7 @@ function reducer(
   state: LabResultsState,
   action: { type: string, fieldName?: string, value: string }
 ): LabResultsState {
-  let newState = JSON.parse(JSON.stringify(state));
+  let newState:LabResultsState = JSON.parse(JSON.stringify(state));
   switch (action.type) {
     case "addEntry":
       newState.data.push({
@@ -59,21 +59,21 @@ function reducer(
     case "updateValue":
       newState.data.forEach(result => {
         if (result.name === action.fieldName) {
-          result.value = action.value;
+          result.value = Number(action.value);
         }
       });
       break;
     case "updateLower":
       newState.data.forEach(result => {
         if (result.name === action.fieldName) {
-          result.lower = action.value;
+          result.lower = Number(action.value);
         }
       });
       break;
     case "updateUpper":
       newState.data.forEach(result => {
         if (result.name === action.fieldName) {
-          result.upper = action.value;
+          result.upper = Number(action.value);
         }
       });
       break;

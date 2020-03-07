@@ -105,6 +105,22 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
     setCurrentPage(contents[newIndex]);
   };
 
+  async function postData(url:string, data:any){
+    const response = await fetch(url, {
+      method: 'POST', 
+      mode: 'cors', 
+      cache: 'no-cache', 
+      credentials: 'same-origin', 
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      redirect: 'follow', // manual, *follow, error
+      referrerPolicy: 'no-referrer', // no-referrer, *client
+      body: JSON.stringify(data) // body data type must match "Content-Type" header
+    });
+    return await response.json(); 
+  }
+
   // Observer for currentPage
   useEffect(() => {
     setPrevPage(currentPage);
@@ -230,12 +246,10 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
             {initNavDots()}
           </div>
           <div className="patient-profile-nav-btns">
-            <div className="nav-btn-help nav-btn">
+            <div className="nav-btn-leftmost nav-btn">
               <FontAwesomeIcon icon="question-circle" size="2x" />
             </div>
-            <div className="nav-btn-save nav-btn">
-              <FontAwesomeIcon icon="save" size="2x" />
-            </div>
+ 
             <div
               className="nav-btn-left nav-btn"
               onClick={() => {

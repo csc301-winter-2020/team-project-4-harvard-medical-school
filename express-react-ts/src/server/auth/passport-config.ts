@@ -19,16 +19,13 @@ function getUserByUsername(username: string) {
       .connect()
       .then((client: any) => {
         const query: string =
-          "SELECT id, username, password FROM csc301db.users WHERE username = $1";
+          "SELECT id, username, password, default_mode, default_sidebar FROM csc301db.users WHERE username = $1";
         return client.query(query, [username]);
       })
       .then((result: any) => {
+        console.log(result);
         if (result.rowCount == 1) {
-          resolve({
-            id: result.rows[0].id,
-            username: result.rows[0].username,
-            password: result.rows[0].password,
-          });
+          resolve(result.rows[0]);
         } else {
           resolve(null);
         }
@@ -61,11 +58,7 @@ function getUserById(id: number) {
       })
       .then((result: any) => {
         if (result.rowCount == 1) {
-          resolve({
-            id: result.rows[0].id,
-            username: result.rows[0].username,
-            password: result.rows[0].password,
-          });
+          resolve(result.rows[0]);
         } else {
           resolve(null);
         }

@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import { IndividualPatientProfile } from "./PatientProfilePage";
 import { useHistory } from "react-router";
@@ -238,14 +238,14 @@ const initialVision: vision = {
   decreaseInVision: false,
   increaseInVision: false,
   blurriness: false,
-  pain: false,
+  painVision: false,
   doubleVision: false,
   eyeDischarge: false,
   redEye: false,
 };
 
 const initialHeadNeck: headNeck = {
-  pain: false,
+  painHeadNeck: false,
   soresInMouth: false,
   soresAroundMouth: false,
   ulcersInMouth: false,
@@ -399,145 +399,6 @@ const initialState: ReviewOfSystemsState = {
 
 type nameMap = {
   [key:string]: string
-  // endocrine: string
-  // vision: string
-  // headNeck: string
-  // pulmonary: string
-  // cardiovascular: string
-  // gastrointestinal: string
-  // gynaecological: string
-  // hematology: string
-  // neurological: string
-  // musculoskeletal: string
-  // mental: string
-  // skinHair: string
-
-  // weightLoss: string
-  // weightGain: string
-  // fatigue: string
-  // difficultySleeping: string
-  // feelingUnwell: string
-  // chronicPain: string
-  // fevers: string
-  // chills: string
-  // sweatsEndocrine: string
-  // lossOfAppetite: string
-  // heatIntolerance: string
-  // coldIntolerance: string
-  // polyphagia: string
-  // polydipsia: string
-  // decreaseInVision: string
-  // increaseInVision: string
-  // blurriness: string
-  // pain: string
-  // doubleVision: string
-  // eyeDischarge: string
-  // redEye: string
-  // soresInMouth: string
-  // soresAroundMouth: string
-  // ulcersInMouth: string
-  // ulcersAroundMouth: string
-  // masses: string
-  // growths: string
-  // acuityChange: string
-  // earPain: string
-  // earDischarge: string
-  // nasalDischarge: string
-  // voiceChange: string
-  // hoarseness: string
-  // toothPain: string
-  // lumpInThroat: string
-  // chestPainPulmonary: string
-  // cough: string
-  // haemoptysis: string
-  // wheezing: string
-  // snoring: string
-  // aponoea: string
-  // chestPainCardiovascular: string
-  // chestPressure: string
-  // shortBreathRest: string
-  // shortBreathExertion: string
-  // orthopnoea: string
-  // paroxysmal: string
-  // lowerOedema: string
-  // lossOfConsciousnessCardiovascular: string
-  // palpitation: string
-  // legPain: string
-  // legCramps: string
-  // ulcersOnFeet: string
-  // woundsOnFeet: string
-  // substernalPain: string
-  // abdominalPain: string
-  // difficultySwallowing: string
-  // painSwallowing: string
-  // nausea: string
-  // vomiting: string
-  // vomitingBlood: string
-  // abdominalSwelling: string
-  // jaundice: string
-  // blackStools: string
-  // bloodyStools: string
-  // constipation: string
-  // diarrhoea: string
-  // changesInBowelHabits: string
-  // polyuria: string
-  // bloodyUrine: string
-  // buringUrination: string
-  // incontinence: string
-  // urgentUrination: string
-  // frequentUrination: string
-  // incompleteEmptying: string
-  // hesitance: string
-  // decreasedForce: string
-  // needVoid: string
-  // erectileDysfunction: string
-  // penileDischarge: string
-  // penilePain: string
-  // testicularPain: string
-  // testicularSwelling: string
-  // penileUlcers: string
-  // penileGrowths: string
-  // sweatsGynaecological: string
-  // pastPregnancies: string
-  // vaginalDischarge: string
-  // menstruationCessation: string
-  // menstruationIrregularity: string
-  // breastPain: string
-  // breastDischarge: string
-  // breastMass: string
-  // abnormalBleeding: string
-  // abnormalBruising: string
-  // newLumps: string
-  // lossOfConsciousnessNeurological: string
-  // seizureActivity: string
-  // numbness: string
-  // weakness: string
-  // dizziness: string
-  // balanceProblems: string
-  // headaches: string
-  // muscleAches: string
-  // jointPain: string
-  // jointSwelling: string
-  // lowBackPain: string
-  // kneePain: string
-  // kneeSwelling: string
-  // handPain: string
-  // handSwelling: string
-  // elbowPain: string
-  // elbowSwelling: string
-  // hipPain: string
-  // hipSwelling: string
-  // shoulderPain: string
-  // shoulderSwelling: string
-  // memory: string
-  // confusion: string
-  // anxiety: string
-  // hairLoss: string
-  // skinEruptions: string
-  // rashes: string
-  // growingSores: string
-  // lesions: string
-  // itching: string
 }
 
 const nameMap: nameMap = {
@@ -571,10 +432,11 @@ const nameMap: nameMap = {
   decreaseInVision: 'Decrease In Vision',
   increaseInVision: 'Increase In Vision',
   blurriness: 'Blurriness',
-  pain: 'Pain',
+  painVision: 'Pain',
   doubleVision: 'Double Vision',
   eyeDischarge: 'Eye Discharge',
   redEye: 'Red Eye',
+  painHeadNeck: 'Pain',
   soresInMouth: 'Sores In Mouth',
   soresAroundMouth: 'Sores Around Mouth',
   ulcersInMouth: 'Ulcers In Mouth',
@@ -682,6 +544,20 @@ const nameMap: nameMap = {
   itching: 'Itching'
 }
 
+async function getPatientInfo(patientID: number){
+  const res = await fetch(`/api/patientprofile/${patientID}`, {method: 'GET'})
+  return await res.json()
+}
+
+async function postReviewOfSystemsInfo(patientID: number, data: ReviewOfSystemsState){
+  const spec = {
+    method: 'POST',
+    body: JSON.stringify(data)
+  }
+  const res = await fetch(`/api/patientprofile/${patientID}`, spec)
+  return await res.json()
+}
+
 export const ReviewOfSystemsPage: IndividualPatientProfile = ({
   pageName,
   currentPage,
@@ -690,26 +566,41 @@ export const ReviewOfSystemsPage: IndividualPatientProfile = ({
   transitionName,
   patientID,
 }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const [gender, setGender] = useState('undefined');
+  const [patientInfo, setPatientInfo] = useState({});
+
   const history = useHistory();
   useEffect(() => {
     if (currentPage === pageName) {
       document.title = `Patient Profile: ${pageName}`;
       history.push(`/patient/${patientID}/reviewofsystems`);
+      //get the gender of the patient
+      getPatientInfo(patientID).then((data) => {
+        setPatientInfo(data)
+        setGender(data.gender)
+      })
     }
   }, [currentPage]);
 
-  // intelligent form specifications
-  type dependencies = {
-    [key:string]: [string]
-    // weightLoss: [string]
-    // weightGain: [string]
-    // decreaseInVision: [string]
-    // increaseInVision: [string]
-    // polyphagia: [string]
-    // polydipsia: [string]
+  const postToDB = () => {
+    // update the patient information to match the current Review of Systems form
+    const patientInfoTemp: {[key:string]:boolean} = patientInfo
+    Object.keys(state).map((category: string) => {
+      Object.keys(state).map((symptomName: string) => {
+        patientInfoTemp[symptomName] = state[category][symptomName]
+      })
+    })
+    setPatientInfo(patientInfoTemp)
+    // POST request to update the patient information
+    postReviewOfSystemsInfo(patientID, patientInfo).then((data) => {
+      //TODO : do something here??
+      console.log(data)
+    })
   }
 
-  const dependencies: dependencies = {
+  // intelligent form specifications
+  const dependencies: {[key:string]: [string]} = {
     weightLoss: ['weightGain'],
     weightGain: ['weightLoss'],
     decreaseInVision: ['increaseInVision'],
@@ -718,12 +609,34 @@ export const ReviewOfSystemsPage: IndividualPatientProfile = ({
     polydipsia: ['polyphagia']
   }
 
+  const genderRelatedSymptoms: {[key:string]: string}= {
+    erectileDysfunction: 'Male',
+    penileDischarge: 'Male',
+    penilePain: 'Male',
+    testicularPain: 'Male',
+    testicularSwelling: 'Male',
+    penileUlcers: 'Male',
+    penileGrowths: 'Male',
+    sweatsGynaecological: 'Female',
+    pastPregnancies: 'Female',
+    vaginalDischarge: 'Female',
+    menstruationCessation: 'Female',
+    menstruationIrregularity: 'Female',
+    breastPain: 'Female',
+    breastDischarge: 'Female',
+    breastMass: 'Female'
+  }
+  
   function checkDependency(category: category, symptomName: string): boolean{
     return !(symptomName in dependencies) || dependencies[symptomName].reduce((acc: boolean, elem: string) => acc && !category[elem], true)
   }
 
-  const [state, dispatch] = useReducer(reducer, initialState);
-
+  // TODO : send POST request when save button is clicked
+  window.onload = () => {
+    const saveButton = document.querySelector('.nav-btn-save')
+    saveButton.addEventListener('click', () => console.log(state))
+  }
+  
   return (
     <>
       <CSSTransition
@@ -741,42 +654,49 @@ export const ReviewOfSystemsPage: IndividualPatientProfile = ({
             {
               Object.keys(state).map((category: string) => {
                 return (
-                  <>
+                  <div key={category}>
                     <h2>{nameMap[category]}</h2>
                     <br></br>
-                    {Object.keys(state[category]).map((symptomName: string) => {
-                      if (checkDependency(state[category], symptomName)) {
-                        return (
-                          <div className="radio-group">
-                            <label>
-                              <input
-                                type="radio"
-                                name={symptomName}
-                                checked={state[category][symptomName]}
-                                onClick={() =>
-                                  dispatch({
-                                    category: category,
-                                    symptomName: symptomName,
-                                  })
-                                }
-                              />
-                              <p>{nameMap[symptomName]}</p>
-                            </label>
-                          </div>
-                        )
-                      }
-                      return (
-                        <div className="radio-group">
-                          <label>
-                            <p style={{ color: "grey" }}>
-                              {nameMap[symptomName]}
-                            </p>
-                          </label>
-                        </div>
-                      )
-                    })}
+                    {
+                      Object.keys(state[category]).map((symptomName: string) => {
+                        // check for gender-dependent symptoms
+                        if(!(symptomName in genderRelatedSymptoms) || 
+                            (symptomName in genderRelatedSymptoms && genderRelatedSymptoms[symptomName] === gender)){
+                          // check for intelligent form
+                          if(checkDependency(state[category], symptomName)) {
+                            return (
+                              <div className="radio-group" key={symptomName}>
+                                <label>
+                                  <input
+                                    type="radio"
+                                    name={symptomName}
+                                    checked={state[category][symptomName]}
+                                    onClick={() =>
+                                      dispatch({
+                                        category: category,
+                                        symptomName: symptomName,
+                                      })
+                                    }
+                                  />
+                                  <p>{nameMap[symptomName]}</p>
+                                </label>
+                              </div>
+                            )
+                          }
+                          return (
+                            <div className="radio-group" key={symptomName}>
+                              <label>
+                                <p style={{ color: "grey" }}>
+                                  {nameMap[symptomName]}
+                                </p>
+                              </label>
+                            </div>
+                          )
+                        }
+                      })
+                    }
                     <br></br>
-                  </>
+                  </div>
                 )
               })
             }

@@ -82,8 +82,17 @@ const browserRouter: JSX.Element = (
       />
       <Route exact path="/settings" component={SettingsPage} />
       <Route exact path="/templates" component={TemplatesPage} />
-      <Route exact path="/template/:id" render={() => <Questions />} />
-      <Route render={() => <Error errNo={404} />} />
+      <Route
+        exact
+        path="/template/:id"
+        render={(props) => <Questions {...props} useDefault={false}  />}
+      />
+      <Route
+        exact
+        path="/templates/new"
+        render={(props) => <Questions {...props} useDefault={true} />}
+      />
+      <Route render={(props) => <Error {...props} errNo={404} />} />
     </Switch>
   </BrowserRouter>
 );

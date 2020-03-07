@@ -5,6 +5,8 @@ import "../../scss/templates/templates";
 import { contentType } from "../../utils/types";
 import { dummyTemplates } from "../../utils/dummyTemplates";
 import { TemplateRow } from "../SubComponents/Templates/TemplateRow";
+import { max } from "../../utils/utils";
+import { useHistory } from "react-router";
 
 interface TemplatesPageProps {}
 
@@ -28,11 +30,11 @@ export type TemplateAssignment = {
 };
 
 export const TemplatesPage: React.FC<TemplatesPageProps> = ({}) => {
-  
   const [searchValue, setSearchValue] = useState("");
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
   const [templates, setTemplates] = useState(dummyTemplates);
-  
+  const history = useHistory();
+
   return (
     <>
       <Header
@@ -74,9 +76,18 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({}) => {
                   />
                 );
               })}
+            <div
+              className="home-page-content-whitespace"
+              style={{ height: max(window.innerHeight - 400, 0) }}
+            >
+              <div className="home-page-content-whitespace-logo"></div>
+            </div>
           </div>
         </div>
       </div>
+      <div className="template-floating-add-btn" onClick={() => {
+        history.push("/templates/new");
+      }}>New Template</div>
     </>
   );
 };

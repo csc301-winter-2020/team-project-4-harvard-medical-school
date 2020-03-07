@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Template, TemplatePage } from "../../Pages/TemplatesPage";
-import { dateFormatFull } from "../../../utils/utils";
+import { dateFormatFull, dateFormatCompact } from "../../../utils/utils";
 import Popup from "reactjs-popup";
 import { Questions } from "./Questions";
 import { useHistory } from "react-router";
@@ -19,6 +19,17 @@ export const TemplateRow: React.FC<TemplateRowProps> = ({
   id
 }) => {
   const history = useHistory();
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () =>
+      setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    };
+  });
+
   return (
     <>
       <div className="home-patient-profile-container" onClick={() => {
@@ -27,7 +38,7 @@ export const TemplateRow: React.FC<TemplateRowProps> = ({
         <div className="home-patient-profile-name-col">{name}</div>
         <div className="home-patient-profile-date-col"> </div>
         <div className="home-patient-profile-last-modified-col">
-          {dateFormatFull(date)}
+          {windowWidth < 1080 ? dateFormatCompact(date) : dateFormatFull(date)}
         </div>
         <div className="home-patient-profile-info-btn">
           <div className="home-patient-profile-info-icon"></div>

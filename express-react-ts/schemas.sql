@@ -143,3 +143,9 @@ CREATE TABLE review_of_systems (
 );
 
 INSERT INTO review_of_systems (patient_id, info) VALUES (1, '{"key": "value"}');
+
+CREATE TABLE lab_results (
+    id SERIAL PRIMARY KEY,
+    patient_id INT,
+    info JSON
+);

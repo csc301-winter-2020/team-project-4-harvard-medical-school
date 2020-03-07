@@ -320,6 +320,40 @@ router.post('/api/reviewOfSystems/:patientId', (req:Request, res:Response, next:
     })
 });
 
+router.get('/api/labResults/:patientId', (req:Request, res:Response, next:NextFunction)=>{
+    const patientId: number = parseInt(req.params.patientId);
+    pool.connect().then((client) => {
+        const query_string: string = "SELECT info FROM csc301db.lab_results\
+         WHERE patient_id = $1";
+        return client.query(query_string, [patientId]);
+    }).then((result) => {
+        if (result.rowCount === 0) {
+            res.status(404).send();
+        } else {
+            res.status(200).json(result.rows[0].info);
+        }
+    })
+});
+
+router.post('/api/labResults/:patientId', (req:Request, res:Response, next:NextFunction)=>{
+    const patientId: number = parseInt(req.params.patientId);
+    pool.connect().then((client) => {
+        const delete_string: string = "DELETE FROM csc301db.lab_results \
+        WHERE patient_id = $1";
+        return client.query(delete_string, [patientId]);
+    }).then((result) => {
+        return pool.connect();
+    }).then((client) => {
+        const insert_string: string = "INSERT INTO csc301db.lab_results \
+        (patient_id, info ) VALUES ($1, $2)";
+        return client.query(insert_string, [patientId, JSON.stringify(req.body)]);
+    }).then((result) => {
+        res.status(200).send();
+    }).catch((err) => {
+        res.status(400).send();
+    })
+});
+
 /**
  * TODO: Return all the classes this user (student) is in
  */

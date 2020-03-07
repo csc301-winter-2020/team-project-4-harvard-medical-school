@@ -1,6 +1,7 @@
 import * as express from 'express';
 const { checkAuthenticated, checkGuest } = require('../auth/authCheck');
 import * as dotenv from "dotenv";
+// @ts-ignore
 import bodyParser = require('body-parser');
 dotenv.config();
 type Router = express.Router;

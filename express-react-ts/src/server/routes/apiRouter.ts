@@ -301,6 +301,25 @@ router.get('/api/reviewOfSystems/:patientId', (req:Request, res:Response, next:N
     })
 });
 
+router.post('/api/reviewOfSystems/:patientId', (req:Request, res:Response, next:NextFunction)=>{
+    const patientId: number = parseInt(req.params.patientId);
+    pool.connect().then((client) => {
+        const delete_string: string = "DELETE FROM csc301db.review_of_systems \
+        WHERE patient_id = $1";
+        return client.query(delete_string, [patientId]);
+    }).then((result) => {
+        return pool.connect();
+    }).then((client) => {
+        const insert_string: string = "INSERT INTO csc301db.review_of_systems \
+        (patient_id, info ) VALUES ($1, $2)";
+        return client.query(insert_string, [patientId, JSON.stringify(req.body)]);
+    }).then((result) => {
+        res.status(200).send();
+    }).catch((err) => {
+        res.status(400).send();
+    })
+});
+
 /**
  * TODO: Return all the classes this user (student) is in
  */

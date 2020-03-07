@@ -135,3 +135,11 @@ CREATE TABLE templates (
 
 INSERT INTO templates (user_id, template_id, template_name, date_millis, template)
 VALUES (1, 1, 'mynew template', 12345, 'ddddddd');
+
+CREATE TABLE review_of_systems (
+    id SERIAL PRIMARY KEY,
+    patient_id INT,
+    info JSON
+);
+
+INSERT INTO review_of_systems (patient_id, info) VALUES (1, '{"key": "value"}');

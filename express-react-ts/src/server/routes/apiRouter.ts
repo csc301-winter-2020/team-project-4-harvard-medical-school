@@ -286,6 +286,21 @@ router.post('/api/student/:userId/templates/new', (req:Request, res:Response, ne
 //     ],
 // }
 
+router.get('/api/reviewOfSystems/:patientId', (req:Request, res:Response, next:NextFunction)=>{
+    const patientId: number = parseInt(req.params.patientId);
+    pool.connect().then((client) => {
+        const query_string: string = "SELECT info FROM csc301db.review_of_systems\
+         WHERE patient_id = $1";
+        return client.query(query_string, [patientId]);
+    }).then((result) => {
+        if (result.rowCount === 0) {
+            res.status(404).send();
+        } else {
+            res.status(200).json(result.rows[0].info);
+        }
+    })
+});
+
 /**
  * TODO: Return all the classes this user (student) is in
  */

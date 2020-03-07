@@ -40,7 +40,7 @@ CREATE TABLE patients (
     lab_result INT
 );
 
-CREATE TYPE SMOKING_TYPE AS ENUM('NEVER', "EX", "CURRENT");
+CREATE TYPE SMOKING_TYPE AS ENUM('NEVER', 'EX', 'CURRENT');
 
 CREATE TABLE patient_profile (
      id SERIAL PRIMARY KEY,
@@ -53,7 +53,7 @@ CREATE TABLE patient_profile (
      gender_at_birth SEX_AT_BIRTH,
      gender TEXT NOT NULL,
      country TEXT,
-     country_canvas TEXT
+     country_canvas TEXT,
 
      pregnant TEXT,
      pregnant_canvas text,
@@ -79,7 +79,7 @@ CREATE TABLE patient_profile (
      HPI TEXT,
      HPI_canvas TEXT,
 
-     hosptial_history TEXT,
+     hospital_history TEXT,
      hospital_history_canvas TEXT,
 
      medications TEXT,
@@ -112,7 +112,7 @@ CREATE TABLE patient_profile (
      packs_per_day_canvas TEXT,
 
      other_substances TEXT,
-     other_substances_canvas TEXT,
+     other_substances_canvas TEXT
 
 );
 INSERT INTO users (username, first_name, last_name, email, password, year, user_type, date_create)

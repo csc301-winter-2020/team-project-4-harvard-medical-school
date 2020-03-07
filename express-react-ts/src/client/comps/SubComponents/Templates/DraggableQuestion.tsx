@@ -10,15 +10,24 @@ interface DraggableQuestionProps {
   question: Question;
   index: number;
   changeFlag: boolean;
+  initChecked: boolean;
+  highlight: string;
+  setQuestions: React.Dispatch<React.SetStateAction<Question[]>>;
+  allQuestions: Question[];
 }
 
 export const DraggableQuestion: React.FC<DraggableQuestionProps> = ({
   question,
   index,
-  changeFlag
+  changeFlag,
+  initChecked,
+  highlight,
+  setQuestions,
+  allQuestions,
+  
 }) => {
   const [isShowing, setIsShowing] = useState(false);
-  const [disabled, setDisabled] = useState(false);
+  const [disabled, setDisabled] = useState(!initChecked);
 
   // useEffect(() => {
   //   setIsShowing(false);
@@ -34,7 +43,8 @@ export const DraggableQuestion: React.FC<DraggableQuestionProps> = ({
             {...provided.draggableProps}
             style={getItemStyle(
               snapshot.isDragging,
-              provided.draggableProps.style
+              provided.draggableProps.style,
+              highlight === nameToUrl[question.content]
             )}
             {...provided.dragHandleProps}
           >
@@ -44,7 +54,16 @@ export const DraggableQuestion: React.FC<DraggableQuestionProps> = ({
                 name={nameToUrl[question.content]}
                 checked={!disabled}
                 onChange={() => {
+                  const questionsCopy: Question[] = JSON.parse(JSON.stringify(allQuestions));
+                  for (let i = 0; i < questionsCopy.length; i++){
+                    if (questionsCopy[i].content === question.content){
+                      questionsCopy[i].visible = !questionsCopy[i].visible;
+                      break;
+                    }
+                  }
+                  setQuestions(questionsCopy);
                   setDisabled(!disabled);
+                  
                 }}
               />
             </span>
@@ -64,6 +83,7 @@ export const DraggableQuestion: React.FC<DraggableQuestionProps> = ({
               questionNum={index}
               question={question}
               isShowing={isShowing}
+              setQuestions={setQuestions}
             />
           </div>
         )}

@@ -1,24 +1,23 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import { getItemStyle, getAnswerListStyle } from "../../../utils/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import { Question } from "./Questions";
+import { AnswerRow } from "./AnswerRow";
 
 interface AnswerProps {
   question: Question;
   questionNum: number;
   isShowing: boolean;
+  setQuestions: React.Dispatch<React.SetStateAction<Question[]>>;
 }
 
 export const Answers: React.FC<AnswerProps> = ({
   question,
   questionNum,
-  isShowing
+  isShowing,
+  setQuestions,
 }) => {
-  const [disabledArr, setDisabledArr] = useState<boolean[]>(
-    new Array(question.answers.length).fill(false)
-  );
 
   return (
     <Droppable droppableId={`droppable${question.id}`} type={`${questionNum}`}>
@@ -41,25 +40,12 @@ export const Answers: React.FC<AnswerProps> = ({
                       {...provided.draggableProps}
                       style={getItemStyle(
                         snapshot.isDragging,
-                        provided.draggableProps.style
+                        provided.draggableProps.style,
+                        false
                       )}
                       {...provided.dragHandleProps}
                     >
-                      <span className="draggable-check">
-                        <label>
-                          <input
-                            type="checkbox"
-                            name={answer}
-                            checked={!disabledArr[index]}
-                            onChange={() => {
-                              const newArr = [...disabledArr];
-                              newArr[index] = !disabledArr[index];
-                              setDisabledArr(newArr);
-                            }}
-                          />
-                          {answer}
-                        </label>
-                      </span>
+                      <AnswerRow name={answer.title} visible={answer.visible}/>
                     </div>
                   )}
                 </Draggable>

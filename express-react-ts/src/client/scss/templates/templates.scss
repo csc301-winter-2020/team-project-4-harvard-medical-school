@@ -6,7 +6,6 @@
 
 .templates-main-container {
   position: relative;
-  overflow-y: scroll;
   padding: 50px;
   margin: auto;
   width: 900px;
@@ -17,10 +16,14 @@
 }
 
 .templates-title {
+  display: inline-block;
+  margin-right: 10px;
+
   h1 {
     margin-left: 10px;
     margin-bottom: 16px;
     font-size: 3rem;
+    max-width: 800px;
   }
 }
 
@@ -56,5 +59,55 @@
   }
   input[type="checkbox"]:checked {
     background-color: $color-primary-light;
+  }
+}
+
+.template-floating-add-btn{
+  border-radius: 3px;
+  text-align: center;
+  padding: 20px;
+  background-color: $color-primary;
+  color: white;
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+
+.template-floating-add-btn:hover{
+  background-color: $color-primary-dim;
+}
+
+.question-floating-save-btn{
+  background-color: $color-primary;
+  border-radius: 3px;
+  text-align: center;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+
+.question-floating-save-btn:hover{
+  background-color: $color-primary-dim;
+}
+
+.template-editTitleBtn{
+  color: #ccc;
+  transition: all .15s ease;
+}
+
+.template-editTitleBtn:hover{
+  color: black;
+}
+
+@media only screen and (max-width: 1080px) {
+  .templates-main-container{
+    width: auto;
   }
 }

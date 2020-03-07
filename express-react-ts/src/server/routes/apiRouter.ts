@@ -1,6 +1,7 @@
 import * as express from 'express';
 const { checkAuthenticated, checkGuest } = require('../auth/authCheck');
 import * as dotenv from "dotenv";
+import bodyParser = require('body-parser');
 dotenv.config();
 type Router = express.Router;
 type Request = express.Request;
@@ -30,6 +31,27 @@ router.get('/api/me', checkAuthenticated, (req:Request, res:Response, next:NextF
     const user:any = req.user;
     user.password = undefined; //Dont send password with JSON.
     res.status(200).json(req.user);
+});
+
+router.get('/api/updateUser/:userId', (req: Request, res: Response, next: NextFunction) => {
+    const userId: number = parseInt(req.params.userId);
+    const body: any = req.body;
+    if (body.default_mode === 'Both' || body.default_mode === 'Canvas' ||
+    body.default_mode === 'text' || body.default_sidebar === true ||
+    body.default_sidebar === true ) {
+        pool.connect().then((client) => {
+            const query_string: string = "UPDATE csc301db.users SET default_mode = $1\
+            , default_sidebar = $2 WHERE id = $3";
+            client.query(query_string, [body.default_mode, body.default_sidebar, userId]); 
+        }).then(result => {
+            res.status(200).send();
+        }).catch((err) => {
+            res.status(400).send();
+        });
+    } else {
+        res.status(400).send();
+    }
+    
 });
 
 /**

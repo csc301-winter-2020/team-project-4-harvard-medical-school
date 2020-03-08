@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Question } from "./Questions";
 
 interface AnswerRowProps {
@@ -17,6 +17,10 @@ export const AnswerRow: React.FC<AnswerRowProps> = ({
   setQuestions,
 }) => {
   const [isVisible, setIsVisible] = useState(visible);
+
+  useEffect(() => {
+    setIsVisible(visible);
+  });
 
   return (
     <>

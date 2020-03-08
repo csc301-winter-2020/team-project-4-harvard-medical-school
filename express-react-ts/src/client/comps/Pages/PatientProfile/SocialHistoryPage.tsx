@@ -115,7 +115,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
           console.log(jsonResult)
           dispatch({ type: "many_fields", newState:{
             "work": jsonResult.work,
-            "livingConditions": jsonResult.livingConditions, 
+            "livingConditions": jsonResult.living_conditions, 
             "sexualHistory": jsonResult.etOH,
             "etOH": jsonResult.drinks_per_week,
             "drinksPerWeek": jsonResult.drinks_per_week,

@@ -576,6 +576,28 @@ router.get("/api/studentHomepage/:studentID",
         });
 });
 
+/**
+ * Route to delete patientprofile
+ */
+router.delete("/api/patientProfile/:patientID/:studentID", 
+  (req:Request, res:Response, next: NextFunction) => {
+    const student_id: number = parseInt(req.params.studentID);
+    const patient_id: number = parseInt(req.params.patientID);
+    const delete_query: string = "DELETE FROM csc301db.patient_profile\
+    WHERE student_id = $1 AND patient_id = $2";
+    pool.query(delete_query, [student_id, patient_id])
+    .then((result: any) => {
+      if (result.rowCount === 0) {
+        res.status(404).send();
+      } else {
+        res.status(200).send();
+      }
+    }).catch((err: any) => {
+      console.log(err);
+      res.status(400).send();
+    })
+  }
+)
 
 /**
  * TODO: Return all the classes this user (student) is in

@@ -4,6 +4,7 @@ import "../../../scss/patient-profiles/social-history.scss";
 import { IndividualPatientProfile } from "./PatientProfilePage";
 import { useHistory } from "react-router";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function reducer(
   state: SocialHistState,
@@ -332,6 +333,13 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
           </div>
           <div className="form-whitespace">
             <div className="home-page-content-whitespace-logo"></div>
+          </div>
+          <div className="patient-profile-nav-btns">
+            <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
+              
+            }}>
+              <FontAwesomeIcon icon="save" size="2x" />
+            </div>
           </div>
         </div>
       </CSSTransition>

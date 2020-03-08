@@ -104,16 +104,29 @@ router.get(
               "medical_history",
               "social_history",
               "family_history",
+              "country",
+              "hpi",
+              "hospital_history",
+              "medications",
+              "allergies",
+              "work",
+              "living_conditions",
+              "sexual_history",
+              "etoh",
+              "drinks_per_week",
+              "last_time_smoked",
+              "packs_per_day",
+              "other_substances",
             ];
-            for (let i = 0; i < query_result.rowCount; i++) {
+            for (let j = 0; j < query_result.rowCount; j++) {
               for (let i = 0; i < attributes.length; i++) {
                 const this_attribute = attributes[i] + "_canvas";
-                if (query_result.rows[this_attribute] !== null) {
-                  query_result.rows[this_attribute] = s3.getSignedUrl(
+                if (query_result.rows[j][this_attribute] !== null) {
+                  query_result.rows[j][this_attribute] = s3.getSignedUrl(
                     "getObject",
                     {
                       Bucket: bucket,
-                      Key: query_result.rows[this_attribute],
+                      Key: query_result.rows[j][this_attribute],
                       Expires: urlExpiredTime,
                     }
                   );
@@ -123,7 +136,11 @@ router.get(
             res.status(200).json(query_result.rows);
           }
         }
-      );
+      )
+      .catch(err => {
+        console.log(err);
+        res.status(500).json(err);
+      });
   }
 );
 
@@ -311,7 +328,7 @@ router.post(
         return pool.query(insert_query, params_arr);
       })
       .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
-        res.status(200).send();
+        res.status(200).send({ message: "Success" });
       })
       .catch((err: any) => {
         console.log(err);
@@ -405,7 +422,7 @@ router.patch(
         ]);
       })
       .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
-        res.status(200).json({message: "Successful update."});
+        res.status(200).json({ message: "Successful update." });
       })
       .catch((err: any) => {
         console.log(err);

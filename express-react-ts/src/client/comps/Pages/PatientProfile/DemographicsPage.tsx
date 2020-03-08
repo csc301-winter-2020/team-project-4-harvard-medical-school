@@ -5,6 +5,8 @@ import { CSSTransition } from "react-transition-group";
 import { IndividualPatientProfile } from "./PatientProfilePage";
 import "../../../scss/login/inputboxes.scss";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
+import { postData } from "./PatientProfilePage";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function reducer(
   state: DemographicsState,
@@ -69,6 +71,24 @@ const initialState: DemographicsState = {
   isPregnant: null,
   country: "",
 };
+
+async function saveData(url: string, state: DemographicsState) {
+  console.log(state)
+  allAttributes.firstName = state.firstName;
+  allAttributes.lastName = state.lastName;
+  allAttributes.age = state.age;
+  allAttributes.sex = state.sex;
+  allAttributes.isPregnant = state.isPregnant;
+  allAttributes.country = state.country;
+  try {
+    const res = await postData(url, allAttributes);
+    console.log("Saved " + state);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+var allAttributes: any;
 
 export const DemographicsPage: IndividualPatientProfile = ({
   pageName,
@@ -274,6 +294,14 @@ export const DemographicsPage: IndividualPatientProfile = ({
           </div>
           <div className="form-whitespace">
             <div className="home-page-content-whitespace-logo"></div>
+          </div>
+          <div className="patient-profile-nav-btns">
+            <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
+              // TODO : add POST request function here
+              
+            }}>
+              <FontAwesomeIcon icon="save" size="2x" />
+            </div>
           </div>
         </div>
       </CSSTransition>

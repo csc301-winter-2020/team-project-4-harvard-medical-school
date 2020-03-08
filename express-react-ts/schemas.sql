@@ -45,6 +45,7 @@ CREATE TYPE SMOKING_TYPE AS ENUM('NEVER', 'EX', 'CURRENT');
 
 CREATE TABLE patient_profile (
      id SERIAL PRIMARY KEY,
+     last_modified TIMESTAMP,
      student_id INT REFERENCES users(id),
      patient_id INT,
      UNIQUE (student_id, patient_id),
@@ -120,8 +121,8 @@ INSERT INTO users (username, first_name, last_name, avatar_url, email, password,
 VALUES ('will', 'will', 'qie', 'example.com', 'willqie@gmail.com', 'will', 1, 'Student', '20190101');
 INSERT INTO patients (lab_result)
 VALUES (NULL);
-INSERT INTO patient_profile (student_id, patient_id, first_name, family_name, age, gender_at_birth, gender, pregnant, country_residence, country_visited, complaint, medical_history, social_history, family_history)
-VALUES (1, 1, 'will', 'qie', 20, 'Male', 'Male', 'NO', 'CA', NULL, 'ddd', 'fff', 'zzz', 'vvv');
+INSERT INTO patient_profile (last_modified, student_id, patient_id, first_name, family_name, age, gender_at_birth, gender, pregnant, country_residence, country_visited, complaint, medical_history, social_history, family_history)
+VALUES (current_timestamp, 1, 1, 'will', 'qie', 20, 'Male', 'Male', 'NO', 'CA', NULL, 'ddd', 'fff', 'zzz', 'vvv');
 
 CREATE TABLE templates (
     user_id INT REFERENCES users(id) NOT NULL,

@@ -301,7 +301,7 @@ router.post(
       .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
         const insert_query: string =
           "INSERT INTO csc301db.patient_profile \
-            (student_id, patient_id, first_name, family_name, age, gender_at_birth\
+            (last_modified, student_id, patient_id, first_name, family_name, age, gender_at_birth\
             ,gender, smoker, pregnant, country_residence, country_visited, complaint, medical_history,\
             social_history, family_history, country, hpi, \
             hospital_history, medications,\
@@ -320,7 +320,7 @@ router.post(
             etoh_canvas, drinks_per_week_canvas, \
              last_time_smoked_canvas, \
             packs_per_day_canvas, other_substances_canvas \
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9\
+            ) VALUES (current_timestamp, $1, $2, $3, $4, $5, $6, $7, $8, $9\
                 ,$10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21,\
                 $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, \
                 $33, $34, $35, $36, $37, $38, $39, $40, $41, $42, $43, $44,\

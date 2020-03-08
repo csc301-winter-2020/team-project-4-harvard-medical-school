@@ -442,8 +442,8 @@ router.post(
     const userId: number = parseInt(req.params.userId);
     const body: any = req.body;
     const insert_query: string =
-      "INSERT INTO csc301db.templates(user_id, template_name,\
-        date_millis, template) VALUES ($1, $2, $3, $4)";
+      "INSERT INTO csc301db.templates(user_id, template_id, template_name,\
+        date_millis, template) VALUES ($1, DEFAULT, $2, $3, $4)";
     pool
       .query(insert_query, [
         userId,

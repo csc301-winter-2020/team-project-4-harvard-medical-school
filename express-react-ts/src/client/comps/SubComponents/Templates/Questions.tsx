@@ -100,6 +100,8 @@ export const Questions: React.FC<QuestionCompProps> = (
         .catch(err => {
           console.log(err);
         });
+    } else {
+      setIsLoading(false);
     }
   }, []);
 
@@ -182,9 +184,9 @@ export const Questions: React.FC<QuestionCompProps> = (
     }
   }, [searchVal]);
 
-  useEffect(() => {
-    console.log(questions);
-  }, [questions]);
+  // useEffect(() => {
+  //   console.log(questions);
+  // }, [questions]);
 
   return (
     <>

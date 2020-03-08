@@ -4,9 +4,9 @@ CREATE SCHEMA csc301db;
 
 SET SEARCH_PATH TO csc301db;
 
-CREATE TYPE Valid_user_types AS ENUM('Student', 'Educator', 'Admin');
+CREATE TYPE Valid_user_types AS ENUM('Student', 'Educator', 'Administrator');
 CREATE TYPE SEX_AT_BIRTH AS ENUM('Male', 'Female');
-CREATE TYPE default_modes AS ENUM('Both', 'Canvas', 'text');
+CREATE TYPE default_modes AS ENUM('Both', 'Writing', 'Typing');
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
@@ -141,8 +141,8 @@ CREATE TABLE templates (
     template TEXT NOT NULL
 );
 
-INSERT INTO templates (user_id, template_id, template_name, date_millis, template)
-VALUES (1, 1, 'mynew template', 12345, 'ddddddd');
+-- INSERT INTO templates (user_id, template_id, template_name, date_millis, template)
+-- VALUES (1, 1, 'mynew template', 12345, 'ddddddd');
 
 CREATE TABLE review_of_systems (
     id SERIAL PRIMARY KEY,

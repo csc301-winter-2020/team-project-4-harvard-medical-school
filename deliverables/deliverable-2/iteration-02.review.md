@@ -79,7 +79,9 @@ We think our decision to have ad hoc in-person team meetings (without our partne
 
 Trello allows users to maintain a continuously updated checklist of tasks that our team would update as we progressed through the project.
 
-We thought Trello allowed for a lot of flexibility in planning out features, as well as provided a convenient interface to track the progress of development.  Additionally, every task created in Trello could be labelled with the team member(s) working on it, allowing other members of the team to see exactly what feature each team member is working on.  We agreed that we would add tasks to the Trello on an ad hoc basis during developments.
+We thought Trello allowed for a lot of flexibility in planning out features, as well as provided a convenient interface to track the progress of development.  Additionally, every task created in Trello could be labelled with the team member(s) working on it, allowing other members of the team to see exactly what feature each team member is working on. 
+
+We agreed that we would add tasks to the Trell for every substantial part of a feature at a low-level.
 
 We think our decision to use Trello in this manner was unsuccessful.
 *  *Why?* 
@@ -87,7 +89,7 @@ We think our decision to use Trello in this manner was unsuccessful.
 *  *Why?* 
     - Team members found Trello to be too inconvenient and out of the way.
 *  *Why?* 
-    - It was easier to assign a task to yourself without updating the Trello, and sending a message on Slack about what feature you planned to work on.
+    - It was easier to assign a task to yourself without updating the Trello, and sending a message on Slack about what feature or functionality you planned to work on.
 *  *Why?* 
     - Creating new tasks on Trello seemed unnecessary when everyone could be updated on what others are working on by simply checking Slack, viewing what the git branches of our project, or asking someone directly to ensure you wouldn’t be working on the same feature.
     - As such, Trello seemed to become more of an unnecessary hassle than a convenient organization artifact.
@@ -102,15 +104,15 @@ Prior to future team meetings, we intend to determine a list of goals or talking
 
 For example, a meeting can be solely focused on how we intend to integrate the Isabel API which we were given access to by our partners. Potential goals we could have during the meeting could be determining which members would be involved in implementing the features involved in integration, collectively testing out the given Isabel interface provided to us, determining how we intend to format our API calls, and sketching out a loose design of how we intend to visually display the information we send or receive from Isabel. 
 
-2. **Having a more organized and high-level Trello board**
+2. **Having a more high-level Trello board**
 
-We stopped using Trello as we deemed it inconvenient to maintain for every feature we worked on during the development of our project, but we still see its merit in tracking high-level progress and pre-planning future developments.
+We stopped using Trello as we deemed it inconvenient to maintain for every feature/functionality we worked on during the development of our project, but we still see its merit in tracking high-level progress and pre-planning future developments.
 
 We intend to be more high-level in creating our tasks, so that our usage of Trello would be less frequent and less meticulous. Rather than granular low-level tasks like "Set up POST requests for patient profile pages upon save button press", we would have tasks more akin to "Connect patient profile frontend to backend".
 
-Low-level breakdowns of such high-level tasks would be specified on the Slack channel whenever the implementation of a new feature/functionality is begun, and by the names of git branches.
+The more specific low-level breakdowns of such high-level tasks would be specified on the Slack channel whenever the implementation of a new feature/functionality is begun, and by the names of git branches.
 
-This way, we can still use Trello to assist us in organizing our general progress without being bogged down by having to constantly update it.
+This way, we can still use Trello to assist us in organizing our general progress without being bogged down by having to constantly update and maintain it.
 
 ## Product - Review
 

@@ -55,11 +55,16 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           year: 1,
           user_type: "Student",
           date_create: date.getTime(),
+          avatar_url: "https://s3.amazonaws.com/37assets/svn/765-default-avatar.png",
         }),
       })
         .then((res: any) => {
-          mToast.success("You have successfully registered.");
-          dispatch({type: "register success"});
+          if (res.status === 200){
+            mToast.success("You have successfully registered.");
+            dispatch({type: "register success"});
+          } else {
+            throw new Error("Error while registering.");
+          }
         })
         .catch((err: any) => {
           console.log(err);

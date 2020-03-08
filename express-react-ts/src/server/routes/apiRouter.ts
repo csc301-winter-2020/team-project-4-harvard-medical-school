@@ -137,7 +137,7 @@ router.get(
           }
         }
       )
-      .catch((err:any) => {
+      .catch((err: any) => {
         console.log(err);
         res.status(500).json(err);
       });
@@ -612,26 +612,28 @@ router.post(
 /**
  * Route to get attributes need for the homepage.
  */
-router.get("/api/studentHomepage/:studentID", 
-    (req:Request, res:Response, next: NextFunction) => {
-        const student_id: number = parseInt(req.params.studentID);
-        pool.connect().then((client: any) => {
-            const query_string: string = "SELECT \
+router.get(
+  "/api/studentHomepage/:studentID",
+  (req: Request, res: Response, next: NextFunction) => {
+    const student_id: number = parseInt(req.params.studentID);
+    pool
+      .connect()
+      .then((client: any) => {
+        const query_string: string =
+          "SELECT \
             id, last_modified, first_name, family_name, gender, age, country_residence, pregnant\
             FROM csc301db.patient_profile WHERE student_id = $1";
-            return client.query(query_string, [student_id]);
-        }).then((result: any) => {
-            if (result.rowCount === 0) {
-                res.status(404).send();
-            } else {
-                res.status(200).json(result.rows);
-            }
-        }).catch((err: any) => {
-            console.log(err);
-            res.status(400).json(err);
-        });
-});
-
+        return client.query(query_string, [student_id]);
+      })
+      .then((result: any) => {
+        res.status(200).json(result.rows);
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(400).json(err);
+      });
+  }
+);
 
 /**
  * TODO: Return all the classes this user (student) is in

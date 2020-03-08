@@ -109,6 +109,8 @@ router.get(
               "last_time_smoked",
               "packs_per_day",
               "other_substances",
+              "assessments",
+              "imaging"
             ];
             for (let j = 0; j < query_result.rowCount; j++) {
               for (let i = 0; i < attributes.length; i++) {
@@ -174,6 +176,8 @@ router.get(
           "last_time_smoked",
           "packs_per_day",
           "other_substances",
+          "assessments",
+          "imaging"
         ];
         // the for loop to translate key into url
         for (let i = 0; i < attributes.length; i++) {
@@ -258,6 +262,8 @@ router.post(
       "last_time_smoked",
       "packs_per_day",
       "other_substances",
+      "assessments",
+      "imaging"
     ];
     for (let i = 0; i < attributes.length; i++) {
       params_arr.push(new_patient[attributes[i]]);
@@ -307,12 +313,13 @@ router.post(
             living_conditions_canvas, sexual_history_canvas, \
             etoh_canvas, drinks_per_week_canvas, \
              last_time_smoked_canvas, \
-            packs_per_day_canvas, other_substances_canvas \
+            packs_per_day_canvas, other_substances_canvas, \
+            assessments, assessments_canvas, imaging, imaging_canvas \
             ) VALUES (current_timestamp, $1, $2, $3, $4, $5, $6, $7, $8, $9\
                 ,$10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21,\
                 $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, \
                 $33, $34, $35, $36, $37, $38, $39, $40, $41, $42, $43, $44,\
-                $45, $46, $47, $48);";
+                $45, $46, $47, $48, $49, $50, $51, $52);";
         return pool.query(insert_query, params_arr);
       })
       .then((result: { rowCount: number; rows: { [x: string]: any } }) => {

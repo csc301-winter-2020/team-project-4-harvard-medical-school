@@ -12,10 +12,9 @@ interface HomePatientProfileProps {
   lastName: string;
   sex: string;
   age: number;
-  dateOfBirth: number;
   isPregnant: string | null;
-  ethnicity: string;
   country: string;
+  patientID: number;
   isPortraitMode: boolean;
 }
 
@@ -27,11 +26,10 @@ export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
   lastName,
   sex,
   age,
-  dateOfBirth,
   isPregnant,
-  ethnicity,
   country,
   isPortraitMode,
+  patientID
 }) => {
   const history = useHistory();
   const [isShowingInfo, setIsShowingInfo] = useState(false);
@@ -50,7 +48,7 @@ export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
               e.target.nodeName !== "path" &&
               e.target.nodeName !== "svg"
             ) {
-              history.push("/patient/8675309/demographics");
+              history.push(`/patient/${patientID}/demographics`);
             }
           }}
         >

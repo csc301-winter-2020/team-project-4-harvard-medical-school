@@ -4,6 +4,7 @@ import { IndividualPatientProfile } from "./PatientProfilePage";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router";
+import { postData } from "./PatientProfilePage";
 
 function reducer(
   state: Assessment_State,
@@ -33,6 +34,19 @@ const initialState: Assessment_State = {
   assessment: "",
 };
 
+async function saveData(url: string, state: any) {
+  console.log(state)
+  allAttributes.assessment = state.assessment;
+  try {
+    const res = await postData(url, allAttributes);
+    console.log(res.message);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+var allAttributes: any;
+
 export const AssessmentAndPlanPage: IndividualPatientProfile = ({
   pageName,
   currentPage,
@@ -57,6 +71,7 @@ export const AssessmentAndPlanPage: IndividualPatientProfile = ({
         .then((jsonResult) => {
           console.log("Get Assessment")
           console.log(jsonResult)
+          allAttributes = jsonResult;
           dispatch({ type: "many_fields", newState:{
             "assessment": "ADD TO DB"}});
 
@@ -109,7 +124,7 @@ export const AssessmentAndPlanPage: IndividualPatientProfile = ({
           <div className="patient-profile-nav-btns">
             <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
               // TODO : add POST request function here
-              
+              saveData('/api/patientprofile/' + patientID, state);
             }}>
               <FontAwesomeIcon icon="save" size="2x" />
             </div>

@@ -41,3 +41,64 @@ We think our decision to have weekly in-person meetings has been very successful
 *  *Why?* 
     - We want our partners to be satisfied with our rate of progress, and we also want the chance to regularly receive direct feedback on features as we implement them.
     - As such, we can confidently design our application with our partner regularly being in the loop on our progress.
+
+#### Q2. Decisions that did not turn out as well as we hoped
+
+Ad hoc team meetings
+
+We think our decision to have ad hoc team meetings (without our partners) without any prior planning of what we would do during the meetings was unsuccessful.
+*  *Why?* 
+    - Team members were often unfocused or non-participatory during these meetings, with only a couple of people working on the project and other team members watching or being unengaged.
+*  *Why?* 
+    - It was usually unclear what everyone was supposed to be doing.
+*  *Why?* 
+    - Meetings were generally organized without a clear direction or set goals of what we hoped to accomplish during a meeting.
+*  *Why?* 
+    - We thought we could set goals for ourselves more effectively as a group, rather than coming up with our own clearly defined ideas separately and then presenting them to the team 
+*  *Why?* 
+    - Most of us were unfamiliar with working with such a large group before, and were not used to having so many disparate voices
+    - As such, group discussions were generally unfruitful.
+
+Our usage of Trello
+
+Trello allows users to maintain a continuously updated checklist of tasks that our team would update as we progressed through the project.
+
+We thought Trello allowed for a lot of flexibility in planning out features, as well as provided a convenient interface to track the progress of development.  Additionally, every task could be labelled with the team member(s) working on it, allowing other members of the team to see exactly what feature each team member is working on.  We agreed that we would add tasks to the Trello on an ad hoc basis during developments.
+
+We think our decision to use Trello in this manner was unsuccessful.
+*  *Why?* 
+    - Team members stopped checking and updating the Trello regularly.
+*  *Why?* 
+    - Team members found Trello to be too inconvenient and out of the way.
+*  *Why?* 
+    - It was easier to assign a task to yourself without updating the Trello, and sending a message on Slack about what feature you planned to work on.
+*  *Why?* 
+    - Creating new tasks on Trello seemed unnecessary when everyone could be updated on what others are working on by simply checking Slack or asking someone directly to ensure you wouldn’t be working on the same feature.
+    - It is more of a hassle to use Trello when any ambiguities can be cleared up with a quick Slack message.
+
+#### Q3. Planned changes
+
+More organized usage of Trello
+
+As described previously, we stopped updating our Trello, meaning that we no longer have a clearly defi
+
+
+## Product - Review
+
+#### Q4. How was your product demo?
+
+In preparation for our product demo, the team met together the night before the day we were to present to our partners. At that point we had already finished developing most of the functionalities of the features we wanted to complete for Deliverable 2.
+
+During this meeting we collectively went over all of our implemented views as a team to ensure the UX and UI design fits all of our standards, as well as made minor changes to make the application more presentable and visually pleasing. 
+
+We also prepared a loose outline of the order in which we were going to present the views of our application to our partners.
+
+On the day of the demo, we successfully presented what we had planned to present the night before. Christopher Marcok did the majority of the talking, as we used his laptop to show our application to our partners. As he navigated through the application, he would describe the functionality of each feature that was implemented on the page he was on.
+
+Our partners accepted all of our features and were pleased with our current progress. There were no change requests.
+
+From a product perspective, we learned that close communication and transparency with our partners helped significantly in designing an application that they would be satisfied with. 
+
+During the development of our application, team members often posed questions to our partners through Slack regarding any ambiguities or design decisions that they were unsure of. 
+
+Thanks to this, we were able to receive frequent feedback on our progress, so by the time of the demo, we already knew that the design of our application would be agreeable to our partners.

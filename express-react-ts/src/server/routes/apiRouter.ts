@@ -610,6 +610,30 @@ router.post(
 );
 
 /**
+ * Route to get attributes need for the homepage.
+ */
+router.get("/api/studentHomepage/:studentID", 
+    (req:Request, res:Response, next: NextFunction) => {
+        const student_id: number = parseInt(req.params.studentID);
+        pool.connect().then((client) => {
+            const query_string: string = "SELECT \
+            id, last_modified, first_name, family_name, gender_at_birth, age\
+            FROM csc301db.patient_profile WHERE student_id = $1";
+            return client.query(query_string, [student_id]);
+        }).then((result) => {
+            if (result.rowCount === 0) {
+                res.status(404).send();
+            } else {
+                res.status(200).json(result.rows);
+            }
+        }).catch((err) => {
+            console.log(err);
+            res.status(400).json(err);
+        });
+});
+
+
+/**
  * TODO: Return all the classes this user (student) is in
  */
 router.get(

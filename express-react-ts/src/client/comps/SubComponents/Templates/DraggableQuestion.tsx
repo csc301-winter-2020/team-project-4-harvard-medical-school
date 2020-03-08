@@ -27,36 +27,37 @@ export const DraggableQuestion: React.FC<DraggableQuestionProps> = ({
   
 }) => {
   const [isShowing, setIsShowing] = useState(false);
-  const [disabled, setDisabled] = useState(!initChecked);
+  const [disabled, setDisabled] = useState(initChecked);
 
-  // useEffect(() => {
-  //   setIsShowing(false);
-  // }, [changeFlag]);
+  
+  useEffect(() => {
+    setDisabled(initChecked);
+  });
 
   return (
     <>
       <Draggable key={question.id} draggableId={question.id} index={index}>
         {(provided, snapshot) => (
           <div
-            id={`${nameToUrl[question.content]}-draggable`}
+            id={`${nameToUrl[question.title]}-draggable`}
             ref={provided.innerRef}
             {...provided.draggableProps}
             style={getItemStyle(
               snapshot.isDragging,
               provided.draggableProps.style,
-              highlight === nameToUrl[question.content]
+              highlight === nameToUrl[question.title]
             )}
             {...provided.dragHandleProps}
           >
             <span className="draggable-check">
               <input
                 type="checkbox"
-                name={nameToUrl[question.content]}
-                checked={!disabled}
+                name={nameToUrl[question.title]}
+                checked={disabled}
                 onChange={() => {
                   const questionsCopy: Question[] = JSON.parse(JSON.stringify(allQuestions));
                   for (let i = 0; i < questionsCopy.length; i++){
-                    if (questionsCopy[i].content === question.content){
+                    if (questionsCopy[i].title === question.title){
                       questionsCopy[i].visible = !questionsCopy[i].visible;
                       break;
                     }
@@ -67,7 +68,7 @@ export const DraggableQuestion: React.FC<DraggableQuestionProps> = ({
                 }}
               />
             </span>
-            {question.content}
+            {question.title}
 
             <span
               className="chevron-style"

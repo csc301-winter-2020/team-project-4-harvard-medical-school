@@ -7,6 +7,7 @@ import { dummyTemplates } from "../../utils/dummyTemplates";
 import { TemplateRow } from "../SubComponents/Templates/TemplateRow";
 import { max } from "../../utils/utils";
 import { useHistory } from "react-router";
+import { HelixLoader } from "../SubComponents/HelixLoader";
 
 interface TemplatesPageProps {}
 
@@ -32,8 +33,28 @@ export type TemplateAssignment = {
 export const TemplatesPage: React.FC<TemplatesPageProps> = ({}) => {
   const [searchValue, setSearchValue] = useState("");
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
-  const [templates, setTemplates] = useState(dummyTemplates);
+  const [templates, setTemplates] = useState<Template[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const history = useHistory();
+
+  useEffect(() => {
+    fetch("/api/student/1/templates")
+    .then(res => {
+      console.log(res);
+      if (res.status === 200){
+        return res.json();
+      } else {
+        throw new Error(res.status + " " + res.statusText);
+      }
+    })
+    .then(data => {
+      setTemplates(data);
+      setIsLoading(false);
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  }, []);
 
   return (
     <>
@@ -45,9 +66,10 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({}) => {
         setSearchValue={setSearchValue}
         placeholder={"Search Templates"}
       />
+      {isLoading && <HelixLoader message="Loading Templates..."/>}
       <div className="templates-outermost">
         <div className="templates-main-container">
-          <div className="templates-title">
+          <div className="templates-title" style={{display: "block", marginRight: "0"}}>
             <h1>Template Editor</h1>
             <div className="home-page-separator-line"></div>
             <div className="home-page-patient-header-grid">

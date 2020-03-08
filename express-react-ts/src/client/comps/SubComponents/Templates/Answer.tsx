@@ -27,7 +27,7 @@ export const Answers: React.FC<AnswerProps> = ({
             ref={provided.innerRef}
             style={getAnswerListStyle(snapshot.isDraggingOver)}
           >
-            {question.answers.map((answer, index) => {
+            {question.fields.map((answer, index) => {
               return (
                 <Draggable
                   key={`${questionNum}${index}`}
@@ -45,7 +45,7 @@ export const Answers: React.FC<AnswerProps> = ({
                       )}
                       {...provided.dragHandleProps}
                     >
-                      <AnswerRow name={answer.title} visible={answer.visible}/>
+                      <AnswerRow name={answer.name} visible={answer.value}/>
                     </div>
                   )}
                 </Draggable>

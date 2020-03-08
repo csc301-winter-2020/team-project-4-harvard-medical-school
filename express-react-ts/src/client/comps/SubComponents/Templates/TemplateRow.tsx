@@ -4,6 +4,7 @@ import { dateFormatFull, dateFormatCompact } from "../../../utils/utils";
 import Popup from "reactjs-popup";
 import { Questions } from "./Questions";
 import { useHistory } from "react-router";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface TemplateRowProps {
   name: string;
@@ -16,34 +17,60 @@ export const TemplateRow: React.FC<TemplateRowProps> = ({
   name,
   date,
   templatePages,
-  id
+  id,
 }) => {
   const history = useHistory();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [isShowing, setIsShowing] = useState(true);
 
   useEffect(() => {
-    const handleResize = () =>
-      setWindowWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize)
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
     return () => {
-      window.removeEventListener('resize', handleResize)
+      window.removeEventListener("resize", handleResize);
     };
   });
 
   return (
     <>
-      <div className="home-patient-profile-container" onClick={() => {
-        history.push(`/template/${id}`);
-      }}>
-        <div className="home-patient-profile-name-col">{name}</div>
-        <div className="home-patient-profile-date-col"> </div>
-        <div className="home-patient-profile-last-modified-col">
-          {windowWidth < 1080 ? dateFormatCompact(date) : dateFormatFull(date)}
+      {isShowing && (
+        <div
+          className="home-patient-profile-container"
+          onClick={(e: any) => {
+            if (
+              e.target.className !== "home-patient-profile-info-btn" &&
+              e.target.className !== "home-patient-profile-info-icon" &&
+              e.target.nodeName !== "path" &&
+              e.target.nodeName !== "svg"
+            ) {
+              history.push(`/template/${id}`);
+            } else {
+              fetch(`/api/student/1/templates/${id}`, {
+                method: "DELETE",
+              })
+                .then(() => {
+                  setIsShowing(false);
+                })
+                .catch(err => {
+                  console.log(err);
+                });
+            }
+          }}
+        >
+          <div className="home-patient-profile-name-col">{name}</div>
+          <div className="home-patient-profile-date-col"> </div>
+          <div className="home-patient-profile-last-modified-col">
+            {windowWidth < 1080
+              ? dateFormatCompact(date * 1000)
+              : dateFormatFull(date * 1000)}
+          </div>
+          <div className="home-patient-profile-info-btn">
+            <div className="home-patient-profile-info-icon">
+              <FontAwesomeIcon icon="trash" />
+            </div>
+          </div>
         </div>
-        <div className="home-patient-profile-info-btn">
-          <div className="home-patient-profile-info-icon"></div>
-        </div>
-      </div>
+      )}
     </>
   );
 };

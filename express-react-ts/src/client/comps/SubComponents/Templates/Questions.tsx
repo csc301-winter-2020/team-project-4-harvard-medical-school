@@ -15,47 +15,54 @@ import {
 } from "../../../utils/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { dummyTemplates, defaultTemplate } from "../../../utils/dummyTemplates";
-import { TemplateAssignment } from "../../Pages/TemplatesPage";
+import {
+  TemplateAssignment,
+  Template,
+  TemplatePage,
+} from "../../Pages/TemplatesPage";
 import { Header } from "../Header";
 import { contentType } from "../../../utils/types";
 import { DraggableQuestion } from "./DraggableQuestion";
 import { RouteComponentProps } from "react-router";
+import { ToastContainer, toast } from "react-toastify";
+import { HelixLoader } from "../HelixLoader";
 
 export type Question = {
   id: string;
-  content: contentType;
-  answers: answer[];
+  title: contentType;
+  fields: answer[];
   visible: boolean;
 };
 
 function getFields(fields: TemplateAssignment[]): answer[] {
   const res: answer[] = [];
   for (let i: number = 0; i < fields.length; i++) {
-    res.push({ title: fields[i].name, visible: fields[i].value });
+    res.push({ name: fields[i].name, value: fields[i].value });
   }
   return res;
 }
 
 type answer = {
-  title: string;
-  visible: boolean;
+  name: string;
+  value: boolean;
 };
 
-const getQuestions = (useDefault: boolean, templateID: number): Question[] => {
+const getQuestions = (useDefault: boolean, t?: TemplatePage[]): Question[] => {
   const count: number = 10;
   if (useDefault) {
     return Array.from({ length: count }, (v, k) => k).map(k => ({
       id: `question-${k}`,
-      content: defaultTemplate.template[k].title,
-      answers: getFields(defaultTemplate.template[k].fields),
+      title: defaultTemplate.template[k].title,
+      fields: getFields(defaultTemplate.template[k].fields),
       visible: true,
     }));
   } else {
+    console.log(t);
     return Array.from({ length: count }, (v, k) => k).map(k => ({
       id: `question-${k}`,
-      content: dummyTemplates[templateID].template[k].title,
-      answers: getFields(dummyTemplates[templateID].template[k].fields),
-      visible: dummyTemplates[templateID].template[k].visible,
+      title: t[k].title,
+      fields: getFields(t[k].fields),
+      visible: t[k].visible,
     }));
   }
 };
@@ -71,9 +78,30 @@ export const Questions: React.FC<QuestionCompProps> = (
   const myProps: any = props;
   const templateID: number = Number(myProps.match.params.id);
   const { useDefault } = props;
-  const [questions, setQuestions] = useState<Question[]>(
-    getQuestions(useDefault, templateID)
-  );
+  const [isLoading, setIsLoading] = useState(true);
+  const [questions, setQuestions] = useState<Question[]>(getQuestions(true));
+
+  useEffect(() => {
+    if (!useDefault) {
+      fetch(`/api/student/1/template/${templateID}`)
+        .then(res => {
+          if (res.status === 200) {
+            return res.json();
+          } else {
+            throw new Error(`Err: ${res.status} ${res.statusText}`);
+          }
+        })
+        .then(data => {
+          console.log(data);
+          setQuestions(getQuestions(false, JSON.parse(data.template)));
+          setTitle(data.template_name);
+          setIsLoading(false);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  }, []);
 
   function onDragStart(result: DropResult, provided: ResponderProvided) {
     setChangeFlag(!changeFlag);
@@ -91,13 +119,13 @@ export const Questions: React.FC<QuestionCompProps> = (
       );
     } else {
       const answers: answer[] = reorder(
-        questions[parseInt(result.type, 10)].answers,
+        questions[parseInt(result.type, 10)].fields,
         result.source.index,
         result.destination.index
       );
 
-      const reorderedQuestions = JSON.parse(JSON.stringify(questions));
-      reorderedQuestions[result.type].answers = answers;
+      const reorderedQuestions: any = JSON.parse(JSON.stringify(questions));
+      reorderedQuestions[result.type].fields = answers;
       setQuestions(reorderedQuestions);
     }
   }
@@ -107,11 +135,10 @@ export const Questions: React.FC<QuestionCompProps> = (
   const [changeFlag, setChangeFlag] = useState(false);
   const [highlight, setHighlight] = useState<string | null>(null);
   const [title, setTitle] = useState(
-    useDefault
-      ? defaultTemplate.template_name
-      : dummyTemplates[templateID].template_name
+    useDefault ? defaultTemplate.template_name : "DEFAULT_NAME"
   );
   const [editingTitle, setEditingTitle] = useState(false);
+  const myToast: any = toast;
 
   useEffect(() => {
     const lower: string = searchVal.toLowerCase();
@@ -169,6 +196,8 @@ export const Questions: React.FC<QuestionCompProps> = (
         searchValue={searchVal}
         setSearchValue={setSearchVal}
       />
+      <ToastContainer position={toast.POSITION.TOP_RIGHT} />
+      {isLoading && <HelixLoader message="Loading Template..."/>}
       <div className="templates-outermost">
         <div
           className="templates-main-container"
@@ -233,7 +262,44 @@ export const Questions: React.FC<QuestionCompProps> = (
           </DragDropContext>
         </div>
       </div>
-      <div className="question-floating-save-btn">
+      <div
+        className="question-floating-save-btn"
+        onClick={() => {
+          const url: string = useDefault
+            ? `/api/student/1/templates/new`
+            : `/api/student/1/template/${templateID}`;
+          fetch(url, {
+            method: useDefault ? "POST" : "PATCH",
+            mode: "cors",
+            cache: "no-cache",
+            credentials: "same-origin",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            redirect: "follow", // manual
+            referrerPolicy: "no-referrer", // no-referrer
+            body: JSON.stringify({
+              user_id: null,
+              template_id: null,
+              template_name: title,
+              date_millis: Math.floor(new Date().getTime() / 1000),
+              template: questions,
+            }),
+          })
+            .then(res => {
+              console.log(res);
+              if (res.status === 200) {
+                myToast.success("Template saved.");
+              } else {
+                throw new Error(res.status + " " + res.statusText);
+              }
+            })
+            .catch(error => {
+              myToast.warning("An error occurred while saving your template.");
+              console.log("An error occured with POST:", error);
+            });
+        }}
+      >
         <FontAwesomeIcon icon="save" size="2x" />
       </div>
     </>

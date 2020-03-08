@@ -39,6 +39,7 @@ import {
   faQuestionCircle,
   faQuestion,
 } from "@fortawesome/free-solid-svg-icons";
+import { HelixLoader } from "./comps/SubComponents/HelixLoader";
 
 const myLibrary: any = library;
 myLibrary.add(
@@ -91,6 +92,11 @@ const browserRouter: JSX.Element = (
         exact
         path="/templates/new"
         render={(props) => <Questions {...props} useDefault={true} />}
+      />
+      <Route
+        exact
+        path="/loader"
+        render={(props) => <HelixLoader {...props} message="DSHGAJLDHJSAHJDS" />}
       />
       <Route render={(props) => <Error {...props} errNo={404} />} />
     </Switch>

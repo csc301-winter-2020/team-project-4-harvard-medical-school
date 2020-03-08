@@ -15,13 +15,9 @@ function getUserByUsername(username: string) {
   console.log(`LOGIN: Trying to log in username: ${username}`);
 
   return new Promise<User>((resolve, reject) => {
-    pool
-      .connect()
-      .then((client: any) => {
         const query: string =
           "SELECT id, username, password, default_mode, default_sidebar FROM csc301db.users WHERE username = $1";
-        return client.query(query, [username]);
-      })
+        pool.query(query, [username])
       .then((result: any) => {
         console.log(result);
         if (result.rowCount == 1) {
@@ -49,13 +45,9 @@ function getUserById(id: number) {
   console.log(`LOGIN: Trying to log in user with ID: ${id}`);
 
   return new Promise<User>((resolve, reject) => {
-    pool
-      .connect()
-      .then((client: any) => {
         const query: string =
           "SELECT * FROM csc301db.users WHERE id = $1";
-        return client.query(query, [id]);
-      })
+        pool.query(query, [id])
       .then((result: any) => {
         if (result.rowCount == 1) {
           resolve(result.rows[0]);

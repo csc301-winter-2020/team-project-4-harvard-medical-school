@@ -1,4 +1,4 @@
-# Scribe / Team 53
+# Scribe/Team 53
 
 ## Iteration 02 - Review & Retrospect
 
@@ -7,7 +7,7 @@
 
 ## Process - Reflection
 
-We will analyze the success/lack of success of our decisions using the “5 Whys” assessment framework. With this framework, we can directly determine the root causes of our success/lack thereof for each decision.
+We will analyze the success/lack of success of our decisions using the “5 Whys” assessment framework. With this framework, we can directly determine the root causes of our success/lack thereof for each decision by repeatedly asking the question "Why?".
 
 #### Q1. Decisions that turned out well
 
@@ -56,7 +56,7 @@ We think our decision to name our git branches in this way has been successful.
 *  *Why?* 
     - Viewing all of our project's branches provides a concise general overview of our progress on the project, which gives better direction of how one can contribute.
 *  *Why?* 
-    - One can easily determine how to contribute to a given feature either by involving themself with the person maintaining the feature's branch, or by starting a new branch on their own (with the confidence that it will not conflict with the implementation of other features on different branches).
+    - One can easily determine how to contribute to a given feature either by communicating with the person maintaining the feature's branch, or by starting a new branch on their own (with the confidence that it will not conflict with the implementation of other features on different branches).
     
 #### Q2. Decisions that did not turn out as well as we hoped
 

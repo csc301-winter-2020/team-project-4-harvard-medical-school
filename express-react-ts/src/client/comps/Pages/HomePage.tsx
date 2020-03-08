@@ -5,6 +5,7 @@ import { HomePatientProfile } from "../SubComponents/Home/HomePatientProfile";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { now, max } from "../../utils/utils";
 import { useHistory } from "react-router";
+import { HelixLoader } from "../SubComponents/HelixLoader";
 
 interface HomePageProps {}
 
@@ -17,9 +18,8 @@ type PatientProfile = {
   firstName: string;
   lastName: string;
   sex: string;
-  dateOfBirth: number;
   isPregnant: string | null;
-  ethnicity: string;
+  patientID: number;
 };
 
 type HomePageState = {
@@ -35,6 +35,11 @@ const initialState: HomePageState = {
   lastModifiedSort: "DESC",
   changed: true,
 };
+
+async function getPatientProfilesForUser(userID: number){
+  const res = await fetch(`/api/student/${userID}/patientprofiles`, {method: 'GET'})
+  return await res.json()
+}
 
 function reducer(
   state: HomePageState,
@@ -103,158 +108,15 @@ const lastModSorterDesc = (a: PatientProfile, b: PatientProfile) => {
 };
 
 export const HomePage: React.FC<HomePageProps> = ({}) => {
-  // Dummy data while we dont have API calls
-  let patients: PatientProfile[] = [
-    {
-      title: "Patient1",
-      date: 456789456,
-      lastModified: 456999456,
-      firstName: "Joe",
-      lastName: "Smith",
-      sex: "M",
-      dateOfBirth: 456789456,
-      isPregnant: null,
-      ethnicity: "Caucasian",
-      age: 20,
-      country: "Canada",
-    },
-    {
-      title: "Patient2",
-      date: 100123456789456,
-      lastModified: 1123456999456,
-      firstName: "Selina",
-      lastName: "Kyle",
-      sex: "F",
-      dateOfBirth: 4565456789456,
-      isPregnant: "No",
-      ethnicity: "Caucasian",
-      age: 20,
-      country: "Canada",
-    },
-    {
-      title: "Patient3",
-      date: 200123456789456,
-      lastModified: 123456999456,
-      firstName: "Pamela",
-      lastName: "Beesly",
-      sex: "F",
-      dateOfBirth: 987456789456,
-      isPregnant: "Yes",
-      ethnicity: "Caucasian",
-      age: 20,
-      country: "Canada",
-    },
-    {
-      title: "Patient4",
-      date: 200123556789456,
-      lastModified: 123456999456,
-      firstName: "Chun",
-      lastName: "Li",
-      sex: "F",
-      dateOfBirth: 987456789456,
-      isPregnant: "No",
-      ethnicity: "Chinese",
-      age: 20,
-      country: "Canada",
-    },
-    {
-      title: "Patient5",
-      date: 200123556789456,
-      lastModified: 123456999456,
-      firstName: "Ken",
-      lastName: "Masters",
-      sex: "M",
-      dateOfBirth: 987456789456,
-      isPregnant: null,
-      ethnicity: "Caucasian",
-      age: 20,
-      country: "Canada",
-    },
-    {
-      title: "Patient6",
-      date: 200123556789456,
-      lastModified: 123456999456,
-      firstName: "Davina",
-      lastName: "Choi",
-      sex: "F",
-      dateOfBirth: 987456789456,
-      isPregnant: "Don't Know",
-      ethnicity: "Korean",
-      age: 20,
-      country: "Canada",
-    },
-    {
-      title: "Patient7",
-      date: 200123556789456,
-      lastModified: 123456999456,
-      firstName: "Johnny",
-      lastName: "Cage",
-      sex: "M",
-      dateOfBirth: 987456789456,
-      isPregnant: null,
-      ethnicity: "Caucasian",
-      age: 20,
-      country: "Canada",
-    },
-    {
-      title: "Patient8",
-      date: 200123556789456,
-      lastModified: 123456999456,
-      firstName: "Heavy",
-      lastName: "WeaponsGuy",
-      sex: "M",
-      dateOfBirth: 987456789456,
-      isPregnant: null,
-      ethnicity: "East European",
-      age: 20,
-      country: "Canada",
-    },
-    {
-      title: "Patient9",
-      date: 200123556789456,
-      lastModified: 123456999456,
-      firstName: "Sylvanas",
-      lastName: "Windrunner",
-      sex: "F",
-      dateOfBirth: 987456789456,
-      isPregnant: "No",
-      ethnicity: "Elven",
-      age: 20,
-      country: "Canada",
-    },
-    {
-      title: "Patient10",
-      date: 200123556789456,
-      lastModified: 123456999456,
-      firstName: "Garrosh",
-      lastName: "Hellscream",
-      sex: "M",
-      dateOfBirth: 987456789456,
-      isPregnant: null,
-      ethnicity: "Orc",
-      age: 20,
-      country: "Canada",
-    },
-    {
-      title: "Patient11",
-      date: now(),
-      lastModified: now(),
-      firstName: "AAaaaaa",
-      lastName: "A",
-      sex: "M",
-      dateOfBirth: now(),
-      isPregnant: null,
-      ethnicity: "aaaaaaa",
-      age: 20,
-      country: "aaaaaa",
-    },
-  ];
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
   const [state, dispatch] = useReducer(reducer, initialState);
   const { nameSort, createdSort, lastModifiedSort, changed } = state;
   const [searchVal, setSearchVal] = useState("");
-  const [patientsList, setPatientsList] = useState(patients);
+  const [allPatients, setAllPatients] = useState([])
+  const [patientsList, setPatientsList] = useState([]);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [isLoading, setIsLoading] = useState(true)
+
   const history = useHistory();
 
   useEffect(() => {
@@ -266,6 +128,32 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
       window.removeEventListener("resize", handleResize);
     };
   });
+
+  useEffect(() => {
+    getPatientProfilesForUser(1).then((data) => {
+      const patientsListNew = []
+
+      for(let i = 0;i < data.length;i++){
+        patientsListNew.push({
+          title: 'Patient'+i,
+          date: now(),
+          lastModified: now(),
+          firstName: data[i].first_name,
+          lastName: data[i].family_name,
+          sex: data[i].gender,
+          isPregnant: null,
+          age: data[i].age,
+          country: data[i].country,
+          patientID: data[i].patient_id
+        })
+      }
+      
+      setAllPatients(patientsListNew)
+      setPatientsList(patientsListNew)
+
+      setIsLoading(false)
+    })
+  }, [])
 
   useEffect(() => {
     if (nameSort !== null) {
@@ -298,7 +186,7 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
 
   useEffect(() => {
     if (searchVal !== "") {
-      const newPatients = patients.filter(p => {
+      const newPatients = allPatients.filter(p => {
         return (
           p.firstName.toLowerCase().includes(searchVal.toLowerCase()) ||
           p.lastName.toLowerCase().includes(searchVal.toLowerCase()) ||
@@ -318,7 +206,7 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
       });
       setPatientsList(newPatients);
     } else {
-      setPatientsList(patients);
+      setPatientsList(allPatients);
     }
   }, [searchVal]);
 
@@ -343,6 +231,7 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
           searchValue={searchVal}
           setSearchValue={setSearchVal}
         />
+        {isLoading && <HelixLoader message="Loading Patients..."/>}
         <div className="home-page-content-container">
           <div className="home-page-your-patients-title">Your Patients</div>
           <div className="home-page-separator-line"></div>
@@ -399,11 +288,10 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
                   date={p.date}
                   lastModified={p.lastModified}
                   sex={p.sex}
-                  dateOfBirth={p.dateOfBirth}
                   age={p.age}
                   country={p.country}
                   isPregnant={p.isPregnant}
-                  ethnicity={p.ethnicity}
+                  patientID={p.patientID}
                 />
               );
             })}

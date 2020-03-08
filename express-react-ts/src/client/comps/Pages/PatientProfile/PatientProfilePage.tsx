@@ -268,6 +268,14 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
               <FontAwesomeIcon icon="arrow-right" size="2x" />
             </div>
           </div>
+          <div className="patient-profile-nav-btns">
+            <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
+              // TODO : add POST request function here
+              
+            }}>
+              <FontAwesomeIcon icon="save" size="2x" />
+            </div>
+          </div>
         </div>
       </div>
     </>

@@ -2,6 +2,7 @@ import React, {useEffect, useReducer} from "react";
 import { CSSTransition } from "react-transition-group";
 import { IndividualPatientProfile } from "./PatientProfilePage";
 import { useHistory } from "react-router";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../../scss/patient-profiles/lab-results.scss";
 
 interface LabResultData {
@@ -148,6 +149,14 @@ export const LabResultsPage: IndividualPatientProfile = ({
             <button className="lab-results-add-value-button" onClick={() => dispatch({ type: 'addEntry', value: 'New' })}>
               Add Lab Result
             </button>
+          </div>
+          <div className="patient-profile-nav-btns">
+            <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
+              // TODO : add POST request function here
+              
+            }}>
+              <FontAwesomeIcon icon="save" size="2x" />
+            </div>
           </div>
         </div>
       </CSSTransition>

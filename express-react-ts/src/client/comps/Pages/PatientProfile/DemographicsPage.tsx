@@ -6,6 +6,7 @@ import { IndividualPatientProfile } from "./PatientProfilePage";
 import "../../../scss/login/inputboxes.scss";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { postData } from "./PatientProfilePage";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function reducer(
   state: DemographicsState,
@@ -293,6 +294,14 @@ export const DemographicsPage: IndividualPatientProfile = ({
           </div>
           <div className="form-whitespace">
             <div className="home-page-content-whitespace-logo"></div>
+          </div>
+          <div className="patient-profile-nav-btns">
+            <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
+              // TODO : add POST request function here
+              
+            }}>
+              <FontAwesomeIcon icon="save" size="2x" />
+            </div>
           </div>
         </div>
       </CSSTransition>

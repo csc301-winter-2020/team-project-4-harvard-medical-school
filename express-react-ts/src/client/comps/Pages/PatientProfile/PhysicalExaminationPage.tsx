@@ -3,6 +3,7 @@ import { CSSTransition } from "react-transition-group";
 import { IndividualPatientProfile } from "./PatientProfilePage";
 import { useHistory } from "react-router";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../../scss/patient-profiles/patient-physical-form.scss";
 
 type PhysicalExamVitals = {
@@ -306,6 +307,14 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
             >
               Add Physical Component
             </button>
+          </div>
+          <div className="patient-profile-nav-btns">
+            <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
+              // TODO : add POST request function here
+              
+            }}>
+              <FontAwesomeIcon icon="save" size="2x" />
+            </div>
           </div>
         </div>
       </CSSTransition>

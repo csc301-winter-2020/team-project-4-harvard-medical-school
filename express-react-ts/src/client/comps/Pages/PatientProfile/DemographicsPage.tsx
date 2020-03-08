@@ -74,12 +74,12 @@ const initialState: DemographicsState = {
 
 async function saveData(url: string, state: DemographicsState) {
   console.log(state)
-  allAttributes.firstName = state.firstName;
-  allAttributes.lastName = state.lastName;
+  allAttributes.first_name = state.firstName;
+  allAttributes.family_name = state.lastName;
   allAttributes.age = state.age;
-  allAttributes.sex = state.sex;
-  allAttributes.isPregnant = state.isPregnant;
-  allAttributes.country = state.country;
+  allAttributes.gender_at_birth = state.sex;
+  allAttributes.pregnant = state.isPregnant;
+  allAttributes.country_residence = state.country;
   try {
     const res = await postData(url, allAttributes);
     console.log("Saved " + state);
@@ -114,6 +114,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
             return res.json()
           })
           .then((jsonResult) => {
+            allAttributes = jsonResult; 
             console.log("Get Demographics")
             console.log(jsonResult)
             dispatch({ type: "many_fields", newState:{
@@ -298,7 +299,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
           <div className="patient-profile-nav-btns">
             <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
               // TODO : add POST request function here
-              
+              saveData('/api/patientprofile/' + patientID, state);
             }}>
               <FontAwesomeIcon icon="save" size="2x" />
             </div>

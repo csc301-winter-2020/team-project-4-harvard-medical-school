@@ -4,7 +4,8 @@ import { IndividualPatientProfile } from "./PatientProfilePage";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router";
-
+import { postData } from "./PatientProfilePage";
+import { json } from "body-parser";
 function reducer(
   state: CCHPI_State,
   action: { type: string; fieldName?: string; value?: string; newState?: {[key: string]: string |boolean|number|null} }
@@ -35,6 +36,20 @@ const initialState: CCHPI_State = {
   HPI: "",
 };
 
+async function saveData(url: string, state: any) {
+  console.log(state)
+  allAttributes.complaint = state.chiefComplaint;
+  allAttributes.hpi = state.HPI;
+  try {
+    const res = await postData(url, allAttributes);
+    console.log(res.message);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+var allAttributes: any;
+
 export const CCHPIPage: IndividualPatientProfile = ({
   pageName,
   currentPage,
@@ -57,11 +72,12 @@ export const CCHPIPage: IndividualPatientProfile = ({
           return res.json()
         })
         .then((jsonResult) => {
+          allAttributes = jsonResult; 
           console.log("Get CCHPI")
           console.log(jsonResult)
           dispatch({ type: "many_fields", newState:{
             "chiefComplaint": jsonResult.complaint, 
-            "HPI": "NEED TO ADD FIELD TO DATABASE"}});
+            "HPI": jsonResult.hpi}});
 
         }).catch((error) => {
           console.log("An error occured with fetch:", error)
@@ -130,8 +146,7 @@ export const CCHPIPage: IndividualPatientProfile = ({
           </div>
           <div className="patient-profile-nav-btns">
             <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
-              // TODO : add POST request function here
-              
+              saveData('/api/patientprofile/' + patientID, state);
             }}>
               <FontAwesomeIcon icon="save" size="2x" />
             </div>

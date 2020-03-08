@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+git push
+cd ..
+git subtree push --prefix express-react-ts/ heroku master
+cd express-react-ts

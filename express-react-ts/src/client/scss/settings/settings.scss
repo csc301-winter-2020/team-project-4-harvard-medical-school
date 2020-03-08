@@ -29,7 +29,20 @@
     height: 300px;
     width: 560px;
     text-align: left;
-
+    .settings-name{
+      display: inline-block;
+      margin-right: 10px;
+    }
+    .settings-year-text{
+      display:inline-block;
+    }
+    .settings-year-input{
+      font-size: 1.4rem;
+    }
+    .settings-avatar-text{
+      display: inline-block;
+      margin-right: 10px;
+    }
     h1 {
       font-size: 3rem;
     }
@@ -40,7 +53,7 @@
 
     input[type="text"] {
       height: 60px;
-      width: 420px;
+      width: 270px;
       font-size: 3rem;
       outline: 0;
       border-width: 0 0 2px;
@@ -53,6 +66,12 @@
     input[type="text"]:focus,
     input[type="number"]:focus {
       border-color: $color-primary-light;
+    }
+
+    #settings-avatar-input{
+      font-size: 1rem;
+      width: 416px;
+      height: 30px;
     }
   }
 

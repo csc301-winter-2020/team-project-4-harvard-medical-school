@@ -30,13 +30,6 @@ function reducer(
   throw new Error("Invalid action.");
 }
 
-function reducerTemp(
-  state: boolean,
-  action: any
-){
-  return !state
-}
-
 type category = endocrine
                 | vision
                 | headNeck
@@ -562,6 +555,11 @@ async function getPatientInfo(patientID: number){
   return await res.json()
 }
 
+async function getReviewOfSystems(patientID: number){
+  const res = await fetch(`/api/reviewOfSystems/${patientID}`, {method: 'GET'})
+  return await res.json()
+}
+
 async function postReviewOfSystemsInfo(patientID: number, data: ReviewOfSystemsState){
   const spec = { 
     method: 'POST',
@@ -574,11 +572,6 @@ async function postReviewOfSystemsInfo(patientID: number, data: ReviewOfSystemsS
   return res
 }
 
-async function getReviewOfSystems(patientID: number){
-  const res = await fetch(`/api/reviewOfSystems/${patientID}`, {method: 'GET'})
-  return await res.json()
-}
-
 export const ReviewOfSystemsPage: IndividualPatientProfile = ({
   pageName,
   currentPage,
@@ -589,8 +582,6 @@ export const ReviewOfSystemsPage: IndividualPatientProfile = ({
 }) => {
   // state which keeps track of all input fields
   const [state, dispatch] = useReducer(reducer, initialState)
-  // boolean flag for sending POST requests on change
-  const [postFlag, dispatchPost] = useReducer(reducerTemp, false)
   // state for keeping track of the gender of the patient
   const [gender, setGender] = useState('undefined')
 
@@ -722,12 +713,12 @@ export const ReviewOfSystemsPage: IndividualPatientProfile = ({
           </div>
           <div className="form-whitespace">
               <div className="home-page-content-whitespace-logo"></div>
-            </div>
+          </div>
           <div className="patient-profile-nav-btns">
             <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
               postToDB(state)
             }}>
-              <FontAwesomeIcon icon="save" size="2x" />
+              <FontAwesomeIcon icon="save" size="2x"/>
             </div>
           </div>
         </div>

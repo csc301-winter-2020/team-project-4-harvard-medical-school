@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState, useRef } from "react";
 import { CSSTransition } from "react-transition-group";
 import { IndividualPatientProfile } from "./PatientProfilePage";
 import { useHistory } from "react-router";
@@ -9,8 +9,13 @@ function reducer(
   action: {
     category: string
     symptomName: string
+    // TODO : add a nullable attribute for editting the entire state
+    reviewOfSystems: ReviewOfSystemsState | null
   }
 ): ReviewOfSystemsState{
+  if(action.reviewOfSystems !== null){
+    return action.reviewOfSystems
+  }
   if(Object.keys(state).includes(action.category) 
       && Object.keys(state[action.category]).includes(action.symptomName)){
     return {
@@ -22,6 +27,13 @@ function reducer(
     };
   }
   throw new Error("Invalid action.");
+}
+
+function reducerTemp(
+  state: boolean,
+  action: any
+){
+  return !state
 }
 
 type category = endocrine
@@ -550,11 +562,19 @@ async function getPatientInfo(patientID: number){
 }
 
 async function postReviewOfSystemsInfo(patientID: number, data: ReviewOfSystemsState){
-  const spec = {
+  const spec = { 
     method: 'POST',
+    headers: {
+      'Content-type': 'application/json'
+    },
     body: JSON.stringify(data)
   }
-  const res = await fetch(`/api/patientprofile/${patientID}`, spec)
+  const res = await fetch(`/api/reviewOfSystems/${patientID}`, spec)
+  return res
+}
+
+async function getReviewOfSystems(patientID: number){
+  const res = await fetch(`/api/reviewOfSystems/${patientID}`, {method: 'GET'})
   return await res.json()
 }
 
@@ -566,9 +586,19 @@ export const ReviewOfSystemsPage: IndividualPatientProfile = ({
   transitionName,
   patientID,
 }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const [gender, setGender] = useState('undefined');
-  const [patientInfo, setPatientInfo] = useState({});
+  const [state, dispatch] = useReducer(reducer, initialState)
+  const [gender, setGender] = useState('undefined')
+  
+  
+  const [postFlag, dispatchPost] = useReducer(reducerTemp, false)
+
+  const postToDB = (state: ReviewOfSystemsState) => {
+    // POST request to update the patient information
+    postReviewOfSystemsInfo(patientID, state).then((data) => {
+      console.log(data)
+    })
+  }
+
 
   const history = useHistory();
   useEffect(() => {
@@ -577,25 +607,34 @@ export const ReviewOfSystemsPage: IndividualPatientProfile = ({
       history.push(`/patient/${patientID}/reviewofsystems`);
       //get the gender of the patient
       getPatientInfo(patientID).then((data) => {
-        setPatientInfo(data)
         setGender(data.gender)
+      })
+
+      getReviewOfSystems(patientID).then((data) => {
+        dispatch({category: 'N/A', symptomName: 'N/A', reviewOfSystems: data})
       })
     }
   }, [currentPage]);
 
-  const postToDB = () => {
-    // update the patient information to match the current Review of Systems form
-    const patientInfoTemp: {[key:string]:boolean} = patientInfo
-    Object.keys(state).map((category: string) => {
-      Object.keys(state).map((symptomName: string) => {
-        patientInfoTemp[symptomName] = state[category][symptomName]
+  const isInitialMount = useRef(true)
+
+  useEffect(() => {
+    if(isInitialMount.current){
+      isInitialMount.current = false
+    }else{
+      postToDB(state)
+    }
+  }, [postFlag])
+
+  window.onload = () => {
+    const saveButton = document.querySelector('.nav-btn-save')
+    saveButton.addEventListener('click', () => dispatchPost(!postFlag))
+
+    const helpButton = document.querySelector('.nav-btn-help')
+    helpButton.addEventListener('click', () => {
+      getReviewOfSystems(patientID).then((data) => {
+        console.log(data)
       })
-    })
-    setPatientInfo(patientInfoTemp)
-    // POST request to update the patient information
-    postReviewOfSystemsInfo(patientID, patientInfo).then((data) => {
-      //TODO : do something here??
-      console.log(data)
     })
   }
 
@@ -629,12 +668,6 @@ export const ReviewOfSystemsPage: IndividualPatientProfile = ({
   
   function checkDependency(category: category, symptomName: string): boolean{
     return !(symptomName in dependencies) || dependencies[symptomName].reduce((acc: boolean, elem: string) => acc && !category[elem], true)
-  }
-
-  // TODO : send POST request when save button is clicked
-  window.onload = () => {
-    const saveButton = document.querySelector('.nav-btn-save')
-    saveButton.addEventListener('click', () => console.log(state))
   }
   
   return (
@@ -671,10 +704,11 @@ export const ReviewOfSystemsPage: IndividualPatientProfile = ({
                                     type="radio"
                                     name={symptomName}
                                     checked={state[category][symptomName]}
-                                    onClick={() =>
+                                    onClick={() => 
                                       dispatch({
                                         category: category,
                                         symptomName: symptomName,
+                                        reviewOfSystems: null
                                       })
                                     }
                                   />

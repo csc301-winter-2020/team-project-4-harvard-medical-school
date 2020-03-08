@@ -20,8 +20,12 @@ $background-dim: #ccc;
   font-family: $serif-font;
 }
 
-body{
+body {
   overflow: hidden;
+}
+
+a {
+  text-decoration: none;
 }
 
 .my-class {
@@ -34,7 +38,7 @@ body{
   text-align: center;
 }
 
-.bold-span{
+.bold-span {
   font-weight: bold;
 }
 

@@ -41,7 +41,7 @@ router.get(
   }
 );
 
-router.get(
+router.post(
   "/api/updateUser/:userId",
   (req: Request, res: Response, next: NextFunction) => {
     const userId: number = parseInt(req.params.userId);

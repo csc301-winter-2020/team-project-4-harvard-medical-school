@@ -5,6 +5,7 @@ import { HomePatientProfile } from "../SubComponents/Home/HomePatientProfile";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { now, max } from "../../utils/utils";
 import { useHistory } from "react-router";
+import { HelixLoader } from "../SubComponents/HelixLoader";
 
 interface HomePageProps {}
 
@@ -260,6 +261,8 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
   const [searchVal, setSearchVal] = useState("");
   const [patientsList, setPatientsList] = useState([]);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [isLoading, setIsLoading] = useState(true)
+
   const history = useHistory();
 
   useEffect(() => {
@@ -293,6 +296,8 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
       }
 
       setPatientsList(patientsListNew)
+
+      setIsLoading(false)
     })
   }, [])
 
@@ -372,6 +377,7 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
           searchValue={searchVal}
           setSearchValue={setSearchVal}
         />
+        {isLoading && <HelixLoader message="Loading Patients..."/>}
         <div className="home-page-content-container">
           <div className="home-page-your-patients-title">Your Patients</div>
           <div className="home-page-separator-line"></div>

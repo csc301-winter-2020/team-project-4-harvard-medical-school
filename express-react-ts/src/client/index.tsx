@@ -93,11 +93,6 @@ const browserRouter: JSX.Element = (
         path="/templates/new"
         render={(props) => <Questions {...props} useDefault={true} />}
       />
-      <Route
-        exact
-        path="/loader"
-        render={(props) => <HelixLoader {...props} message="DSHGAJLDHJSAHJDS" />}
-      />
       <Route render={(props) => <Error {...props} errNo={404} />} />
     </Switch>
   </BrowserRouter>

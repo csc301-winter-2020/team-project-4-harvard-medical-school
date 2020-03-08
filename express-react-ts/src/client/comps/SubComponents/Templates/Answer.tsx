@@ -10,6 +10,7 @@ interface AnswerProps {
   questionNum: number;
   isShowing: boolean;
   setQuestions: React.Dispatch<React.SetStateAction<Question[]>>;
+  allQuestions: Question[];
 }
 
 export const Answers: React.FC<AnswerProps> = ({
@@ -17,8 +18,8 @@ export const Answers: React.FC<AnswerProps> = ({
   questionNum,
   isShowing,
   setQuestions,
+  allQuestions,
 }) => {
-
   return (
     <Droppable droppableId={`droppable${question.id}`} type={`${questionNum}`}>
       {(provided, snapshot) =>
@@ -45,7 +46,13 @@ export const Answers: React.FC<AnswerProps> = ({
                       )}
                       {...provided.dragHandleProps}
                     >
-                      <AnswerRow name={answer.name} visible={answer.value}/>
+                      <AnswerRow
+                        name={answer.name}
+                        visible={answer.value}
+                        allQuestions={allQuestions}
+                        setQuestions={setQuestions}
+                        question={question}
+                      />
                     </div>
                   )}
                 </Draggable>

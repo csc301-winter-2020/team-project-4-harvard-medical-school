@@ -85,6 +85,7 @@ export const DraggableQuestion: React.FC<DraggableQuestionProps> = ({
               question={question}
               isShowing={isShowing}
               setQuestions={setQuestions}
+              allQuestions={allQuestions}
             />
           </div>
         )}

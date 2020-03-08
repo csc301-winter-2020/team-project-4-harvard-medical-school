@@ -10,6 +10,9 @@ Server will start on port 3000. Ensure that any environment variables `process.e
 
 Deployment to heroku made easy with the `npm run build` script which runs automatically transpiles all files when you push to heroku.
 
+# Deployment
+To deploy to heroku, simply run `./push_and_deploy` from this directory to push and commit - this automates deployment on push
+
 # Database & Google Vision
 Database connection has been set up. The following environmental variable must be defined in `.env` 
 for the server to run.

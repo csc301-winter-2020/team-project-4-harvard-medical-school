@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Header } from "../SubComponents/Header";
 import "../../scss/settings/settings.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { defaultAvatar } from "../../utils/utils";
 import { HelixLoader } from "../SubComponents/HelixLoader";
 
 interface SettingsPageProps {}
@@ -92,7 +93,10 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({}) => {
       <div className="settings-outermost">
         <div className="settings-main-container">
           <div className="settings-top-container">
-            <div className="settings-avatar"></div>
+            <div className="settings-avatar"
+            style={{
+              backgroundImage: `url("${userData.avatar_url}")`,
+            }}></div>
             <div className="settings-top-info">
               {!isEditing ? (
                 <h1>{userData.first_name+' '+userData.last_name}</h1>

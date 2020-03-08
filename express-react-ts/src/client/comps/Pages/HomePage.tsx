@@ -36,11 +36,6 @@ const initialState: HomePageState = {
   changed: true,
 };
 
-async function getPatientProfilesForUser(userID: number){
-  const res = await fetch(`/api/studentHomepage/${userID}`, {method: 'GET'})
-  return await res.json()
-}
-
 function reducer(
   state: HomePageState,
   action: {
@@ -112,17 +107,16 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { nameSort, createdSort, lastModifiedSort, changed } = state;
   const [searchVal, setSearchVal] = useState("");
-  const [allPatients, setAllPatients] = useState([])
+  const [allPatients, setAllPatients] = useState([]);
   const [patientsList, setPatientsList] = useState([]);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
 
   const history = useHistory();
 
   useEffect(() => {
     document.title = "Scribe: Home";
-    const handleResize = () =>
-      setWindowWidth(window.innerWidth);
+    const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -130,31 +124,85 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
   });
 
   useEffect(() => {
-    getPatientProfilesForUser(1).then((data) => {
-      const patientsListNew = []
+    fetch("/api/me")
+      .then((res: any) => {
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          throw new Error("api me status not 200");
+        }
+      })
+      .then((data: any) => {
+        console.log(data);
+        return fetch(`/api/studentHomepage/${data.id}`);
+      })
+      .then((res: any) => {
+        if (res.status === 200){
+          return res.json()
+        } else {
+          throw new Error("res.status not 200");
+        }
+      })
+      .then((data:any) => {
+        const patientsListNew:PatientProfile[] = [];
+        console.log(data);
+        // TODO: some fields don't have the right data
+        for (let i = 0; i < data.length; i++) {
+          patientsListNew.push({
+            title: "Patient" + data[i].id,
+            date: now(),
+            lastModified: data[i].last_modified,
+            firstName: data[i].first_name,
+            lastName: data[i].family_name,
+            sex: data[i].gender,
+            isPregnant: data[i].gender === "Male" ? null : data[i].pregnant,
+            age: data[i].age,
+            country: data[i].country_residence,
+            patientID: data[i].id,
+          });
+        }
+        setAllPatients(patientsListNew);
+        setPatientsList(patientsListNew);
+        setIsLoading(false);
+      })
+      .catch((err: any) => {
+        console.log("Could not verify your session.");
+        console.log(err);
+        history.push("/err/500/Please try again.");
+      });
+  }, []);
 
-      // TODO: some fields don't have the right data
-      for(let i = 0;i < data.length;i++){
-        patientsListNew.push({
-          title: 'Patient'+data[i].id,
-          date: now(),
-          lastModified: data[i].last_modified,
-          firstName: data[i].first_name,
-          lastName: data[i].family_name,
-          sex: data[i].gender,
-          isPregnant: data[i].gender === 'Male' ? null : data[i].pregnant,
-          age: data[i].age,
-          country: data[i].country_residence,
-          patientID: data[i].id
-        })
-      }
-      
-      setAllPatients(patientsListNew)
-      setPatientsList(patientsListNew)
+  // fetch(`/api/studentHomepage/${data.id}`)
+  // .then((data: any) => {
+  //   if (data.status === 200){
+  //     return data.json()
+  //   } else {
+  //     throw new Error("no data");
+  //   }
+  // })
+  // .then((data:any) => {
+  //   const patientsListNew:PatientProfile[] = [];
+  //   console.log(data);
+  //   // TODO: some fields don't have the right data
+  //   for (let i = 0; i < data.length; i++) {
+  //     patientsListNew.push({
+  //       title: "Patient" + data[i].id,
+  //       date: now(),
+  //       lastModified: data[i].last_modified,
+  //       firstName: data[i].first_name,
+  //       lastName: data[i].family_name,
+  //       sex: data[i].gender,
+  //       isPregnant: data[i].gender === "Male" ? null : data[i].pregnant,
+  //       age: data[i].age,
+  //       country: data[i].country_residence,
+  //       patientID: data[i].id,
+  //     });
+  //   }
+  //   setAllPatients(patientsListNew);
+  //   setPatientsList(patientsListNew);
+  //   setIsLoading(false);
+  // })
 
-      setIsLoading(false)
-    })
-  }, [])
 
   useEffect(() => {
     if (nameSort !== null) {
@@ -232,7 +280,7 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
           searchValue={searchVal}
           setSearchValue={setSearchVal}
         />
-        {isLoading && <HelixLoader message="Loading Patients..."/>}
+        {isLoading && <HelixLoader message="Loading Patients..." />}
         <div className="home-page-content-container">
           <div className="home-page-your-patients-title">Your Patients</div>
           <div className="home-page-separator-line"></div>
@@ -306,9 +354,12 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
           <div className="home-page-create-new-patient-btn">
             <p>Add Patient</p>
           </div>
-          <div className="home-page-create-template-btn" onClick={()=>{
-            history.push("/templates");
-          }}>
+          <div
+            className="home-page-create-template-btn"
+            onClick={() => {
+              history.push("/templates");
+            }}
+          >
             <p>Add/Customize Template</p>
           </div>
         </div>

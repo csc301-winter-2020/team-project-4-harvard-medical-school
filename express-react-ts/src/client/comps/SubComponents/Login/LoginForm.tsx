@@ -76,6 +76,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   useEffect(() => {
     fetch("/api/me")
     .then(res => {
+      console.log(res);
       if (res.status === 200){
         history.push("/home");
       }

@@ -107,8 +107,9 @@ router.patch(
         email = $4, \
         password = $5, \
         year = $6, \
-        user_type = $7 \
-        WHERE id = $8";
+        user_type = $7, \
+        avater_url = $8 \
+        WHERE id = $9";
         pool.query(query, [
           body.username,
           body.first_name,
@@ -117,6 +118,7 @@ router.patch(
           body.password,
           body.year,
           body.user_type,
+          body.avatar_url,
           userId,
         ])
       .then((result: any) => {

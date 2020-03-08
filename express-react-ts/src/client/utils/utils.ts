@@ -60,7 +60,7 @@ export function reorder<T> (list:T[], startIndex:number, endIndex:number):T[] {
 };
 
 const grid = 6;
-export const getItemStyle = (isDragging:boolean, draggableStyle:any) => {
+export const getItemStyle = (isDragging:boolean, draggableStyle:any, highlight: boolean) => {
   return {
     // some basic styles to make the items look a bit nicer
     userSelect: "none",
@@ -69,7 +69,7 @@ export const getItemStyle = (isDragging:boolean, draggableStyle:any) => {
     textAlign: "left",
 
     // change background colour if dragging
-    background: isDragging ? "lightgreen" : "white",
+    background: highlight ? "#00ffd9" : (isDragging ? "lightgreen" : "white"),
 
     // styles we need to apply on draggables
     ...draggableStyle

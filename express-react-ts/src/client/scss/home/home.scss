@@ -334,6 +334,9 @@ input:focus {
   .home-page-content-container {
     width: 100%;
   }
+  .home-page-content-container{
+    margin-left: 0;
+  }
 
   .home-patient-profile-name-col, .home-patient-profile-date-col, .home-patient-profile-last-modified-col{
     font-size: 2.1rem;

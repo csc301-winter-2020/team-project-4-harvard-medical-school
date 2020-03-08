@@ -1,6 +1,7 @@
 import * as express from 'express';
 const { checkAuthenticated, checkGuest } = require('../auth/authCheck');
 import * as dotenv from "dotenv";
+// @ts-ignore
 import bodyParser = require('body-parser');
 dotenv.config();
 type Router = express.Router;
@@ -39,13 +40,13 @@ router.get('/api/updateUser/:userId', (req: Request, res: Response, next: NextFu
     if (body.default_mode === 'Both' || body.default_mode === 'Canvas' ||
     body.default_mode === 'text' || body.default_sidebar === true ||
     body.default_sidebar === true ) {
-        pool.connect().then((client) => {
+        pool.connect().then((client: { query: (arg0: string, arg1: number[]) => any; }) => {
             const query_string: string = "UPDATE csc301db.users SET default_mode = $1\
             , default_sidebar = $2 WHERE id = $3";
             client.query(query_string, [body.default_mode, body.default_sidebar, userId]); 
-        }).then(result => {
+        }).then((result: { rowCount: number; rows: { [x: string]: any; }; }) => {
             res.status(200).send();
-        }).catch((err) => {
+        }).catch((err: any) => {
             res.status(400).send();
         });
     } else {
@@ -121,7 +122,7 @@ router.get('/api/patientprofile/:patientId', (req:Request, res:Response, next:Ne
             }
             res.status(200).json(result);
         }
-    })).catch((err) => {
+    })).catch((err :any) => {
         console.log(err);
         res.status(500).send();
     });
@@ -195,7 +196,7 @@ router.post('/api/patientprofile/:patientId', (req:Request, res:Response, next:N
         return pool.query(
             "DELETE FROM csc301db.patient_profile WHERE student_id = $1 AND patient_id = $2",
         [new_patient.student_id, new_patient.patient_id]);
-    }).then((result) => {
+    }).then((result: {rowCount: number; rows: { [x: string]: any; }; }) => {
         const insert_query: string = "INSERT INTO csc301db.patient_profile \
             (student_id, patient_id, first_name, family_name, age, gender_at_birth\
             ,gender, smoker, pregnant, country_residence, country_visited, complaint, medical_history,\
@@ -222,9 +223,9 @@ router.post('/api/patientprofile/:patientId', (req:Request, res:Response, next:N
                 $33, $34, $35, $36, $37, $38, $39, $40, $41, $42, $43, $44,\
                 $45, $46, $47, $48);"; 
         return pool.query(insert_query, params_arr);
-    }).then((result) => {
+    }).then((result: {rowCount: number; rows: { [x: string]: any; }; }) => {
         res.status(200).send();
-    }).catch((err) => {
+    }).catch((err: any) => {
         console.log(err);
         res.status(400).json(err);
     });  
@@ -235,10 +236,10 @@ router.post('/api/patientprofile/:patientId', (req:Request, res:Response, next:N
  */
 router.get('/api/student/:userId/templates', (req:Request, res:Response, next:NextFunction) => {
     const userId: number = parseInt(req.params.userId);
-    pool.connect().then((client) => {
+    pool.connect().then((client :{ query: (arg0: string, arg1: number[]) => any; }) => {
         const query_string: string = "SELECT * FROM csc301db.templates WHERE user_id = $1";
         return client.query(query_string, [userId]);
-    }).then((result) => {
+    }).then((result :{rowCount: number; rows: { [x: string]: any; }; }) => {
         if (result.rowCount === 0) {
             res.status(404).send();
         }
@@ -247,7 +248,7 @@ router.get('/api/student/:userId/templates', (req:Request, res:Response, next:Ne
             template_arr[i].template = JSON.parse(template_arr[i].template);
         }
         res.status(200).json(template_arr);
-    }).catch((err) => {
+    }).catch((err: any) => {
         console.log(err);
         res.status(500).send();
     });
@@ -257,14 +258,14 @@ router.get('/api/student/:userId/templates', (req:Request, res:Response, next:Ne
 router.post('/api/student/:userId/templates/new', (req:Request, res:Response, next:NextFunction) => {
     const userId: number = parseInt(req.params.userId);
     const body: any = req.body;
-    pool.connect().then((client) => {
+    pool.connect().then((client :{ query: (arg0: string, arg1: number[]) => any; }) => {
         const insert_query: string = "INSERT INTO csc301db.templates(user_id, template_name,\
             date_millis, template) VALUES ($1, $2, $3, $4)";
         return client.query(insert_query, [userId, body.template_name,
              body.date_millis, JSON.stringify(body.template)]);
-    }).then((result) => {
+    }).then((result : {rowCount: number; rows: { [x: string]: any; }; }) => {
         res.status(200).send();
-    }).catch((err) => {
+    }).catch((err: any) => {
         console.log(err);
         res.status(400).send();
     });
@@ -288,11 +289,11 @@ router.post('/api/student/:userId/templates/new', (req:Request, res:Response, ne
 
 router.get('/api/reviewOfSystems/:patientId', (req:Request, res:Response, next:NextFunction)=>{
     const patientId: number = parseInt(req.params.patientId);
-    pool.connect().then((client) => {
+    pool.connect().then((client : { query: (arg0: string, arg1: number[]) => any; }) => {
         const query_string: string = "SELECT info FROM csc301db.review_of_systems\
          WHERE patient_id = $1";
         return client.query(query_string, [patientId]);
-    }).then((result) => {
+    }).then((result :{rowCount: number; rows: { [x: string]: any; }; }) => {
         if (result.rowCount === 0) {
             res.status(404).send();
         } else {
@@ -303,30 +304,30 @@ router.get('/api/reviewOfSystems/:patientId', (req:Request, res:Response, next:N
 
 router.post('/api/reviewOfSystems/:patientId', (req:Request, res:Response, next:NextFunction)=>{
     const patientId: number = parseInt(req.params.patientId);
-    pool.connect().then((client) => {
+    pool.connect().then((client: { query: (arg0: string, arg1: number[]) => any; }) => {
         const delete_string: string = "DELETE FROM csc301db.review_of_systems \
         WHERE patient_id = $1";
         return client.query(delete_string, [patientId]);
-    }).then((result) => {
+    }).then((result: any) => {
         return pool.connect();
-    }).then((client) => {
+    }).then((client : { query: (arg0: string, arg1: any[]) => any; }) => {
         const insert_string: string = "INSERT INTO csc301db.review_of_systems \
         (patient_id, info ) VALUES ($1, $2)";
         return client.query(insert_string, [patientId, JSON.stringify(req.body)]);
-    }).then((result) => {
+    }).then((result : {rowCount: number; rows: { [x: string]: any; }; }) => {
         res.status(200).send();
-    }).catch((err) => {
+    }).catch((err: any) => {
         res.status(400).send();
     })
 });
 
 router.get('/api/labResults/:patientId', (req:Request, res:Response, next:NextFunction)=>{
     const patientId: number = parseInt(req.params.patientId);
-    pool.connect().then((client) => {
+    pool.connect().then((client: { query: (arg0: string, arg1: number[]) => any; }) => {
         const query_string: string = "SELECT info FROM csc301db.lab_results\
          WHERE patient_id = $1";
         return client.query(query_string, [patientId]);
-    }).then((result) => {
+    }).then((result : {rowCount: number; rows: { [x: string]: any; }; }) => {
         if (result.rowCount === 0) {
             res.status(404).send();
         } else {
@@ -337,19 +338,19 @@ router.get('/api/labResults/:patientId', (req:Request, res:Response, next:NextFu
 
 router.post('/api/labResults/:patientId', (req:Request, res:Response, next:NextFunction)=>{
     const patientId: number = parseInt(req.params.patientId);
-    pool.connect().then((client) => {
+    pool.connect().then((client: { query: (arg0: string, arg1: number[]) => any; }) => {
         const delete_string: string = "DELETE FROM csc301db.lab_results \
         WHERE patient_id = $1";
         return client.query(delete_string, [patientId]);
-    }).then((result) => {
+    }).then((result : {rowCount: number; rows: { [x: string]: any; }; }) => {
         return pool.connect();
-    }).then((client) => {
+    }).then((client: any) => {
         const insert_string: string = "INSERT INTO csc301db.lab_results \
         (patient_id, info ) VALUES ($1, $2)";
         return client.query(insert_string, [patientId, JSON.stringify(req.body)]);
-    }).then((result) => {
+    }).then((result : {rowCount: number; rows: { [x: string]: any; }; }) => {
         res.status(200).send();
-    }).catch((err) => {
+    }).catch((err: any) => {
         res.status(400).send();
     })
 });
@@ -358,7 +359,7 @@ router.post('/api/labResults/:patientId', (req:Request, res:Response, next:NextF
  * TODO: Return all the classes this user (student) is in
  */
 router.get('/api/student/:userId/classes', (req:Request, res:Response, next:NextFunction) => {
-    const userId = req.params.userId;
+    const userId: string = req.params.userId;
     res.status(200).json('');
 });
 
@@ -366,7 +367,7 @@ router.get('/api/student/:userId/classes', (req:Request, res:Response, next:Next
  * TODO: Return all the classes this instructor manages
  */
 router.get('/api/instructor/:userId/classes', (req:Request, res:Response, next:NextFunction) => {
-    const userId = req.params.userId;
+    const userId: string = req.params.userId;
     res.status(200).json('');
 });
 

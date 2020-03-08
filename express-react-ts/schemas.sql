@@ -127,7 +127,7 @@ CREATE TABLE templates (
     template_id SERIAL PRIMARY KEY,
     UNIQUE (user_id, template_id),
     template_name TEXT NOT NULL,
-    date_millis INT NOT NULL,
+    date_millis BIGINT NOT NULL,
     -- Gimmick, backend does not need to understand what is in the
     -- template, just store as a plain text
     template TEXT NOT NULL

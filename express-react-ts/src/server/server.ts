@@ -106,8 +106,8 @@ app.use(loginRegisterRouter);
 
 // Setup default routes for the server.
 
-// TODO: for some reason this isnt working!!!!!!!!! it should only let you go to '/' if you are not logged in already
-app.get("/", checkGuest, (req, res) => {
+
+app.get(["/home", "/settings", "/templates", "/patient/*", "/template/*"], checkAuthenticated, (req, res) => {
   res.sendFile(path.resolve(__dirname + "/../public/index.html"));
 });
 

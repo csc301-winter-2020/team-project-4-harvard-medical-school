@@ -1,7 +1,8 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { FormGroup } from "./FormGroup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { toast } from "react-toastify";
+import { useHistory } from "react-router";
 
 interface LoginFormProps {
   isRegisterMode: boolean;
@@ -25,6 +26,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   onSubmit,
 }) => {
   const mToast: any = toast;
+  const history = useHistory();
 
   function registerUser(e: any) {
     e.preventDefault();
@@ -65,6 +67,18 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         });
     }
   }
+
+  useEffect(() => {
+    fetch("/api/me")
+    .then(res => {
+      if (res.status === 200){
+        history.push("/home");
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  }, []);
 
   return (
     <Fragment>

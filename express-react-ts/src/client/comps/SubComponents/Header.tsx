@@ -45,7 +45,12 @@ export const Header: React.FC<HeaderProps> = ({
       {showSearch && (
         <div className="home-page-header-search-bar">
           <FontAwesomeIcon icon="search" />
-          <input type="text" placeholder={placeholder} value={searchValue} onChange={e => setSearchValue(e.target.value)}></input>
+          <input
+            type="text"
+            placeholder={placeholder}
+            value={searchValue}
+            onChange={e => setSearchValue(e.target.value)}
+          ></input>
         </div>
       )}
 
@@ -82,12 +87,9 @@ export const Header: React.FC<HeaderProps> = ({
           >
             Settings
           </div>
-          <div
-            className="home-page-header-avatar-drop-logout"
-            onClick={() => history.push("/logout")}
-          >
-            Logout
-          </div>
+          <a href="/logout">
+            <div className="home-page-header-avatar-drop-logout">Logout</div>
+          </a>
         </div>
       </CSSTransition>
     </div>

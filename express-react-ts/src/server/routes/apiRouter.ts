@@ -69,14 +69,17 @@ router.get('/api/student/:userId/patientprofiles', (req:Request, res:Response, n
         } else {
             const attributes: Array<string> =
             ['pregnant', 'country_residence', 'country_visited', 'complaint',
-            'medical_history', 'social_history', 'family_history'];
-            for (let i = 0; i < query_result.rowCount; i++) {
+            'medical_history', 'social_history', 'family_history', 'country',
+            'hpi', 'hospital_history', 'medications', 'allergies', 'work', 
+            'living_conditions', 'sexual_history', 'etoh', 'drinks_per_week',
+            'last_time_smoked', 'packs_per_day', 'other_substances'];
+            for (let j = 0; j < query_result.rowCount; j++) {
                 for (let i = 0; i < attributes.length; i++) {
                     const this_attribute = attributes[i] + '_canvas';
-                    if (query_result.rows[this_attribute] !== null) {
-                        query_result.rows[this_attribute] = s3.getSignedUrl('getObject', {
+                    if (query_result.rows[j][this_attribute] !== null) {
+                        query_result.rows[j][this_attribute] = s3.getSignedUrl('getObject', {
                             Bucket: bucket,
-                            Key: query_result.rows[this_attribute],
+                            Key: query_result.rows[j][this_attribute],
                             Expires: urlExpiredTime
                         });
                     }
@@ -84,7 +87,10 @@ router.get('/api/student/:userId/patientprofiles', (req:Request, res:Response, n
             }
             res.status(200).json(query_result.rows);
         }
-    }));
+    })).catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+    });
 });
 
 /**

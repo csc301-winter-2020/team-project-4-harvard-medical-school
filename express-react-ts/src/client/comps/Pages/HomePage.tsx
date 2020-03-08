@@ -36,6 +36,11 @@ const initialState: HomePageState = {
   changed: true,
 };
 
+async function getPatientProfilesForUser(userID: number){
+  const res = await fetch(`/api/student/${userID}/patientprofiles`, {method: 'GET'})
+  return await res.json()
+}
+
 function reducer(
   state: HomePageState,
   action: {
@@ -253,7 +258,7 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { nameSort, createdSort, lastModifiedSort, changed } = state;
   const [searchVal, setSearchVal] = useState("");
-  const [patientsList, setPatientsList] = useState(patients);
+  const [patientsList, setPatientsList] = useState([]);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const history = useHistory();
 
@@ -266,6 +271,30 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
       window.removeEventListener("resize", handleResize);
     };
   });
+
+  useEffect(() => {
+    getPatientProfilesForUser(1).then((data) => {
+      const patientsListNew = []
+
+      for(let i = 0;i < data.length;i++){
+        patientsListNew.push({
+          title: 'Patient'+i,
+          date: now(),
+          lastModified: now(),
+          firstName: data[i].first_name,
+          lastName: data[i].family_name,
+          sex: data[i].gender,
+          dateOfBirth: now(),
+          isPregnant: null,
+          ethnicity: null,
+          age: data[i].age,
+          country: data[i].country
+        })
+      }
+
+      setPatientsList(patientsListNew)
+    })
+  }, [])
 
   useEffect(() => {
     if (nameSort !== null) {

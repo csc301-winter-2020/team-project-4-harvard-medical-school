@@ -96,13 +96,6 @@ export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
               <p>
                 <span className="bold-span">Country:</span> {country}
               </p>
-              <p>
-                <span className="bold-span">Ethnicity:</span> {ethnicity}
-              </p>
-              <p>
-                <span className="bold-span">Date Of Birth:</span>{" "}
-                {dateFormatFull(dateOfBirth)}
-              </p>
             </div>
             <div className="home-patient-profile-info-btn-container">
               <div className="home-patient-profile-info-export-btn">

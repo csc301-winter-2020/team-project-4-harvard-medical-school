@@ -2,6 +2,7 @@ import React, { useEffect, useReducer, useState, useRef } from "react";
 import { CSSTransition } from "react-transition-group";
 import { IndividualPatientProfile } from "./PatientProfilePage";
 import { useHistory } from "react-router";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../../scss/patient-profiles/patient-profile-form.scss";
 
 function reducer(
@@ -586,57 +587,37 @@ export const ReviewOfSystemsPage: IndividualPatientProfile = ({
   transitionName,
   patientID,
 }) => {
+  // state which keeps track of all input fields
   const [state, dispatch] = useReducer(reducer, initialState)
-  const [gender, setGender] = useState('undefined')
-  
-  
+  // boolean flag for sending POST requests on change
   const [postFlag, dispatchPost] = useReducer(reducerTemp, false)
+  // state for keeping track of the gender of the patient
+  const [gender, setGender] = useState('undefined')
 
+  // POST request to update the patient Review of Systems information
   const postToDB = (state: ReviewOfSystemsState) => {
-    // POST request to update the patient information
     postReviewOfSystemsInfo(patientID, state).then((data) => {
       console.log(data)
     })
   }
-
 
   const history = useHistory();
   useEffect(() => {
     if (currentPage === pageName) {
       document.title = `Patient Profile: ${pageName}`;
       history.push(`/patient/${patientID}/reviewofsystems`);
-      //get the gender of the patient
+
+      // get the gender of the patient
       getPatientInfo(patientID).then((data) => {
         setGender(data.gender)
       })
 
+      // get the Review of Systems information from the database
       getReviewOfSystems(patientID).then((data) => {
         dispatch({category: 'N/A', symptomName: 'N/A', reviewOfSystems: data})
       })
     }
   }, [currentPage]);
-
-  const isInitialMount = useRef(true)
-
-  useEffect(() => {
-    if(isInitialMount.current){
-      isInitialMount.current = false
-    }else{
-      postToDB(state)
-    }
-  }, [postFlag])
-
-  window.onload = () => {
-    const saveButton = document.querySelector('.nav-btn-save')
-    saveButton.addEventListener('click', () => dispatchPost(!postFlag))
-
-    const helpButton = document.querySelector('.nav-btn-help')
-    helpButton.addEventListener('click', () => {
-      getReviewOfSystems(patientID).then((data) => {
-        console.log(data)
-      })
-    })
-  }
 
   // intelligent form specifications
   const dependencies: {[key:string]: [string]} = {
@@ -648,6 +629,7 @@ export const ReviewOfSystemsPage: IndividualPatientProfile = ({
     polydipsia: ['polyphagia']
   }
 
+  // gender-related symptoms
   const genderRelatedSymptoms: {[key:string]: string}= {
     erectileDysfunction: 'Male',
     penileDischarge: 'Male',
@@ -666,8 +648,10 @@ export const ReviewOfSystemsPage: IndividualPatientProfile = ({
     breastMass: 'Female'
   }
   
+  // intelligent form checker function
   function checkDependency(category: category, symptomName: string): boolean{
-    return !(symptomName in dependencies) || dependencies[symptomName].reduce((acc: boolean, elem: string) => acc && !category[elem], true)
+    return !(symptomName in dependencies) || 
+             dependencies[symptomName].reduce((acc: boolean, elem: string) => acc && !category[elem], true)
   }
   
   return (
@@ -717,6 +701,7 @@ export const ReviewOfSystemsPage: IndividualPatientProfile = ({
                               </div>
                             )
                           }
+                          // grey out the input according to intelligent form
                           return (
                             <div className="radio-group" key={symptomName}>
                               <label>
@@ -734,6 +719,16 @@ export const ReviewOfSystemsPage: IndividualPatientProfile = ({
                 )
               })
             }
+          </div>
+          <div className="form-whitespace">
+              <div className="home-page-content-whitespace-logo"></div>
+            </div>
+          <div className="patient-profile-nav-btns">
+            <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
+              postToDB(state)
+            }}>
+              <FontAwesomeIcon icon="save" size="2x" />
+            </div>
           </div>
         </div>
       </CSSTransition>

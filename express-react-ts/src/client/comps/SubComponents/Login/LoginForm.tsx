@@ -1,6 +1,7 @@
-import React, { Fragment } from 'react'
-import { FormGroup } from './FormGroup'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { Fragment } from "react";
+import { FormGroup } from "./FormGroup";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { toast } from "react-toastify";
 
 interface LoginFormProps {
   isRegisterMode: boolean;
@@ -15,66 +16,125 @@ interface LoginFormProps {
   onSubmit: (e: React.FormEvent<HTMLButtonElement>) => void;
 }
 
-export const LoginForm: React.FC<LoginFormProps> = ({isRegisterMode, dispatch, username, password, repassword, onSubmit}) => {
-    return (
-      <Fragment>
-    <h1 className="login-form-header">
-    { isRegisterMode ? "Register" : "Login"}
-    </h1>
-    <form className="login-form" action="/login" method="post">
-    <FormGroup
-      dispatch={dispatch}
-      id="login-username"
-      label="Username or Email"
-      value={username}
-      type="text"
-      name="username"
-    />
-    <FormGroup
-      dispatch={dispatch}
-      id="login-password"
-      label="Password"
-      value={password}
-      type="password"
-      name="password"
-    />
-    {isRegisterMode && (
-      <FormGroup
-        dispatch={dispatch}
-        id="login-repassword"
-        label="Confirm Password"
-        value={repassword}
-        type="password"
-        name="repassword"
-      />
-    )}
-    <button className="login-btn" onClick={e => onSubmit(e)}>
-      {!isRegisterMode ? "Login" : "Register"}
-      <span style={{ marginLeft: "10px" }}>
-        <FontAwesomeIcon icon="sign-in-alt" />
-      </span>
-    </button>
-  </form>
-  {!isRegisterMode ? (
-    <p className="login-register-small-text">
-      Haven't made an account yet?{" "}
-      <span
-        className="login-register-span"
-        onClick={() => dispatch({ type: "start register" })}
-      >
-        Register.
-      </span>
-    </p>
-  ) : (
-    <p className="login-register-small-text">
-      Already have an account?{" "}
-      <span
-        className="login-register-span"
-        onClick={() => dispatch({ type: "stop register" })}
-      >
-        Log In.
-      </span>
-    </p>
-  )}
-  </Fragment>);
-}
+export const LoginForm: React.FC<LoginFormProps> = ({
+  isRegisterMode,
+  dispatch,
+  username,
+  password,
+  repassword,
+  onSubmit,
+}) => {
+  const mToast: any = toast;
+
+  function registerUser(e: any) {
+    e.preventDefault();
+    if (password !== repassword) {
+      mToast.error("Passwords do not match!");
+    } else if (password === "" || username === "") {
+      mToast.error("One or more fields are missing!");
+    } else {
+      const date = new Date();
+      fetch("/register", {
+        method: "POST",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        redirect: "follow",
+        referrerPolicy: "no-referrer",
+        body: JSON.stringify({
+          username: username,
+          first_name: "John",
+          last_name: "Doe",
+          email: "Example@example.com",
+          password: password,
+          year: 1,
+          user_type: "Student",
+          date_create: date.getTime(),
+        }),
+      })
+        .then((res: any) => {
+          mToast.success("You have successfully registered.");
+          dispatch({type: "register success"});
+        })
+        .catch((err: any) => {
+          console.log(err);
+          mToast.error("There was an issue with your registration. Try again.");
+        });
+    }
+  }
+
+  return (
+    <Fragment>
+      <h1 className="login-form-header">
+        {isRegisterMode ? "Register" : "Login"}
+      </h1>
+      <form className="login-form" action="/login" method="post">
+        <FormGroup
+          dispatch={dispatch}
+          id="login-username"
+          label={isRegisterMode ? "Username" : "Username or Email"}
+          value={username}
+          type="text"
+          name="username"
+        />
+        <FormGroup
+          dispatch={dispatch}
+          id="login-password"
+          label="Password"
+          value={password}
+          type="password"
+          name="password"
+        />
+        {isRegisterMode && (
+          <FormGroup
+            dispatch={dispatch}
+            id="login-repassword"
+            label="Confirm Password"
+            value={repassword}
+            type="password"
+            name="repassword"
+          />
+        )}
+        <button
+          className="login-btn"
+          onClick={e => {
+            if (isRegisterMode) {
+              registerUser(e);
+            } else {
+              onSubmit(e);
+            }
+          }}
+        >
+          {!isRegisterMode ? "Login" : "Register"}
+          <span style={{ marginLeft: "10px" }}>
+            <FontAwesomeIcon icon="sign-in-alt" />
+          </span>
+        </button>
+      </form>
+      {!isRegisterMode ? (
+        <p className="login-register-small-text">
+          Haven't made an account yet?{" "}
+          <span
+            className="login-register-span"
+            onClick={() => dispatch({ type: "start register" })}
+          >
+            Register.
+          </span>
+        </p>
+      ) : (
+        <p className="login-register-small-text">
+          Already have an account?{" "}
+          <span
+            className="login-register-span"
+            onClick={() => dispatch({ type: "stop register" })}
+          >
+            Log In.
+          </span>
+        </p>
+      )}
+    </Fragment>
+  );
+};

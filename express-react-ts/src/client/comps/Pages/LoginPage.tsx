@@ -47,6 +47,12 @@ function reducer(
         username: "",
         password: "",
       };
+    case "register success":
+      return {
+        ...state,
+        isRegisterMode: false,
+        isLoading: false,
+      }
     case "stop register":
       return {
         ...state,

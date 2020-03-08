@@ -42,7 +42,7 @@ function getUserByUsername(username: string) {
 // getUserByUsername('will');
 
 /**
- * * TODO: Change from dummy data to PSQL query.
+ * * 
  * @param id The id of the user we are trying to find.
  */
 function getUserById(id: number) {
@@ -53,7 +53,7 @@ function getUserById(id: number) {
       .connect()
       .then((client: any) => {
         const query: string =
-          "SELECT id, username, password FROM csc301db.users WHERE id = $1";
+          "SELECT * FROM csc301db.users WHERE id = $1";
         return client.query(query, [id]);
       })
       .then((result: any) => {

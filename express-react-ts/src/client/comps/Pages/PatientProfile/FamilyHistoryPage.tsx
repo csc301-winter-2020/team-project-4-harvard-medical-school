@@ -49,12 +49,12 @@ async function postData(url: string, data: any) {
   return await response.json();
 }
 
-async function saveData(url: string, familyHist: string) {
-  console.log(familyHist)
-  allAttributes.family_history = familyHist;
+async function saveData(url: string, state: any) {
+  console.log(state.familyHist)
+  allAttributes.family_history = state.familyHist;
   try {
     const res = await postData(url, allAttributes);
-    console.log("Saved " + familyHist);
+    console.log("Saved " + state.familyHist);
   } catch (err) {
     console.log("Error: " + err);
   }
@@ -144,7 +144,7 @@ export const FamilyHistoryPage: IndividualPatientProfile = ({
             </div>
             <div className="patient-profile-nav-btns">
               <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
-                saveData('/api/patientprofile/' + patientID, familyHist);
+                saveData('/api/patientprofile/' + patientID, state);
               }}>
                 <FontAwesomeIcon icon="save" size="2x" />
               </div>

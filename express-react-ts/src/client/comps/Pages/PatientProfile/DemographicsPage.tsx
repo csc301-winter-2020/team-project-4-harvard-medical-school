@@ -70,6 +70,34 @@ const initialState: DemographicsState = {
   country: "",
 };
 
+async function postData(url: string, data: any) {
+  const response = await fetch(url, {
+    method: 'POST',
+    mode: 'cors',
+    cache: 'no-cache',
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    redirect: 'follow', // manual
+    referrerPolicy: 'no-referrer', // no-referrer
+    body: JSON.stringify(data)
+  });
+  return await response.json();
+}
+
+async function saveData(url: string, state: DemographicsState) {
+  console.log(state)
+  try {
+    const res = await postData(url, allAttributes);
+    console.log("Saved " + state);
+  } catch (err) {
+    console.log("Error: " + err);
+  }
+}
+
+var allAttributes: any;
+
 export const DemographicsPage: IndividualPatientProfile = ({
   pageName,
   currentPage,

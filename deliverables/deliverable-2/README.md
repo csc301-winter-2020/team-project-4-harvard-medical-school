@@ -16,9 +16,7 @@ The problem our application aims to solve deals with the inefficiency of how med
 
 Our application saves time by speeding up this process, as students can take notes directly within the application (accepting both typed and stylus inputs), providing a standardized way of organizing a student’s notes in one place, as well as providing a convenient method for submission. This also makes it easier for educators to view and provide input on their student’s submissions.
 
-Scribe also helps researchers gain better understanding in how medical students learn and approach diagnosis decision making through the generated list of medical terms and diagnoses generated from a student’s notes. 
-
-As of now, not much research has been done on how students approach diagnosis decisions; with our application, we can gain empirical data that helps indicate how students organically come to final patient diagnosis.
+Scribe also helps researchers gain better understanding in how medical students learn and approach diagnosis decisions. As of now, not much research has been done on how students approach diagnosis decisions; with our application, we can gain empirical data that helps indicate how students organically come to final patient diagnoses.
 
 From this information, we can curate and collect statistics about how medical students approach clinical problems in the context of the broader medical curriculum, as well as gain a better understanding of how their understanding of clinical concepts evolves throughout their medical education.
 
@@ -38,8 +36,6 @@ From this information, we can curate and collect statistics about how medical st
             - The navigation sidebar displays a list of every page of the patient profile; clicking on an element within this list brings you to the corresponding page.
 
 * ???? Creation and deletion of patient profiles ?????
-
-* Accessing the text information of a patient profile from our database
 
 * Updating the text information of a patient profile and saving it in our database
 

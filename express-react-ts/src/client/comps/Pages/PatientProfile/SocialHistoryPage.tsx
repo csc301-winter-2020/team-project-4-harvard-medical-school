@@ -5,6 +5,7 @@ import { IndividualPatientProfile } from "./PatientProfilePage";
 import { useHistory } from "react-router";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { postData } from "./PatientProfilePage";
 
 function reducer(
   state: SocialHistState,
@@ -67,6 +68,26 @@ const initialState:  SocialHistState = {
   otherSubstances: "",
 };
 
+async function saveData(url: string, state: any) {
+  console.log(state)
+  allAttributes.work = state.work;
+  allAttributes.living_conditions = state.livingConditions; 
+  allAttributes.etoh = state.etOH;
+  allAttributes.drinks_per_week = state.drinksPerWeek;
+  allAttributes.smoker = state.smoker;
+  allAttributes.last_time_smoked = state.lastTimeSmoked;
+  allAttributes.packs_per_day = state.packsPerDay;
+  allAttributes.other_substances = state.otherSubstances; 
+  try {
+    const res = await postData(url, allAttributes);
+    console.log(res.message);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+var allAttributes: any;
+
 export const SocialHistoryPage: IndividualPatientProfile = ({
   pageName,
   currentPage,
@@ -89,18 +110,19 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
           return res.json()
         })
         .then((jsonResult) => {
+          allAttributes = jsonResult; 
           console.log("Get Social History")
           console.log(jsonResult)
           dispatch({ type: "many_fields", newState:{
-            "work": "NEED TO ADD TO DB",
-            "livingConditions": "NEED TO ADD TO DB", 
-            "sexualHistory": "NEED TO ADD TO DB",
-            "etOH": "NEED TO ADD TO DB",
-            "drinksPerWeek": "NEED TO ADD TO DB",
-            "smoker": "NEED TO ADD TO DB",
-            "lastTimeSmoked": "NEED TO ADD TO DB",
-            "packsPerDay": "NEED TO ADD TO DB",
-            "otherSubstances": "NEED TO ADD TO DB",}});
+            "work": jsonResult.work,
+            "livingConditions": jsonResult.livingConditions, 
+            "sexualHistory": jsonResult.etOH,
+            "etOH": jsonResult.drinks_per_week,
+            "drinksPerWeek": jsonResult.drinks_per_week,
+            "smoker": jsonResult.smoker,
+            "lastTimeSmoked": jsonResult.last_time_smoke,
+            "packsPerDay": jsonResult.packs_per_day,
+            "otherSubstances": jsonResult.otherSubstances}});
 
         }).catch((error) => {
           console.log("An error occured with fetch:", error)
@@ -336,7 +358,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
           </div>
           <div className="patient-profile-nav-btns">
             <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
-              
+              saveData('/api/patientprofile/' + patientID, state);
             }}>
               <FontAwesomeIcon icon="save" size="2x" />
             </div>

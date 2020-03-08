@@ -4,6 +4,7 @@ import { IndividualPatientProfile } from "./PatientProfilePage";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router";
+import { postData} from "./PatientProfilePage";
 
 function reducer(
   state: ImagingResultsState,
@@ -33,6 +34,19 @@ const initialState: ImagingResultsState = {
   imagingResults: "",
 };
 
+async function saveData(url: string, state: any) {
+  console.log(state)
+  //allAttributes.imagingResults = state.imagingResults; 
+  try {
+    const res = await postData(url, allAttributes);
+    console.log(res.message);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+var allAttributes: any;
+
 export const ImagingResultsPage: IndividualPatientProfile = ({
   pageName,
   currentPage,
@@ -57,8 +71,9 @@ export const ImagingResultsPage: IndividualPatientProfile = ({
         .then((jsonResult) => {
           console.log("Get Imaging")
           console.log(jsonResult)
+          allAttributes = jsonResult;
           dispatch({ type: "many_fields", newState:{
-            "imagingResults": "ADD TO DB"}});
+            "imagingResults": "Add imagingResults to DB"}});
 
         }).catch((error) => {
           console.log("An error occured with fetch:", error)
@@ -110,7 +125,7 @@ export const ImagingResultsPage: IndividualPatientProfile = ({
           <div className="patient-profile-nav-btns">
             <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
               // TODO : add POST request function here
-              
+              saveData('/api/patientprofile/' + patientID, state);
             }}>
               <FontAwesomeIcon icon="save" size="2x" />
             </div>

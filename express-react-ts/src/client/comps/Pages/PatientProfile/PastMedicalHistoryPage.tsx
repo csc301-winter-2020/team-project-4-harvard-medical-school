@@ -4,6 +4,7 @@ import { IndividualPatientProfile } from "./PatientProfilePage";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router";
+import { postData } from "./PatientProfilePage";
 
 function reducer(
   state: PMH_State,
@@ -39,6 +40,22 @@ const initialState: PMH_State = {
   allergies: "",
 };
 
+async function saveData(url: string, state: any) {
+  console.log(state)
+  allAttributes.medical_history = state.pastMedHist;
+  allAttributes.hospital_history = state.pastHospits;
+  allAttributes.medications = state.medications;
+  allAttributes.allergies = state.allergies;
+  try {
+    const res = await postData(url, allAttributes);
+    console.log(res.message);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+var allAttributes: any;
+
 export const PastMedicalHistoryPage: IndividualPatientProfile = ({
   pageName,
   currentPage,
@@ -63,11 +80,12 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
         .then((jsonResult) => {
           console.log("Get PMH")
           console.log(jsonResult)
+          allAttributes = jsonResult;
           dispatch({ type: "many_fields", newState:{
             "pastMedHist": jsonResult.medical_history,
-            "pastHospits": "NEED TO ADD PAST HOSPITALIZATIONS TO DB", 
-            "medications": "NEED TO ADD MEDICATIONS TO DB",
-            "allergies": "NEED TO ADD ALLERGIES TO DB",}});
+            "pastHospits": jsonResult.hospital_history, 
+            "medications": jsonResult.medications,
+            "allergies": jsonResult.allergies,}});
 
         }).catch((error) => {
           console.log("An error occured with fetch:", error)
@@ -176,7 +194,7 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
           <div className="patient-profile-nav-btns">
             <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
               // TODO : add POST request function here
-              
+              saveData('/api/patientprofile/' + patientID, state);
             }}>
               <FontAwesomeIcon icon="save" size="2x" />
             </div>

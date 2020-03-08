@@ -26,6 +26,7 @@ body {
 
 a {
   text-decoration: none;
+  color: inherit;
 }
 
 .my-class {
@@ -36,6 +37,16 @@ a {
 
 .app-error-page {
   text-align: center;
+  font-size: 3rem;
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+
+  .error-page-content{
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+  }
 }
 
 .bold-span {

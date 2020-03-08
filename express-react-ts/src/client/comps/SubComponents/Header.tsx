@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../scss/home/hamburgers.scss";
 import { CSSTransition } from "react-transition-group";
 import { useHistory } from "react-router-dom";
+import {numberToYearStr} from "../../utils/utils";
 
 interface HeaderProps {
   isAvatarPopup: boolean;
@@ -13,6 +14,8 @@ interface HeaderProps {
   placeholder: string;
 }
 
+const defaultAvatar: string = "https://i1.rgstatic.net/ii/profile.image/273584577880065-1442239054184_Q512/Danny_Heap.jpg";
+
 export const Header: React.FC<HeaderProps> = ({
   isAvatarPopup,
   setIsAvatarPopup,
@@ -22,6 +25,10 @@ export const Header: React.FC<HeaderProps> = ({
   placeholder,
 }) => {
   const history = useHistory();
+  const [firstName, setFirstName] = useState("FIRST");
+  const [lastName, setLastName] = useState("LAST");
+  const [avatar, setAvatar] = useState(defaultAvatar);
+  const [year, setYear] = useState(1);
   useEffect(() => {
     const hamburger = document.querySelector("#header-hamburger-btn");
     if (isAvatarPopup) {
@@ -30,6 +37,26 @@ export const Header: React.FC<HeaderProps> = ({
       hamburger.className = "hamburger hamburger--slider";
     }
   }, [isAvatarPopup]);
+
+  useEffect(() => {
+    fetch("/api/me")
+    .then((res:any) => {
+      if (res.status === 200){
+        return res.json();
+      } else {
+        throw new Error();
+      }
+    }) 
+    .then((data:any) => {
+      setFirstName(data.first_name);
+      setLastName(data.last_name);
+      setAvatar(data.avatar_url);
+      setYear(data.year);
+    })
+    .catch((err: any) => {
+      console.log("Could not verify your session.");
+    });
+  }, []);
 
   return (
     <div className="home-page-header-container">
@@ -76,10 +103,10 @@ export const Header: React.FC<HeaderProps> = ({
         classNames="fade-slide-down"
       >
         <div className="home-page-header-avatar-popup-container">
-          <div className="home-page-header-avatar-image"></div>
+          <div className="home-page-header-avatar-image" style={{backgroundImage: `url("${avatar}")`}}></div>
           <div className="home-page-header-avatar-drop-name">
-            Student Profile
-            <p>1st Year</p>
+            {`${firstName} ${lastName}`}
+            <p>{numberToYearStr[year]} Year</p>
           </div>
           <div
             className="home-page-header-avatar-drop-settings"

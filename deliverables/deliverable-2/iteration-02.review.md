@@ -12,7 +12,7 @@ We will analyze the success/lack of success of our decisions using the “5 Whys
 #### Q1. Decisions that turned out well
 
 
-1. Using Slack as our main method of communication
+1. **Using Slack as our main method of communication**
 
 We decided to create a Slack channel to communicate with ourselves as well as our partner. 
 
@@ -27,7 +27,7 @@ We think our decision to use Slack has been very successful.
     - Slack notifies us of new messages across all of our devices in real-time, allowing for people to immediately answer questions, acknowledge any updates on development, and schedule times to meet as a team.
     - As such, we are always on the same page on how the project is going, and any ambiguities can be addressed very quickly.
 
-2. Weekly scheduled in-person meetings with the partner
+2. **Weekly scheduled in-person meetings with the partner**
 
 We decided to schedule (through Slack) an in-person meeting with our partners every week, during which we can update them on our progress, ask questions on anything we are unsure of, and discuss any roadblocks we have encountered.
 
@@ -44,7 +44,7 @@ We think our decision to have weekly in-person meetings has been very successful
 
 #### Q2. Decisions that did not turn out as well as we hoped
 
-Ad hoc team meetings
+1. **Ad hoc team meetings**
 
 We think our decision to have ad hoc team meetings (without our partners) without any prior planning of what we would do during the meetings was unsuccessful.
 *  *Why?* 
@@ -59,7 +59,7 @@ We think our decision to have ad hoc team meetings (without our partners) withou
     - Most of us were unfamiliar with working with such a large group before, and were not used to having so many disparate voices
     - As such, group discussions were generally unfruitful.
 
-Our usage of Trello
+2. **Our usage of Trello**
 
 Trello allows users to maintain a continuously updated checklist of tasks that our team would update as we progressed through the project.
 
@@ -78,27 +78,30 @@ We think our decision to use Trello in this manner was unsuccessful.
 
 #### Q3. Planned changes
 
-More organized usage of Trello
+1. **Being more prepared for team meetings**
 
-As described previously, we stopped updating our Trello, meaning that we no longer have a clearly defi
+We intend to collectively be more prepared for team meetings, such that we have clearer direction and set goals of what we plan to do during these meetings. As illustrated in the previous section, past team meetings would generally have a lot of wasted time and unengagement, with many team members not having a clear idea of what they are supposed to be doing. 
 
+Prior to future team meetings, we intend to determine a list of goals or talking points that should be completed or discussed during the meeting. Such a list does not need to be incredibly detailed or rigidly adhered to; we just need a good starting point from which we can productively work on the project together.
+
+For example, a meeting can be solely focused on how we intend to integrate the Isabel API which we were given access to by our partners. Potential goals we could have during the meeting could be determining which members would be involved in implementing the features involved in integration, collectively testing out the given Isabel interface provided to us, determining how we intend to format our API calls, and sketching out a loose design of how we intend to visually display the information we send or receive from Isabel. 
 
 ## Product - Review
 
 #### Q4. How was your product demo?
 
-In preparation for our product demo, the team met together the night before the day we were to present to our partners. At that point we had already finished developing most of the functionalities of the features we wanted to complete for Deliverable 2.
+In preparation for our product demo, the team met together the night before the day we were to present to our partners. At that point we had already finished developing most of the functionalities of the features that we wanted to complete for Deliverable 2.
 
 During this meeting we collectively went over all of our implemented views as a team to ensure the UX and UI design fits all of our standards, as well as made minor changes to make the application more presentable and visually pleasing. 
 
 We also prepared a loose outline of the order in which we were going to present the views of our application to our partners.
 
-On the day of the demo, we successfully presented what we had planned to present the night before. Christopher Marcok did the majority of the talking, as we used his laptop to show our application to our partners. As he navigated through the application, he would describe the functionality of each feature that was implemented on the page he was on.
+On the day of the demo, we successfully presented what we had planned to present the night before. Christopher Marcok did the majority of the talking, as we used his laptop to show our application to our partners, and he was comfortable with speaking about our progress. As he navigated through the application, he would describe the functionality of each feature that was implemented on the page he was on.
 
 Our partners accepted all of our features and were pleased with our current progress. There were no change requests.
 
 From a product perspective, we learned that close communication and transparency with our partners helped significantly in designing an application that they would be satisfied with. 
 
-During the development of our application, team members often posed questions to our partners through Slack regarding any ambiguities or design decisions that they were unsure of. 
+During the development of our application, team members often posed questions to our partners through Slack and during our weekly meetings regarding any ambiguities or design decisions that they were unsure of. Our partners were very responsive and cummunicative in answering our questions.
 
-Thanks to this, we were able to receive frequent feedback on our progress, so by the time of the demo, we already knew that the design of our application would be agreeable to our partners.
+Thanks to this, we were able to receive frequent and detailed feedback on our progress, so by the time of the demo, we already knew that the design of our application would be agreeable to our partners.

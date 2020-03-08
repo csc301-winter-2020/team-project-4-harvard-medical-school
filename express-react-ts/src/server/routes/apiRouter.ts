@@ -224,7 +224,7 @@ router.post('/api/patientprofile/:patientId', (req:Request, res:Response, next:N
                 $45, $46, $47, $48);"; 
         return pool.query(insert_query, params_arr);
     }).then((result: {rowCount: number; rows: { [x: string]: any; }; }) => {
-        res.status(200).send();
+        res.status(200).send({message:"Success"});
     }).catch((err: any) => {
         console.log(err);
         res.status(400).json(err);

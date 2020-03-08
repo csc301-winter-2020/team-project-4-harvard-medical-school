@@ -5,6 +5,7 @@ import { CSSTransition } from "react-transition-group";
 import { IndividualPatientProfile } from "./PatientProfilePage";
 import "../../../scss/login/inputboxes.scss";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
+import { postData } from "./PatientProfilePage";
 
 function reducer(
   state: DemographicsState,
@@ -70,29 +71,19 @@ const initialState: DemographicsState = {
   country: "",
 };
 
-async function postData(url: string, data: any) {
-  const response = await fetch(url, {
-    method: 'POST',
-    mode: 'cors',
-    cache: 'no-cache',
-    credentials: 'same-origin',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    redirect: 'follow', // manual
-    referrerPolicy: 'no-referrer', // no-referrer
-    body: JSON.stringify(data)
-  });
-  return await response.json();
-}
-
 async function saveData(url: string, state: DemographicsState) {
   console.log(state)
+  allAttributes.firstName = state.firstName;
+  allAttributes.lastName = state.lastName;
+  allAttributes.age = state.age;
+  allAttributes.sex = state.sex;
+  allAttributes.isPregnant = state.isPregnant;
+  allAttributes.country = state.country;
   try {
     const res = await postData(url, allAttributes);
     console.log("Saved " + state);
   } catch (err) {
-    console.log("Error: " + err);
+    console.log(err);
   }
 }
 

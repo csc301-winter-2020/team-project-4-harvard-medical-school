@@ -4,6 +4,7 @@ import { IndividualPatientProfile } from "./PatientProfilePage";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { useHistory } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { postData } from "./PatientProfilePage";
 
 function reducer(
   state: Family_Hist_State,
@@ -30,33 +31,17 @@ type Family_Hist_State = {
 }
 
 const initialState: Family_Hist_State = {
-  familyHist: "test2",
+  familyHist: "",
 };
-
-async function postData(url: string, data: any) {
-  const response = await fetch(url, {
-    method: 'POST',
-    mode: 'cors',
-    cache: 'no-cache',
-    credentials: 'same-origin',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    redirect: 'follow', // manual
-    referrerPolicy: 'no-referrer', // no-referrer
-    body: JSON.stringify(data)
-  });
-  return await response.json();
-}
 
 async function saveData(url: string, state: any) {
   console.log(state.familyHist)
   allAttributes.family_history = state.familyHist;
   try {
     const res = await postData(url, allAttributes);
-    console.log("Saved " + state.familyHist);
+    console.log(res.message);
   } catch (err) {
-    console.log("Error: " + err);
+    console.log(err);
   }
 }
 

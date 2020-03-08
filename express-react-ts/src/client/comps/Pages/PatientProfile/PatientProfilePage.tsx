@@ -16,6 +16,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { contentType, contents } from "../../../utils/types";
 import { urlToName } from "../../../utils/utils";
 
+
 /**
  * To create a new type of page, firstly make the react FC and then import it here.
  * Then add the string to the contentType type.
@@ -49,6 +50,22 @@ interface IndividualPatientProfilePageProps {
 export type IndividualPatientProfile = React.FC<
   IndividualPatientProfilePageProps
 >;
+
+export async function postData(url: string, data: any) {
+  const response = await fetch(url, {
+    method: 'POST',
+    mode: 'cors',
+    cache: 'no-cache',
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    redirect: 'follow', // manual
+    referrerPolicy: 'no-referrer', // no-referrer
+    body: JSON.stringify(data)
+  });
+  return await response.json();
+}
 
 const initNavDots = () => {
   const container = [];
@@ -104,22 +121,6 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
     const newIndex = index === 0 ? contents.length - 1 : index - 1;
     setCurrentPage(contents[newIndex]);
   };
-
-  async function postData(url:string, data:any){
-    const response = await fetch(url, {
-      method: 'POST', 
-      mode: 'cors', 
-      cache: 'no-cache', 
-      credentials: 'same-origin', 
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      redirect: 'follow', // manual, *follow, error
-      referrerPolicy: 'no-referrer', // no-referrer, *client
-      body: JSON.stringify(data) // body data type must match "Content-Type" header
-    });
-    return await response.json(); 
-  }
 
   // Observer for currentPage
   useEffect(() => {

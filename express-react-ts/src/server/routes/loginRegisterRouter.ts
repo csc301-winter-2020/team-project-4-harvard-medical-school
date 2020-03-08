@@ -29,12 +29,9 @@ router.post(
  */
 router.post("/register", (req: Request, res: Response, next: NextFunction) => {
   const body: any = req.body;
-  pool
-    .connect()
-    .then((client: any) => {
       const query: string =
         "INSERT INTO csc301db.users (username, first_name, last_name, avatar_url, email, password, year, user_type, date_create) VALUES($1, $2, $3, $4, $5, $6, $7, $8, NOW())";
-      return client.query(query, [
+      pool.query(query, [
         body.username,
         body.first_name,
         body.last_name,
@@ -43,8 +40,7 @@ router.post("/register", (req: Request, res: Response, next: NextFunction) => {
         body.password,
         body.year,
         body.user_type,
-      ]);
-    })
+      ])
     .then((result: any) => {
       console.log(result);
       res
@@ -80,12 +76,8 @@ router.get(
  * Get all users.
  */
 router.get("/api/users/all", (req: Request, res: Response) => {
-  pool
-    .connect()
-    .then((client: { query: (arg0: string, arg1: number[]) => any }) => {
       const query_string: string = "SELECT * FROM csc301db.users";
-      return client.query(query_string, []);
-    })
+      pool.query(query_string, [])
     .then((query_result: { rowCount: number; rows: any[] }) => {
       const result: any = query_result.rows;
       res.status(200).json(result);
@@ -107,9 +99,6 @@ router.patch(
     const user: any = req.user;
     const userId: number = user.id;
     const body: any = req.body;
-    pool
-      .connect()
-      .then((client: any) => {
         const query: string =
           "UPDATE csc301db.users SET \
         username = $1, \
@@ -120,7 +109,7 @@ router.patch(
         year = $6, \
         user_type = $7 \
         WHERE id = $8";
-        return client.query(query, [
+        pool.query(query, [
           body.username,
           body.first_name,
           body.last_name,
@@ -129,8 +118,7 @@ router.patch(
           body.year,
           body.user_type,
           userId,
-        ]);
-      })
+        ])
       .then((result: any) => {
         console.log(result);
         res

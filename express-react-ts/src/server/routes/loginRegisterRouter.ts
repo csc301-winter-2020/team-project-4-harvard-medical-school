@@ -16,7 +16,7 @@ const { checkAuthenticated, checkGuest } = require("../auth/authCheck");
  * TODO: Redirect to home on success, send a HTTP error code on failure, instead of redirect again to root.
  */
 router.post(
-  "/login",
+  "/login", checkGuest,
   passport.authenticate("local", {
     successRedirect: "/home",
     failureRedirect: "/",
@@ -69,9 +69,42 @@ router.get(
 /**
  * TODO: Update user in the user table.
  */
-router.patch("/:userId", (req: Request, res: Response, next: NextFunction) => {
-  const userId = req.params.userId;
-  res.sendStatus(204);
+router.patch("/me", checkAuthenticated, (req: Request, res: Response, next: NextFunction) => {
+  const user:any = req.user;
+  const userId:number = user.id;
+  const body: any = req.body;
+  pool
+    .connect()
+    .then((client: any) => {
+      const query: string =
+        "UPDATE csc301db.users SET \
+        username = $1, \
+        first_name = $2, \
+        last_name = $3, \
+        email = $4, \
+        password = $5, \
+        year = $6, \
+        user_type = $7 \
+        WHERE id = $8";
+      return client.query(query, [
+        body.username,
+        body.first_name,
+        body.last_name,
+        body.email,
+        body.password,
+        body.year,
+        body.user_type,
+        userId
+      ]);
+    })
+    .then((result: any) => {
+      console.log(result);
+      res.status(200).json({message: "Successfully updated this user: " + body.username});
+    })
+    .catch((err:any) => {
+      console.log(err);
+      res.status(400).json({message: `The following error occurred while updating: ${err}`});
+    });
 });
 
 export default router;

@@ -93,7 +93,8 @@ const browserRouter: JSX.Element = (
         path="/templates/new"
         render={(props) => <Questions {...props} useDefault={true} />}
       />
-      <Route render={(props) => <Error {...props} errNo={404} />} />
+      <Route exact path="/err/:num/:msg" render={(props) => <Error {...props} urlErr={true}/>} />
+      <Route render={(props) => <Error {...props} errNo={404} urlErr={false}/>} />
     </Switch>
   </BrowserRouter>
 );

@@ -114,7 +114,13 @@ CREATE TABLE patient_profile (
      packs_per_day_canvas TEXT,
 
      other_substances TEXT,
-     other_substances_canvas TEXT
+     other_substances_canvas TEXT,
+
+     assessments TEXT,
+     assessments_canvas TEXT,
+
+     imaging TEXT,
+     imaging_canvas TEXT
 
 );
 INSERT INTO users (username, first_name, last_name, avatar_url, email, password, year, user_type, date_create)

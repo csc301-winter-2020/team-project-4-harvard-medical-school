@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Header } from "../SubComponents/Header";
 import "../../scss/settings/settings.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { defaultAvatar } from "../../utils/utils";
+import { HelixLoader } from "../SubComponents/HelixLoader";
 
 interface SettingsPageProps {}
 
@@ -13,6 +15,29 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({}) => {
     "writing"
   );
   const [showSidebarDefault, setShowSidebarDefault] = useState<boolean>(true);
+  const [avatar, setAvatar] = useState(defaultAvatar);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/me")
+    .then((res:any) => {
+      if (res.status === 200){
+        return res.json();
+      } else {
+        throw new Error();
+      }
+    }) 
+    .then((data:any) => {
+      setName(data.first_name);
+      setAvatar(data.avatar_url);
+    })
+    .catch((err: any) => {
+      console.log("Could not verify your session.");
+    })
+    .finally(() => {
+      setIsLoading(false);
+    });
+  }, []);
 
   return (
     <>
@@ -22,10 +47,14 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({}) => {
         setIsAvatarPopup={setIsAvatarPopup}
         showSearch={false}
       />
+      {isLoading && <HelixLoader message="Loading Settings..."/>}
       <div className="settings-outermost">
         <div className="settings-main-container">
           <div className="settings-top-container">
-            <div className="settings-avatar"></div>
+            <div className="settings-avatar"
+            style={{
+              backgroundImage: `url("${avatar}")`,
+            }}></div>
             <div className="settings-top-info">
               {!isEditing ? (
                 <h1>{name}</h1>

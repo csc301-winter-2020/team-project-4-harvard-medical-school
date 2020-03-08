@@ -53,14 +53,11 @@ router.post(
       body.default_sidebar === true ||
       body.default_sidebar === true
     ) {
-        const query_string: string =
-          "UPDATE csc301db.users SET default_mode = $1\
+      const query_string: string =
+        "UPDATE csc301db.users SET default_mode = $1\
           , default_sidebar = $2 WHERE id = $3";
-        pool.query(query_string, [
-          body.default_mode,
-          body.default_sidebar,
-          userId,
-        ])
+      pool
+        .query(query_string, [body.default_mode, body.default_sidebar, userId])
         .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
           res.status(200).send();
         })
@@ -80,9 +77,10 @@ router.get(
   "/api/student/:userId/patientprofiles",
   (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.userId;
-      const query_string: string =
-        "SELECT * FROM csc301db.patient_profile WHERE student_id = $1";
-      pool.query(query_string, [parseInt(userId)])
+    const query_string: string =
+      "SELECT * FROM csc301db.patient_profile WHERE student_id = $1";
+    pool
+      .query(query_string, [parseInt(userId)])
       .then(
         (query_result: { rowCount: number; rows: { [x: string]: any } }) => {
           if (query_result.rowCount === 0) {
@@ -109,6 +107,8 @@ router.get(
               "last_time_smoked",
               "packs_per_day",
               "other_substances",
+              "assessments",
+              "imaging",
             ];
             for (let j = 0; j < query_result.rowCount; j++) {
               for (let i = 0; i < attributes.length; i++) {
@@ -129,7 +129,7 @@ router.get(
           }
         }
       )
-      .catch((err:any) => {
+      .catch((err: any) => {
         console.log(err);
         res.status(500).json(err);
       });
@@ -145,55 +145,58 @@ router.get(
     const patientId: string = req.params.patientId;
     const query_string: string =
       "SELECT * FROM csc301db.patient_profile WHERE patient_id = $1";
-    pool.query(query_string, [parseInt(patientId)])
-    .then((query_result: { rowCount: number; rows: any[] }) => {
-      if (query_result.rowCount === 0) {
-        res.status(404).send();
-      } else {
-        const result: any = query_result.rows[0];
-        console.log(result);
+    pool
+      .query(query_string, [parseInt(patientId)])
+      .then((query_result: { rowCount: number; rows: any[] }) => {
+        if (query_result.rowCount === 0) {
+          res.status(404).send();
+        } else {
+          const result: any = query_result.rows[0];
+          console.log(result);
 
-        const attributes: Array<string> = [
-          "pregnant",
-          "country_residence",
-          "country_visited",
-          "complaint",
-          "medical_history",
-          "social_history",
-          "family_history",
-          "country",
-          "hpi",
-          "hospital_history",
-          "medications",
-          "allergies",
-          "work",
-          "living_conditions",
-          "sexual_history",
-          "etoh",
-          "drinks_per_week",
-          "last_time_smoked",
-          "packs_per_day",
-          "other_substances",
-        ];
-        // the for loop to translate key into url
-        for (let i = 0; i < attributes.length; i++) {
-          const this_attribute = attributes[i] + "_canvas";
-          if (result[this_attribute] !== null) {
-            console.log(this_attribute);
-            result[this_attribute] = s3.getSignedUrl("getObject", {
-              Bucket: bucket,
-              Key: result[this_attribute],
-              Expires: urlExpiredTime,
-            });
+          const attributes: Array<string> = [
+            "pregnant",
+            "country_residence",
+            "country_visited",
+            "complaint",
+            "medical_history",
+            "social_history",
+            "family_history",
+            "country",
+            "hpi",
+            "hospital_history",
+            "medications",
+            "allergies",
+            "work",
+            "living_conditions",
+            "sexual_history",
+            "etoh",
+            "drinks_per_week",
+            "last_time_smoked",
+            "packs_per_day",
+            "other_substances",
+            "assessments",
+            "imaging",
+          ];
+          // the for loop to translate key into url
+          for (let i = 0; i < attributes.length; i++) {
+            const this_attribute = attributes[i] + "_canvas";
+            if (result[this_attribute] !== null) {
+              console.log(this_attribute);
+              result[this_attribute] = s3.getSignedUrl("getObject", {
+                Bucket: bucket,
+                Key: result[this_attribute],
+                Expires: urlExpiredTime,
+              });
+            }
           }
+          res.status(200).json(result);
         }
-        res.status(200).json(result);
-      }
-    })
-    .catch((err: any) => {
-      console.log(err);
-      res.status(500).send();
-    });
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(500).send();
+      });
     // res.status(200).json('');
   }
 );
@@ -258,6 +261,8 @@ router.post(
       "last_time_smoked",
       "packs_per_day",
       "other_substances",
+      "assessments",
+      "imaging",
     ];
     for (let i = 0; i < attributes.length; i++) {
       params_arr.push(new_patient[attributes[i]]);
@@ -307,12 +312,13 @@ router.post(
             living_conditions_canvas, sexual_history_canvas, \
             etoh_canvas, drinks_per_week_canvas, \
              last_time_smoked_canvas, \
-            packs_per_day_canvas, other_substances_canvas \
+            packs_per_day_canvas, other_substances_canvas, \
+            assessments, assessments_canvas, imaging, imaging_canvas \
             ) VALUES (current_timestamp, $1, $2, $3, $4, $5, $6, $7, $8, $9\
                 ,$10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21,\
                 $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, \
                 $33, $34, $35, $36, $37, $38, $39, $40, $41, $42, $43, $44,\
-                $45, $46, $47, $48);";
+                $45, $46, $47, $48, $49, $50, $51, $52);";
         return pool.query(insert_query, params_arr);
       })
       .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
@@ -334,14 +340,15 @@ router.get(
     const userId: number = parseInt(req.params.userId);
     const query_string: string =
       "SELECT * FROM csc301db.templates WHERE user_id = $1";
-    pool.query(query_string, [userId])
-    .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
-      res.status(200).json(result.rows);
-    })
-    .catch((err: any) => {
-      console.log(err);
-      res.status(500).json({ error: err });
-    });
+    pool
+      .query(query_string, [userId])
+      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
+        res.status(200).json(result.rows);
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(500).json({ error: err });
+      });
   }
 );
 
@@ -355,22 +362,23 @@ router.get(
     const templateId: number = parseInt(req.params.templateId);
     const query_string: string =
       "SELECT * FROM csc301db.templates WHERE user_id = $1 AND template_id = $2";
-    pool.query(query_string, [userId, templateId])
-    .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
-      // console.log(result);
-      if (result.rowCount === 0) {
-        res.status(404).json({ error: "That template does not exist." });
-      }
-      // const template_arr: any = result.rows;
-      // for (let i = 0; i < template_arr.length; i++) {
-      //   template_arr[i].template = JSON.parse(template_arr[i].template);
-      // }
-      res.status(200).json(result.rows[0]);
-    })
-    .catch((err: any) => {
-      console.log(err);
-      res.status(500).json({ error: err });
-    });
+    pool
+      .query(query_string, [userId, templateId])
+      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
+        // console.log(result);
+        if (result.rowCount === 0) {
+          res.status(404).json({ error: "That template does not exist." });
+        }
+        // const template_arr: any = result.rows;
+        // for (let i = 0; i < template_arr.length; i++) {
+        //   template_arr[i].template = JSON.parse(template_arr[i].template);
+        // }
+        res.status(200).json(result.rows[0]);
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(500).json({ error: err });
+      });
   }
 );
 
@@ -389,20 +397,21 @@ router.patch(
         date_millis = $2,\
         template = $3\
         WHERE user_id = $4 AND template_id = $5";
-    pool.query(query_string, [
-      body.template_name,
-      body.date_millis,
-      JSON.stringify(body.template),
-      userId,
-      templateId,
-    ])
-    .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
-      res.status(200).json({ message: "Successful update." });
-    })
-    .catch((err: any) => {
-      console.log(err);
-      res.status(500).json({ error: err });
-    });
+    pool
+      .query(query_string, [
+        body.template_name,
+        body.date_millis,
+        JSON.stringify(body.template),
+        userId,
+        templateId,
+      ])
+      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
+        res.status(200).json({ message: "Successful update." });
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(500).json({ error: err });
+      });
   }
 );
 
@@ -413,16 +422,17 @@ router.delete(
     const templateId: number = parseInt(req.params.templateId);
     const insert_query: string =
       "DELETE FROM csc301db.templates WHERE user_id = $1 AND template_id = $2";
-    pool.query(insert_query, [userId, templateId])
-    .then(() => {
-      res.status(200).json({ message: "Successful deletion." });
-    })
-    .catch((err: any) => {
-      console.log(err);
-      res
-        .status(500)
-        .json({ message: "An error occurred while deleting this template." });
-    });
+    pool
+      .query(insert_query, [userId, templateId])
+      .then(() => {
+        res.status(200).json({ message: "Successful deletion." });
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res
+          .status(500)
+          .json({ message: "An error occurred while deleting this template." });
+      });
   }
 );
 
@@ -434,19 +444,20 @@ router.post(
     const insert_query: string =
       "INSERT INTO csc301db.templates(user_id, template_name,\
         date_millis, template) VALUES ($1, $2, $3, $4)";
-    pool.query(insert_query, [
-      userId,
-      body.template_name,
-      body.date_millis,
-      JSON.stringify(body.template),
-    ])
-    .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
-      res.status(200).send();
-    })
-    .catch((err: any) => {
-      console.log(err);
-      res.status(400).send();
-    });
+    pool
+      .query(insert_query, [
+        userId,
+        body.template_name,
+        body.date_millis,
+        JSON.stringify(body.template),
+      ])
+      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
+        res.status(200).send();
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(400).send();
+      });
   }
 );
 
@@ -473,14 +484,15 @@ router.get(
     const query_string: string =
       "SELECT info FROM csc301db.review_of_systems\
       WHERE patient_id = $1";
-    pool.query(query_string, [patientId])
-    .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
-      if (result.rowCount === 0) {
-        res.status(404).send();
-      } else {
-        res.status(200).json(result.rows[0].info);
-      }
-    });
+    pool
+      .query(query_string, [patientId])
+      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
+        if (result.rowCount === 0) {
+          res.status(404).send();
+        } else {
+          res.status(200).json(result.rows[0].info);
+        }
+      });
   }
 );
 
@@ -491,22 +503,20 @@ router.post(
     const delete_string: string =
       "DELETE FROM csc301db.review_of_systems \
     WHERE patient_id = $1";
-    pool.query(delete_string, [patientId])
-    .then((result: any) => {
-      const insert_string: string =
-        "INSERT INTO csc301db.review_of_systems \
+    pool
+      .query(delete_string, [patientId])
+      .then((result: any) => {
+        const insert_string: string =
+          "INSERT INTO csc301db.review_of_systems \
       (patient_id, info ) VALUES ($1, $2)";
-      return pool.query(insert_string, [
-        patientId,
-        JSON.stringify(req.body),
-      ]);
-    })
-    .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
-      res.status(200).send();
-    })
-    .catch((err: any) => {
-      res.status(400).send();
-    });
+        return pool.query(insert_string, [patientId, JSON.stringify(req.body)]);
+      })
+      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
+        res.status(200).send();
+      })
+      .catch((err: any) => {
+        res.status(400).send();
+      });
   }
 );
 
@@ -517,14 +527,15 @@ router.get(
     const query_string: string =
       "SELECT info FROM csc301db.lab_results\
       WHERE patient_id = $1";
-    pool.query(query_string, [patientId])
-    .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
-      if (result.rowCount === 0) {
-        res.status(404).send();
-      } else {
-        res.status(200).json(result.rows[0].info);
-      }
-    });
+    pool
+      .query(query_string, [patientId])
+      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
+        if (result.rowCount === 0) {
+          res.status(404).send();
+        } else {
+          res.status(200).json(result.rows[0].info);
+        }
+      });
   }
 );
 
@@ -535,69 +546,72 @@ router.post(
     const delete_string: string =
       "DELETE FROM csc301db.lab_results \
     WHERE patient_id = $1";
-    pool.query(delete_string, [patientId])
-    .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
-      const insert_string: string =
-        "INSERT INTO csc301db.lab_results \
+    pool
+      .query(delete_string, [patientId])
+      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
+        const insert_string: string =
+          "INSERT INTO csc301db.lab_results \
       (patient_id, info ) VALUES ($1, $2)";
-      return pool.query(insert_string, [
-        patientId,
-        JSON.stringify(req.body),
-      ]);
-    })
-    .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
-      res.status(200).send();
-    })
-    .catch((err: any) => {
-      res.status(400).send();
-    });
+        return pool.query(insert_string, [patientId, JSON.stringify(req.body)]);
+      })
+      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
+        res.status(200).send();
+      })
+      .catch((err: any) => {
+        res.status(400).send();
+      });
   }
 );
 
 /**
  * Route to get attributes need for the homepage.
  */
-router.get("/api/studentHomepage/:studentID", 
-    (req:Request, res:Response, next: NextFunction) => {
-        const student_id: number = parseInt(req.params.studentID);
-        const query_string: string = "SELECT \
+router.get(
+  "/api/studentHomepage/:studentID",
+  (req: Request, res: Response, next: NextFunction) => {
+    const student_id: number = parseInt(req.params.studentID);
+    const query_string: string =
+      "SELECT \
         id, last_modified, first_name, family_name, gender, age, country_residence, pregnant\
         FROM csc301db.patient_profile WHERE student_id = $1";
-        pool.query(query_string, [student_id])
-        .then((result: any) => {
-            if (result.rowCount === 0) {
-                res.status(404).send();
-            } else {
-                res.status(200).json(result.rows);
-            }
-        }).catch((err: any) => {
-            console.log(err);
-            res.status(400).json(err);
-        });
-});
+    pool
+      .query(query_string, [student_id])
+      .then((result: any) => {
+        res.status(200).json(result.rows);
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(400).json(err);
+      });
+  }
+);
 
 /**
  * Route to delete patientprofile
  */
-router.delete("/api/patientProfile/:patientID/:studentID", 
-  (req:Request, res:Response, next: NextFunction) => {
+router.delete(
+  "/api/patientProfile/:patientID/:studentID",
+  (req: Request, res: Response, next: NextFunction) => {
     const student_id: number = parseInt(req.params.studentID);
     const patient_id: number = parseInt(req.params.patientID);
-    const delete_query: string = "DELETE FROM csc301db.patient_profile\
+    const delete_query: string =
+      "DELETE FROM csc301db.patient_profile\
     WHERE student_id = $1 AND patient_id = $2";
-    pool.query(delete_query, [student_id, patient_id])
-    .then((result: any) => {
-      if (result.rowCount === 0) {
-        res.status(404).send();
-      } else {
-        res.status(200).send();
-      }
-    }).catch((err: any) => {
-      console.log(err);
-      res.status(400).send();
-    })
+    pool
+      .query(delete_query, [student_id, patient_id])
+      .then((result: any) => {
+        if (result.rowCount === 0) {
+          res.status(404).send();
+        } else {
+          res.status(200).send();
+        }
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(400).send();
+      });
   }
-)
+);
 
 /**
  * TODO: Return all the classes this user (student) is in

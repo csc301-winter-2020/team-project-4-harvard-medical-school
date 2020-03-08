@@ -48,6 +48,8 @@ export const numberToYearStr: {[key: number]:  string} = {
   4: "4th"
 }
 
+export const defaultAvatar: string = "https://i1.rgstatic.net/ii/profile.image/273584577880065-1442239054184_Q512/Danny_Heap.jpg";
+
 /**
  * For templates customization
  */

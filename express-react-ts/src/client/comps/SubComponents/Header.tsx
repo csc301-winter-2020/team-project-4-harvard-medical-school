@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../scss/home/hamburgers.scss";
 import { CSSTransition } from "react-transition-group";
 import { useHistory } from "react-router-dom";
-import {numberToYearStr} from "../../utils/utils";
+import {numberToYearStr, defaultAvatar} from "../../utils/utils";
 
 interface HeaderProps {
   isAvatarPopup: boolean;
@@ -13,8 +13,6 @@ interface HeaderProps {
   setSearchValue?: Function;
   placeholder: string;
 }
-
-const defaultAvatar: string = "https://i1.rgstatic.net/ii/profile.image/273584577880065-1442239054184_Q512/Danny_Heap.jpg";
 
 export const Header: React.FC<HeaderProps> = ({
   isAvatarPopup,
@@ -55,6 +53,7 @@ export const Header: React.FC<HeaderProps> = ({
     })
     .catch((err: any) => {
       console.log("Could not verify your session.");
+      history.push("/");
     });
   }, []);
 

@@ -617,7 +617,7 @@ router.get("/api/studentHomepage/:studentID",
         const student_id: number = parseInt(req.params.studentID);
         pool.connect().then((client: any) => {
             const query_string: string = "SELECT \
-            id, last_modified, first_name, family_name, gender_at_birth, age\
+            id, last_modified, first_name, family_name, gender, age, country_residence, pregnant\
             FROM csc301db.patient_profile WHERE student_id = $1";
             return client.query(query_string, [student_id]);
         }).then((result: any) => {

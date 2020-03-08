@@ -37,7 +37,7 @@ const initialState: HomePageState = {
 };
 
 async function getPatientProfilesForUser(userID: number){
-  const res = await fetch(`/api/student/${userID}/patientprofiles`, {method: 'GET'})
+  const res = await fetch(`/api/studentHomepage/${userID}`, {method: 'GET'})
   return await res.json()
 }
 
@@ -133,18 +133,19 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
     getPatientProfilesForUser(1).then((data) => {
       const patientsListNew = []
 
+      // TODO: some fields don't have the right data
       for(let i = 0;i < data.length;i++){
         patientsListNew.push({
-          title: 'Patient'+i,
+          title: 'Patient'+data[i].id,
           date: now(),
-          lastModified: now(),
+          lastModified: data[i].last_modified,
           firstName: data[i].first_name,
           lastName: data[i].family_name,
           sex: data[i].gender,
-          isPregnant: null,
+          isPregnant: data[i].gender === 'Male' ? null : data[i].pregnant,
           age: data[i].age,
-          country: data[i].country,
-          patientID: data[i].patient_id
+          country: data[i].country_residence,
+          patientID: data[i].id
         })
       }
       

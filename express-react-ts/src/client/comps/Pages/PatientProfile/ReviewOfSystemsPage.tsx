@@ -690,6 +690,9 @@ export const ReviewOfSystemsPage: IndividualPatientProfile = ({
                                         reviewOfSystems: null
                                       })
                                     }
+                                    onChange={
+                                      () => {}
+                                    }
                                   />
                                   <p>{nameMap[symptomName]}</p>
                                 </label>

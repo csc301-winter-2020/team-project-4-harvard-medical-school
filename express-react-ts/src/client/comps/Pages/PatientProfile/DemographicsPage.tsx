@@ -100,6 +100,17 @@ export const DemographicsPage: IndividualPatientProfile = ({
   patientID,
 }) => {
   const history = useHistory();
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const [showingFirstNameCanvas, setShowingFirstNameCanvas] = useState(true);
+  const [showingFirstNameText, setShowingFirstNameText] = useState(false);
+  const [showingLastNameCanvas, setShowingLastNameCanvas] = useState(true);
+  const [showingLastNameText, setShowingLastNameText] = useState(false);
+  const [showingAgeCanvas, setShowingAgeCanvas] = useState(true);
+  const [showingAgeText, setShowingAgeText] = useState(false);
+  const [showingCountryCanvas, setShowingCountryCanvas] = useState(true);
+  const [showingCountryText, setShowingCountryText] = useState(false);
+
+  const { firstName, lastName, sex, age, isPregnant, country } = state;
 
   useEffect(() => {
     if (currentPage === pageName) {
@@ -131,17 +142,6 @@ export const DemographicsPage: IndividualPatientProfile = ({
       }
     }
   }, [currentPage]);
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const [showingFirstNameCanvas, setShowingFirstNameCanvas] = useState(true);
-  const [showingFirstNameText, setShowingFirstNameText] = useState(false);
-  const [showingLastNameCanvas, setShowingLastNameCanvas] = useState(true);
-  const [showingLastNameText, setShowingLastNameText] = useState(false);
-  const [showingAgeCanvas, setShowingAgeCanvas] = useState(true);
-  const [showingAgeText, setShowingAgeText] = useState(false);
-  const [showingCountryCanvas, setShowingCountryCanvas] = useState(true);
-  const [showingCountryText, setShowingCountryText] = useState(false);
-
-  const { firstName, lastName, sex, age, isPregnant, country } = state;
 
   return (
     <>

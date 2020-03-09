@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Header } from "../SubComponents/Header";
 import "../../scss/settings/settings.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { defaultAvatar } from "../../utils/utils";
+import { defaultAvatar, numberToYearStr } from "../../utils/utils";
 import { HelixLoader } from "../SubComponents/HelixLoader";
 
 interface SettingsPageProps {}
@@ -23,15 +23,15 @@ async function patchUserInfo(data: userData) {
       "Content-Type": "application/json",
     },
     redirect: "follow",
-    referrerPolicy: "no-referrer", 
+    referrerPolicy: "no-referrer",
     body: JSON.stringify(data),
   })
-  .then((res: any) => {
-    console.log(res);
-  })
-  .catch((err: any) => {
-    console.log(err);
-  })
+    .then((res: any) => {
+      console.log(res);
+    })
+    .catch((err: any) => {
+      console.log(err);
+    });
 }
 
 type userData = {
@@ -111,18 +111,77 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({}) => {
             ></div>
             <div className="settings-top-info">
               {!isEditing ? (
-                <h1>{userData.first_name + " " + userData.last_name}</h1>
+                <>
+                  <h1 className="settings-name">{userData.first_name}</h1>
+                  <p className="settings-name">{"  "}</p>
+                  <h1 className="settings-name">{userData.last_name}</h1>
+                </>
               ) : (
-                <input
-                  type="text"
-                  placeholder="Enter your name..."
-                  value={name}
-                  // TODO : change this to first and last names
-                  onChange={e => setName(e.target.value)}
-                />
+                <>
+                  <input
+                    className="settings-name"
+                    type="text"
+                    placeholder="First Name"
+                    maxLength={16}
+                    value={userData.first_name}
+                    onChange={e =>
+                      setUserData({ ...userData, first_name: e.target.value })
+                    }
+                  />
+                  <input
+                    className="settings-name"
+                    type="text"
+                    maxLength={16}
+                    placeholder="Last Name"
+                    value={userData.last_name}
+                    onChange={e =>
+                      setUserData({ ...userData, last_name: e.target.value })
+                    }
+                  />
+                </>
               )}
-              <h3>1st Year Student</h3>
-              <h3>Toronto General Hospital</h3>
+              <div></div>
+              {!isEditing && (
+                <h3 className="settings-year-text">
+                  {numberToYearStr[userData.year]} Year Student
+                </h3>
+              )}
+              {isEditing && (
+                <>
+                  <input
+                    className="settings-year-input"
+                    type="number"
+                    min="1"
+                    max="4"
+                    step="1"
+                    value={userData.year}
+                    onChange={(e: any) => {
+                      setUserData({
+                        ...userData,
+                        year: e.target.value,
+                      });
+                    }}
+                  />
+                  <h3 className="settings-year-text">Year Student</h3>
+                </>
+              )}
+              <h3 style={{ marginBottom: "10px" }}>Toronto General Hospital</h3>
+              {isEditing && (
+                <>
+                  <h3 className="settings-avatar-text">Avatar URL:</h3>
+                  <input
+                    type="text"
+                    id="settings-avatar-input"
+                    value={userData.avatar_url}
+                    onChange={(e: any) => {
+                      setUserData({
+                        ...userData,
+                        avatar_url: e.target.value,
+                      });
+                    }}
+                  />
+                </>
+              )}
             </div>
           </div>
           <div className="settings-bottom-container">

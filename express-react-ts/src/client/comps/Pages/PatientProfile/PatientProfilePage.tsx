@@ -16,7 +16,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { contentType, contents } from "../../../utils/types";
 import { urlToName } from "../../../utils/utils";
 
-
 /**
  * To create a new type of page, firstly make the react FC and then import it here.
  * Then add the string to the contentType type.
@@ -53,16 +52,16 @@ export type IndividualPatientProfile = React.FC<
 
 export async function postData(url: string, data: any) {
   const response = await fetch(url, {
-    method: 'POST',
-    mode: 'cors',
-    cache: 'no-cache',
-    credentials: 'same-origin',
+    method: "POST",
+    mode: "cors",
+    cache: "no-cache",
+    credentials: "same-origin",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    redirect: 'follow', // manual
-    referrerPolicy: 'no-referrer', // no-referrer
-    body: JSON.stringify(data)
+    redirect: "follow", // manual
+    referrerPolicy: "no-referrer", // no-referrer
+    body: JSON.stringify(data),
   });
   return await response.json();
 }
@@ -181,6 +180,23 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
     };
   });
 
+  useEffect(() => {
+    fetch("/api/me")
+      .then(res => {
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          throw new Error("Could not validate your session.");
+        }
+      })
+      .then((data: any) => {
+        setIsShowingSidebar(data.default_sidebar);
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <>
       <Header
@@ -250,7 +266,7 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
             <div className="nav-btn-leftmost nav-btn">
               <FontAwesomeIcon icon="question-circle" size="2x" />
             </div>
- 
+
             <div
               className="nav-btn-left nav-btn"
               onClick={() => {

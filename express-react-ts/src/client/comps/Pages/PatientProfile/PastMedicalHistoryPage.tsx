@@ -65,6 +65,21 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
   isShowingSidebar,
   patientID
 }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const [showingPastMedHistCanvas, setShowingPastMedHistCanvas] = useState(true);
+  const [showingPastMedHistText, setShowingPastMedHistText] = useState(false);
+
+  const [showingPastHospitsCanvas, setShowingPastHospitsCanvas] = useState(true);
+  const [showingPastHospitsText, setShowingPastHospitsText] = useState(false);
+
+  const [showingMedicationsCanvas, setShowingMedicationsCanvas] = useState(true);
+  const [showingMedicationsText, setShowingMedicationsText] = useState(false);
+
+  const [showingAllergiesCanvas, setShowingAllergiesCanvas] = useState(true);
+  const [showingAllergiesText, setShowingAllergiesText] = useState(false);
+  
+  const { pastMedHist, pastHospits, medications, allergies } = state;
   const history = useHistory();
   useEffect(() => {
     if (currentPage === pageName) {
@@ -93,22 +108,6 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
 
     }
   }, [currentPage]);
-
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  const [showingPastMedHistCanvas, setShowingPastMedHistCanvas] = useState(true);
-  const [showingPastMedHistText, setShowingPastMedHistText] = useState(false);
-
-  const [showingPastHospitsCanvas, setShowingPastHospitsCanvas] = useState(true);
-  const [showingPastHospitsText, setShowingPastHospitsText] = useState(false);
-
-  const [showingMedicationsCanvas, setShowingMedicationsCanvas] = useState(true);
-  const [showingMedicationsText, setShowingMedicationsText] = useState(false);
-
-  const [showingAllergiesCanvas, setShowingAllergiesCanvas] = useState(true);
-  const [showingAllergiesText, setShowingAllergiesText] = useState(false);
-  
-  const { pastMedHist, pastHospits, medications, allergies } = state;
 
   return (
     <>

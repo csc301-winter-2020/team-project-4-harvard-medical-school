@@ -84,9 +84,8 @@ From this information, we can curate and collect statistics about how medical st
     - For now, click the three horizontal lines icon at the top right of the screen. This menu icon appears on every page on the website other than the login screen.
     - Clicking it pops up a small display menu showing your name, your year of study, a button that leads you to your User  Settings page, and a Logout button.
     - Click the Settings button. This brings you to your user profile settings page. 
-    - Here you can change your Default Input Mode as well as determine whether you want to show the navigation sidebar by default, as outlined in the Key Features section.
-    - Clicking the pencil icon at the bottom right of the screen allows you to edit your name, your year of study, and your profile picture. Note that at the moment you cannot update your hospital.
-    - If you decide to change your name, year, or profile picture, click the checkmark icon at the bottom right of the screen to confirm your changes.
+    - Clicking the pencil icon at the bottom right of the screen allows you to edit your name, your year of study, your profile picture, your Default Input Mode, and whether you want to show the sidebar by default. Note that at the moment you cannot update your hospital.
+    - If you decide to change any of these settings, click the checkmark icon at the bottom right of the screen to confirm your changes.
     - Now let us return to our patients list page. Click the Scribe logo at the top right of the screen. This logo is also present on every page of the website, and clicking it will always bring you to the patient list page.
     
 [![Image from Gyazo](https://i.gyazo.com/b332f9119624d14e211ac885bd290790.gif)](https://gyazo.com/b332f9119624d14e211ac885bd290790)

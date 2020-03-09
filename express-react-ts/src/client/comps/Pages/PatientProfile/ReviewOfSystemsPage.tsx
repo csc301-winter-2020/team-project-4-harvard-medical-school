@@ -209,8 +209,6 @@ const initialGynaecological: gynaecological = {
   breastMass: false
 }
 
-//TODO: add for men/women
-
 const initialHematology: hematology = {
   abnormalBleeding: false,
   abnormalBruising: false,

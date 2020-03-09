@@ -176,13 +176,13 @@ From this information, we can curate and collect statistics about how medical st
 1. `git clone https://github.com/csc301-winter-2020/team-project-4-harvard-medical-school`
 2. Create .env file and populate it with information obtained from another team member (it contains authentication information for accessing the database, etc)
 3. The information that goes into these files needs to be obtained *directly* from one of the team members, since it contains private information and is not on github.
-4. `cd express-react-ts`
-5. `git checkout dev`
+4. `git checkout dev`
     - (or whatever branch you wish to work on)
-6. `npm install`
-7. `npm run build (only when setting it up for the first time)`
-8. `npm run dev`
-9. Go to localhost:3000 on your browser to access the application
+5. `npm install`
+6. `npm run build`
+	- this command is only required when building for the first time. Otherwise you can just use `npm run dev`.
+7. `npm run dev`
+8. Go to localhost:3000 on your browser to access the application
 
  ## Deployment and Github Workflow
  

@@ -35,33 +35,42 @@ From this information, we can curate and collect statistics about how medical st
         - Set whether the navigation sidebar within patient profiles is shown by default.
             - The navigation sidebar displays a list of every page of the patient profile; clicking on an element within this list brings you to the corresponding page.
 
-* ???? Creation and deletion of patient profiles ?????
+* **Creation and deletion of patient profiles**
+    - Each new patient profile is initialized with the patient's first and last name.
+    - Created patient profiles are displayed on the Patient List page
+        - You can search for a specific patient profile by patient name.
+        - The Patient List is able to be sorted alphabetically, by creation date, and by most recent modification date.
 
 * **Polished views and (mostly) completed functionality for 8/10 pages of a patient profile**
     - Every patient profile consists of 10 distinct pages, each with their own set of different form input fields.
-    - Each form input field generally consists of a canvas input box and a text input box, each of which can be optionally hidden by toggle buttons.
+    - Every form input field generally consists of a canvas input box and a text input box, each of which can be optionally hidden by toggle buttons.
         - Recall that the default display of these form input fields can be changed within the user settings page.
     - A page may also have radio button input fields. Certain input configurations to these radio buttons may prompt previously hidden form input fields to appear, or cause other radio buttons to grey out.
         - For example, selecting Female within the Demographics page reveals a form input field asking if the patient is pregnant. This form input field is hidden when Male is selected instead.
     - The form input fields for most of the pages are quite similar, except for the Physical Examination and Lab Results pages, which require their own specialized methods of input.
         - As such, these two pages are still incomplete at the moment.
-    - Information entered into all text form inputs and radio button inputs is persistent, in that it is saved in our database and accessible at later times.
-        - At the moment, canvas form inputs cannot be saved or accessed from our database.
+    - Note that at the moment, only information entered into **text form inputs** and **radio button inputs** is saved in our database and accessible at later times.
+        - Currently, canvas form inputs cannot be saved or accessed from our database.
     
 * **Functional canvas input fields on the client-side**
-    - Canvas input fields allow for users to handwrite their notes directly in our application
+    - Canvas input fields allow for users to handwrite their notes directly in our application.
     - Functionalities include an eraser tool, the ability to change pen color, and the option to erase an entire canvas at once.
     - Canvases are also expandable in size, should a user run out of room.
-    - Note that because canvas form inputs currently cannot be saved or accessed from our database, navigating away from the page or reloading the page resets all canvasses.
+    - Note that because canvas form inputs currently cannot be saved or accessed from our database, navigating away from the page or reloading the page resets all canvases.
 
-* The creation and editing of patient profile templates (but not applying them to patient profiles)
+* **The creation and editing of patient profile templates**
+    - Users are able to create and edit patient profile templates that are intended to allow the user to rearrange or hide patient profile pages and/or certain form input fields within a patient profile.
+        - For example, a user may find it unnecessary to have a Lab Results page in a patient's profile.
+    - In creating a template, the user is presented a superset of all possible pages and form input fields within each page.
+        - Pages and form input fields can then be dragged around to rearrange them, or checked off to indicate that they should be hidden.
+    - Note that created templates cannot actually be applied to patient profiles at the moment, but created and edited templates are saved and accessible from our database.
 
 ## Instructions
 
 1. **Login/Registration Page**
 
- - __site URL__ brings you to our website's login page. You may enter the credentials for the following pre-created user:
-     - Username: will, Password: will
+ - https://csc301-scribe.herokuapp.com/ brings you to our website's login page. You may enter the credentials for the following pre-created user:
+     - Username: user, Password: user
  
  - Alternatively, you may register for your own user account by clicking the register button and inputting a username and password.
 
@@ -86,7 +95,7 @@ From this information, we can curate and collect statistics about how medical st
  - Now let us return to our patients list page. Click the Scribe logo at the top right of the screen. This logo is also present on every page of the website, and clicking it will always bring you to the patient list page.
 
  
-2. Patient List Page
+2. **Patient List Page**
 
     - This page displays a list of all of a student's patients. You may search through your patients with the search bar at the top of the screen. Note that the search bar only searches for patient names.
 

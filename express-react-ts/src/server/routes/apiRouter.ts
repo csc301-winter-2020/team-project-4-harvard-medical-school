@@ -140,13 +140,13 @@ router.get(
  * TODO: Return the patient profile of this id
  */
 router.get(
-  "/api/patientprofile/:patientId",
+  "/api/patientprofile/Id",
   (req: Request, res: Response, next: NextFunction) => {
-    const patientId: string = req.params.patientId;
+    const profile_id: string = req.params.Id;
     const query_string: string =
       "SELECT * FROM csc301db.patient_profile WHERE patient_id = $1";
     pool
-      .query(query_string, [parseInt(patientId)])
+      .query(query_string, [parseInt(profile_id)])
       .then((query_result: { rowCount: number; rows: any[] }) => {
         if (query_result.rowCount === 0) {
           res.status(404).send();

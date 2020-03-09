@@ -36,7 +36,7 @@ const initialState: Assessment_State = {
 
 async function saveData(url: string, state: any) {
   console.log(state)
-  allAttributes.assessment = state.assessment;
+  allAttributes.assessments = state.assessment;
   try {
     const res = await postData(url, allAttributes);
     console.log(res.message);
@@ -56,6 +56,13 @@ export const AssessmentAndPlanPage: IndividualPatientProfile = ({
   isShowingSidebar,
   patientID,
 }) => {
+  
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const [showingAssessmentCanvas, setShowingAssessmentCanvas] = useState(true);
+  const [showingAssessmentText, setShowingAssessmentText] = useState(false);
+
+  const { assessment } = state;
   const history = useHistory();
   useEffect(() => {
     if (currentPage === pageName){
@@ -73,7 +80,7 @@ export const AssessmentAndPlanPage: IndividualPatientProfile = ({
           console.log(jsonResult)
           allAttributes = jsonResult;
           dispatch({ type: "many_fields", newState:{
-            "assessment": "ADD TO DB"}});
+            "assessment": jsonResult.assessments}});
 
         }).catch((error) => {
           console.log("An error occured with fetch:", error)
@@ -81,12 +88,6 @@ export const AssessmentAndPlanPage: IndividualPatientProfile = ({
     }
   }, [currentPage]);
 
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  const [showingAssessmentCanvas, setShowingAssessmentCanvas] = useState(true);
-  const [showingAssessmentText, setShowingAssessmentText] = useState(false);
-
-  const { assessment } = state;
 
   return (
     <>

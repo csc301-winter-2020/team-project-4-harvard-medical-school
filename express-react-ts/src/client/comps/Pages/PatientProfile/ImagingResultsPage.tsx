@@ -36,7 +36,7 @@ const initialState: ImagingResultsState = {
 
 async function saveData(url: string, state: any) {
   console.log(state)
-  //allAttributes.imagingResults = state.imagingResults; 
+  allAttributes.imaging = state.imagingResults; 
   try {
     const res = await postData(url, allAttributes);
     console.log(res.message);
@@ -56,7 +56,14 @@ export const ImagingResultsPage: IndividualPatientProfile = ({
   isShowingSidebar,
   patientID,
 }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const [showingImagingResultsCanvas, setShowingImagingResultsCanvas] = useState(true);
+  const [showingImagingResultsText, setShowingImagingResultsText] = useState(false);
+
+  const { imagingResults } = state;
   const history = useHistory();
+  
   useEffect(() => {
     if (currentPage === pageName) {
       document.title = `Patient Profile: ${pageName}`;
@@ -73,7 +80,7 @@ export const ImagingResultsPage: IndividualPatientProfile = ({
           console.log(jsonResult)
           allAttributes = jsonResult;
           dispatch({ type: "many_fields", newState:{
-            "imagingResults": "Add imagingResults to DB"}});
+            "imagingResults": jsonResult.imaging}});
 
         }).catch((error) => {
           console.log("An error occured with fetch:", error)
@@ -81,14 +88,6 @@ export const ImagingResultsPage: IndividualPatientProfile = ({
 
     }
   }, [currentPage]);
-
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  const [showingImagingResultsCanvas, setShowingImagingResultsCanvas] = useState(true);
-  const [showingImagingResultsText, setShowingImagingResultsText] = useState(false);
-
-  const { imagingResults } = state;
-
   return (
     <>
       <CSSTransition

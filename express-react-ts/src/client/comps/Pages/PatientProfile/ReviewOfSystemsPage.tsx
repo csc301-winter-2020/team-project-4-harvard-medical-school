@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState, useRef } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import { IndividualPatientProfile } from "./PatientProfilePage";
 import { useHistory } from "react-router";
@@ -518,7 +518,7 @@ const nameMap: nameMap = {
   abnormalBleeding: 'Abnormal Bleeding',
   abnormalBruising: 'Abnormal Bruising',
   newLumps: 'New Lumps Or Bumps',
-  lossOfConsciousnessNeurological: 'AbruptLossOfConsciousness',
+  lossOfConsciousnessNeurological: 'Abrupt Loss Of Consciousness',
   seizureActivity: 'Witnessed Seizure Activity',
   numbness: 'Numbness',
   weakness: 'Weakness',
@@ -601,11 +601,15 @@ export const ReviewOfSystemsPage: IndividualPatientProfile = ({
       // get the gender of the patient
       getPatientInfo(patientID).then((data) => {
         setGender(data.gender)
+      }).catch((err) => {
+        console.log('could not get gender')
       })
 
       // get the Review of Systems information from the database
       getReviewOfSystems(patientID).then((data) => {
         dispatch({category: 'N/A', symptomName: 'N/A', reviewOfSystems: data})
+      }).catch((err) => {
+        console.log('could not get Review of Systems data from database')
       })
     }
   }, [currentPage]);

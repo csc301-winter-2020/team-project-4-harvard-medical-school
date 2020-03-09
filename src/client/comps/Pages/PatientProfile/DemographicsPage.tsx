@@ -32,13 +32,13 @@ function reducer(
     case "MALE":
       return {
         ...state,
-        sex: "M",
+        sex: "Male",
         isPregnant: null,
       };
     case "FEMALE":
       return {
         ...state,
-        sex: "F",
+        sex: "Female",
       };
     case "PREGNANT":
       return {
@@ -63,7 +63,7 @@ function reducer(
 type DemographicsState = {
   firstName: string;
   lastName: string;
-  sex: "M" | "F" | null;
+  sex: "Male" | "Female" | null;
   age: string;
   isPregnant: "Y" | "N" | "UNSURE" | null;
   country: string | null;
@@ -83,7 +83,7 @@ async function saveData(url: string, state: DemographicsState) {
   allAttributes.first_name = state.firstName;
   allAttributes.family_name = state.lastName;
   allAttributes.age = state.age;
-  allAttributes.gender_at_birth = state.sex;
+  allAttributes.gender = state.sex;
   allAttributes.pregnant = state.isPregnant;
   allAttributes.country_residence = state.country;
   try {
@@ -153,7 +153,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
               newState: {
                 firstName: jsonResult.first_name,
                 lastName: jsonResult.family_name,
-                sex: jsonResult.gender_at_birth,
+                sex: jsonResult.gender,
                 age: jsonResult.age,
                 isPregnant: jsonResult.pregnant,
                 country: jsonResult.country_residence,
@@ -239,7 +239,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
                 <input
                   type="radio"
                   name="sex"
-                  checked={sex === "M"}
+                  checked={sex === "Male"}
                   onChange={() => {
                     dispatch({ type: "MALE" });
                   }}
@@ -251,7 +251,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
                 <input
                   type="radio"
                   name="sex"
-                  checked={sex === "F"}
+                  checked={sex === "Female"}
                   onChange={() => {
                     dispatch({ type: "FEMALE" });
                   }}
@@ -259,7 +259,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
                 <p>Female</p>
               </label>
             </div>
-            {sex === "F" && (
+            {sex === "Female" && (
               <>
                 <h3>Pregnant?</h3>
                 <div className="radio-group">

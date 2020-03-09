@@ -69,47 +69,30 @@ From this information, we can curate and collect statistics about how medical st
 ## Instructions
 
 1. **Login/Registration Page**
-
     - https://csc301-scribe.herokuapp.com/ brings you to our website's login page. You may enter the credentials for the following pre-created user:
         - Username: will, Password: will
- 
     - Alternatively, you may register for your own user account by clicking the register button and inputting a username and password.
-
     - As mentioned in Key Features, we currently only support the student-facing side of the application, so all users are assumed to be medical students at the moment.
- 
 2. **User Settings Page**
-
      - Logging in successfully brings you to a page displaying a list of all of your patients, but we shall explore that page later on.
-
     - For now, click the three horizontal lines icon at the top right of the screen. This menu icon appears on every page on the website other than the login screen.
-
     - Clicking it pops up a small display menu showing your name, your year of study, a button that leads you to your User  Settings page, and a Logout button.
-
     - Click the Settings button. This brings you to your user profile settings page. 
-
     - Here you can change your Default Input Mode as well as determine whether you want to show the navigation sidebar by default, as outlined in the Key Features section.
-
     - Clicking the pencil icon at the bottom right of the screen allows you to edit your name, your year of study, and your profile picture. Note that at the moment you cannot update your hospital.
-    
     - If you decide to change your name, year, or profile picture, click the checkmark icon at the bottom right of the screen to confirm your changes.
-
     - Now let us return to our patients list page. Click the Scribe logo at the top right of the screen. This logo is also present on every page of the website, and clicking it will always bring you to the patient list page.
  
 3. **Patient List Page**
-
     - This page displays a list of all of a student's patients. You may search through your patients with the search bar at the top of the screen. Note that the search bar only searches for patient names.
-
     - You may reorder the rows of the patients list by clicking the column headings at the top of the list.
-
     - Clicking the red 'i' at the right side of each row of the patient list reveals the patient's key demographics, as well as the options to export the patient profile to PDF and delete the patient profile entirely.
         - Note that the export to PDF button is not functional at the moment, but patient profile deletion is.
-        
     - On this page is the Add/Customize Template button on the bottom right of the screen. We will explore this button later on.
     - For now, let us try creating a new patient profile. Click the Add Patient button on the bottom right of the screen.
     - Simply enter a first and last name for the new patient and press Create.
     - Now that new patient profile should appear in the patient list.
     - Let us now enter a patient profile. Press any row of the patient profile list.
-
 4. **Exploring the pages of a Patient Profile**
     - Within the patient profile is where users take their notes during patient interviews.
     - On the left side of every page is a navigation sidebar which displays a list of all the pages of the patient profile.

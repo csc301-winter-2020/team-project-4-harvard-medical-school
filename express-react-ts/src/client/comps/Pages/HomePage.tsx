@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { now, max } from "../../utils/utils";
 import { useHistory } from "react-router";
 import { HelixLoader } from "../SubComponents/HelixLoader";
+import { ToastContainer, toast } from "react-toastify";
 
 interface HomePageProps {}
 
@@ -280,6 +281,7 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
           searchValue={searchVal}
           setSearchValue={setSearchVal}
         />
+        <ToastContainer position={toast.POSITION.TOP_RIGHT} />
         {isLoading && <HelixLoader message="Loading Patients..." />}
         <div className="home-page-content-container">
           <div className="home-page-your-patients-title">Your Patients</div>
@@ -360,7 +362,7 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
               history.push("/templates");
             }}
           >
-            <p>Add/Customize Template</p>
+            <p>Template Editor</p>
           </div>
         </div>
       </div>

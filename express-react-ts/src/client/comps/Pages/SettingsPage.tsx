@@ -4,6 +4,7 @@ import "../../scss/settings/settings.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { defaultAvatar, numberToYearStr } from "../../utils/utils";
 import { HelixLoader } from "../SubComponents/HelixLoader";
+import { toast, ToastContainer } from "react-toastify";
 
 interface SettingsPageProps {}
 
@@ -63,14 +64,9 @@ const dummyData: userData = {
 export const SettingsPage: React.FC<SettingsPageProps> = ({}) => {
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState("Danny Heap");
   const [isLoading, setIsLoading] = useState(true);
-  // const [defaultMode, setDefaultMode] = useState<"Typing" | "Both" | "Writing">(
-  //   "Writing"
-  // );
-  // const [showSidebarDefault, setShowSidebarDefault] = useState<boolean>(true);
-
   const [userData, setUserData] = useState<userData>(dummyData);
+  const myToast: any = toast;
 
   useEffect(() => {
     getUserSettings().then(data => {
@@ -99,6 +95,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({}) => {
         setIsAvatarPopup={setIsAvatarPopup}
         showSearch={false}
       />
+      <ToastContainer position={toast.POSITION.TOP_RIGHT} />
       {isLoading && <HelixLoader message="Loading Settings..." />}
       <div className="settings-outermost">
         <div className="settings-main-container">
@@ -197,6 +194,8 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({}) => {
                       ...userData,
                       default_mode: "Writing",
                     });
+                  } else {
+                    myToast.info("Click the pencil icon to edit.");
                   }
                 }}
               />
@@ -214,6 +213,8 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({}) => {
                       ...userData,
                       default_mode: "Typing",
                     });
+                  } else {
+                    myToast.info("Click the pencil icon to edit.");
                   }
                 }}
               />
@@ -231,6 +232,8 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({}) => {
                       ...userData,
                       default_mode: "Both",
                     });
+                  } else {
+                    myToast.info("Click the pencil icon to edit.");
                   }
                 }}
               />
@@ -249,6 +252,8 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({}) => {
                       ...userData,
                       default_sidebar: true,
                     });
+                  } else {
+                    myToast.info("Click the pencil icon to edit.");
                   }
                 }}
               />
@@ -266,6 +271,8 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({}) => {
                       ...userData,
                       default_sidebar: false,
                     });
+                  } else {
+                    myToast.info("Click the pencil icon to edit.");
                   }
                 }}
               />
@@ -293,9 +300,11 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({}) => {
               })
                 .then(res => {
                   console.log(res);
+                  myToast.success("Your settings have been saved.");
                 })
                 .catch(err => {
                   console.log(err);
+                  myToast.warn("There was an error saving your settings.");
                 });
             }
             setIsEditing(!isEditing);

@@ -53,7 +53,7 @@ export type IndividualPatientProfile = React.FC<
 
 export async function postData(url: string, data: any) {
   const response = await fetch(url, {
-    method: "POST",
+    method: "PATCH",
     mode: "cors",
     cache: "no-cache",
     credentials: "same-origin",

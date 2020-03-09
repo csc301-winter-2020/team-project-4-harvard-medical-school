@@ -156,7 +156,7 @@ export const CCHPIPage: IndividualPatientProfile = ({
           </div>
           <div className="patient-profile-nav-btns">
             <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
-              saveData('/api/patientprofile/' + patientID, state);
+              saveData('/api/patientprofile/'+ patientID, state);
             }}>
               <FontAwesomeIcon icon="save" size="2x" />
             </div>

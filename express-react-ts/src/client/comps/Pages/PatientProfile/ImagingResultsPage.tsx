@@ -74,7 +74,7 @@ export const ImagingResultsPage: IndividualPatientProfile = ({
 
   const { imagingResults } = state;
   const history = useHistory();
-  
+
   useEffect(() => {
     if (currentPage === pageName) {
       document.title = `Patient Profile: ${pageName}`;

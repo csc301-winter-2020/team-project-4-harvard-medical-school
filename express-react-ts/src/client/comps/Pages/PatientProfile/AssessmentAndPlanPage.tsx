@@ -64,15 +64,6 @@ export const AssessmentAndPlanPage: IndividualPatientProfile = ({
   const [showingAssessmentCanvas, setShowingAssessmentCanvas] = useState(true);
   const [showingAssessmentText, setShowingAssessmentText] = useState(false);
 
-  useEffect(() => {
-    const canvasShow: boolean = canvasInit(defaultMode);
-    const textShow: boolean = textInit(defaultMode);
-
-    setShowingAssessmentCanvas(canvasShow);
-    setShowingAssessmentText(textShow);
-
-  }, [defaultMode]);
-
   const { assessment } = state;
   const history = useHistory();
   useEffect(() => {
@@ -99,7 +90,15 @@ export const AssessmentAndPlanPage: IndividualPatientProfile = ({
     }
   }, [currentPage]);
 
+  useEffect(() => {
+    const canvasShow: boolean = canvasInit(defaultMode);
+    const textShow: boolean = textInit(defaultMode);
 
+    setShowingAssessmentCanvas(canvasShow);
+    setShowingAssessmentText(textShow);
+
+  }, [defaultMode]);
+  
   return (
     <>
       <CSSTransition

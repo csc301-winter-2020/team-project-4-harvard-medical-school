@@ -38,6 +38,7 @@ const initialState: Family_Hist_State = {
 async function saveData(url: string, state: any) {
   console.log(state.familyHist)
   allAttributes.family_history = state.familyHist;
+  console.log(allAttributes)
   try {
     const res = await postData(url, allAttributes);
     console.log(res.message);

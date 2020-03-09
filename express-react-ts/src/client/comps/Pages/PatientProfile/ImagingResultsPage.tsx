@@ -5,6 +5,7 @@ import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientForm
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router";
 import { postData} from "./PatientProfilePage";
+import { canvasInit, textInit } from "../../../utils/utils";
 
 function reducer(
   state: ImagingResultsState,
@@ -55,11 +56,21 @@ export const ImagingResultsPage: IndividualPatientProfile = ({
   transitionName,
   isShowingSidebar,
   patientID,
+  defaultMode,
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const [showingImagingResultsCanvas, setShowingImagingResultsCanvas] = useState(true);
   const [showingImagingResultsText, setShowingImagingResultsText] = useState(false);
+
+  useEffect(() => {
+    const canvasShow: boolean = canvasInit(defaultMode);
+    const textShow: boolean = textInit(defaultMode);
+
+    setShowingImagingResultsCanvas(canvasShow);
+    setShowingImagingResultsText(textShow);
+
+  }, [defaultMode]);
 
   const { imagingResults } = state;
   const history = useHistory();

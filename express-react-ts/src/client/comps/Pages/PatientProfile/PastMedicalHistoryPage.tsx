@@ -5,6 +5,7 @@ import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientForm
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router";
 import { postData } from "./PatientProfilePage";
+import { canvasInit, textInit } from "../../../utils/utils";
 
 function reducer(
   state: PMH_State,
@@ -63,7 +64,8 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
   transitionDuration,
   transitionName,
   isShowingSidebar,
-  patientID
+  patientID,
+  defaultMode
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -81,6 +83,20 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
   
   const { pastMedHist, pastHospits, medications, allergies } = state;
   const history = useHistory();
+  useEffect(() => {
+    const canvasShow: boolean = canvasInit(defaultMode);
+    const textShow: boolean = textInit(defaultMode);
+    
+    setShowingPastMedHistCanvas(canvasShow);
+    setShowingPastMedHistText(textShow);
+    setShowingPastHospitsCanvas(canvasShow);
+    setShowingPastHospitsText(textShow);
+    setShowingMedicationsCanvas(canvasShow);
+    setShowingMedicationsText(textShow);
+    setShowingAllergiesCanvas(canvasShow);
+    setShowingAllergiesText(textShow);
+  }, [defaultMode]);
+
   useEffect(() => {
     if (currentPage === pageName) {
       document.title = `Patient Profile: ${pageName}`;

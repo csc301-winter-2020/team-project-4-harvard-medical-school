@@ -5,6 +5,7 @@ import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientForm
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router";
 import { postData } from "./PatientProfilePage";
+import { canvasInit, textInit } from "../../../utils/utils";
 
 function reducer(
   state: Assessment_State,
@@ -55,12 +56,22 @@ export const AssessmentAndPlanPage: IndividualPatientProfile = ({
   transitionName,
   isShowingSidebar,
   patientID,
+  defaultMode,
 }) => {
   
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const [showingAssessmentCanvas, setShowingAssessmentCanvas] = useState(true);
   const [showingAssessmentText, setShowingAssessmentText] = useState(false);
+
+  useEffect(() => {
+    const canvasShow: boolean = canvasInit(defaultMode);
+    const textShow: boolean = textInit(defaultMode);
+
+    setShowingAssessmentCanvas(canvasShow);
+    setShowingAssessmentText(textShow);
+
+  }, [defaultMode]);
 
   const { assessment } = state;
   const history = useHistory();

@@ -1,4 +1,4 @@
-![Deliverable 2 README](deliverables/deliverable-2)
+[Deliverable 2 README](deliverables/deliverable-2)
 
 # Getting Started
 

@@ -2,6 +2,7 @@ import React, { Fragment, useState, useReducer, useEffect } from "react";
 import "../../scss/home/home";
 import { Header } from "../SubComponents/Header";
 import { HomePatientProfile } from "../SubComponents/Home/HomePatientProfile";
+import NewPatient from "../SubComponents/Home/NewPatient"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { now, max } from "../../utils/utils";
 import { useHistory } from "react-router";
@@ -111,6 +112,7 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
   const [patientsList, setPatientsList] = useState([]);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [isLoading, setIsLoading] = useState(true);
+  const [showNewPatientPopup, setNewPatientPopup] = useState(false);
 
   const history = useHistory();
 
@@ -259,6 +261,11 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
     }
   }, [searchVal]);
 
+  function newPatient() {
+    console.log('adding new patient');
+    setNewPatientPopup(true);
+  }
+
   return (
     <Fragment>
       <div
@@ -352,7 +359,7 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
             </div>
           </div>
           <div className="home-page-create-new-patient-btn">
-            <p>Add Patient</p>
+            <p onClick={newPatient}>Add Patient</p>
           </div>
           <div
             className="home-page-create-template-btn"
@@ -363,6 +370,8 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
             <p>Add/Customize Template</p>
           </div>
         </div>
+
+        {showNewPatientPopup && <NewPatient history={history}></NewPatient>}
       </div>
     </Fragment>
   );

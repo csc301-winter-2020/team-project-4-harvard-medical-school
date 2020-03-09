@@ -302,7 +302,7 @@ router.post(
             living_conditions, sexual_history, \
             etoh, drinks_per_week, \
              last_time_smoked, \
-            packs_per_day, other_substances, \
+            packs_per_day, other_substances,assessments, imaging,\
             pregnant_canvas, country_residence_canvas, country_visited_canvas,\
             complaint_canvas, medical_history_canvas,\
             social_history_canvas, family_history_canvas, country_canvas,\
@@ -313,7 +313,7 @@ router.post(
             etoh_canvas, drinks_per_week_canvas, \
              last_time_smoked_canvas, \
             packs_per_day_canvas, other_substances_canvas, \
-            assessments, assessments_canvas, imaging, imaging_canvas \
+             assessments_canvas, imaging_canvas \
             ) VALUES (current_timestamp, $1, $2, $3, $4, $5, $6, $7, $8, $9\
                 ,$10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21,\
                 $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, \
@@ -413,7 +413,7 @@ router.patch(
             living_conditions, sexual_history, \
             etoh, drinks_per_week, \
              last_time_smoked, \
-            packs_per_day, other_substances, \
+            packs_per_day, other_substances, assessments, imaging,\
             pregnant_canvas, country_residence_canvas, country_visited_canvas,\
             complaint_canvas, medical_history_canvas,\
             social_history_canvas, family_history_canvas, country_canvas,\
@@ -424,7 +424,7 @@ router.patch(
             etoh_canvas, drinks_per_week_canvas, \
              last_time_smoked_canvas, \
             packs_per_day_canvas, other_substances_canvas, \
-            assessments, assessments_canvas, imaging, imaging_canvas, id \
+             assessments_canvas, imaging_canvas, id \
             ) VALUES (current_timestamp, $1, $2, $3, $4, $5, $6, $7, $8, $9\
                 ,$10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21,\
                 $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, \

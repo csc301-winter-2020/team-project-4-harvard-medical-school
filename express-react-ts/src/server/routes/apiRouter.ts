@@ -143,7 +143,6 @@ router.get(
   "/api/patientprofile/:Id",
   (req: Request, res: Response, next: NextFunction) => {
     const profile_id: string = req.params.Id;
-    console.log(profile_id);
     const query_string: string =
       "SELECT * FROM csc301db.patient_profile WHERE id = $1";
     pool
@@ -321,6 +320,117 @@ router.post(
                 $33, $34, $35, $36, $37, $38, $39, $40, $41, $42, $43, $44,\
                 $45, $46, $47, $48, $49, $50, $51) RETURNING id;";
         return pool.query(insert_query, params_arr);
+      })
+      .then((result: any) => {
+        console.log(result);
+        res.status(200).json(result.rows[0]);
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(400).json(err);
+      });
+  }
+);
+
+/**
+ * Create a new patient profile for patient <patientId>
+ */
+router.patch(
+  "/api/patientprofile/:id",
+  (req: Request, res: Response, next: NextFunction) => {
+    const profile_id: string = req.params.id;
+    const new_patient: any = req.body;
+    console.log(req.body);
+    const params_arr: any = [];
+    // params_arr.push(profile_id);
+    params_arr.push(new_patient.student_id);
+    params_arr.push(new_patient.first_name);
+    params_arr.push(new_patient.family_name);
+    params_arr.push(new_patient.age);
+    params_arr.push(new_patient.gender_at_birth);
+    params_arr.push(new_patient.gender);
+    params_arr.push(new_patient.smoker);
+    const upload_promise: any = [];
+    const attributes: Array<string> = [
+      "pregnant",
+      "country_residence",
+      "country_visited",
+      "complaint",
+      "medical_history",
+      "social_history",
+      "family_history",
+      "country",
+      "hpi",
+      "hospital_history",
+      "medications",
+      "allergies",
+      "work",
+      "living_conditions",
+      "sexual_history",
+      "etoh",
+      "drinks_per_week",
+      "last_time_smoked",
+      "packs_per_day",
+      "other_substances",
+      "assessments",
+      "imaging",
+    ];
+    for (let i = 0; i < attributes.length; i++) {
+      params_arr.push(new_patient[attributes[i]]);
+    }
+    for (let i = 0; i < attributes.length; i++) {
+      const time: number = Date.now();
+      const key_name: string = `canvas_${req.user}_${attributes[i]}_${time}`;
+      console.log(key_name);
+      if (new_patient[attributes[i] + "_canvas"] === null) {
+        upload_promise.push(Promise.resolve(null));
+      } else {
+        upload_promise.push(
+          save_to_aws(new_patient[attributes[i] + "_canvas"], key_name)
+        );
+      }
+    }
+    console.log(upload_promise);
+    Promise.all(upload_promise)
+      .then(values => {
+        for (let i = 0; i < values.length; i++) {
+          params_arr.push(values[i]);
+        }
+        console.log("upload sceesss");
+        return pool.query(
+          "DELETE FROM csc301db.patient_profile WHERE id = $1",
+          [profile_id]
+        );
+      })
+      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
+        const insert_query: string =
+          "INSERT INTO csc301db.patient_profile \
+            (last_modified, student_id, first_name, family_name, age, gender_at_birth\
+            ,gender, smoker, pregnant, country_residence, country_visited, complaint, medical_history,\
+            social_history, family_history, country, hpi, \
+            hospital_history, medications,\
+            allergies, work, \
+            living_conditions, sexual_history, \
+            etoh, drinks_per_week, \
+             last_time_smoked, \
+            packs_per_day, other_substances, \
+            pregnant_canvas, country_residence_canvas, country_visited_canvas,\
+            complaint_canvas, medical_history_canvas,\
+            social_history_canvas, family_history_canvas, country_canvas,\
+            hpi_canvas, \
+            hospital_history_canvas, medications_canvas,\
+            allergies_canvas, work_canvas, \
+            living_conditions_canvas, sexual_history_canvas, \
+            etoh_canvas, drinks_per_week_canvas, \
+             last_time_smoked_canvas, \
+            packs_per_day_canvas, other_substances_canvas, \
+            assessments, assessments_canvas, imaging, imaging_canvas, id \
+            ) VALUES (current_timestamp, $1, $2, $3, $4, $5, $6, $7, $8, $9\
+                ,$10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21,\
+                $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, \
+                $33, $34, $35, $36, $37, $38, $39, $40, $41, $42, $43, $44,\
+                $45, $46, $47, $48, $49, $50, $51, $52) RETURNING id;";
+        return pool.query(insert_query, params_arr.concat([profile_id]));
       })
       .then((result: any) => {
         console.log(result);

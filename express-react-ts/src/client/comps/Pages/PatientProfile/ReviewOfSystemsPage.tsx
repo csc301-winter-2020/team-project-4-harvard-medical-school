@@ -30,17 +30,17 @@ function reducer(
 }
 
 type category = endocrine
-                | vision
-                | headNeck
-                | pulmonary
-                | cardiovascular
-                | gastrointestinal
-                | gynaecological
-                | hematology
-                | neurological
-                | musculoskeletal
-                | mental
-                | skinHair
+              | vision
+              | headNeck
+              | pulmonary
+              | cardiovascular
+              | gastrointestinal
+              | gynaecological
+              | hematology
+              | neurological
+              | musculoskeletal
+              | mental
+              | skinHair
 
 type endocrine = {
   [key:string]: boolean
@@ -449,6 +449,7 @@ export const ReviewOfSystemsPage: IndividualPatientProfile = ({
   setCurrentPage,
   transitionDuration,
   transitionName,
+  isShowingSidebar,
   patientID,
 }) => {
   // state which keeps track of all input fields
@@ -529,7 +530,8 @@ export const ReviewOfSystemsPage: IndividualPatientProfile = ({
         onEnter={() => setCurrentPage(pageName)}
         classNames={transitionName}
       >
-        <div className="review-of-systems-page-outermost-container patient-profile-window">
+        <div className={isShowingSidebar ? "review-of-systems-page-outermost-container patient-profile-window" : 
+                                           "review-of-systems-page-outermost-container patient-profile-window width-100"}>
           <div className="patient-profile-page-title">
             <h2>{pageName}</h2>
           </div>

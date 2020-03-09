@@ -71,7 +71,7 @@ From this information, we can curate and collect statistics about how medical st
 1. **Login/Registration Page**
 
  - https://csc301-scribe.herokuapp.com/ brings you to our website's login page. You may enter the credentials for the following pre-created user:
-     - Username: user, Password: user
+     - Username: will, Password: will
  
  - Alternatively, you may register for your own user account by clicking the register button and inputting a username and password.
 
@@ -79,23 +79,23 @@ From this information, we can curate and collect statistics about how medical st
  
 2. **User Settings Page**
 
- - Logging in successfully brings you to a page displaying a list of all of your patients, but we shall explore that page later on.
+     - Logging in successfully brings you to a page displaying a list of all of your patients, but we shall explore that page later on.
 
- - For now, click the three horizontal lines icon at the top right of the screen. This menu icon appears on every page on the website other than the login screen.
+    - For now, click the three horizontal lines icon at the top right of the screen. This menu icon appears on every page on the website other than the login screen.
 
- - Clicking it pops up a small display menu showing your name, your year of study, a button that leads you to your User  Settings page, and a Logout button.
+    - Clicking it pops up a small display menu showing your name, your year of study, a button that leads you to your User  Settings page, and a Logout button.
 
- - Click the Settings button. This brings you to your user profile settings page. 
+    - Click the Settings button. This brings you to your user profile settings page. 
 
- - Here you can change your Default Input Mode as well as determine whether you want to show the navigation sidebar by default, as outlined in the Key Features section.
+    - Here you can change your Default Input Mode as well as determine whether you want to show the navigation sidebar by default, as outlined in the Key Features section.
 
- - Clicking the pencil icon at the bottom right of the screen allows you to edit your name, your year of study, and your profile picture. Note that at the moment you cannot update your hospital.
+    - Clicking the pencil icon at the bottom right of the screen allows you to edit your name, your year of study, and your profile picture. Note that at the moment you cannot update your hospital.
+    
+    - If you decide to change your name, year, or profile picture, click the checkmark icon at the bottom right of the screen to confirm your changes.
 
- - If you decide to change your name, year, or profile picture, click the checkmark icon at the bottom right of the screen to confirm your changes.
-
- - Now let us return to our patients list page. Click the Scribe logo at the top right of the screen. This logo is also present on every page of the website, and clicking it will always bring you to the patient list page.
+    - Now let us return to our patients list page. Click the Scribe logo at the top right of the screen. This logo is also present on every page of the website, and clicking it will always bring you to the patient list page.
  
-2. **Patient List Page**
+3. **Patient List Page**
 
     - This page displays a list of all of a student's patients. You may search through your patients with the search bar at the top of the screen. Note that the search bar only searches for patient names.
 
@@ -106,9 +106,9 @@ From this information, we can curate and collect statistics about how medical st
         
     - On this page is the Add/Customize Template button on the bottom right of the screen. We will explore this button later on.
     - For now, let us try creating a new patient profile. Click the Add Patient button on the bottom right of the screen.
-    
-3. **Patient Profile Creation**
-    - complete this
+    - Simply enter a first and last name for the new patient and press Create.
+    - Now that new patient profile should appear in the patient list.
+    - Let us now enter a patient profile. Press any row of the patient profile list.
 
 4. **Exploring the pages of a Patient Profile**
     - Within the patient profile is where users take their notes during patient interviews.
@@ -131,8 +131,21 @@ From this information, we can curate and collect statistics about how medical st
         - For example, if you were to change a patient's First Name through a text box, press the save button, and log out, then the patient's first name will have been changed when you log back in.
     
 5. **Patient profile templates**
+    - Let us return to the Patient List page. You can do this quickly by pressing the Scribe logo at the top left of the screen. 
+    - Press the Template Editor button at the bottom right of the screen.
+    - This brings you to the Template List page, which is very similar to the Patient List page, but instead lists any patient profile templates that you have created.
+    - Recall that patient profile templates are intended to allow the user to rearrange or hide patient profile pages and/or certain form input fields within a page.
+    - Also recall that currently we cannot actually apply created templates to patient profiles; all the functionality we have for now deals with the creation and editability of templates themselves.
+    - Let us now try creating a new template. Press the New Template button at the bottom right of the screen.
+    - You are now presented with a list containing the superset of all possible pages.
+    - You can try dragging each row of the list to rearrange the intended order of the pages within a patient profile.
+    - Clicking the downwards arrow at the right side of each row reveals the possible input form fields that can be on each page, which can similarly be dragged around.
+    - Every row also has a check box on the right, which indicates whether the page or form input field will be visible in the patient profile.
+    - You can change the name of your patient profile template by clicking the pencil icon directly above the list of rows, then you should be able to input text.
+    - Press the checkmark icon to confirm your new template name.
+    - Once you have finished editing the template to your liking, press the save button on the bottom right of the screen to save your template, then press the back button to return to the template list, where your new template should appear.
+    - You can edit your new template by clicking its row, and you can also delete the template by clilking the trash can icon on the right side.
 
- 
  ## Development requirements
  * If a developer were to set this up on their machine or a remote server, what are the technical requirements (e.g. OS, libraries, etc.)?
  * Briefly describe instructions for setting up and running the application (think a true README).

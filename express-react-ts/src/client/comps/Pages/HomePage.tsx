@@ -2,6 +2,7 @@ import React, { Fragment, useState, useReducer, useEffect } from "react";
 import "../../scss/home/home";
 import { Header } from "../SubComponents/Header";
 import { HomePatientProfile } from "../SubComponents/Home/HomePatientProfile";
+import { NewPatient } from "../SubComponents/Home/NewPatient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { now, max } from "../../utils/utils";
 import { useHistory } from "react-router";
@@ -112,6 +113,7 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
   const [patientsList, setPatientsList] = useState([]);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [isLoading, setIsLoading] = useState(true);
+  const [showNewPatientPopup, setNewPatientPopup] = useState(false);
 
   const history = useHistory();
 
@@ -138,14 +140,14 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
         return fetch(`/api/studentHomepage/${data.id}`);
       })
       .then((res: any) => {
-        if (res.status === 200){
-          return res.json()
+        if (res.status === 200) {
+          return res.json();
         } else {
           throw new Error("res.status not 200");
         }
       })
-      .then((data:any) => {
-        const patientsListNew:PatientProfile[] = [];
+      .then((data: any) => {
+        const patientsListNew: PatientProfile[] = [];
         console.log(data);
         // TODO: some fields don't have the right data
         for (let i = 0; i < data.length; i++) {
@@ -172,38 +174,6 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
         history.push("/err/500/Please try again.");
       });
   }, []);
-
-  // fetch(`/api/studentHomepage/${data.id}`)
-  // .then((data: any) => {
-  //   if (data.status === 200){
-  //     return data.json()
-  //   } else {
-  //     throw new Error("no data");
-  //   }
-  // })
-  // .then((data:any) => {
-  //   const patientsListNew:PatientProfile[] = [];
-  //   console.log(data);
-  //   // TODO: some fields don't have the right data
-  //   for (let i = 0; i < data.length; i++) {
-  //     patientsListNew.push({
-  //       title: "Patient" + data[i].id,
-  //       date: now(),
-  //       lastModified: data[i].last_modified,
-  //       firstName: data[i].first_name,
-  //       lastName: data[i].family_name,
-  //       sex: data[i].gender,
-  //       isPregnant: data[i].gender === "Male" ? null : data[i].pregnant,
-  //       age: data[i].age,
-  //       country: data[i].country_residence,
-  //       patientID: data[i].id,
-  //     });
-  //   }
-  //   setAllPatients(patientsListNew);
-  //   setPatientsList(patientsListNew);
-  //   setIsLoading(false);
-  // })
-
 
   useEffect(() => {
     if (nameSort !== null) {
@@ -259,6 +229,11 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
       setPatientsList(allPatients);
     }
   }, [searchVal]);
+
+  function newPatient() {
+    console.log("adding new patient");
+    setNewPatientPopup(true);
+  }
 
   return (
     <Fragment>
@@ -354,7 +329,7 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
             </div>
           </div>
           <div className="home-page-create-new-patient-btn">
-            <p>Add Patient</p>
+            <p onClick={newPatient}>Add Patient</p>
           </div>
           <div
             className="home-page-create-template-btn"
@@ -365,6 +340,13 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
             <p>Template Editor</p>
           </div>
         </div>
+
+        {showNewPatientPopup && (
+          <NewPatient
+            history={history}
+            setShowNewPatientPopup={setNewPatientPopup}
+          ></NewPatient>
+        )}
       </div>
     </Fragment>
   );

@@ -5,7 +5,7 @@ import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientForm
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router";
 import { postData } from "./PatientProfilePage";
-import { json } from "body-parser";
+import { canvasInit, textInit } from "../../../utils/utils";
 function reducer(
   state: CCHPI_State,
   action: { type: string; fieldName?: string; value?: string; newState?: {[key: string]: string |boolean|number|null} }
@@ -57,7 +57,8 @@ export const CCHPIPage: IndividualPatientProfile = ({
   transitionDuration,
   transitionName,
   isShowingSidebar,
-  patientID
+  patientID,
+  defaultMode,
 }) => {
   const history = useHistory();
   useEffect(() => {
@@ -94,6 +95,15 @@ export const CCHPIPage: IndividualPatientProfile = ({
   const [showingHPIText, setShowingHPIText] = useState(false);
 
   const { chiefComplaint, HPI } = state;
+
+  useEffect(() => {
+    const canvasShow: boolean = canvasInit(defaultMode);
+    const textShow: boolean = textInit(defaultMode);
+    setShowingChiefComplaintCanvas(canvasShow);
+    setShowingChiefComplaintText(textShow);
+    setShowingHPICanvas(canvasShow);
+    setShowingHPIText(textShow);
+  }, [defaultMode]);
 
   return (
     <>

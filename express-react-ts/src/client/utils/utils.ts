@@ -50,9 +50,15 @@ export const numberToYearStr: {[key: number]:  string} = {
 
 export const defaultAvatar: string = "https://i1.rgstatic.net/ii/profile.image/273584577880065-1442239054184_Q512/Danny_Heap.jpg";
 
-/**
- * For templates customization
- */
+export type inputMode = "Both" | "Writing" | "Typing";
+
+export function canvasInit(mode: inputMode):boolean{
+  return mode === "Both" || mode === "Writing";
+}
+
+export function textInit(mode:inputMode):boolean{
+  return mode === "Both" || mode === "Typing";
+}
 
 /**
  * Reorders a genericly typed list.

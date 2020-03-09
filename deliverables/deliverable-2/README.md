@@ -42,7 +42,7 @@ From this information, we can curate and collect statistics about how medical st
         - The Patient List is able to be sorted alphabetically, by creation date, and by most recent modification date.
 
 * **Polished views and (mostly) completed functionality for 8/10 pages of a patient profile**
-    - Every patient profile consists of 10 distinct pages, each with their own set of different form input fields.
+    - Every patient profile consists of (at the moment) 10 distinct pages, each with their own set of different form input fields.
     - Every form input field generally consists of a canvas input box and a text input box, each of which can be optionally hidden by toggle buttons.
         - Recall that the default display of these form input fields can be changed within the user settings page.
     - A page may also have radio button input fields. Certain input configurations to these radio buttons may prompt previously hidden form input fields to appear, or cause other radio buttons to grey out.
@@ -51,6 +51,7 @@ From this information, we can curate and collect statistics about how medical st
         - As such, these two pages are still incomplete at the moment.
     - Note that at the moment, only information entered into **text form inputs** and **radio button inputs** is saved in our database and accessible at later times.
         - Currently, canvas form inputs cannot be saved or accessed from our database.
+    - The views of the 8 standard pages of the patient profile are also presentable on a tablet devices, but functionality on tablet devices has not been extensively tested yet.
     
 * **Functional canvas input fields on the client-side**
     - Canvas input fields allow for users to handwrite their notes directly in our application.
@@ -74,7 +75,7 @@ From this information, we can curate and collect statistics about how medical st
  
  - Alternatively, you may register for your own user account by clicking the register button and inputting a username and password.
 
- - As mentioned in Key Features, we only support the student-facing side of the application, so all users are assumed to be medical students.
+ - As mentioned in Key Features, we currently only support the student-facing side of the application, so all users are assumed to be medical students at the moment.
  
 2. **User Settings Page**
 
@@ -82,38 +83,54 @@ From this information, we can curate and collect statistics about how medical st
 
  - For now, click the three horizontal lines icon at the top right of the screen. This menu icon appears on every page on the website other than the login screen.
 
- - Clicking it pops up a small display menu showing your name, your year of study, a button that leads you to your User  Settings page, and a logout button.
+ - Clicking it pops up a small display menu showing your name, your year of study, a button that leads you to your User  Settings page, and a Logout button.
 
  - Click the Settings button. This brings you to your user profile settings page. 
 
- - Here you can change your Default Input Mode and determine whether you want to show the navigation sidebar by default, as outlined in the Key Features section.
+ - Here you can change your Default Input Mode as well as determine whether you want to show the navigation sidebar by default, as outlined in the Key Features section.
 
- - Clicking the pencil icon at the bottom right of the screen allows you to edit your name and your profile picture. Note that at the moment you cannot change your year of study or your hospital. We will implement this by the next deliverable.
+ - Clicking the pencil icon at the bottom right of the screen allows you to edit your name, your year of study, and your profile picture. Note that at the moment you cannot update your hospital.
 
- - If you decide to change your name or profile picture, click the checkmark icon at the bottom right of the screen to confirm your changes.
+ - If you decide to change your name, year, or profile picture, click the checkmark icon at the bottom right of the screen to confirm your changes.
 
  - Now let us return to our patients list page. Click the Scribe logo at the top right of the screen. This logo is also present on every page of the website, and clicking it will always bring you to the patient list page.
-
  
 2. **Patient List Page**
 
     - This page displays a list of all of a student's patients. You may search through your patients with the search bar at the top of the screen. Note that the search bar only searches for patient names.
 
-    - You may reorder the patients list by clicking the column headings at the top of the list.
+    - You may reorder the rows of the patients list by clicking the column headings at the top of the list.
 
     - Clicking the red 'i' at the right side of each row of the patient list reveals the patient's key demographics, as well as the options to export the patient profile to PDF and delete the patient profile entirely.
         - Note that the export to PDF button is not functional at the moment, but patient profile deletion is.
         
-    - Clicking
+    - On this page is the Add/Customize Template button on the bottom right of the screen. We will explore this button later on.
+    - For now, let us try creating a new patient profile. Click the Add Patient button on the bottom right of the screen.
     
+3. **Patient Profile Creation**
+    - complete this
+
+4. **Exploring the pages of a Patient Profile**
+    - Within the patient profile is where users take their notes during patient interviews.
+    - On the left side of every page is a navigation sidebar which displays a list of all the pages of the patient profile.
+    - Clicking on an element of this list brings you to the corresponding page.
+    - Recall that you can change whether the sidebar is shown by default in the User Settings page.
+    - Also recall that the **Physical Examination** and **Lab Results** pages are still incomplete.
+    - At the bottom right side of the page are two arrow buttons that also let you navigate to other pages in the patient profile.
+    - The question mark button is for a currently unimplemented 'Helps and Tips' feature; at the moment, it does nothing.
+    - The main bulk of the page is where students take their notes through various form input fields.
+    - Notice that above most form input fields are two buttons that enable you to toggle whether a text input box or a canvas input box is displayed to you. 
+        - Recall that the default input mode can be set within the User Settings page.
+    - Interacting with a canvas input box is quite intuitive:
+        - The colored circles on the left change the color of your pen.
+        - The trash can icon on the right erases the entire canvas.
+        - The eraser icon toggles the eraser tool.
+        - The expansion icon extends the canvas size.
+    - Recall that canvas form inputs currently cannot be saved or accessed from our database, so navigating away from the page or reloading the page resets all canvases.
+    - You can test how text form inputs and radio button form inputs are saved and accessed from the database by using the save button at the top right of the page.
+        - For example, if you were to change a patient's First Name through a text box, press the save button, and log out, then the patient's first name will have been changed when you log back in.
     
-    
-
-
-
-
-
-
+5. **Patient profile templates**
 
  
  ## Development requirements

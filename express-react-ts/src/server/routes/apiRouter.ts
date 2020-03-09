@@ -140,7 +140,7 @@ router.get(
  * TODO: Return the patient profile of this id
  */
 router.get(
-  "/api/patientprofile/Id",
+  "/api/patientprofile/:Id",
   (req: Request, res: Response, next: NextFunction) => {
     const profile_id: string = req.params.Id;
     const query_string: string =

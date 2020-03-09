@@ -96,18 +96,21 @@ From this information, we can curate and collect statistics about how medical st
     - On this page is the Add/Customize Template button on the bottom right of the screen. We will explore this button later on.
     - For now, let us try creating a new patient profile. Click the Add Patient button on the bottom right of the screen.
     - Simply enter a first and last name for the new patient and press Create.
-    - Now that new patient profile should appear in the patient list.
-    - Let us now enter a patient profile. Press any row of the patient profile list.
+    - The new patient profile should appear in the patient list. You will be redirected to the newly created patient profile.
+    - Let us now enter a patient profile. Press any row of the patient profile list. You may use the back button to return to the patient profile list and select one or stay on the patient profile you just created.
 [![Image from Gyazo](https://i.gyazo.com/00e8e0c03b61445a234ea08f7119f592.gif)](https://gyazo.com/00e8e0c03b61445a234ea08f7119f592)
+
 4. **Exploring the pages of a Patient Profile**
+[![Image from Gyazo](https://i.gyazo.com/5df270b7ddf9615e2b00bd69ea36c341.gif)](https://gyazo.com/5df270b7ddf9615e2b00bd69ea36c341)
     - Within the patient profile is where users take their notes during patient interviews.
     - On the left side of every page is a navigation sidebar which displays a list of all the pages of the patient profile.
     - Clicking on an element of this list brings you to the corresponding page.
     - Recall that you can change whether the sidebar is shown by default in the User Settings page.
-    - Also recall that the **Physical Examination** and **Lab Results** pages are still incomplete.
+    - Also note that the **Physical Examination** and **Lab Results** pages are still incomplete.
     - At the bottom right side of the page are two arrow buttons that also let you navigate to other pages in the patient profile.
     - The question mark button is for a currently unimplemented 'Helps and Tips' feature; at the moment, it does nothing.
     - The main bulk of the page is where students take their notes through various form input fields.
+[![Image from Gyazo](https://i.gyazo.com/5120951d94f6814482dca134b8f38fc6.gif)](https://gyazo.com/5120951d94f6814482dca134b8f38fc6)
     - Notice that above most form input fields are two buttons that enable you to toggle whether a text input box or a canvas input box is displayed to you. 
         - Recall that the default input mode can be set within the User Settings page.
     - Interacting with a canvas input box is quite intuitive:
@@ -115,11 +118,13 @@ From this information, we can curate and collect statistics about how medical st
         - The trash can icon on the right erases the entire canvas.
         - The eraser icon toggles the eraser tool.
         - The expansion icon extends the canvas size.
+[![Image from Gyazo](https://i.gyazo.com/452431f535a0f663a4b77d3e9be37024.gif)](https://gyazo.com/452431f535a0f663a4b77d3e9be37024)
     - Recall that canvas form inputs currently cannot be saved or accessed from our database, so navigating away from the page or reloading the page resets all canvases.
     - You can test how text form inputs and radio button form inputs are saved and accessed from the database by using the save button at the top right of the page.
         - For example, if you were to change a patient's First Name through a text box, press the save button, and log out, then the patient's first name will have been changed when you log back in.
     
 5. **Patient profile templates**
+[![Image from Gyazo](https://i.gyazo.com/a45eadb4afa240917b296ee5f09ce29e.gif)](https://gyazo.com/a45eadb4afa240917b296ee5f09ce29e)
     - Let us return to the Patient List page. You can do this quickly by pressing the Scribe logo at the top left of the screen. 
     - Press the Template Editor button at the bottom right of the screen.
     - This brings you to the Template List page, which is very similar to the Patient List page, but instead lists any patient profile templates that you have created.
@@ -129,7 +134,8 @@ From this information, we can curate and collect statistics about how medical st
     - You are now presented with a list containing the superset of all possible pages.
     - You can try dragging each row of the list to rearrange the intended order of the pages within a patient profile.
     - Clicking the downwards arrow at the right side of each row reveals the possible input form fields that can be on each page, which can similarly be dragged around.
-    - Every row also has a check box on the right, which indicates whether the page or form input field will be visible in the patient profile.
+    - Every row also has a check box on the left, which indicates whether the page or form input field will be visible in the patient profile.
+[![Image from Gyazo](https://i.gyazo.com/0e368972a3159f747014c871a586087d.gif)](https://gyazo.com/0e368972a3159f747014c871a586087d)
     - You can change the name of your patient profile template by clicking the pencil icon directly above the list of rows, then you should be able to input text.
     - Press the checkmark icon to confirm your new template name.
     - Once you have finished editing the template to your liking, press the save button on the bottom right of the screen to save your template, then press the back button to return to the template list, where your new template should appear.

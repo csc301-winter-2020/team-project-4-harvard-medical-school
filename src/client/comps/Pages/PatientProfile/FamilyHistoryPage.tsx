@@ -6,6 +6,7 @@ import { useHistory } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { postData } from "./PatientProfilePage";
 import { canvasInit, textInit } from "../../../utils/utils";
+import { toast } from "react-toastify";
 
 function reducer(
   state: Family_Hist_State,
@@ -39,12 +40,9 @@ async function saveData(url: string, state: any) {
   console.log(state.familyHist)
   allAttributes.family_history = state.familyHist;
   console.log(allAttributes)
-  try {
-    const res = await postData(url, allAttributes);
-    console.log(res.message);
-  } catch (err) {
-    console.log(err);
-  }
+
+  const res = await postData(url, allAttributes);
+  return await res.message
 }
 
 var allAttributes: any;
@@ -64,6 +62,8 @@ export const FamilyHistoryPage: IndividualPatientProfile = ({
 
   const [showingFamilyHistCanvas, setShowingFamilyHistCanvas] = useState(true);
   const [showingFamilyHistText, setShowingFamilyHistText] = useState(false);
+
+  const myToast: any = toast
 
   useEffect(() => {
     const canvasShow: boolean = canvasInit(defaultMode);
@@ -142,7 +142,12 @@ export const FamilyHistoryPage: IndividualPatientProfile = ({
             </div>
             <div className="patient-profile-nav-btns">
               <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
-                saveData('/api/patientprofile/' + patientID, state);
+                saveData('/api/patientprofile/' + patientID, state).then((data) => {
+                  console.log(data)
+                  myToast.success('Information saved')
+                }).catch((err) => {
+                  myToast.success('Information could not be saved')
+                })
               }}>
                 <FontAwesomeIcon icon="save" size="2x" />
               </div>

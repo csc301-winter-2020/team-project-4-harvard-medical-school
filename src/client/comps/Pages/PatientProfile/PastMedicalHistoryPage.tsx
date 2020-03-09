@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router";
 import { postData } from "./PatientProfilePage";
 import { canvasInit, textInit } from "../../../utils/utils";
+import { toast } from "react-toastify";
 
 function reducer(
   state: PMH_State,
@@ -47,12 +48,9 @@ async function saveData(url: string, state: any) {
   allAttributes.hospital_history = state.pastHospits;
   allAttributes.medications = state.medications;
   allAttributes.allergies = state.allergies;
-  try {
-    const res = await postData(url, allAttributes);
-    console.log(res.message);
-  } catch (err) {
-    console.log(err);
-  }
+
+  const res = await postData(url, allAttributes)
+  return await res.message
 }
 
 var allAttributes: any;
@@ -82,6 +80,9 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
   const [showingAllergiesText, setShowingAllergiesText] = useState(false);
   
   const { pastMedHist, pastHospits, medications, allergies } = state;
+
+  const myToast: any = toast
+
   const history = useHistory();
   useEffect(() => {
     const canvasShow: boolean = canvasInit(defaultMode);
@@ -209,7 +210,12 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
           <div className="patient-profile-nav-btns">
             <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
               // TODO : add POST request function here
-              saveData('/api/patientprofile/' + patientID, state);
+              saveData('/api/patientprofile/' + patientID, state).then((data) => {
+                console.log(data)
+                myToast.success('Information saved')
+              }).catch((err) => {
+                myToast.success('Information could not be saved')
+              })
             }}>
               <FontAwesomeIcon icon="save" size="2x" />
             </div>

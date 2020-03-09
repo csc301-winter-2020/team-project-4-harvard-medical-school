@@ -95,20 +95,20 @@ From this information, we can curate and collect statistics about how medical st
 
     - This page displays a list of all of a student's patients. You may search through your patients with the search bar at the top of the screen. Note that the search bar only searches for patient names.
     
-    [![Image from Gyazo](https://i.gyazo.com/5e95fbb6f0d019664d4614d6e9a20a9c.gif)](https://gyazo.com/5e95fbb6f0d019664d4614d6e9a20a9c)
+[![Image from Gyazo](https://i.gyazo.com/5e95fbb6f0d019664d4614d6e9a20a9c.gif)](https://gyazo.com/5e95fbb6f0d019664d4614d6e9a20a9c)
     
     - You may reorder the rows of the patients list by clicking the column headings at the top of the list.
     - Clicking the red 'i' at the right side of each row of the patient list reveals the patient's key demographics, as well as the options to export the patient profile to PDF and delete the patient profile entirely.
         - Note that the export to PDF button is not functional at the moment, but patient profile deletion is.
         
-        [![Image from Gyazo](https://i.gyazo.com/8567fd7b2e81d02b02cd2e5a85f24c14.gif)](https://gyazo.com/8567fd7b2e81d02b02cd2e5a85f24c14)
+[![Image from Gyazo](https://i.gyazo.com/8567fd7b2e81d02b02cd2e5a85f24c14.gif)](https://gyazo.com/8567fd7b2e81d02b02cd2e5a85f24c14)
         
     - On this page is the Template Editor button on the bottom right of the screen. We will explore this button later on.
     - For now, let us try creating a new patient profile. Click the Add Patient button on the bottom right of the screen.
     - Simply enter a first and last name for the new patient and press Create.
     - The new patient profile should appear in the patient list. You will be redirected to the newly created patient profile.
     
-    [![Image from Gyazo](https://i.gyazo.com/00e8e0c03b61445a234ea08f7119f592.gif)](https://gyazo.com/00e8e0c03b61445a234ea08f7119f592)
+[![Image from Gyazo](https://i.gyazo.com/00e8e0c03b61445a234ea08f7119f592.gif)](https://gyazo.com/00e8e0c03b61445a234ea08f7119f592)
     
 4. **Exploring the pages of a Patient Profile**
     - Within the patient profile is where users take their notes during patient interviews.
@@ -119,13 +119,13 @@ From this information, we can curate and collect statistics about how medical st
     - At the bottom right side of the page are two arrow buttons that also let you navigate to other pages in the patient profile.
     - The question mark button is for a currently unimplemented 'Helps and Tips' feature; at the moment, it does nothing.
     
-    [![Image from Gyazo](https://i.gyazo.com/5df270b7ddf9615e2b00bd69ea36c341.gif)](https://gyazo.com/5df270b7ddf9615e2b00bd69ea36c341)
+[![Image from Gyazo](https://i.gyazo.com/5df270b7ddf9615e2b00bd69ea36c341.gif)](https://gyazo.com/5df270b7ddf9615e2b00bd69ea36c341)
     
     - The main bulk of the page is where students take their notes through various form input fields.
     - Notice that above most form input fields are two buttons that enable you to toggle whether a text input box or a canvas input box is displayed to you. 
         - Recall that the default input mode can be set within the User Settings page.
         
-         [![Image from Gyazo](https://i.gyazo.com/5120951d94f6814482dca134b8f38fc6.gif)](https://gyazo.com/5120951d94f6814482dca134b8f38fc6)
+ [![Image from Gyazo](https://i.gyazo.com/5120951d94f6814482dca134b8f38fc6.gif)](https://gyazo.com/5120951d94f6814482dca134b8f38fc6)
         
     - Interacting with a canvas input box is quite intuitive:
         - The colored circles on the left change the color of your pen.
@@ -134,7 +134,7 @@ From this information, we can curate and collect statistics about how medical st
         - The expansion icon extends the canvas size.
     - Recall that canvas form inputs currently cannot be saved or accessed from our database, so navigating away from the page or reloading the page resets all canvases.
     
-    [![Image from Gyazo](https://i.gyazo.com/452431f535a0f663a4b77d3e9be37024.gif)](https://gyazo.com/452431f535a0f663a4b77d3e9be37024)
+[![Image from Gyazo](https://i.gyazo.com/452431f535a0f663a4b77d3e9be37024.gif)](https://gyazo.com/452431f535a0f663a4b77d3e9be37024)
     
     - You can test how text form inputs and radio button form inputs are saved and accessed from the database by using the save button at the top right of the page.
         - For example, if you were to change a patient's First Name through a text box, press the save button, and log out, then the patient's first name will have been changed when you log back in.
@@ -148,7 +148,7 @@ From this information, we can curate and collect statistics about how medical st
     - Let us now try creating a new template. Press the New Template button at the bottom right of the screen.
     - You are now presented with a list containing the superset of all possible pages.
     
-    [![Image from Gyazo](https://i.gyazo.com/a45eadb4afa240917b296ee5f09ce29e.gif)](https://gyazo.com/a45eadb4afa240917b296ee5f09ce29e)
+[![Image from Gyazo](https://i.gyazo.com/a45eadb4afa240917b296ee5f09ce29e.gif)](https://gyazo.com/a45eadb4afa240917b296ee5f09ce29e)
     
     - You can search for a specific page within the template with the search bar at the top of the page. Found pages will be highlighted and scrolled to.
     - You can try dragging each row of the list to rearrange the intended order of the pages within a patient profile.
@@ -166,7 +166,7 @@ From this information, we can curate and collect statistics about how medical st
  **Technical requirements:**
 
 - Google Chrome
-    - Some of our styling is currently unsupported in other browsers
+    - Some of our CSS is currently unsupported in other browsers
     - (Our partner is okay with the application being Chrome-exclusive)
 - npm
 - git
@@ -176,13 +176,13 @@ From this information, we can curate and collect statistics about how medical st
 1. `git clone https://github.com/csc301-winter-2020/team-project-4-harvard-medical-school`
 2. Create .env file and populate it with information obtained from another team member (it contains authentication information for accessing the database, etc)
 3. The information that goes into these files needs to be obtained *directly* from one of the team members, since it contains private information and is not on github.
-4. `cd express-react-ts`
-5. `git checkout dev`
+4. `git checkout dev`
     - (or whatever branch you wish to work on)
-6. `npm install`
-7. `npm run build (only when setting it up for the first time)`
-8. `npm run dev`
-9. Go to localhost:3000 on your browser to access the application
+5. `npm install`
+6. `npm run build`
+	- this command is only required when building for the first time. Otherwise you can just use `npm run dev`.
+7. `npm run dev`
+8. Go to localhost:3000 on your browser to access the application
 
  ## Deployment and Github Workflow
  

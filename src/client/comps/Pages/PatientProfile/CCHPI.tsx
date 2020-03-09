@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router";
 import { postData } from "./PatientProfilePage";
 import { canvasInit, textInit } from "../../../utils/utils";
+import { toast } from "react-toastify";
 function reducer(
   state: CCHPI_State,
   action: { type: string; fieldName?: string; value?: string; newState?: {[key: string]: string |boolean|number|null} }
@@ -40,12 +41,9 @@ async function saveData(url: string, state: any) {
   console.log(state)
   allAttributes.complaint = state.chiefComplaint;
   allAttributes.hpi = state.HPI;
-  try {
-    const res = await postData(url, allAttributes);
-    console.log(res.message);
-  } catch (err) {
-    console.log(err);
-  }
+
+  const res = await postData(url, allAttributes);
+  return await res.message
 }
 
 var allAttributes: any;
@@ -95,6 +93,8 @@ export const CCHPIPage: IndividualPatientProfile = ({
   const [showingHPIText, setShowingHPIText] = useState(false);
 
   const { chiefComplaint, HPI } = state;
+
+  const myToast: any = toast
 
   useEffect(() => {
     const canvasShow: boolean = canvasInit(defaultMode);
@@ -156,7 +156,12 @@ export const CCHPIPage: IndividualPatientProfile = ({
           </div>
           <div className="patient-profile-nav-btns">
             <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
-              saveData('/api/patientprofile/'+ patientID, state);
+              saveData('/api/patientprofile/'+ patientID, state).then((data) => {
+                console.log(data)
+                myToast.success('Information saved')
+              }).catch((err) => {
+                myToast.success('Information could not be saved')
+              })
             }}>
               <FontAwesomeIcon icon="save" size="2x" />
             </div>

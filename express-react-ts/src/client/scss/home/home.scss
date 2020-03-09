@@ -350,31 +350,39 @@ input:focus {
   right: 25%;  
   top: 30%;
   margin: auto;  
-  border-radius: 20px;
+  border-radius: 3px;
   height: 300px;
   background: white;
   vertical-align: middle;
+  padding: 10px;
 
   div {
-    margin: auto;
+    text-align: center;
   }
 
-  label {
-    left: 25%;
-    top: 0px;
-    font-size: 16px;
-    color: black;
-    padding: 10px;
+  input[type="text"] {
+    height: 60px;
+    width: 45%;
+    font-size: 3rem;
+    outline: 0;
+    border-width: 0 0 2px;
+    border-color: #ccc;
+    margin: 5px;
   }
-
-  input {
-    padding: 10px;
-    background-color: #ccc;
+  input[type="text"]:hover,
+  input[type="number"]:hover{
+    border-color: $color-primary-very-light;
+  }
+  input[type="text"]:focus,
+  input[type="number"]:focus {
+    border-color: $color-primary-light;
   }
 
   h1 {
-    margin-top: 10px;
     text-align: center;
+  }
+  p {
+    margin-bottom: 10px;
   }
 }
 
@@ -384,11 +392,23 @@ input:focus {
   border-radius: 3px;
   color: white;
   font-size: 1.5rem;
-  text-align: center;
   cursor: pointer;
   transition: all 0.1s ease;
   width: 50%;
   top: 10%;
+  padding: 10px;
+  margin: auto;
+  margin-bottom: 16px;
+  transition: all 0.15s ease;
+}
+
+.home-page-create-new-patient-popup-btn:hover{
+  background-color: $color-primary-dim;
+}
+
+.home-page-create-new-patient-btn-cntr{
+  margin-top: 20px;
+  text-align: center;
 }
 
 @media only screen and (max-width: 1080px) {

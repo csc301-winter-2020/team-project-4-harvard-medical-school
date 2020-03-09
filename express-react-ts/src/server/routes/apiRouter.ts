@@ -598,7 +598,7 @@ router.delete(
     const patient_id: number = parseInt(req.params.patientID);
     const delete_query: string =
       "DELETE FROM csc301db.patient_profile\
-    WHERE student_id = $1 AND patient_id = $2";
+    WHERE student_id = $1 AND id = $2";
     pool
       .query(delete_query, [student_id, patient_id])
       .then((result: any) => {

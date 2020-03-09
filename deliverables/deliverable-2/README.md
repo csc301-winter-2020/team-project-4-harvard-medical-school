@@ -70,12 +70,12 @@ From this information, we can curate and collect statistics about how medical st
 
 1. **Login/Registration Page**
 
- - https://csc301-scribe.herokuapp.com/ brings you to our website's login page. You may enter the credentials for the following pre-created user:
-     - Username: will, Password: will
+    - https://csc301-scribe.herokuapp.com/ brings you to our website's login page. You may enter the credentials for the following pre-created user:
+        - Username: will, Password: will
  
- - Alternatively, you may register for your own user account by clicking the register button and inputting a username and password.
+    - Alternatively, you may register for your own user account by clicking the register button and inputting a username and password.
 
- - As mentioned in Key Features, we currently only support the student-facing side of the application, so all users are assumed to be medical students at the moment.
+    - As mentioned in Key Features, we currently only support the student-facing side of the application, so all users are assumed to be medical students at the moment.
  
 2. **User Settings Page**
 

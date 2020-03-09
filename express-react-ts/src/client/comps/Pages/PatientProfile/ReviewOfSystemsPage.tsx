@@ -10,7 +10,6 @@ function reducer(
   action: {
     category: string
     symptomName: string
-    // TODO : add a nullable attribute for editting the entire state
     reviewOfSystems: ReviewOfSystemsState | null
   }
 ): ReviewOfSystemsState{
@@ -31,196 +30,68 @@ function reducer(
 }
 
 type category = endocrine
-                | vision
-                | headNeck
-                | pulmonary
-                | cardiovascular
-                | gastrointestinal
-                | gynaecological
-                | hematology
-                | neurological
-                | musculoskeletal
-                | mental
-                | skinHair
+              | vision
+              | headNeck
+              | pulmonary
+              | cardiovascular
+              | gastrointestinal
+              | gynaecological
+              | hematology
+              | neurological
+              | musculoskeletal
+              | mental
+              | skinHair
 
 type endocrine = {
   [key:string]: boolean
-  // weightLoss: boolean
-  // weightGain: boolean
-  // fatigue: boolean
-  // difficultySleeping: boolean
-  // feelingUnwell: boolean
-  // chronicPain: boolean
-  // fevers: boolean
-  // chills: boolean
-  // sweats: boolean
-  // lossOfAppetite: boolean
-  // heatIntolerance: boolean
-  // coldIntolerance: boolean
-  // polyphagia: boolean
-  // polydipsia: boolean
 }
 
 type vision = {
   [key:string]: boolean
-  // decreaseInVision: boolean
-  // increaseInVision: boolean
-  // blurriness: boolean
-  // pain: boolean
-  // doubleVision: boolean
-  // eyeDischarge: boolean
-  // redEye: boolean
 }
 
 type headNeck = {
   [key:string]: boolean
-  // pain: boolean
-  // soresInMouth: boolean
-  // soresAroundMouth: boolean
-  // ulcersInMouth: boolean
-  // ulcersAroundMouth: boolean
-  // masses: boolean
-  // growths: boolean
-  // acuityChange: boolean
-  // earPain: boolean
-  // earDischarge: boolean
-  // nasalDischarge: boolean
-  // voiceChange: boolean
-  // hoarseness: boolean
-  // toothPain: boolean
-  // lumpInThroat: boolean
 }
 
 type pulmonary = {
   [key:string]: boolean
-  // chestPain: boolean
-  // cough: boolean
-  // haemoptysis: boolean
-  // wheezing: boolean
-  // snoring: boolean
-  // aponoea: boolean
 }
 
 type cardiovascular = {
   [key:string]: boolean
-  // chestPain: boolean
-  // chestPressure: boolean
-  // shortBreathRest: boolean
-  // shortBreathExertion: boolean
-  // orthopnoea: boolean
-  // paroxysmal: boolean
-  // lowerOedema: boolean
-  // lossOfConsciousness: boolean
-  // palpitation: boolean
-  // legPain: boolean
-  // legCramps: boolean
-  // //TODO: add fast/slow to heal
-  // ulcersOnFeet: boolean
-  // woundsOnFeet: boolean
 }
 
 type gastrointestinal = {
   [key:string]: boolean
-  // substernalPain: boolean
-  // abdominalPain: boolean
-  // difficultySwallowing: boolean
-  // painSwallowing: boolean
-  // nausea: boolean
-  // vomiting: boolean
-  // abdominalSwelling: boolean
-  // jaundice: boolean
-  // vomitingBlood: boolean
-  // blackStools: boolean
-  // bloodyStools: boolean
-  // constipation: boolean
-  // diarrhoea: boolean
-  // //TODO: enter text?
-  // changesInBowelHabits: boolean
 }
 
 type gynaecological = {
   [key:string]: boolean
-  // polyuria: boolean
-  // bloodyUrine: boolean
-  // buringUrination: boolean
-  // incontinence: boolean
-  // urgentUrination: boolean
-  // frequentUrination: boolean
-  // incompleteEmptying: boolean
-  // hesitance: boolean
-  // decreasedForce: boolean
-  // needVoid: boolean
 }
-
-//TODO: add for men/women
 
 type hematology = {
   [key:string]: boolean
-  // abnormalBleeding: boolean
-  // abnormalBruising: boolean
-  // newLumps: boolean
 }
 
 type neurological = {
   [key:string]: boolean
-  // lossOfConsciousness: boolean
-  // seizureActivity: boolean
-  // numbness: boolean
-  // weakness: boolean
-  // dizziness: boolean
-  // balanceProblems: boolean
-  // headaches: boolean
 }
 
 type musculoskeletal = {
   [key:string]: boolean
-  // jointPain: boolean
-  // jointSwelling: boolean
-  // muscleAches: boolean
-  // lowBackPain: boolean
-  // kneePain: boolean
-  // kneeSwelling: boolean
-  // handPain: boolean
-  // handSwelling: boolean
-  // elbowPain: boolean
-  // elbowSwelling: boolean
-  // hipPain: boolean
-  // hipSwelling: boolean
-  // shoulderPain: boolean
-  // shoulderSwelling: boolean
 }
 
 type mental = {
   [key:string]: boolean
-  // memory: boolean
-  // confusion: boolean
-  // anxiety: boolean
 }
 
 type skinHair = {
   [key:string]: boolean
-  // hairLoss: boolean
-  // skinEruptions: boolean
-  // rashes: boolean
-  // growingSores: boolean
-  // lesions: boolean
-  // itching: boolean
 }
 
 type ReviewOfSystemsState = {
   [key: string]: category
-  // endocrine: endocrine 
-  // vision: vision
-  // headNeck: headNeck
-  // pulmonary: pulmonary
-  // cardiovascular: cardiovascular
-  // gastrointestinal: gastrointestinal
-  // gynaecological: gynaecological
-  // hematology: hematology
-  // neurological: neurological
-  // musculoskeletal: musculoskeletal
-  // mental: mental
-  // skinHair: skinHair
 }
 
 const initialEndo: endocrine = {
@@ -578,6 +449,7 @@ export const ReviewOfSystemsPage: IndividualPatientProfile = ({
   setCurrentPage,
   transitionDuration,
   transitionName,
+  isShowingSidebar,
   patientID,
 }) => {
   // state which keeps track of all input fields
@@ -658,7 +530,8 @@ export const ReviewOfSystemsPage: IndividualPatientProfile = ({
         onEnter={() => setCurrentPage(pageName)}
         classNames={transitionName}
       >
-        <div className="review-of-systems-page-outermost-container patient-profile-window">
+        <div className={isShowingSidebar ? "review-of-systems-page-outermost-container patient-profile-window" : 
+                                           "review-of-systems-page-outermost-container patient-profile-window width-100"}>
           <div className="patient-profile-page-title">
             <h2>{pageName}</h2>
           </div>
@@ -689,6 +562,9 @@ export const ReviewOfSystemsPage: IndividualPatientProfile = ({
                                         symptomName: symptomName,
                                         reviewOfSystems: null
                                       })
+                                    }
+                                    onChange={
+                                      () => {}
                                     }
                                   />
                                   <p>{nameMap[symptomName]}</p>

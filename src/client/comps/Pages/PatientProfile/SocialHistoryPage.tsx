@@ -7,6 +7,7 @@ import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientForm
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { postData } from "./PatientProfilePage";
 import { canvasInit, textInit } from "../../../utils/utils";
+import { toast } from "react-toastify";
 
 function reducer(
   state: SocialHistState,
@@ -84,12 +85,9 @@ async function saveData(url: string, state: any) {
   allAttributes.last_time_smoked = state.lastTimeSmoked;
   allAttributes.packs_per_day = state.packsPerDay;
   allAttributes.other_substances = state.otherSubstances;
-  try {
-    const res = await postData(url, allAttributes);
-    console.log(res.message);
-  } catch (err) {
-    console.log(err);
-  }
+  
+  const res = await postData(url, allAttributes);
+  return await res.message
 }
 
 var allAttributes: any;
@@ -140,6 +138,8 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
         });
     }
   }, [currentPage]);
+
+  const myToast: any = toast
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -430,7 +430,12 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
                 borderRadius: "5px",
               }}
               onClick={() => {
-                saveData("/api/patientprofile/" + patientID, state);
+                saveData("/api/patientprofile/" + patientID, state).then((data) => {
+                  console.log(data)
+                  myToast.success('Information saved')
+                }).catch((err) => {
+                  myToast.success('Information could not be saved')
+                })
               }}
             >
               <FontAwesomeIcon icon="save" size="2x" />

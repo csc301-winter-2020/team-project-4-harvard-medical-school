@@ -8,6 +8,7 @@ import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientForm
 import { postData } from "./PatientProfilePage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { textInit, canvasInit } from "../../../utils/utils";
+import { toast } from "react-toastify";
 
 function reducer(
   state: DemographicsState,
@@ -86,12 +87,9 @@ async function saveData(url: string, state: DemographicsState) {
   allAttributes.gender = state.sex;
   allAttributes.pregnant = state.isPregnant;
   allAttributes.country_residence = state.country;
-  try {
-    const res = await postData(url, allAttributes);
-    console.log("Saved " + state);
-  } catch (err) {
-    console.log(err);
-  }
+
+  const res = await postData(url, allAttributes);
+  return await res.message
 }
 
 var allAttributes: any;
@@ -118,6 +116,8 @@ export const DemographicsPage: IndividualPatientProfile = ({
   const [showingCountryText, setShowingCountryText] = useState(false);
 
   const { firstName, lastName, sex, age, isPregnant, country } = state;
+
+  const myToast: any = toast
 
   useEffect(() => {
     const canvasShow: boolean = canvasInit(defaultMode);
@@ -331,7 +331,12 @@ export const DemographicsPage: IndividualPatientProfile = ({
               }}
               onClick={() => {
                 // TODO : add POST request function here
-                saveData("/api/patientprofile/" + patientID, state);
+                saveData("/api/patientprofile/" + patientID, state).then((data) => {
+                  console.log(data)
+                  myToast.success('Information saved')
+                }).catch((err) => {
+                  myToast.success('Information could not be saved')
+                })
               }}
             >
               <FontAwesomeIcon icon="save" size="2x" />

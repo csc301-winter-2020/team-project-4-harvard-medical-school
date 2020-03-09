@@ -15,6 +15,7 @@ import { AssessmentAndPlanPage } from "./AssessmentAndPlanPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { contentType, contents } from "../../../utils/types";
 import { urlToName, inputMode } from "../../../utils/utils";
+import { ToastContainer, toast } from "react-toastify";
 
 /**
  * To create a new type of page, firstly make the react FC and then import it here.
@@ -210,6 +211,7 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
         setIsAvatarPopup={setIsAvatarPopup}
         showSearch={false}
       />
+      <ToastContainer position={toast.POSITION.TOP_RIGHT} />
       <div className="patient-profile-page-outermost-container">
         <nav
           className="patient-profile-page-sidebar-container"

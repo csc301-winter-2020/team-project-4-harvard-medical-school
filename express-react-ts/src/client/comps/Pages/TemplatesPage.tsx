@@ -72,7 +72,7 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({}) => {
       <div className="templates-outermost">
         <div className="templates-main-container">
           <div className="templates-title" style={{display: "block", marginRight: "0"}}>
-            <h1>Template Editor</h1>
+            <h1>Template List</h1>
             <div className="home-page-separator-line"></div>
             <div className="home-page-patient-header-grid">
               <p className="home-page-patient-header-grid-name-col">Name</p>

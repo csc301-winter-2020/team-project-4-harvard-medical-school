@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { defaultPatientProfile } from "../../../utils/defaultPatientProfile";
 import "../../../scss/home/home";
+import { toast } from "react-toastify";
 
 interface NewPatientProps {
   history?: any;
@@ -16,9 +17,14 @@ export const NewPatient: React.FC<NewPatientProps> = ({
   history,
   setShowNewPatientPopup,
 }) => {
+  const mToast:any = toast;
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const newPatient = async () => {
+    if (firstName === "" || lastName === ""){
+      mToast.warn("One or more fields are missing!");
+      return;
+    }
     let data = JSON.parse(JSON.stringify(defaultPatientProfile));
     data["first_name"] = firstName;
     data["family_name"] = lastName;

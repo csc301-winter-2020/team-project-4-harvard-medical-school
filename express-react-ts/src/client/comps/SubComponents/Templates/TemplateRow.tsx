@@ -59,7 +59,7 @@ export const TemplateRow: React.FC<TemplateRowProps> = ({
             <Popup
               trigger={
                 <div className="home-patient-profile-info-icon">
-                  <FontAwesomeIcon icon="trash" />
+                  <FontAwesomeIcon icon="trash" size={innerWidth < 1080 ? "2x" : "1x"}/>
                 </div>
               }
               modal

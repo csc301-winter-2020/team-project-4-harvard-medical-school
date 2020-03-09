@@ -23,7 +23,7 @@ import {
 import { Header } from "../Header";
 import { contentType } from "../../../utils/types";
 import { DraggableQuestion } from "./DraggableQuestion";
-import { RouteComponentProps } from "react-router";
+import { RouteComponentProps, useHistory } from "react-router";
 import { ToastContainer, toast } from "react-toastify";
 import { HelixLoader } from "../HelixLoader";
 
@@ -141,6 +141,7 @@ export const Questions: React.FC<QuestionCompProps> = (
   );
   const [editingTitle, setEditingTitle] = useState(false);
   const myToast: any = toast;
+  const history = useHistory();
 
   useEffect(() => {
     const lower: string = searchVal.toLowerCase();
@@ -264,6 +265,12 @@ export const Questions: React.FC<QuestionCompProps> = (
           </DragDropContext>
         </div>
       </div>
+      <div
+        className="question-floating-back-btn" onClick={() => {
+          history.goBack();
+        }}>
+          <FontAwesomeIcon icon="arrow-left" size="2x" />
+        </div>
       <div
         className="question-floating-save-btn"
         onClick={() => {

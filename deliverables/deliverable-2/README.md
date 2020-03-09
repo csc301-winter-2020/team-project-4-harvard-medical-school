@@ -190,18 +190,17 @@ Generally, checking the team's Trello indicates a general overview of the curren
 
 We also have a defined git branch naming scheme such that all branch names must be in the following format:
 `<utorid-feature_name>`
-This makes it even easier to determine which features or functionalities are being developed at a given time, and the person who is developing it.
+This makes it even easier to determine which features or functionalities are being developed at a given time, and the lets you know who is developing the feature. The decision to use this naming scheme is expanded upon in `iteration-02.review.md`.
 
 If there is still some ambiguity in what to work on or what anyone is doing, everyone is very responsive on our team Slack channel.
 
 Once you finish developing a feature, normally you notify everyone on Slack that it has been completed. Only when you've received a response from another team member confirming that your work has been reviewed can you merge your branch into `dev`.
 
 For actual deployment we use Heroku. 
-We have automated deployment in that whenever we merge to the `master` branch it will automatically push and deploy to Heroku. 
-We only deploy and merge to `master` in this way after notifying everyone on the Slack and receiving a go-ahead from at least three other teammates. 
+We have automated deployment in that whenever push to the `master` branch it will automatically deploy to Heroku. 
+We only push to `master` in this way after notifying everyone on the Slack and receiving a go-ahead from everyone on the team.
 
-We do this because we always want the `master` branch and our deployed app to have a stable iteration of our application, free of errors. As such, we do not merge into `master` often.
-
+We do this because we always want the `master` branch and our deployed app to have a stable iteration of our application that has been well-reviewed by everyone.
  
  ## Licenses 
 

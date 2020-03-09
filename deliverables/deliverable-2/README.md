@@ -29,7 +29,7 @@ From this information, we can curate and collect statistics about how medical st
     - Note that at the current iteration of our project, we only support the student-facing side of the application. As such, all users are currently assumed to be medical students. 
 
 * **Custom configuration of a student’s user profile and settings**
-    - Users can access a settings page where they can change their name and profile picture, as well as set the following preferences for their account:
+    - Users can access a settings page where they can change their name, year of study, and profile picture, as well as set the following preferences for their account:
         - Set the Default Input Mode to Writing, Typing, or Both.
             - This setting determines the default input fields that are presented to the user when he/she is taking notes within a patient's profile. *Writing* presents canvas input boxes and *Typing* presents text input boxes.
         - Set whether the navigation sidebar within patient profiles is shown by default.
@@ -48,10 +48,10 @@ From this information, we can curate and collect statistics about how medical st
     - A page may also have radio button input fields. Certain input configurations to these radio buttons may prompt previously hidden form input fields to appear, or cause other radio buttons to grey out.
         - For example, selecting Female within the Demographics page reveals a form input field asking if the patient is pregnant. This form input field is hidden when Male is selected instead.
     - The form input fields for most of the pages are quite similar, except for the Physical Examination and Lab Results pages, which require their own specialized methods of input.
-        - As such, these two pages are still incomplete at the moment.
+        - As such, these two pages are still currently incomplete.
     - Note that at the moment, only information entered into **text form inputs** and **radio button inputs** is saved in our database and accessible at later times.
         - Currently, canvas form inputs cannot be saved or accessed from our database.
-    - The views of the 8 standard pages of the patient profile are also presentable on a tablet devices, but functionality on tablet devices has not been extensively tested yet.
+    - The views of the 8 standard pages of the patient profile are also presentable on tablet devices, but functionality on tablet devices has not been extensively tested yet.
     
 * **Functional canvas input fields on the client-side**
     - Canvas input fields allow for users to handwrite their notes directly in our application.

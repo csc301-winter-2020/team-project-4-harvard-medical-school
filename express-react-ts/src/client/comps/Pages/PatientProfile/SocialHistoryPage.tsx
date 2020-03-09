@@ -6,10 +6,16 @@ import { useHistory } from "react-router";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { postData } from "./PatientProfilePage";
+import { canvasInit, textInit } from "../../../utils/utils";
 
 function reducer(
   state: SocialHistState,
-  action: { type: string; fieldName?: string; value?: string; newState?: {[key: string]: string |boolean|number|null} }
+  action: {
+    type: string;
+    fieldName?: string;
+    value?: string;
+    newState?: { [key: string]: string | boolean | number | null };
+  }
 ): SocialHistState {
   switch (action.type) {
     case "field":
@@ -47,7 +53,7 @@ function reducer(
 type SocialHistState = {
   work: string;
   livingConditions: string;
-  sexualHistory : string;
+  sexualHistory: string;
   etOH: string;
   drinksPerWeek: string;
   smoker: "NEVER" | "EX" | "CURRENT";
@@ -56,10 +62,10 @@ type SocialHistState = {
   otherSubstances: string;
 };
 
-const initialState:  SocialHistState = {
+const initialState: SocialHistState = {
   work: "",
   livingConditions: "",
-  sexualHistory : "",
+  sexualHistory: "",
   etOH: "",
   drinksPerWeek: "",
   smoker: "NEVER",
@@ -69,15 +75,15 @@ const initialState:  SocialHistState = {
 };
 
 async function saveData(url: string, state: any) {
-  console.log(state)
+  console.log(state);
   allAttributes.work = state.work;
-  allAttributes.living_conditions = state.livingConditions; 
+  allAttributes.living_conditions = state.livingConditions;
   allAttributes.etoh = state.etOH;
   allAttributes.drinks_per_week = state.drinksPerWeek;
   allAttributes.smoker = state.smoker;
   allAttributes.last_time_smoked = state.lastTimeSmoked;
   allAttributes.packs_per_day = state.packsPerDay;
-  allAttributes.other_substances = state.otherSubstances; 
+  allAttributes.other_substances = state.otherSubstances;
   try {
     const res = await postData(url, allAttributes);
     console.log(res.message);
@@ -95,7 +101,8 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
   transitionDuration,
   transitionName,
   isShowingSidebar,
-  patientID
+  patientID,
+  defaultMode,
 }) => {
   const history = useHistory();
   useEffect(() => {
@@ -104,31 +111,33 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
       history.push(`/patient/${patientID}/social`);
 
       // Get request
-      const url = '/api/patientprofile/' + patientID;
+      const url = "/api/patientprofile/" + patientID;
       fetch(url)
-        .then((res) => {
-          return res.json()
+        .then(res => {
+          return res.json();
         })
-        .then((jsonResult) => {
-          allAttributes = jsonResult; 
-          console.log("Get Social History")
-          console.log(jsonResult)
-          dispatch({ type: "many_fields", newState:{
-            "work": jsonResult.work,
-            "livingConditions": jsonResult.living_conditions, 
-            "sexualHistory": jsonResult.etOH,
-            "etOH": jsonResult.drinks_per_week,
-            "drinksPerWeek": jsonResult.drinks_per_week,
-            "smoker": jsonResult.smoker,
-            "lastTimeSmoked": jsonResult.last_time_smoke,
-            "packsPerDay": jsonResult.packs_per_day,
-            "otherSubstances": jsonResult.otherSubstances}});
-
-        }).catch((error) => {
-          console.log("An error occured with fetch:", error)
+        .then(jsonResult => {
+          allAttributes = jsonResult;
+          console.log("Get Social History");
+          console.log(jsonResult);
+          dispatch({
+            type: "many_fields",
+            newState: {
+              work: jsonResult.work,
+              livingConditions: jsonResult.living_conditions,
+              sexualHistory: jsonResult.etOH,
+              etOH: jsonResult.drinks_per_week,
+              drinksPerWeek: jsonResult.drinks_per_week,
+              smoker: jsonResult.smoker,
+              lastTimeSmoked: jsonResult.last_time_smoke,
+              packsPerDay: jsonResult.packs_per_day,
+              otherSubstances: jsonResult.otherSubstances,
+            },
+          });
+        })
+        .catch(error => {
+          console.log("An error occured with fetch:", error);
         });
-
-
     }
   }, [currentPage]);
 
@@ -137,28 +146,84 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
   const [showingWorkCanvas, setShowingWorkCanvas] = useState(true);
   const [showingWorkText, setShowingWorkText] = useState(false);
 
-  const [showingLivingConditionsCanvas, setShowingLivingConditionsCanvas] = useState(true);
-  const [showingLivingConditionsText, setShowingLivingConditionsText] = useState(false);
+  const [
+    showingLivingConditionsCanvas,
+    setShowingLivingConditionsCanvas,
+  ] = useState(true);
+  const [
+    showingLivingConditionsText,
+    setShowingLivingConditionsText,
+  ] = useState(false);
 
-  const [showingSexualHistoryCanvas, setShowingSexualHistoryCanvas] = useState(true);
-  const [showingSexualHistoryText, setShowingSexualHistoryText] = useState(false);
+  const [showingSexualHistoryCanvas, setShowingSexualHistoryCanvas] = useState(
+    true
+  );
+  const [showingSexualHistoryText, setShowingSexualHistoryText] = useState(
+    false
+  );
 
   const [showingEtOHCanvas, setShowingEtOHCanvas] = useState(true);
   const [showingEtOHText, setShowingEtOHText] = useState(false);
 
-  const [showingDrinksPerWeekCanvas, setShowingDrinksPerWeekCanvas] = useState(true);
-  const [showingDrinksPerWeekText, setShowingDrinksPerWeekText] = useState(false);
+  const [showingDrinksPerWeekCanvas, setShowingDrinksPerWeekCanvas] = useState(
+    true
+  );
+  const [showingDrinksPerWeekText, setShowingDrinksPerWeekText] = useState(
+    false
+  );
 
-  const [showingLastTimeSmokedCanvas, setShowingLastTimeSmokedCanvas] = useState(true);
-  const [showingLastTimeSmokedText, setShowingLastTimeSmokedText] = useState(false);
+  const [
+    showingLastTimeSmokedCanvas,
+    setShowingLastTimeSmokedCanvas,
+  ] = useState(true);
+  const [showingLastTimeSmokedText, setShowingLastTimeSmokedText] = useState(
+    false
+  );
 
-  const [showingPacksPerDayCanvas, setShowingPacksPerDayCanvas] = useState(true);
+  const [showingPacksPerDayCanvas, setShowingPacksPerDayCanvas] = useState(
+    true
+  );
   const [showingPacksPerDayText, setShowingPacksPerDayText] = useState(false);
 
-  const [showingOtherSubstancesCanvas, setShowingOtherSubstancesCanvas] = useState(true);
-  const [showingOtherSubstancesText, setShowingOtherSubstancesText] = useState(false);
+  const [
+    showingOtherSubstancesCanvas,
+    setShowingOtherSubstancesCanvas,
+  ] = useState(true);
+  const [showingOtherSubstancesText, setShowingOtherSubstancesText] = useState(
+    false
+  );
 
-  const { work, livingConditions, sexualHistory, etOH, drinksPerWeek, smoker, lastTimeSmoked, packsPerDay, otherSubstances } = state;
+  const {
+    work,
+    livingConditions,
+    sexualHistory,
+    etOH,
+    drinksPerWeek,
+    smoker,
+    lastTimeSmoked,
+    packsPerDay,
+    otherSubstances,
+  } = state;
+
+  useEffect(() => {
+    const canvasShow: boolean = canvasInit(defaultMode);
+    const textShow: boolean = textInit(defaultMode);
+
+    setShowingWorkCanvas(canvasShow);
+    setShowingWorkText(textShow);
+    setShowingLivingConditionsCanvas(canvasShow);
+    setShowingLivingConditionsText(textShow);
+    setShowingSexualHistoryCanvas(canvasShow);
+    setShowingSexualHistoryText(textShow);
+    setShowingEtOHCanvas(canvasShow);
+    setShowingEtOHText(textShow);
+    setShowingDrinksPerWeekCanvas(canvasShow);
+    setShowingDrinksPerWeekText(textShow);
+    setShowingLastTimeSmokedText(textShow);
+    setShowingPacksPerDayCanvas(canvasShow);
+    setShowingPacksPerDayText(textShow);
+    setShowingOtherSubstancesText(textShow);
+  }, [defaultMode]);
 
   return (
     <>
@@ -228,7 +293,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
               isTextArea={true}
             />
 
-            <h1> Substance Use: </h1> 
+            <h1> Substance Use: </h1>
 
             <PatientFormInput
               dispatch={dispatch}
@@ -332,7 +397,6 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
                   canvasWidth={600}
                   isTextArea={false}
                 />
-                
               </>
             )}
 
@@ -357,9 +421,18 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
             <div className="home-page-content-whitespace-logo"></div>
           </div>
           <div className="patient-profile-nav-btns">
-            <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
-              saveData('/api/patientprofile/' + patientID, state);
-            }}>
+            <div
+              className="nav-btn"
+              style={{
+                right: "20px",
+                top: "70px",
+                position: "fixed",
+                borderRadius: "5px",
+              }}
+              onClick={() => {
+                saveData("/api/patientprofile/" + patientID, state);
+              }}
+            >
               <FontAwesomeIcon icon="save" size="2x" />
             </div>
           </div>

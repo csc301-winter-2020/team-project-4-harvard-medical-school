@@ -7,10 +7,16 @@ import "../../../scss/login/inputboxes.scss";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { postData } from "./PatientProfilePage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { textInit, canvasInit } from "../../../utils/utils";
 
 function reducer(
   state: DemographicsState,
-  action: { type: string; fieldName?: string; value?: string; newState?: {[key: string]: string |boolean|number|null} }
+  action: {
+    type: string;
+    fieldName?: string;
+    value?: string;
+    newState?: { [key: string]: string | boolean | number | null };
+  }
 ): DemographicsState {
   switch (action.type) {
     case "field":
@@ -73,7 +79,7 @@ const initialState: DemographicsState = {
 };
 
 async function saveData(url: string, state: DemographicsState) {
-  console.log(state)
+  console.log(state);
   allAttributes.first_name = state.firstName;
   allAttributes.family_name = state.lastName;
   allAttributes.age = state.age;
@@ -98,6 +104,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
   transitionName,
   isShowingSidebar,
   patientID,
+  defaultMode,
 }) => {
   const history = useHistory();
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -113,31 +120,48 @@ export const DemographicsPage: IndividualPatientProfile = ({
   const { firstName, lastName, sex, age, isPregnant, country } = state;
 
   useEffect(() => {
+    const canvasShow: boolean = canvasInit(defaultMode);
+    const textShow: boolean = textInit(defaultMode);
+    setShowingFirstNameCanvas(canvasShow);
+    setShowingFirstNameText(textShow);
+    setShowingLastNameCanvas(canvasShow);
+    setShowingLastNameText(textShow);
+    setShowingAgeCanvas(canvasShow);
+    setShowingAgeText(textShow);
+    setShowingCountryCanvas(canvasShow);
+    setShowingCountryText(textShow);
+  }, [defaultMode]);
+
+  useEffect(() => {
     if (currentPage === pageName) {
       document.title = `Patient Profile: ${pageName}`;
       if (!window.location.href.includes("demographics")) {
         history.push(`/patient/${patientID}/demographics`);
-        
-        // Get request
-        const url = '/api/patientprofile/' + patientID;
-        fetch(url)
-          .then((res) => {
-            return res.json()
-          })
-          .then((jsonResult) => {
-            allAttributes = jsonResult; 
-            console.log("Get Demographics")
-            console.log(jsonResult)
-            dispatch({ type: "many_fields", newState:{
-              "firstName": jsonResult.first_name, 
-              "lastName": jsonResult.family_name, 
-              "sex": jsonResult.gender_at_birth, 
-              "age": jsonResult.age, 
-              "isPregnant": jsonResult.pregnant, 
-              "country": jsonResult.country_residence}});
 
-          }).catch((error) => {
-            console.log("An error occured with fetch:", error)
+        // Get request
+        const url = "/api/patientprofile/" + patientID;
+        fetch(url)
+          .then(res => {
+            return res.json();
+          })
+          .then(jsonResult => {
+            allAttributes = jsonResult;
+            console.log("Get Demographics");
+            console.log(jsonResult);
+            dispatch({
+              type: "many_fields",
+              newState: {
+                firstName: jsonResult.first_name,
+                lastName: jsonResult.family_name,
+                sex: jsonResult.gender_at_birth,
+                age: jsonResult.age,
+                isPregnant: jsonResult.pregnant,
+                country: jsonResult.country_residence,
+              },
+            });
+          })
+          .catch(error => {
+            console.log("An error occured with fetch:", error);
           });
       }
     }
@@ -297,10 +321,19 @@ export const DemographicsPage: IndividualPatientProfile = ({
             <div className="home-page-content-whitespace-logo"></div>
           </div>
           <div className="patient-profile-nav-btns">
-            <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
-              // TODO : add POST request function here
-              saveData('/api/patientprofile/' + patientID, state);
-            }}>
+            <div
+              className="nav-btn"
+              style={{
+                right: "20px",
+                top: "70px",
+                position: "fixed",
+                borderRadius: "5px",
+              }}
+              onClick={() => {
+                // TODO : add POST request function here
+                saveData("/api/patientprofile/" + patientID, state);
+              }}
+            >
               <FontAwesomeIcon icon="save" size="2x" />
             </div>
           </div>

@@ -143,8 +143,9 @@ router.get(
   "/api/patientprofile/:Id",
   (req: Request, res: Response, next: NextFunction) => {
     const profile_id: string = req.params.Id;
+    console.log(profile_id);
     const query_string: string =
-      "SELECT * FROM csc301db.patient_profile WHERE patient_id = $1";
+      "SELECT * FROM csc301db.patient_profile WHERE id = $1";
     pool
       .query(query_string, [parseInt(profile_id)])
       .then((query_result: { rowCount: number; rows: any[] }) => {

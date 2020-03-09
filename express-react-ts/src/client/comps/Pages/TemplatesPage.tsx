@@ -8,6 +8,7 @@ import { TemplateRow } from "../SubComponents/Templates/TemplateRow";
 import { max } from "../../utils/utils";
 import { useHistory } from "react-router";
 import { HelixLoader } from "../SubComponents/HelixLoader";
+import { ToastContainer, toast } from "react-toastify";
 
 interface TemplatesPageProps {}
 
@@ -67,6 +68,7 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({}) => {
         placeholder={"Search Templates"}
       />
       {isLoading && <HelixLoader message="Loading Templates..."/>}
+      <ToastContainer position={toast.POSITION.TOP_RIGHT} />
       <div className="templates-outermost">
         <div className="templates-main-container">
           <div className="templates-title" style={{display: "block", marginRight: "0"}}>

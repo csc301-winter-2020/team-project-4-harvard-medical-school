@@ -297,7 +297,7 @@ export const Questions: React.FC<QuestionCompProps> = (
               }
             })
             .catch(error => {
-              myToast.warning("An error occurred while saving your template.");
+              myToast.warn("An error occurred while saving your template.");
               console.log("An error occured with POST:", error);
             });
         }}

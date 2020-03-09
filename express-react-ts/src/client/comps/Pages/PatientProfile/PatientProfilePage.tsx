@@ -14,7 +14,7 @@ import { LabResultsPage } from "./LabResultsPage";
 import { AssessmentAndPlanPage } from "./AssessmentAndPlanPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { contentType, contents } from "../../../utils/types";
-import { urlToName } from "../../../utils/utils";
+import { urlToName, inputMode } from "../../../utils/utils";
 
 /**
  * To create a new type of page, firstly make the react FC and then import it here.
@@ -44,6 +44,7 @@ interface IndividualPatientProfilePageProps {
   transitionName: string;
   isShowingSidebar: boolean;
   patientID: number;
+  defaultMode: inputMode;
 }
 
 export type IndividualPatientProfile = React.FC<
@@ -106,6 +107,9 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
   const [isShowingSidebar, setIsShowingSidebar] = useState(true);
   const [prevPage, setPrevPage] = useState<contentType | null>(null);
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
+  const [defaultMode, setDefaultMode] = useState<inputMode>(
+    "Both"
+  );
 
   const incrementPage = () => {
     transitionName = "slide-left";
@@ -191,6 +195,7 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
       })
       .then((data: any) => {
         setIsShowingSidebar(data.default_sidebar);
+        setDefaultMode(data.default_mode);
       })
       .catch((err: any) => {
         console.log(err);
@@ -255,6 +260,7 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
                 setCurrentPage={setCurrentPage}
                 transitionDuration={transitionDuration}
                 transitionName={transitionName}
+                defaultMode={defaultMode}
               />
             );
           })}

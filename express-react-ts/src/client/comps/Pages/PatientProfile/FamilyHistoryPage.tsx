@@ -5,6 +5,7 @@ import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientForm
 import { useHistory } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { postData } from "./PatientProfilePage";
+import { canvasInit, textInit } from "../../../utils/utils";
 
 function reducer(
   state: Family_Hist_State,
@@ -55,12 +56,23 @@ export const FamilyHistoryPage: IndividualPatientProfile = ({
   transitionName,
   isShowingSidebar,
   patientID,
+  defaultMode,
 }) => {
   const history = useHistory();
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const [showingFamilyHistCanvas, setShowingFamilyHistCanvas] = useState(true);
   const [showingFamilyHistText, setShowingFamilyHistText] = useState(false);
+
+  useEffect(() => {
+    const canvasShow: boolean = canvasInit(defaultMode);
+    const textShow: boolean = textInit(defaultMode);
+
+    setShowingFamilyHistCanvas(canvasShow);
+    setShowingFamilyHistText(textShow);
+
+  }, [defaultMode]);
+
 
   const { familyHist } = state;
 

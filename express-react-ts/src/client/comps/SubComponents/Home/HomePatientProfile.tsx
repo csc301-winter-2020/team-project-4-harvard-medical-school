@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router-dom";
 import { dateFormatFull, dateFormatCompact } from "../../../utils/utils";
 import Popup from "reactjs-popup";
+import { toast } from "react-toastify";
 
 interface HomePatientProfileProps {
   title?: string;
@@ -29,11 +30,30 @@ export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
   isPregnant,
   country,
   isPortraitMode,
-  patientID
+  patientID,
 }) => {
   const history = useHistory();
   const [isShowingInfo, setIsShowingInfo] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
+  const [userID, setUserID] = useState(null);
+  const mToast: any = toast;
+
+  useEffect(() => {
+    fetch("/api/me")
+      .then((res: any) => {
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          throw new Error("api me status not 200");
+        }
+      })
+      .then((data: any) => {
+        setUserID(data.id);
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     !isDeleted && (
@@ -108,7 +128,7 @@ export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
                 modal
                 closeOnDocumentClick
               >
-                {(close: Function)=> (
+                {(close: Function) => (
                   <div id="modal-container">
                     <div id="modal-header"> Delete Patient Profile </div>
                     <div id="modal-content">
@@ -119,12 +139,52 @@ export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
                         <button
                           onClick={() => {
                             close();
-                            setIsDeleted(true);
+                            if (userID === null) {
+                              console.log(
+                                "User ID is null. Failed the api/me HTTP request."
+                              );
+                              mToast.warn(
+                                "Could not delete patient profile. Try logging in again."
+                              );
+                            } else {
+                              fetch(
+                                `/api/patientProfile/${patientID}/${userID}`,
+                                {
+                                  method: "DELETE",
+                                  mode: "cors",
+                                  cache: "no-cache",
+                                  credentials: "same-origin",
+                                  headers: {
+                                    "Content-Type": "application/json",
+                                  },
+                                  redirect: "follow",
+                                  referrerPolicy: "no-referrer",
+                                }
+                              )
+                                .then(res => {
+                                  if (res.status === 200) {
+                                    setIsDeleted(true);
+                                    mToast.success("Patient profile deleted.");
+                                  } else {
+                                    throw new Error(
+                                      "Could not delete Patient Profile."
+                                    );
+                                  }
+                                })
+                                .catch((err: any) => {
+                                  console.log(err);
+                                  mToast.warn(
+                                    "Could not delete patient profile. Try again."
+                                  );
+                                });
+                            }
                           }}
                         >
                           Yes, delete this profile.
                         </button>
-                        <button onClick={() => close()}>No, take me back!</button>
+                        <button onClick={() => close()}>
+                          No, take me back!
+                        </button>
                       </div>
                     </div>
                   </div>

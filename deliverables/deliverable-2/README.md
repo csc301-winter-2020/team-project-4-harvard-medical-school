@@ -64,18 +64,19 @@ From this information, we can curate and collect statistics about how medical st
         - For example, a user may find it unnecessary to have a Lab Results page in a patient's profile.
     - In creating a template, the user is presented a superset of all possible pages and form input fields within each page.
         - Pages and form input fields can then be dragged around to rearrange them, or checked off to indicate that they should be hidden.
+        - You can also search for specific pages in the template by their names; found pages will be highlighted and scrolled to.
     - Note that created templates cannot actually be applied to patient profiles at the moment, but created and edited templates are saved and accessible from our database.
+    - Created templates are displayed on the Template List page
+        - You can search for a specific template by its name.
 
 ## Instructions
 
 1. **Login/Registration Page**
-[![Image from Gyazo](https://i.gyazo.com/0b29c9e8778983d4a7abad51c0c14feb.gif)](https://gyazo.com/0b29c9e8778983d4a7abad51c0c14feb)
     - https://csc301-scribe.herokuapp.com/ brings you to our website's login page. You may enter the credentials for the following pre-created user:
         - Username: will, Password: will
     - Alternatively, you may register for your own user account by clicking the register button and inputting a username and password.
-    - As mentioned in Key Features, we currently only support the student-facing side of the application, so all users are assumed to be medical students at the moment.    
+    - As mentioned in Key Features, we currently only support the student-facing side of the application, so all users are assumed to be medical students at the moment.
 2. **User Settings Page**
-[![Image from Gyazo](https://i.gyazo.com/b332f9119624d14e211ac885bd290790.gif)](https://gyazo.com/b332f9119624d14e211ac885bd290790)
      - Logging in successfully brings you to a page displaying a list of all of your patients, but we shall explore that page later on.
     - For now, click the three horizontal lines icon at the top right of the screen. This menu icon appears on every page on the website other than the login screen.
     - Clicking it pops up a small display menu showing your name, your year of study, a button that leads you to your User  Settings page, and a Logout button.
@@ -84,33 +85,26 @@ From this information, we can curate and collect statistics about how medical st
     - Clicking the pencil icon at the bottom right of the screen allows you to edit your name, your year of study, and your profile picture. Note that at the moment you cannot update your hospital.
     - If you decide to change your name, year, or profile picture, click the checkmark icon at the bottom right of the screen to confirm your changes.
     - Now let us return to our patients list page. Click the Scribe logo at the top right of the screen. This logo is also present on every page of the website, and clicking it will always bring you to the patient list page.
-[![Image from Gyazo](https://i.gyazo.com/931681690032b9e91f621ff1f6c1ad9b.gif)](https://gyazo.com/931681690032b9e91f621ff1f6c1ad9b)
-
+ 
 3. **Patient List Page**
-[![Image from Gyazo](https://i.gyazo.com/5e95fbb6f0d019664d4614d6e9a20a9c.gif)](https://gyazo.com/5e95fbb6f0d019664d4614d6e9a20a9c)
     - This page displays a list of all of a student's patients. You may search through your patients with the search bar at the top of the screen. Note that the search bar only searches for patient names.
     - You may reorder the rows of the patients list by clicking the column headings at the top of the list.
     - Clicking the red 'i' at the right side of each row of the patient list reveals the patient's key demographics, as well as the options to export the patient profile to PDF and delete the patient profile entirely.
         - Note that the export to PDF button is not functional at the moment, but patient profile deletion is.
-[![Image from Gyazo](https://i.gyazo.com/8567fd7b2e81d02b02cd2e5a85f24c14.gif)](https://gyazo.com/8567fd7b2e81d02b02cd2e5a85f24c14)
-    - On this page is the Add/Customize Template button on the bottom right of the screen. We will explore this button later on.
+    - On this page is the Template Editor button on the bottom right of the screen. We will explore this button later on.
     - For now, let us try creating a new patient profile. Click the Add Patient button on the bottom right of the screen.
     - Simply enter a first and last name for the new patient and press Create.
-    - The new patient profile should appear in the patient list. You will be redirected to the newly created patient profile.
-    - Let us now enter a patient profile. Press any row of the patient profile list. You may use the back button to return to the patient profile list and select one or stay on the patient profile you just created.
-[![Image from Gyazo](https://i.gyazo.com/00e8e0c03b61445a234ea08f7119f592.gif)](https://gyazo.com/00e8e0c03b61445a234ea08f7119f592)
-
+    - Now that new patient profile should appear in the patient list.
+    - Let us now enter a patient profile. Press any row of the patient profile list.
 4. **Exploring the pages of a Patient Profile**
-[![Image from Gyazo](https://i.gyazo.com/5df270b7ddf9615e2b00bd69ea36c341.gif)](https://gyazo.com/5df270b7ddf9615e2b00bd69ea36c341)
     - Within the patient profile is where users take their notes during patient interviews.
     - On the left side of every page is a navigation sidebar which displays a list of all the pages of the patient profile.
     - Clicking on an element of this list brings you to the corresponding page.
     - Recall that you can change whether the sidebar is shown by default in the User Settings page.
-    - Also note that the **Physical Examination** and **Lab Results** pages are still incomplete.
+    - Also recall that the **Physical Examination** and **Lab Results** pages are still incomplete.
     - At the bottom right side of the page are two arrow buttons that also let you navigate to other pages in the patient profile.
     - The question mark button is for a currently unimplemented 'Helps and Tips' feature; at the moment, it does nothing.
     - The main bulk of the page is where students take their notes through various form input fields.
-[![Image from Gyazo](https://i.gyazo.com/5120951d94f6814482dca134b8f38fc6.gif)](https://gyazo.com/5120951d94f6814482dca134b8f38fc6)
     - Notice that above most form input fields are two buttons that enable you to toggle whether a text input box or a canvas input box is displayed to you. 
         - Recall that the default input mode can be set within the User Settings page.
     - Interacting with a canvas input box is quite intuitive:
@@ -118,13 +112,11 @@ From this information, we can curate and collect statistics about how medical st
         - The trash can icon on the right erases the entire canvas.
         - The eraser icon toggles the eraser tool.
         - The expansion icon extends the canvas size.
-[![Image from Gyazo](https://i.gyazo.com/452431f535a0f663a4b77d3e9be37024.gif)](https://gyazo.com/452431f535a0f663a4b77d3e9be37024)
     - Recall that canvas form inputs currently cannot be saved or accessed from our database, so navigating away from the page or reloading the page resets all canvases.
     - You can test how text form inputs and radio button form inputs are saved and accessed from the database by using the save button at the top right of the page.
         - For example, if you were to change a patient's First Name through a text box, press the save button, and log out, then the patient's first name will have been changed when you log back in.
     
 5. **Patient profile templates**
-[![Image from Gyazo](https://i.gyazo.com/a45eadb4afa240917b296ee5f09ce29e.gif)](https://gyazo.com/a45eadb4afa240917b296ee5f09ce29e)
     - Let us return to the Patient List page. You can do this quickly by pressing the Scribe logo at the top left of the screen. 
     - Press the Template Editor button at the bottom right of the screen.
     - This brings you to the Template List page, which is very similar to the Patient List page, but instead lists any patient profile templates that you have created.
@@ -132,23 +124,57 @@ From this information, we can curate and collect statistics about how medical st
     - Also recall that currently we cannot actually apply created templates to patient profiles; all the functionality we have for now deals with the creation and editability of templates themselves.
     - Let us now try creating a new template. Press the New Template button at the bottom right of the screen.
     - You are now presented with a list containing the superset of all possible pages.
+    - You can search for a specific page within the template with the search bar at the top of the page. Found pages will be highlighted and scrolled to.
     - You can try dragging each row of the list to rearrange the intended order of the pages within a patient profile.
     - Clicking the downwards arrow at the right side of each row reveals the possible input form fields that can be on each page, which can similarly be dragged around.
     - Every row also has a check box on the left, which indicates whether the page or form input field will be visible in the patient profile.
-[![Image from Gyazo](https://i.gyazo.com/0e368972a3159f747014c871a586087d.gif)](https://gyazo.com/0e368972a3159f747014c871a586087d)
     - You can change the name of your patient profile template by clicking the pencil icon directly above the list of rows, then you should be able to input text.
     - Press the checkmark icon to confirm your new template name.
     - Once you have finished editing the template to your liking, press the save button on the bottom right of the screen to save your template, then press the back button to return to the template list, where your new template should appear.
     - You can edit your new template by clicking its row, and you can also delete the template by clilking the trash can icon on the right side.
 
  ## Development requirements
- * If a developer were to set this up on their machine or a remote server, what are the technical requirements (e.g. OS, libraries, etc.)?
- * Briefly describe instructions for setting up and running the application (think a true README).
  
+ **Technical requirements:**
+
+- Google Chrome
+    - Some of our styling is currently unsupported in other browsers
+    - (Our partner is okay with the application being Chrome-exclusive)
+- npm
+- git
+- Node.js (latest version)
+    
+ **Instructions for setting up and running Scribe:**
+1. `git clone https://github.com/csc301-winter-2020/team-project-4-harvard-medical-school`
+2. Create .env file and populate it with information obtained from another team member (it contains authentication information for accessing the database, etc)
+3. The information that goes into these files needs to be obtained *directly* from one of the team members, since it contains private information and is not on github.
+4. `cd express-react-ts`
+5. `git checkout dev`
+    - (or whatever branch you wish to work on)
+6. `npm install`
+7. `npm run build (only when setting it up for the first time)`
+8. `npm run dev`
+9. Go to localhost:3000 on your browser to access the application
+
  ## Deployment and Github Workflow
+ 
+Generally, checking the team's Trello indicates a general overview of the current progress on the project, and it also lets you know which team member is working on a given feature/functionality and what high-level tasks still need to be completed.
 
-Describe your Git / GitHub workflow. Essentially, we want to understand how your team members shares a codebase, avoid conflicts and deploys the application.
+We also have a defined git branch naming scheme such that all branch names must be in the following format:
+`<utorid-feature_name>`
+This makes it even easier to determine which features or functionalities are being developed at a given time, and the person who is developing it.
 
+If there is still some ambiguity in what to work on or what anyone is doing, everyone is very responsive on our team Slack channel.
+
+Once you finish developing a feature, normally you notify everyone on Slack that it has been completed. Only when you've received a response from another team member confirming that your work has been reviewed can you merge your branch into `dev`.
+
+For actual deployment we use Heroku. 
+We have automated deployment in that whenever we merge to the `master` branch it will automatically push and deploy to Heroku. 
+We only deploy and merge to `master` in this way after notifying everyone on the Slack and receiving a go-ahead from at least three other teammates. 
+
+We do this because we always want the `master` branch and our deployed app to have a stable iteration of our application, free of errors. As such, we do not merge into `master` often.
+
+ 
  ## Licenses 
 
 We applied an MIT license to our codebase. 

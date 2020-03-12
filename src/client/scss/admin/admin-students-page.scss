@@ -1,0 +1,55 @@
+@import "../app.scss";
+
+.admin-students {
+  text-align: center;
+  margin-right: auto;
+  margin-left: auto;
+  width: 70%;
+}
+
+.admin-students-header {
+  text-align: center;
+  font-size: 50px;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.admin-students-button-link {
+  color: white;
+  background-color: $color-primary-dim;
+  font-size: 30px;
+  height: 70px;
+  width: 100%;
+  margin-bottom: 15px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+
+.admin-students-button-link:hover {
+  background-color: $color-primary;
+}
+
+.top-margin {
+  margin-top: 50px;
+}
+
+.admin-students-button {
+  color: white;
+  background-color: $color-primary-dim;
+  font-size: 50px;
+  height: 150px;
+  width: 475px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+
+.admin-students-button:hover {
+  background-color: $color-primary;
+}
+
+.right-margin-button {
+  margin-right: 50px;
+}

@@ -1,13 +1,13 @@
 @import "../app.scss";
 
-.admin-students {
+.admin-page {
   text-align: center;
   margin-right: auto;
   margin-left: auto;
   width: 70%;
 }
 
-.admin-students-header {
+.admin-page-header {
   text-align: center;
   font-size: 50px;
   font-weight: bold;
@@ -15,7 +15,7 @@
   margin-bottom: 30px;
 }
 
-.admin-students-button-link {
+.admin-page-list-button {
   color: white;
   background-color: $color-primary-dim;
   font-size: 30px;
@@ -27,15 +27,11 @@
   transition: all .15s ease;
 }
 
-.admin-students-button-link:hover {
+.admin-page-list-button:hover {
   background-color: $color-primary;
 }
 
-.top-margin {
-  margin-top: 50px;
-}
-
-.admin-students-button {
+.admin-page-button {
   color: white;
   background-color: $color-primary-dim;
   font-size: 50px;
@@ -46,8 +42,12 @@
   transition: all .15s ease;
 }
 
-.admin-students-button:hover {
+.admin-page-button:hover {
   background-color: $color-primary;
+}
+
+.top-margin {
+  margin-top: 50px;
 }
 
 .right-margin-button {

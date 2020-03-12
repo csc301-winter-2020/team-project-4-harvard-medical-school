@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../../scss/admin/admin-students-page.scss";
+import "../../../scss/admin/admin-page.scss";
 import { Header } from "../../SubComponents/Header";
 
 interface AdminProfilePageProps {
@@ -32,22 +32,22 @@ export const AdminClassStudentsPage: React.FC<AdminProfilePageProps> = (
       setIsAvatarPopup={setIsAvatarPopup}
       showSearch={false}
     />
-    <div className="admin-students">
-      <h1 className="admin-students-header">Class: {className}</h1>
+    <div className="admin-page">
+      <h1 className="admin-page-header">Class: {className}</h1>
       <div>
         {students.map(student =>
           <div>
-            <button className="admin-students-button-link" onClick={() => alert('TODO')}>
+            <button className="admin-page-list-button" onClick={() => alert('TODO')}>
               {student.name}
             </button>
           </div>
         )}
       </div>
       <div className="top-margin">
-        <button className="admin-students-button right-margin-button" onClick={() => alert('TODO')}>
+        <button className="admin-page-button right-margin-button" onClick={() => alert('TODO')}>
           Export Data
         </button>
-        <button className="admin-students-button" onClick={() => alert('TODO')}>
+        <button className="admin-page-button" onClick={() => alert('TODO')}>
           Unlock Help/Tips
         </button>
       </div>

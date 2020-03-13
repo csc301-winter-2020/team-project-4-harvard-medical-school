@@ -30,6 +30,7 @@ function reducer(
 
 type ImagingResultsState = {
   imagingResults: string;
+  imagingResults_canvas?: string; 
 }
 
 const initialState: ImagingResultsState = {
@@ -39,6 +40,7 @@ const initialState: ImagingResultsState = {
 async function saveData(url: string, state: any) {
   console.log(state)
   allAttributes.imaging = state.imagingResults; 
+  allAttributes.imaging_canvas = state.imagingResult_canvas;
 
   const res = await postData(url, allAttributes);
   return await res.message

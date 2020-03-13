@@ -30,6 +30,7 @@ function reducer(
 
 type Assessment_State = {
   assessment: string;
+  assessment_canvas?: string;
 }
 
 const initialState: Assessment_State = {
@@ -39,6 +40,7 @@ const initialState: Assessment_State = {
 async function saveData(url: string, state: any) {
   console.log(state)
   allAttributes.assessments = state.assessment;
+  allAttributes.assessments_canvas = state.assessment_canvas;
 
   const res = await postData(url, allAttributes);
   return await res.message

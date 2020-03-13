@@ -53,14 +53,22 @@ function reducer(
 
 type SocialHistState = {
   work: string;
+  work_canvas?: string;
   livingConditions: string;
+  livingConditions_canvas?: string;
   sexualHistory: string;
+  sexualHistory_canvas?: string;
   etOH: string;
+  etOH_canvas?: string;
   drinksPerWeek: string;
+  drinksPerWeek_canvas?: string;
   smoker: "NEVER" | "EX" | "CURRENT";
   lastTimeSmoked: string;
+  lastTimeSmoked_canvas?: string;
   packsPerDay: string;
+  packsPerDay_canvas?: string;
   otherSubstances: string;
+  otherSubstances_canvas?: string;
 };
 
 const initialState: SocialHistState = {
@@ -78,13 +86,20 @@ const initialState: SocialHistState = {
 async function saveData(url: string, state: any) {
   console.log(state);
   allAttributes.work = state.work;
+  allAttributes.work_canvas = state.work_canvas;
   allAttributes.living_conditions = state.livingConditions;
+  allAttributes.living_conditions_canvas = state.livingConditions_canvas; 
   allAttributes.etoh = state.etOH;
+  allAttributes.etoh_canvas = state.etOH_canvas; 
   allAttributes.drinks_per_week = state.drinksPerWeek;
+  allAttributes.drinks_per_week_canvas = state.drinksPerWeek_canvas; 
   allAttributes.smoker = state.smoker;
   allAttributes.last_time_smoked = state.lastTimeSmoked;
+  allAttributes.last_time_smoked_canvas = state.lastTimeSmoked_canvas; 
   allAttributes.packs_per_day = state.packsPerDay;
+  allAttributes.packs_per_day_canvas = state.packsPerDay_canvas; 
   allAttributes.other_substances = state.otherSubstances;
+  allAttributes.other_substances_canvas = state.otherSubstances_canvas;
   
   const res = await postData(url, allAttributes);
   return await res.message

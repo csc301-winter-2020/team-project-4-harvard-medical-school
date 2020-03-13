@@ -88,7 +88,7 @@ async function saveData(url: string, state: DemographicsState) {
   allAttributes.first_name = state.firstName;
   allAttributes.first_name_canvas = state.firstNameCanvas;
   allAttributes.family_name = state.lastName;
-  allAttributes.family_name = state.lastNameCanvas;
+  allAttributes.family_name_canvas = state.lastNameCanvas;
   allAttributes.age = state.age;
   allAttributes.age_canvas = state.ageCanvas;
   allAttributes.gender = state.sex;

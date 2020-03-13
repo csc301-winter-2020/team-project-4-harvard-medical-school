@@ -150,7 +150,159 @@ CREATE TABLE review_of_systems (
     info JSON
 );
 
-INSERT INTO review_of_systems (patient_id, info) VALUES (1, '{"key": "value"}');
+INSERT INTO review_of_systems (patient_id, info) VALUES (1, '{
+    "endocrine": {
+        "weightLoss": true,
+        "weightGain": false,
+        "fatigue": false,
+        "difficultySleeping": false,
+        "feelingUnwell": true,
+        "chronicPain": false,
+        "fevers": false,
+        "chills": false,
+        "sweatsEndocrine": false,
+        "lossOfAppetite": false,
+        "heatIntolerance": false,
+        "coldIntolerance": false,
+        "polyphagia": false,
+        "polydipsia": false
+    },
+    "vision": {
+        "decreaseInVision": false,
+        "increaseInVision": false,
+        "blurriness": false,
+        "painVision": false,
+        "doubleVision": false,
+        "eyeDischarge": false,
+        "redEye": false
+    },
+    "headNeck": {
+        "painHeadNeck": false,
+        "soresInMouth": false,
+        "soresAroundMouth": false,
+        "ulcersInMouth": false,
+        "ulcersAroundMouth": false,
+        "masses": false,
+        "growths": false,
+        "acuityChange": false,
+        "earPain": false,
+        "earDischarge": false,
+        "nasalDischarge": false,
+        "voiceChange": false,
+        "hoarseness": false,
+        "toothPain": false,
+        "lumpInThroat": false
+    },
+    "pulmonary": {
+        "chestPainPulmonary": false,
+        "cough": false,
+        "haemoptysis": false,
+        "wheezing": false,
+        "snoring": false,
+        "aponoea": false
+    },
+    "cardiovascular": {
+        "chestPainCardiovascular": false,
+        "chestPressure": false,
+        "shortBreathRest": false,
+        "shortBreathExertion": false,
+        "orthopnoea": false,
+        "paroxysmal": false,
+        "lowerOedema": false,
+        "lossOfConsciousnessCardiovascular": false,
+        "palpitation": false,
+        "legPain": false,
+        "legCramps": false,
+        "ulcersOnFeet": false,
+        "woundsOnFeet": false
+    },
+    "gastrointestinal": {
+        "substernalPain": false,
+        "abdominalPain": false,
+        "difficultySwallowing": false,
+        "painSwallowing": false,
+        "nausea": false,
+        "vomiting": false,
+        "abdominalSwelling": false,
+        "jaundice": false,
+        "vomitingBlood": false,
+        "blackStools": false,
+        "bloodyStools": false,
+        "constipation": false,
+        "diarrhoea": false,
+        "changesInBowelHabits": false
+    },
+    "gynaecological": {
+        "polyuria": false,
+        "bloodyUrine": false,
+        "buringUrination": false,
+        "incontinence": false,
+        "urgentUrination": false,
+        "frequentUrination": false,
+        "incompleteEmptying": false,
+        "hesitance": false,
+        "decreasedForce": false,
+        "needVoid": false,
+        "erectileDysfunction": false,
+        "penileDischarge": false,
+        "penilePain": false,
+        "testicularPain": false,
+        "testicularSwelling": false,
+        "penileUlcers": false,
+        "penileGrowths": false,
+        "sweatsGynaecological": false,
+        "pastPregnancies": false,
+        "vaginalDischarge": false,
+        "menstruationCessation": false,
+        "menstruationIrregularity": false,
+        "breastPain": false,
+        "breastDischarge": false,
+        "breastMass": false
+    },
+    "hematology": {
+        "abnormalBleeding": false,
+        "abnormalBruising": false,
+        "newLumps": false
+    },
+    "neurological": {
+        "lossOfConsciousnessNeurological": false,
+        "seizureActivity": false,
+        "numbness": false,
+        "weakness": false,
+        "dizziness": false,
+        "balanceProblems": false,
+        "headaches": false
+    },
+    "musculoskeletal": {
+        "jointPain": false,
+        "jointSwelling": false,
+        "muscleAches": false,
+        "lowBackPain": false,
+        "kneePain": false,
+        "kneeSwelling": false,
+        "handPain": false,
+        "handSwelling": false,
+        "elbowPain": false,
+        "elbowSwelling": false,
+        "hipPain": false,
+        "hipSwelling": false,
+        "shoulderPain": false,
+        "shoulderSwelling": false
+    },
+    "mental": {
+        "memory": false,
+        "confusion": false,
+        "anxiety": false
+    },
+    "skinHair": {
+        "hairLoss": false,
+        "skinEruptions": false,
+        "rashes": false,
+        "growingSores": false,
+        "lesions": false,
+        "itching": false
+    }
+}');
 
 CREATE TABLE lab_results (
     id SERIAL PRIMARY KEY,

@@ -8,6 +8,7 @@ interface CanvasCompProps {
   initialHeight: number;
   initialWidth: number;
   id: string;
+  dispatch: Function;
 }
 
 export const CanvasComp: React.FC<CanvasCompProps> = ({
@@ -34,6 +35,10 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
 
   function clearCanvas() {
     inputRef.clear();
+  }
+
+  function serializeCanvas() {
+    return inputRef.getSaveData();
   }
 
   function changeColor(color: string) {
@@ -83,6 +88,7 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
         <div
           className="canvas-draw-container"
           id={`canvas-draw-container-${id}`}
+          onMouseUp={}
         >
           <CanvasDraw
             ref={(canvasDraw: any) => (inputRef = canvasDraw)}

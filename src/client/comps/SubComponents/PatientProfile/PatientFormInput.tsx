@@ -45,6 +45,7 @@ export const PatientFormInput: React.FC<PatientFormInputProps> = ({
       {isShowingCanvas && (
         <CanvasComp
           id={id}
+          dispatch={dispatch}
           initialHeight={canvasHeight}
           initialWidth={canvasWidth}
         />

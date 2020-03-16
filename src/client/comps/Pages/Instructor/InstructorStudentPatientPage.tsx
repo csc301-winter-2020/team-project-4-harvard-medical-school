@@ -12,7 +12,6 @@ export const InstructorStudentPatientPage: React.FC<InstructorStudentPatient> = 
   props: InstructorStudentPatientPageProps
 ) => {
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
-  const [searchVal, setSearchVal] = useState("");
   const [studentName, setStudentName] = useState("StudentName");
   const [patientName, setPatientName] = useState("PatientName");
 
@@ -21,9 +20,7 @@ export const InstructorStudentPatientPage: React.FC<InstructorStudentPatient> = 
       placeholder={""}
       isAvatarPopup={isAvatarPopup}
       setIsAvatarPopup={setIsAvatarPopup}
-      showSearch={true}
-      searchValue={searchVal}
-      setSearchValue={setSearchVal}
+      showSearch={false}
     />
     <div className="instructor-student-patient-container">
       <div className="instructor-student-patient-header">

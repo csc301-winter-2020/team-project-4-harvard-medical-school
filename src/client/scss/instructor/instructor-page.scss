@@ -1,13 +1,13 @@
 @import "../app.scss";
 
-.admin-page {
+.instructor-page {
   text-align: center;
   margin-right: auto;
   margin-left: auto;
-  width: 50%;
+  width: 70%;
 }
 
-.admin-page-header {
+.instructor-page-header {
   text-align: center;
   font-size: 50px;
   font-weight: bold;
@@ -15,40 +15,45 @@
   margin-bottom: 30px;
 }
 
-.admin-page-list-button {
+.instructor-student-image {
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+}
+
+.instructor-page-list-button {
   color: white;
   background-color: $color-primary-dim;
   font-size: 30px;
   height: 70px;
-  width: 100%;
+  width: 400px;
   margin-bottom: 15px;
   text-align: center;
   cursor: pointer;
   transition: all .15s ease;
 }
 
-.admin-page-list-button:hover {
+.instructor-page-list-button:hover {
   background-color: $color-primary;
 }
 
-.admin-page-button {
+.instructor-page-button {
   color: white;
   background-color: $color-primary-dim;
-  font-size: 35px;
-  height: 100px;
-  width: 400px;
+  font-size: 50px;
+  height: 150px;
+  width: 475px;
   text-align: center;
   cursor: pointer;
   transition: all .15s ease;
 }
 
-.admin-page-button:hover {
+.instructor-page-button:hover {
   background-color: $color-primary;
 }
 
-.admin-page-button-margins {
-  margin-top: 3px;
-  margin-bottom: 30px;
+.top-margin {
+  margin-top: 50px;
 }
 
 .right-margin-button {

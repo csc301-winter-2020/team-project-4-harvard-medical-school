@@ -14,6 +14,7 @@ import { Questions } from "./comps/SubComponents/Templates/Questions";
 import { Error } from "./comps/Pages/Errors/Error";
 import { AdminPage } from "./comps/Pages/Admin/AdminPage";
 import { AdminClassStudentsPage } from "./comps/Pages/Admin/AdminClassStudentsPage";
+import { InstructorPage } from "./comps/Pages/Instructor/InstructorPage";
 import {
   faCheckSquare,
   faCoffee,
@@ -95,8 +96,9 @@ const browserRouter: JSX.Element = (
         path="/templates/new"
         render={(props) => <Questions {...props} useDefault={true} />}
       />
-      <Route exact path="/admin/" component={AdminPage} />
+      <Route exact path="/admin" component={AdminPage} />
       <Route exact path="/admin/:id/students" component={AdminClassStudentsPage} />
+      <Route exact path="/instructor" component={InstructorPage} />
       <Route exact path="/err/:num/:msg" render={(props) => <Error {...props} urlErr={true}/>} />
       <Route render={(props) => <Error {...props} errNo={404} urlErr={false}/>} />
     </Switch>

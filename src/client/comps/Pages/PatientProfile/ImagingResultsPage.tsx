@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useReducer } from "react";
 import { CSSTransition } from "react-transition-group";
-import { IndividualPatientProfile } from "./PatientProfilePage";
+import { IndividualPatientProfile, fetchAllCanvases } from "./PatientProfilePage";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router";
@@ -30,6 +30,7 @@ function reducer(
 
 type ImagingResultsState = {
   imagingResults: string;
+  imagingResultsCanvas?: string; 
 }
 
 const initialState: ImagingResultsState = {
@@ -40,6 +41,11 @@ async function saveData(url: string, state: any) {
   console.log(state)
   allAttributes.imaging = state.imagingResults; 
 
+  if (state.imagingResultsCanvas !== undefined) {
+    allAttributes.imaging_canvas = state.imagingResultsCanvas;
+  }
+
+  console.log(allAttributes);
   const res = await postData(url, allAttributes);
   return await res.message
 }
@@ -72,7 +78,7 @@ export const ImagingResultsPage: IndividualPatientProfile = ({
 
   }, [defaultMode]);
 
-  const { imagingResults } = state;
+  const { imagingResults, imagingResultsCanvas } = state;
   const history = useHistory();
 
   useEffect(() => {
@@ -86,13 +92,21 @@ export const ImagingResultsPage: IndividualPatientProfile = ({
         .then((res) => {
           return res.json()
         })
-        .then((jsonResult) => {
+        .then(jsonResult => {
+          return fetchAllCanvases(jsonResult);
+        })
+        .then(jsonResult => {
           console.log("Get Imaging")
           console.log(jsonResult)
           allAttributes = jsonResult;
-          dispatch({ type: "many_fields", newState:{
-            "imagingResults": jsonResult.imaging}});
 
+          dispatch({ 
+            type: "many_fields", 
+            newState:{
+              imagingResults: jsonResult.imaging,
+              imagingResultsCanvas: jsonResult.imaging_canvas
+            }
+          });
         }).catch((error) => {
           console.log("An error occured with fetch:", error)
         });
@@ -126,6 +140,7 @@ export const ImagingResultsPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingImagingResultsText}
               canvasHeight={700}
               canvasWidth={600}
+              canvasData={imagingResultsCanvas}
               isTextArea={true}
             />
           </div>

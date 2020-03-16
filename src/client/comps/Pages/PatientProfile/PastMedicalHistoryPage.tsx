@@ -30,9 +30,13 @@ function reducer(
 
 type PMH_State = {
   pastMedHist: string;
+  pastMedHist_canvas?: string;
   pastHospits: string;
+  pastHospis_canvas?: string;
   medications: string;
+  medications_canvas?: string;
   allergies: string;
+  allergies_canvas?: string; 
 }
 
 const initialState: PMH_State = {
@@ -45,15 +49,19 @@ const initialState: PMH_State = {
 async function saveData(url: string, state: any) {
   console.log(state)
   allAttributes.medical_history = state.pastMedHist;
+  allAttributes.medical_history_canvas = state.pastMedHist_canvas; 
   allAttributes.hospital_history = state.pastHospits;
+  allAttributes.hospital_history_canvas = state.pastHospits_canvas; 
   allAttributes.medications = state.medications;
+  allAttributes.medications_canvas = state.medications_canvas; 
   allAttributes.allergies = state.allergies;
-
+  allAttributes.allergies_canvas = state.allergies_canvas; 
   const res = await postData(url, allAttributes)
   return await res.message
 }
 
 var allAttributes: any;
+
 
 export const PastMedicalHistoryPage: IndividualPatientProfile = ({
   pageName,

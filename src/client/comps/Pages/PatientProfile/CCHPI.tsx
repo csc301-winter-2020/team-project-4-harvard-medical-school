@@ -29,7 +29,9 @@ function reducer(
 
 type CCHPI_State = {
   chiefComplaint: string;
+  chieffComplaint_canvas?: string;
   HPI: string;
+  HPI_canvas?: string;
 };
 
 const initialState: CCHPI_State = {
@@ -40,7 +42,9 @@ const initialState: CCHPI_State = {
 async function saveData(url: string, state: any) {
   console.log(state)
   allAttributes.complaint = state.chiefComplaint;
+  allAttributes.complaint_canvas = state.chiefComplaint_canvas; 
   allAttributes.hpi = state.HPI;
+  allAttributes.hpi_canvas = state.HPI_canvas; 
 
   const res = await postData(url, allAttributes);
   return await res.message

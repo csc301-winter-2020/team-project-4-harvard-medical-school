@@ -30,6 +30,7 @@ function reducer(
 
 type Family_Hist_State = {
   familyHist: string;
+  familyHist_canvas?: string; 
 }
 
 const initialState: Family_Hist_State = {
@@ -39,7 +40,7 @@ const initialState: Family_Hist_State = {
 async function saveData(url: string, state: any) {
   console.log(state.familyHist)
   allAttributes.family_history = state.familyHist;
-  console.log(allAttributes)
+  allAttributes.family_history_canvas = state.familyHist_canvas;
 
   const res = await postData(url, allAttributes);
   return await res.message

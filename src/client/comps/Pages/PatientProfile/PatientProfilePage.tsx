@@ -68,6 +68,23 @@ export async function postData(url: string, data: any) {
   return await response.json();
 }
 
+export function formatCanvases(canvases: any[]) {
+  let formattedCanvases = []
+  for (let canvas of canvases) {
+    try {
+      let formattedCanvas = canvas.replace(/\\/g, '').slice(1, -1);
+
+      // Try to parse this cavas
+      JSON.parse(formattedCanvas);
+      formattedCanvases.push(formattedCanvas);
+    } catch(err) {
+      // Empty canvas
+      formattedCanvases.push('{"lines":[],"width":600,"height":200}');
+    }
+  }
+  return formattedCanvases;
+}
+
 const initNavDots = () => {
   const container = [];
   for (let i = 0; i < contents.length; i++) {

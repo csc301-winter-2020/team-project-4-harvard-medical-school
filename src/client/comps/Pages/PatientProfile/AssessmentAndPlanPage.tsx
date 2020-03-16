@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useReducer } from "react";
 import { CSSTransition } from "react-transition-group";
-import { IndividualPatientProfile } from "./PatientProfilePage";
+import { IndividualPatientProfile, formatCanvases } from "./PatientProfilePage";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router";
 import { postData } from "./PatientProfilePage";
 import { canvasInit, textInit } from "../../../utils/utils";
 import { toast } from "react-toastify";
+import { json } from "body-parser";
 
 function reducer(
   state: Assessment_State,
@@ -30,6 +31,7 @@ function reducer(
 
 type Assessment_State = {
   assessment: string;
+  assessmentCanvas?: string;
 }
 
 const initialState: Assessment_State = {
@@ -39,6 +41,7 @@ const initialState: Assessment_State = {
 async function saveData(url: string, state: any) {
   console.log(state)
   allAttributes.assessments = state.assessment;
+  if (state.assessmentCanvas !== undefined) allAttributes.assessment_canvas = state.assessmentCanvas;
 
   const res = await postData(url, allAttributes);
   return await res.message
@@ -62,7 +65,7 @@ export const AssessmentAndPlanPage: IndividualPatientProfile = ({
   const [showingAssessmentCanvas, setShowingAssessmentCanvas] = useState(true);
   const [showingAssessmentText, setShowingAssessmentText] = useState(false);
 
-  const { assessment } = state;
+  const { assessment, assessmentCanvas } = state;
 
   const myToast: any = toast
 
@@ -82,10 +85,21 @@ export const AssessmentAndPlanPage: IndividualPatientProfile = ({
           console.log("Get Assessment")
           console.log(jsonResult)
           allAttributes = jsonResult;
-          dispatch({ type: "many_fields", newState:{
-            "assessment": jsonResult.assessments}});
+          return fetch(jsonResult.assessment_canvas).then(res => res.text())
+        })
+        .then(canvas => {
+          console.log(canvas);
+          let [formattedCanvas] = formatCanvases([canvas]);
 
-        }).catch((error) => {
+          dispatch({ 
+            type: "many_fields", 
+            newState:{
+              assessment: allAttributes.assessments,
+              assessmentCanvas: formattedCanvas
+            }
+          });
+        })
+        .catch((error) => {
           console.log("An error occured with fetch:", error)
         });
     }
@@ -127,6 +141,7 @@ export const AssessmentAndPlanPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingAssessmentText}
               canvasHeight={700}
               canvasWidth={600}
+              canvasData={assessmentCanvas}
               isTextArea={true}
             />
           </div>

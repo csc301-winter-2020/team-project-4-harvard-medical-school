@@ -2,7 +2,7 @@ import React, { useEffect, useReducer, useState } from "react";
 import "../../../scss/patient-profiles/patient-profile-form.scss";
 import { useHistory } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
-import { IndividualPatientProfile } from "./PatientProfilePage";
+import { IndividualPatientProfile, formatCanvases } from "./PatientProfilePage";
 import "../../../scss/login/inputboxes.scss";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { postData } from "./PatientProfilePage";
@@ -86,15 +86,15 @@ const initialState: DemographicsState = {
 async function saveData(url: string, state: DemographicsState) {
   console.log(state);
   allAttributes.first_name = state.firstName;
-  allAttributes.first_name_canvas = state.firstNameCanvas;
+  if (state.firstNameCanvas !== undefined) allAttributes.first_name_canvas = state.firstNameCanvas;
   allAttributes.family_name = state.lastName;
-  allAttributes.family_name = state.lastNameCanvas;
+  if (state.lastNameCanvas !== undefined) allAttributes.family_name_canvas = state.lastNameCanvas;
   allAttributes.age = state.age;
-  allAttributes.age_canvas = state.ageCanvas;
+  if (state.ageCanvas !== undefined) allAttributes.age_canvas = state.ageCanvas;
   allAttributes.gender = state.sex;
   allAttributes.pregnant = state.isPregnant;
   allAttributes.country_residence = state.country;
-  allAttributes.country_residence_canvas = state.countryCanvas;
+  if (state.countryCanvas !== undefined) allAttributes.country_residence_canvas = state.countryCanvas;
   console.log(allAttributes);
 
   const res = await postData(url, allAttributes);
@@ -124,7 +124,18 @@ export const DemographicsPage: IndividualPatientProfile = ({
   const [showingCountryCanvas, setShowingCountryCanvas] = useState(true);
   const [showingCountryText, setShowingCountryText] = useState(false);
 
-  const { firstName, lastName, sex, age, isPregnant, country } = state;
+  const { 
+    firstName,
+    firstNameCanvas,
+    lastName,
+    lastNameCanvas, 
+    sex, 
+    age, 
+    ageCanvas, 
+    isPregnant, 
+    country, 
+    countryCanvas 
+  } = state;
 
   const myToast: any = toast
 
@@ -157,19 +168,32 @@ export const DemographicsPage: IndividualPatientProfile = ({
           allAttributes = jsonResult;
           console.log("Get Demographics");
           console.log(jsonResult);
+
+          let canvases = [];
+          canvases.push(fetch(jsonResult.first_name_canvas).then(res => res.text()));
+          canvases.push(fetch(jsonResult.family_name_canvas).then(res => res.text()));
+          canvases.push(fetch(jsonResult.age_canvas).then(res => res.text()));
+          canvases.push(fetch(jsonResult.country_residence_canvas).then(res => res.text()));
+
+          return Promise.all(canvases);
+        })
+        .then(canvases => {
+          console.log(canvases);
+          let formattedCanvases = formatCanvases(canvases);
+
           dispatch({
             type: "many_fields",
             newState: {
-              firstName: jsonResult.first_name,
-              firstNameCanvas: jsonResult.first_name_canvas,
-              lastName: jsonResult.family_name,
-              listNameCanvas: jsonResult.family_name_canvas,
-              sex: jsonResult.gender,
-              age: jsonResult.age,
-              ageCanvas: jsonResult.age_canvas,
-              isPregnant: jsonResult.pregnant,
-              country: jsonResult.country_residence,
-              countryCanvas: jsonResult.country_residence_canvas,
+              firstName: allAttributes.first_name,
+              firstNameCanvas: formattedCanvases[0],
+              lastName: allAttributes.family_name,
+              lastNameCanvas: formattedCanvases[1],
+              sex: allAttributes.gender,
+              age: allAttributes.age,
+              ageCanvas: formattedCanvases[2],
+              isPregnant: allAttributes.pregnant,
+              country: allAttributes.country_residence,
+              countryCanvas: formattedCanvases[3],
             },
           });
         })
@@ -213,6 +237,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingFirstNameText}
               canvasHeight={200}
               canvasWidth={600}
+              canvasData={firstNameCanvas}
               isTextArea={false}
             />
 
@@ -229,6 +254,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingLastNameText}
               canvasHeight={200}
               canvasWidth={600}
+              canvasData={lastNameCanvas}
               isTextArea={false}
             />
             <PatientFormInput
@@ -244,6 +270,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingAgeText}
               canvasHeight={200}
               canvasWidth={600}
+              canvasData={ageCanvas}
               isTextArea={false}
             />
             <h3>Sex at Birth</h3>
@@ -327,6 +354,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingCountryText}
               canvasHeight={200}
               canvasWidth={600}
+              canvasData={countryCanvas}
               isTextArea={false}
             />
           </div>

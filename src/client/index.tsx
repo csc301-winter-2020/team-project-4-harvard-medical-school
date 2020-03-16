@@ -15,6 +15,8 @@ import { Error } from "./comps/Pages/Errors/Error";
 import { AdminPage } from "./comps/Pages/Admin/AdminPage";
 import { AdminClassStudentsPage } from "./comps/Pages/Admin/AdminClassStudentsPage";
 import { InstructorPage } from "./comps/Pages/Instructor/InstructorPage";
+import { InstructorStudentProfilePage } from "./comps/Pages/Instructor/InstructorStudentProfilePage";
+import { InstructorStudentPatientPage } from "./comps/Pages/Instructor/InstructorStudentPatientPage";
 import {
   faCheckSquare,
   faCoffee,
@@ -99,6 +101,8 @@ const browserRouter: JSX.Element = (
       <Route exact path="/admin" component={AdminPage} />
       <Route exact path="/admin/:id/students" component={AdminClassStudentsPage} />
       <Route exact path="/instructor" component={InstructorPage} />
+      <Route exact path="/instructor/student/:id" component={InstructorStudentProfilePage} />
+      <Route exact path="/instructor/student/:sid/patient/:pid" component={InstructorStudentPatientPage} />
       <Route exact path="/err/:num/:msg" render={(props) => <Error {...props} urlErr={true}/>} />
       <Route render={(props) => <Error {...props} errNo={404} urlErr={false}/>} />
     </Switch>

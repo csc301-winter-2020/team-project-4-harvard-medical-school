@@ -68,21 +68,29 @@ export async function postData(url: string, data: any) {
   return await response.json();
 }
 
-export function formatCanvases(canvases: any[]) {
-  let formattedCanvases = []
-  for (let canvas of canvases) {
-    try {
-      let formattedCanvas = canvas.replace(/\\/g, '').slice(1, -1);
-
-      // Try to parse this cavas
-      JSON.parse(formattedCanvas);
-      formattedCanvases.push(formattedCanvas);
-    } catch(err) {
-      // Empty canvas
-      formattedCanvases.push('{"lines":[],"width":600,"height":200}');
+export async function fetchAllCanvases(jsonResult: any) {
+  for (let key in jsonResult) {
+    if (key.endsWith('_canvas') && jsonResult[key] !== undefined) {
+      let res = await fetch(jsonResult[key]);
+      let canvasString = await res.text();
+      jsonResult[key] = formatCanvas(canvasString);
     }
   }
-  return formattedCanvases;
+  return jsonResult;
+}
+
+function formatCanvas(canvas: string) {
+  try {
+    let formattedCanvas = canvas.replace(/\\/g, '').slice(1, -1);
+
+    // Try to parse this cavas
+    JSON.parse(formattedCanvas);
+    return formattedCanvas;
+  } catch(err) {
+    // Empty canvas
+    console.log(err);
+    return '{"lines":[],"width":600,"height":200}';
+  }
 }
 
 const initNavDots = () => {

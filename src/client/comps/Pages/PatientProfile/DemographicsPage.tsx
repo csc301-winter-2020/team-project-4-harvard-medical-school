@@ -2,7 +2,7 @@ import React, { useEffect, useReducer, useState } from "react";
 import "../../../scss/patient-profiles/patient-profile-form.scss";
 import { useHistory } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
-import { IndividualPatientProfile, formatCanvases } from "./PatientProfilePage";
+import { IndividualPatientProfile, fetchAllCanvases } from "./PatientProfilePage";
 import "../../../scss/login/inputboxes.scss";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { postData } from "./PatientProfilePage";
@@ -165,35 +165,27 @@ export const DemographicsPage: IndividualPatientProfile = ({
           return res.json();
         })
         .then(jsonResult => {
-          allAttributes = jsonResult;
           console.log("Get Demographics");
           console.log(jsonResult);
 
-          let canvases = [];
-          canvases.push(fetch(jsonResult.first_name_canvas).then(res => res.text()));
-          canvases.push(fetch(jsonResult.family_name_canvas).then(res => res.text()));
-          canvases.push(fetch(jsonResult.age_canvas).then(res => res.text()));
-          canvases.push(fetch(jsonResult.country_residence_canvas).then(res => res.text()));
-
-          return Promise.all(canvases);
+          return fetchAllCanvases(jsonResult);
         })
-        .then(canvases => {
-          console.log(canvases);
-          let formattedCanvases = formatCanvases(canvases);
+        .then(jsonResult => {
+          allAttributes = jsonResult;
 
           dispatch({
             type: "many_fields",
             newState: {
-              firstName: allAttributes.first_name,
-              firstNameCanvas: formattedCanvases[0],
-              lastName: allAttributes.family_name,
-              lastNameCanvas: formattedCanvases[1],
-              sex: allAttributes.gender,
-              age: allAttributes.age,
-              ageCanvas: formattedCanvases[2],
-              isPregnant: allAttributes.pregnant,
-              country: allAttributes.country_residence,
-              countryCanvas: formattedCanvases[3],
+              firstName: jsonResult.first_name,
+              firstNameCanvas: jsonResult.first_name_canvas,
+              lastName: jsonResult.family_name,
+              lastNameCanvas: jsonResult.last_name_canvas,
+              sex: jsonResult.gender,
+              age: jsonResult.age,
+              ageCanvas: jsonResult.age_canvas,
+              isPregnant: jsonResult.pregnant,
+              country: jsonResult.country_residence,
+              countryCanvas: jsonResult.country_residence_canvas,
             },
           });
         })

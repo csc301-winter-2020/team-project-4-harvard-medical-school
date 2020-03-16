@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useReducer } from "react";
 import { CSSTransition } from "react-transition-group";
-import { IndividualPatientProfile } from "./PatientProfilePage";
+import { IndividualPatientProfile, fetchAllCanvases } from "./PatientProfilePage";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router";
@@ -30,13 +30,13 @@ function reducer(
 
 type PMH_State = {
   pastMedHist: string;
-  pastMedHist_canvas?: string;
+  pastMedHistCanvas?: string;
   pastHospits: string;
-  pastHospis_canvas?: string;
+  pastHospitsCanvas?: string;
   medications: string;
-  medications_canvas?: string;
+  medicationsCanvas?: string;
   allergies: string;
-  allergies_canvas?: string; 
+  allergiesCanvas?: string; 
 }
 
 const initialState: PMH_State = {
@@ -49,13 +49,29 @@ const initialState: PMH_State = {
 async function saveData(url: string, state: any) {
   console.log(state)
   allAttributes.medical_history = state.pastMedHist;
-  allAttributes.medical_history_canvas = state.pastMedHist_canvas; 
+
+  if (state.pastMedHistCanvas !== undefined) {
+    allAttributes.medical_history_canvas = state.pastMedHistCanvas; 
+  }
+  
   allAttributes.hospital_history = state.pastHospits;
-  allAttributes.hospital_history_canvas = state.pastHospits_canvas; 
+
+  if (state.pastHospitsCanvas !== undefined) {
+    allAttributes.hospital_history_canvas = state.pastHospitsCanvas; 
+  }
+  
   allAttributes.medications = state.medications;
-  allAttributes.medications_canvas = state.medications_canvas; 
+
+  if (state.medicationsCanvas !== undefined) {
+    allAttributes.medications_canvas = state.medicationsCanvas; 
+  }
+  
   allAttributes.allergies = state.allergies;
-  allAttributes.allergies_canvas = state.allergies_canvas; 
+
+  if (state.allergiesCanvas !== undefined) {
+    allAttributes.allergies_canvas = state.allergiesCanvas; 
+  }
+  
   const res = await postData(url, allAttributes)
   return await res.message
 }
@@ -87,7 +103,16 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
   const [showingAllergiesCanvas, setShowingAllergiesCanvas] = useState(true);
   const [showingAllergiesText, setShowingAllergiesText] = useState(false);
   
-  const { pastMedHist, pastHospits, medications, allergies } = state;
+  const { 
+    pastMedHist, 
+    pastMedHistCanvas, 
+    pastHospits, 
+    pastHospitsCanvas,
+    medications, 
+    medicationsCanvas,
+    allergies,
+    allergiesCanvas
+  } = state;
 
   const myToast: any = toast
 
@@ -117,15 +142,26 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
         .then((res) => {
           return res.json()
         })
+        .then(jsonResult => {
+          return fetchAllCanvases(jsonResult);
+        })
         .then((jsonResult) => {
           console.log("Get PMH")
           console.log(jsonResult)
           allAttributes = jsonResult;
-          dispatch({ type: "many_fields", newState:{
-            "pastMedHist": jsonResult.medical_history,
-            "pastHospits": jsonResult.hospital_history, 
-            "medications": jsonResult.medications,
-            "allergies": jsonResult.allergies,}});
+          dispatch({ 
+            type: "many_fields", 
+            newState:{
+              pastMedHist: jsonResult.medical_history,
+              pastMedHistCanvas: jsonResult.medical_history_canvas,
+              pastHospits: jsonResult.hospital_history,
+              pastHospitsCanvas: jsonResult.hospital_history_canvas,
+              medications: jsonResult.medications,
+              medicationsCanvas: jsonResult.medications_canvas,
+              allergies: jsonResult.allergies,
+              allergiesCanvas: jsonResult.allergies_canvas,
+            }
+          });
 
         }).catch((error) => {
           console.log("An error occured with fetch:", error)
@@ -161,6 +197,7 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingPastMedHistText}
               canvasHeight={600}
               canvasWidth={600}
+              canvasData={pastMedHistCanvas}
               isTextArea={true}
             />
 
@@ -177,6 +214,7 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingPastHospitsText}
               canvasHeight={600}
               canvasWidth={600}
+              canvasData={pastHospitsCanvas}
               isTextArea={true}
             />
 
@@ -193,6 +231,7 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingMedicationsText}
               canvasHeight={600}
               canvasWidth={600}
+              canvasData={medicationsCanvas}
               isTextArea={true}
             />
 
@@ -209,6 +248,7 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingAllergiesText}
               canvasHeight={600}
               canvasWidth={600}
+              canvasData={allergiesCanvas}
               isTextArea={true}
             />
           </div>

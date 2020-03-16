@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useReducer } from "react";
 import { CSSTransition } from "react-transition-group";
-import { IndividualPatientProfile } from "./PatientProfilePage";
+import { IndividualPatientProfile, fetchAllCanvases } from "./PatientProfilePage";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { useHistory } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -30,7 +30,7 @@ function reducer(
 
 type Family_Hist_State = {
   familyHist: string;
-  familyHist_canvas?: string; 
+  familyHistCanvas?: string; 
 }
 
 const initialState: Family_Hist_State = {
@@ -40,7 +40,7 @@ const initialState: Family_Hist_State = {
 async function saveData(url: string, state: any) {
   console.log(state.familyHist)
   allAttributes.family_history = state.familyHist;
-  allAttributes.family_history_canvas = state.familyHist_canvas;
+  allAttributes.family_history_canvas = state.familyHistCanvas;
 
   const res = await postData(url, allAttributes);
   return await res.message
@@ -76,7 +76,7 @@ export const FamilyHistoryPage: IndividualPatientProfile = ({
   }, [defaultMode]);
 
 
-  const { familyHist } = state;
+  const { familyHist, familyHistCanvas } = state;
 
   useEffect(() => {
     if (currentPage === pageName) {
@@ -90,12 +90,18 @@ export const FamilyHistoryPage: IndividualPatientProfile = ({
           return res.json()
         })
         .then((jsonResult) => {
-          console.log("Get Family History")
-          console.log(jsonResult)
+          return fetchAllCanvases(jsonResult);
+        })
+        .then(jsonResult => {
+          console.log("Get Family History");
+          console.log(jsonResult);
+
           allAttributes = jsonResult;
           dispatch({
-            type: "many_fields", newState: {
-              "familyHist": jsonResult.family_history
+            type: "many_fields", 
+            newState: {
+              familyHist: jsonResult.family_history,
+              familyHistCanvas: jsonResult.family_history_canvas,
             }
           });
 
@@ -135,6 +141,7 @@ export const FamilyHistoryPage: IndividualPatientProfile = ({
                 setIsShowingText={setShowingFamilyHistText}
                 canvasHeight={700}
                 canvasWidth={600}
+                canvasData={familyHistCanvas}
                 isTextArea={true}
               />
             </div>

@@ -90,8 +90,7 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
 
   useEffect(() => {
     if (loadSaveData && saveData) {
-      console.log(saveData);
-      inputRef.loadSaveData(saveData, true);
+      inputRef.loadSaveData(saveData);
       setLoadSaveData(false);
     }
   }, [saveData]);

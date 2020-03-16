@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import "../../../scss/patient-profiles/social-history.scss";
-import { IndividualPatientProfile } from "./PatientProfilePage";
+import { IndividualPatientProfile, fetchAllCanvases } from "./PatientProfilePage";
 import { useHistory } from "react-router";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -53,22 +53,22 @@ function reducer(
 
 type SocialHistState = {
   work: string;
-  work_canvas?: string;
+  workCanvas?: string;
   livingConditions: string;
-  livingConditions_canvas?: string;
+  livingConditionsCanvas?: string;
   sexualHistory: string;
-  sexualHistory_canvas?: string;
+  sexualHistoryCanvas?: string;
   etOH: string;
-  etOH_canvas?: string;
+  etOHCanvas?: string;
   drinksPerWeek: string;
-  drinksPerWeek_canvas?: string;
+  drinksPerWeekCanvas?: string;
   smoker: "NEVER" | "EX" | "CURRENT";
   lastTimeSmoked: string;
-  lastTimeSmoked_canvas?: string;
+  lastTimeSmokedCanvas?: string;
   packsPerDay: string;
-  packsPerDay_canvas?: string;
+  packsPerDayCanvas?: string;
   otherSubstances: string;
-  otherSubstances_canvas?: string;
+  otherSubstancesCanvas?: string;
 };
 
 const initialState: SocialHistState = {
@@ -86,20 +86,39 @@ const initialState: SocialHistState = {
 async function saveData(url: string, state: any) {
   console.log(state);
   allAttributes.work = state.work;
-  allAttributes.work_canvas = state.work_canvas;
+  allAttributes.sexual_history = state.sexualHistory;
   allAttributes.living_conditions = state.livingConditions;
-  allAttributes.living_conditions_canvas = state.livingConditions_canvas; 
   allAttributes.etoh = state.etOH;
-  allAttributes.etoh_canvas = state.etOH_canvas; 
   allAttributes.drinks_per_week = state.drinksPerWeek;
-  allAttributes.drinks_per_week_canvas = state.drinksPerWeek_canvas; 
   allAttributes.smoker = state.smoker;
   allAttributes.last_time_smoked = state.lastTimeSmoked;
-  allAttributes.last_time_smoked_canvas = state.lastTimeSmoked_canvas; 
   allAttributes.packs_per_day = state.packsPerDay;
-  allAttributes.packs_per_day_canvas = state.packsPerDay_canvas; 
   allAttributes.other_substances = state.otherSubstances;
-  allAttributes.other_substances_canvas = state.otherSubstances_canvas;
+
+  if (state.workCanvas !== undefined) {
+    allAttributes.work_canvas = state.workCanvas;
+  }
+  if (state.sexualHistoryCanvas !== undefined) {
+    allAttributes.sexual_history_canvas = state.sexualHistoryCanvas;
+  }
+  if (state.livingConditionsCanvas !== undefined) {
+    allAttributes.living_conditions_canvas = state.livingConditionsCanvas; 
+  }
+  if (state.etOHCanvas !== undefined) {
+    allAttributes.etoh_canvas = state.etOHCanvas; 
+  }
+  if (state.drinksPerWeekCanvas !== undefined) {
+    allAttributes.drinks_per_week_canvas = state.drinksPerWeekCanvas; 
+  }
+  if (state.lastTimeSmokedCanvas !== undefined) {
+    allAttributes.last_time_smoked_canvas = state.lastTimeSmokedCanvas; 
+  }
+  if (state.packsPerDayCanvas !== undefined) {
+    allAttributes.packs_per_day_canvas = state.packsPerDayCanvas; 
+  }
+  if (state.otherSubstancesCanvas !== undefined) {
+    allAttributes.other_substances_canvas = state.otherSubstancesCanvas;
+  }
   
   const res = await postData(url, allAttributes);
   return await res.message
@@ -130,6 +149,9 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
           return res.json();
         })
         .then(jsonResult => {
+          return fetchAllCanvases(jsonResult);
+        })
+        .then(jsonResult => {
           allAttributes = jsonResult;
           console.log("Get Social History");
           console.log(jsonResult);
@@ -137,14 +159,22 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
             type: "many_fields",
             newState: {
               work: jsonResult.work,
+              workCanvas: jsonResult.work_canvas,
               livingConditions: jsonResult.living_conditions,
-              sexualHistory: jsonResult.etOH,
-              etOH: jsonResult.drinks_per_week,
+              livingConditionsCanvas: jsonResult.living_conditions_canvas,
+              sexualHistory: jsonResult.sexual_history,
+              sexualHistoryCanvas: jsonResult.sexual_history_canvas,
+              etOH: jsonResult.etoh,
+              etOHCanvas: jsonResult.etoh_canvas,
               drinksPerWeek: jsonResult.drinks_per_week,
+              drinksPerWeekCanvas: jsonResult.drinks_per_week_canvas,
               smoker: jsonResult.smoker,
-              lastTimeSmoked: jsonResult.last_time_smoke,
+              lastTimeSmoked: jsonResult.last_time_smoked,
+              lastTimeSmokedCanvas: jsonResult.last_time_smoked_canvas,
               packsPerDay: jsonResult.packs_per_day,
-              otherSubstances: jsonResult.otherSubstances,
+              packsPerDayCanvas: jsonResult.packs_per_day_canvas,
+              otherSubstances: jsonResult.other_substances,
+              otherSubstancesCanvas: jsonResult.other_substances_canvas,
             },
           });
         })
@@ -210,14 +240,22 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
 
   const {
     work,
+    workCanvas,
     livingConditions,
+    livingConditionsCanvas,
     sexualHistory,
+    sexualHistoryCanvas,
     etOH,
+    etOHCanvas,
     drinksPerWeek,
+    drinksPerWeekCanvas,
     smoker,
     lastTimeSmoked,
+    lastTimeSmokedCanvas,
     packsPerDay,
+    packsPerDayCanvas,
     otherSubstances,
+    otherSubstancesCanvas,
   } = state;
 
   useEffect(() => {
@@ -273,6 +311,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingWorkText}
               canvasHeight={600}
               canvasWidth={600}
+              canvasData={workCanvas}
               isTextArea={true}
             />
 
@@ -289,6 +328,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingLivingConditionsText}
               canvasHeight={600}
               canvasWidth={600}
+              canvasData={livingConditionsCanvas}
               isTextArea={true}
             />
 
@@ -305,6 +345,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingSexualHistoryText}
               canvasHeight={600}
               canvasWidth={600}
+              canvasData={sexualHistoryCanvas}
               isTextArea={true}
             />
 
@@ -323,6 +364,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingEtOHText}
               canvasHeight={600}
               canvasWidth={600}
+              canvasData={etOHCanvas}
               isTextArea={true}
             />
 
@@ -339,6 +381,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingDrinksPerWeekText}
               canvasHeight={200}
               canvasWidth={600}
+              canvasData={drinksPerWeekCanvas}
               isTextArea={false}
             />
 
@@ -394,6 +437,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
                   setIsShowingText={setShowingLastTimeSmokedText}
                   canvasHeight={200}
                   canvasWidth={600}
+                  canvasData={lastTimeSmokedCanvas}
                   isTextArea={false}
                 />
 
@@ -410,6 +454,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
                   setIsShowingText={setShowingPacksPerDayText}
                   canvasHeight={200}
                   canvasWidth={600}
+                  canvasData={packsPerDayCanvas}
                   isTextArea={false}
                 />
               </>
@@ -429,6 +474,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingOtherSubstancesText}
               canvasHeight={600}
               canvasWidth={600}
+              canvasData={otherSubstancesCanvas}
               isTextArea={true}
             />
           </div>

@@ -1,13 +1,12 @@
 import React, { useEffect, useState, useReducer } from "react";
 import { CSSTransition } from "react-transition-group";
-import { IndividualPatientProfile, formatCanvases } from "./PatientProfilePage";
+import { IndividualPatientProfile, fetchAllCanvases } from "./PatientProfilePage";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router";
 import { postData } from "./PatientProfilePage";
 import { canvasInit, textInit } from "../../../utils/utils";
 import { toast } from "react-toastify";
-import { json } from "body-parser";
 
 function reducer(
   state: Assessment_State,
@@ -41,7 +40,7 @@ const initialState: Assessment_State = {
 async function saveData(url: string, state: any) {
   console.log(state)
   allAttributes.assessments = state.assessment;
-  if (state.assessmentCanvas !== undefined) allAttributes.assessment_canvas = state.assessmentCanvas;
+  if (state.assessmentCanvas !== undefined) allAttributes.assessments_canvas = state.assessmentCanvas;
 
   const res = await postData(url, allAttributes);
   return await res.message
@@ -84,18 +83,16 @@ export const AssessmentAndPlanPage: IndividualPatientProfile = ({
         .then((jsonResult) => {
           console.log("Get Assessment")
           console.log(jsonResult)
-          allAttributes = jsonResult;
-          return fetch(jsonResult.assessment_canvas).then(res => res.text())
+          console.log(jsonResult.assessments_canvas)
+          return fetchAllCanvases(jsonResult);
         })
-        .then(canvas => {
-          console.log(canvas);
-          let [formattedCanvas] = formatCanvases([canvas]);
-
+        .then(jsonResult => {
+          allAttributes = jsonResult;
           dispatch({ 
             type: "many_fields", 
             newState:{
-              assessment: allAttributes.assessments,
-              assessmentCanvas: formattedCanvas
+              assessment: jsonResult.assessments,
+              assessmentCanvas: jsonResult.assessments_canvas
             }
           });
         })

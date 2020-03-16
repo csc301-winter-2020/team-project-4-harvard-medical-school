@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../../../scss/instructor/instructor-page.scss";
 import { Header } from "../../SubComponents/Header";
+import { InstructorStudentProfile } from "../../SubComponents/Instructor/InstructorStudentProfile";
 
 interface InstructorPageProps {
 }
@@ -20,7 +21,7 @@ export const InstructorPage: React.FC<InstructorPageProps> = (
   props: InstructorPageProps
 ) => {
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
-  const [instructorName, setInstructorName] = useState("Mr. InstructorNameHere");
+  const [instructorName, setInstructorName] = useState("Instructor Name");
   const [students, setStudents] = useState(mockData);
   const [searchVal, setSearchVal] = useState("");
 
@@ -33,16 +34,14 @@ export const InstructorPage: React.FC<InstructorPageProps> = (
       searchValue={searchVal}
       setSearchValue={setSearchVal}
     />
-    <div className="instructor-page">
+    <div className="instructor-page-container">
       <h1 className="instructor-page-header">Welcome, {instructorName}!</h1>
-      <div>
+      <div className="">
         {students.map(student =>
-          <div>
-            <button className="instructor-page-list-button" onClick={() => alert('TODO')}>
-              Class {student.name}
-            </button>
-            <img src={student.pictureURL} className="instructor-student-image" alt="studentPicture" />
-          </div>
+          <InstructorStudentProfile
+            name={student.name}
+            imageURL={student.pictureURL}
+          />
         )}
       </div>
     </div>

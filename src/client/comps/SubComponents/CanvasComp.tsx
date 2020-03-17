@@ -56,7 +56,7 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
       setBrushRadius(12);
       setIsErasing(true);
       setLastBrushColor(brushColor);
-      setBrushColor("rgba(250,250,250,1)");
+      setBrushColor("rgba(255,255,255,1)");
     }
   }
 
@@ -88,6 +88,7 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
             ref={(canvasDraw: any) => (inputRef = canvasDraw)}
             canvasWidth={canvasWidth}
             canvasHeight={canvasHeight}
+            hideGrid={true}
             lazyRadius={0}
             brushRadius={brushRadius}
             brushColor={brushColor}

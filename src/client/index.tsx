@@ -6,7 +6,8 @@ import { fab } from "@fortawesome/free-brands-svg-icons";
 import { BrowserRouter } from "react-router-dom";
 import { Switch, Route } from "react-router";
 import { LoginPage } from "./comps/Pages/LoginPage";
-import { HomePage } from "./comps/Pages/HomePage";
+import { HomePage } from "./comps/Pages/StudentHomePage";
+import { AllHomePage } from "./comps/Pages/AllHomePage";
 import { PatientProfilePage } from "./comps/Pages/PatientProfile/PatientProfilePage";
 import { SettingsPage } from "./comps/Pages/SettingsPage";
 import { TemplatesPage } from "./comps/Pages/TemplatesPage";
@@ -79,7 +80,7 @@ const browserRouter: JSX.Element = (
   <BrowserRouter>
     <Switch>
       <Route exact path="/" component={LoginPage} />
-      <Route exact path="/home" component={HomePage} />
+      <Route exact path="/home" component={AllHomePage} />
       <Route
         exact
         path={["/patient/:id", "/patient/:id/:pageName"]}

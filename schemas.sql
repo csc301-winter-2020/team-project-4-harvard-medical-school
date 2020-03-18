@@ -23,17 +23,23 @@ CREATE TABLE users (
     default_sidebar BOOLEAN DEFAULT TRUE
 );
 
--- CREATE TABLE class (
---     id INT PRIMARY KEY,
---     name VARCHAR(50) NOT NULL,
---     instructor_id int REFERENCES users(id)
--- );
+CREATE TABLE class (
+     id SERIAL PRIMARY KEY,
+     name VARCHAR(50) NOT NULL,
+     instructor_id int REFERENCES users(id)
+ );
 
--- CREATE TABLE students_enrollment (
---   class_id INT REFERENCES class(id),
---   student_id INT REFERENCES users(id),
---   PRIMARY KEY (class_id, student_id)
--- );
+ CREATE TABLE students_enrollment (
+   class_id INT REFERENCES class(id),
+   student_id INT REFERENCES users(id),
+   PRIMARY KEY (class_id, student_id)
+ );
+
+--Class Inserts for testing purposes 
+INSERT INTO class (name, instructor_id)
+VALUES ('CSC369 WINTER 2020', 1);
+INSERT INTO class (name, instructor_id)
+VALUES ('CSC343 WINTER 2020', 1);
 
 -- -- Not Sure what other fields should be put in --
 CREATE TABLE patients (

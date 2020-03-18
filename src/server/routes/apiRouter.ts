@@ -746,6 +746,25 @@ router.get(
 );
 
 /**
+ * Get all classes
+ */
+router.get(
+  "/api/classes/all",
+  (req: Request, res: Response, next: NextFunction) =>{
+    const query_string: string = "SELECT id, name FROM csc301db.class";
+    pool
+      .query(query_string, [])
+      .then((result: any) => {
+        res.status(200).json(result.rows);
+      })
+      .catch((err: any) =>{
+        console.log(err);
+        res.status(500).json({error: err}); 
+      })
+  }
+);
+
+/**
  * TODO: Return all the classes this user (student) is in
  */
 router.get(

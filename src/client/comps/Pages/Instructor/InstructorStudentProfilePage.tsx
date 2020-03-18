@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "../../../scss/instructor/instructor-student-profile-page.scss";
 import { Header } from "../../SubComponents/Header";
-import { InstructorStudentPatientEncounter } from "../../SubComponents/Instructor/InstructorStudentPatientEncounter";
 import { max } from "../../../utils/utils";
+import { InstructorStudentPatientEncounter } from "../../SubComponents/Instructor/InstructorStudentPatientEncounter";
 
 interface InstructorStudentProfilePageProps {
 }

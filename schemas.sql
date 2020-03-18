@@ -35,12 +35,6 @@ CREATE TABLE class (
    PRIMARY KEY (class_id, student_id)
  );
 
---Class Inserts for testing purposes 
-INSERT INTO class (name, instructor_id)
-VALUES ('CSC369 WINTER 2020', 1);
-INSERT INTO class (name, instructor_id)
-VALUES ('CSC343 WINTER 2020', 1);
-
 -- -- Not Sure what other fields should be put in --
 CREATE TABLE patients (
     id SERIAL PRIMARY KEY,
@@ -139,6 +133,12 @@ INSERT INTO patients (lab_result)
 VALUES (NULL);
 INSERT INTO patient_profile (last_modified, student_id, patient_id, first_name, family_name, age, gender_at_birth, gender, pregnant, country_residence, country_visited, complaint, medical_history, social_history, family_history)
 VALUES (current_timestamp, 1, 1, 'will', 'qie', 20, 'Male', 'Male', 'NO', 'CA', NULL, 'ddd', 'fff', 'zzz', 'vvv');
+
+--Class Inserts for testing purposes 
+INSERT INTO class (name, instructor_id)
+VALUES ('CSC369 WINTER 2020', 1);
+INSERT INTO class (name, instructor_id)
+VALUES ('CSC343 WINTER 2020', 1);
 
 CREATE TABLE templates (
     user_id INT REFERENCES users(id) NOT NULL,

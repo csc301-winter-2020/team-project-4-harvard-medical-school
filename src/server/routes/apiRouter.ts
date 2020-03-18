@@ -726,6 +726,26 @@ router.delete(
 );
 
 /**
+ * Get all the users of type student.
+ */
+router.get(
+  "/api/students/all",
+  (req: Request, res: Response, next: NextFunction) => {
+    const query_string: string =
+      "SELECT * FROM csc301db.users WHERE user_type = 'Student'";
+    pool
+      .query(query_string, [])
+      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
+        res.status(200).json(result.rows);
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(500).json({ error: err });
+      });
+  }
+);
+
+/**
  * TODO: Return all the classes this user (student) is in
  */
 router.get(

@@ -44,7 +44,6 @@ import {
   faQuestionCircle,
   faQuestion,
 } from "@fortawesome/free-solid-svg-icons";
-import { HelixLoader } from "./comps/SubComponents/HelixLoader";
 
 const myLibrary: any = library;
 myLibrary.add(
@@ -91,20 +90,38 @@ const browserRouter: JSX.Element = (
       <Route
         exact
         path="/template/:id"
-        render={(props) => <Questions {...props} useDefault={false}  />}
+        render={props => <Questions {...props} useDefault={false} />}
       />
       <Route
         exact
         path="/templates/new"
-        render={(props) => <Questions {...props} useDefault={true} />}
+        render={props => <Questions {...props} useDefault={true} />}
       />
       <Route exact path="/admin" component={AdminPage} />
-      <Route exact path="/admin/:id/students" component={AdminClassStudentsPage} />
+      <Route
+        exact
+        path="/admin/:id/students"
+        component={AdminClassStudentsPage}
+      />
       <Route exact path="/instructor" component={InstructorPage} />
-      <Route exact path="/instructor/student/:id" component={InstructorStudentProfilePage} />
-      <Route exact path="/instructor/student/:sid/patient/:pid" component={InstructorStudentPatientPage} />
-      <Route exact path="/err/:num/:msg" render={(props) => <Error {...props} urlErr={true}/>} />
-      <Route render={(props) => <Error {...props} errNo={404} urlErr={false}/>} />
+      <Route
+        exact
+        path="/instructor/student/:id"
+        component={InstructorStudentProfilePage}
+      />
+      <Route
+        exact
+        path="/instructor/student/:sid/patient/:pid"
+        component={InstructorStudentPatientPage}
+      />
+      <Route
+        exact
+        path="/err/:num/:msg"
+        render={props => <Error {...props} urlErr={true} />}
+      />
+      <Route
+        render={props => <Error {...props} errNo={404} urlErr={false} />}
+      />
     </Switch>
   </BrowserRouter>
 );

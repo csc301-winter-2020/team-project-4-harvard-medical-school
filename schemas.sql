@@ -124,7 +124,11 @@ CREATE TABLE patient_profile (
 
 );
 INSERT INTO users (username, first_name, last_name, avatar_url, email, password, year, user_type, date_create)
-VALUES ('will', 'will', 'qie', 'example.com', 'willqie@gmail.com', 'will', 1, 'Student', '20190101');
+VALUES ('student', 'will', 'qie', 'https://www.pphfoundation.ca/wp-content/uploads/2018/05/default-avatar.png', 'willqie@gmail.com', 'will', 1, 'Student', '20190101');
+INSERT INTO users (username, first_name, last_name, avatar_url, email, password, year, user_type, date_create)
+VALUES ('instructor', 'will', 'qie', 'https://www.pphfoundation.ca/wp-content/uploads/2018/05/default-avatar.png', 'willqie@gmail.com', 'will', 1, 'Educator', '20190101');
+INSERT INTO users (username, first_name, last_name, avatar_url, email, password, year, user_type, date_create)
+VALUES ('admin', 'will', 'qie', 'https://www.pphfoundation.ca/wp-content/uploads/2018/05/default-avatar.png', 'willqie@gmail.com', 'will', 1, 'Administrator', '20190101');
 INSERT INTO patients (lab_result)
 VALUES (NULL);
 INSERT INTO patient_profile (last_modified, student_id, patient_id, first_name, family_name, age, gender_at_birth, gender, pregnant, country_residence, country_visited, complaint, medical_history, social_history, family_history)

@@ -759,30 +759,52 @@ router.get(
       })
       .catch((err: any) =>{
         console.log(err);
-        res.status(500).json({error: err}); 
+        res.status(400).json({error: err}); 
       })
   }
 );
 
 /**
- * TODO: Return all the classes this user (student) is in
+ * Get all students enrollment in a specific class
  */
 router.get(
-  "/api/student/:userId/classes",
-  (req: Request, res: Response, next: NextFunction) => {
-    const userId: string = req.params.userId;
-    res.status(200).json("");
+  "/api/students/:classID",
+  (req: Request, res: Response, next: NextFunction) =>{
+    const class_id: number = parseInt(req.params.classID);
+    const query_string: string = 
+    "SELECT first_name, last_name\
+     FROM csc301db.users JOIN csc301db.students_enrollment\
+     ON csc301db.users.id = csc301db.students_enrollment.student_id\
+     WHERE csc301db.student_enrollment.class_id = ?";
+    pool
+      .query(query_string, [class_id])
+      .then((result: any) => {
+        res.status(200).json(result.rows);
+      })
+      .catch((err: any) =>{
+        console.log(err);
+        res.status(400).json({error: err}); 
+      })
   }
 );
 
 /**
- * TODO: Return all the classes this instructor manages
+ * Create new class
  */
-router.get(
-  "/api/instructor/:userId/classes",
+router.post(
+  "/api/classes/",
   (req: Request, res: Response, next: NextFunction) => {
-    const userId: string = req.params.userId;
-    res.status(200).json("");
+      const new_class = req.body; 
+      const insert_string: string = "INSERT INTO csc301db.class\
+      (name, instructor_id) VALUES ($1, $2)";
+      pool
+        .query(insert_string, [new_class.name, new_class.instructor_id])
+        .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
+          res.status(200).send("New Class Created");
+        })
+        .catch((err: any) => {
+          res.status(400).send();
+        });
   }
 );
 

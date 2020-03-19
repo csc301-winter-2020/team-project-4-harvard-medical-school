@@ -115,6 +115,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
 }) => {
   const history = useHistory();
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [lastState, setLastState] = useState(state);
   const [showingFirstNameCanvas, setShowingFirstNameCanvas] = useState(true);
   const [showingFirstNameText, setShowingFirstNameText] = useState(false);
   const [showingLastNameCanvas, setShowingLastNameCanvas] = useState(true);
@@ -137,7 +138,32 @@ export const DemographicsPage: IndividualPatientProfile = ({
     countryCanvas 
   } = state;
 
-  const myToast: any = toast
+  const myToast: any = toast;
+
+  useEffect(() => {
+    if (lastState === initialState) {
+      setLastState(state);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      if (currentPage == pageName && state && state !== lastState) {
+        console.log(lastState);
+        console.log(state);
+
+        saveData("/api/patientprofile/" + patientID, state).then((data) => {
+          console.log(data);
+          myToast.success('Autosaved');
+        }).catch((err) => {
+          myToast.success('Autosave failed');
+        });
+
+        setLastState(state);
+      }
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [state, lastState]);
 
   useEffect(() => {
     const canvasShow: boolean = canvasInit(defaultMode);

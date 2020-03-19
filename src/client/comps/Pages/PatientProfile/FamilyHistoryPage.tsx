@@ -60,6 +60,7 @@ export const FamilyHistoryPage: IndividualPatientProfile = ({
 }) => {
   const history = useHistory();
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [lastState, setLastState] = useState(state);
 
   const [showingFamilyHistCanvas, setShowingFamilyHistCanvas] = useState(true);
   const [showingFamilyHistText, setShowingFamilyHistText] = useState(false);
@@ -75,6 +76,30 @@ export const FamilyHistoryPage: IndividualPatientProfile = ({
 
   }, [defaultMode]);
 
+  useEffect(() => {
+    if (lastState === initialState) {
+      setLastState(state);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      if (currentPage == pageName && state && state !== lastState) {
+        console.log(lastState);
+        console.log(state);
+
+        saveData("/api/patientprofile/" + patientID, state).then((data) => {
+          console.log(data);
+          myToast.success('Autosaved');
+        }).catch((err) => {
+          myToast.success('Autosave failed');
+        });
+
+        setLastState(state);
+      }
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [state, lastState]);
 
   const { familyHist, familyHistCanvas } = state;
 

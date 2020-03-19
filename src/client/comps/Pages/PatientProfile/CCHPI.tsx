@@ -7,6 +7,7 @@ import { useHistory } from "react-router";
 import { postData } from "./PatientProfilePage";
 import { canvasInit, textInit } from "../../../utils/utils";
 import { toast } from "react-toastify";
+
 function reducer(
   state: CCHPI_State,
   action: { type: string; fieldName?: string; value?: string; newState?: {[key: string]: string |boolean|number|null} }
@@ -105,6 +106,7 @@ export const CCHPIPage: IndividualPatientProfile = ({
     }
   }, [currentPage]);
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [lastState, setLastState] = useState(state);
 
   const [showingChiefComplaintCanvas, setShowingChiefComplaintCanvas] = useState(true);
   const [showingChiefComplaintText, setShowingChiefComplaintText] = useState(false);
@@ -124,6 +126,31 @@ export const CCHPIPage: IndividualPatientProfile = ({
     setShowingHPICanvas(canvasShow);
     setShowingHPIText(textShow);
   }, [defaultMode]);
+
+  useEffect(() => {
+    if (lastState === initialState) {
+      setLastState(state);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      if (currentPage == pageName && state && state !== lastState) {
+        console.log(lastState);
+        console.log(state);
+
+        saveData("/api/patientprofile/" + patientID, state).then((data) => {
+          console.log(data);
+          myToast.success('Autosaved');
+        }).catch((err) => {
+          myToast.success('Autosave failed');
+        });
+
+        setLastState(state);
+      }
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [state, lastState]);
 
   return (
     <>

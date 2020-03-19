@@ -187,6 +187,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
   const myToast: any = toast
 
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [lastState, setLastState] = useState(state);
 
   const [showingWorkCanvas, setShowingWorkCanvas] = useState(true);
   const [showingWorkText, setShowingWorkText] = useState(false);
@@ -200,43 +201,29 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
     setShowingLivingConditionsText,
   ] = useState(false);
 
-  const [showingSexualHistoryCanvas, setShowingSexualHistoryCanvas] = useState(
-    true
-  );
-  const [showingSexualHistoryText, setShowingSexualHistoryText] = useState(
-    false
-  );
+  const [showingSexualHistoryCanvas, setShowingSexualHistoryCanvas] = useState(true);
+  const [showingSexualHistoryText, setShowingSexualHistoryText] = useState(false);
 
   const [showingEtOHCanvas, setShowingEtOHCanvas] = useState(true);
   const [showingEtOHText, setShowingEtOHText] = useState(false);
 
-  const [showingDrinksPerWeekCanvas, setShowingDrinksPerWeekCanvas] = useState(
-    true
-  );
-  const [showingDrinksPerWeekText, setShowingDrinksPerWeekText] = useState(
-    false
-  );
+  const [showingDrinksPerWeekCanvas, setShowingDrinksPerWeekCanvas] = useState(true);
+  const [showingDrinksPerWeekText, setShowingDrinksPerWeekText] = useState(false);
 
   const [
     showingLastTimeSmokedCanvas,
     setShowingLastTimeSmokedCanvas,
   ] = useState(true);
-  const [showingLastTimeSmokedText, setShowingLastTimeSmokedText] = useState(
-    false
-  );
+  const [showingLastTimeSmokedText, setShowingLastTimeSmokedText] = useState(false);
 
-  const [showingPacksPerDayCanvas, setShowingPacksPerDayCanvas] = useState(
-    true
-  );
+  const [showingPacksPerDayCanvas, setShowingPacksPerDayCanvas] = useState(true);
   const [showingPacksPerDayText, setShowingPacksPerDayText] = useState(false);
 
   const [
     showingOtherSubstancesCanvas,
     setShowingOtherSubstancesCanvas,
   ] = useState(true);
-  const [showingOtherSubstancesText, setShowingOtherSubstancesText] = useState(
-    false
-  );
+  const [showingOtherSubstancesText, setShowingOtherSubstancesText] = useState(false);
 
   const {
     work,
@@ -277,6 +264,31 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
     setShowingPacksPerDayText(textShow);
     setShowingOtherSubstancesText(textShow);
   }, [defaultMode]);
+
+  useEffect(() => {
+    if (lastState === initialState) {
+      setLastState(state);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      if (currentPage == pageName && state && state !== lastState) {
+        console.log(lastState);
+        console.log(state);
+
+        saveData("/api/patientprofile/" + patientID, state).then((data) => {
+          console.log(data);
+          myToast.success('Autosaved');
+        }).catch((err) => {
+          myToast.success('Autosave failed');
+        });
+
+        setLastState(state);
+      }
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [state, lastState]);
 
   return (
     <>

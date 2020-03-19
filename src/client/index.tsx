@@ -102,7 +102,7 @@ const browserRouter: JSX.Element = (
       <Route
         exact
         path="/admin/:id/students"
-        component={AdminClassStudentsPage}
+        render={props => <AdminClassStudentsPage {...props} classID={props.match.params.id}/>}
       />
       <Route exact path="/instructor" component={InstructorPage} />
       <Route

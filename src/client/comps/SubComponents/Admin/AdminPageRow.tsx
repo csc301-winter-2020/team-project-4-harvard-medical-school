@@ -30,7 +30,7 @@ export const AdminPageRow: React.FC<AdminPageRowProps> = ({
             e.target.nodeName !== "path" &&
             e.target.nodeName !== "svg"
           ) {
-            history.push(`/admin/${c.id}/students`);
+            history.push(`/admin/${c.id}/students`, [c.id]);
           }
         }}>
           <div className="home-patient-profile-name-col">{c.name}</div>

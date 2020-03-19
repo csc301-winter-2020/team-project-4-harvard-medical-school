@@ -5,6 +5,7 @@ import { useHistory } from "react-router";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../../scss/patient-profiles/patient-physical-form.scss";
+import { textInit, canvasInit } from '../../../utils/utils'
 import { render } from "@testing-library/react";
 
 function reducer(
@@ -15,21 +16,32 @@ function reducer(
     value: any
     physicalExaminationState: physicalExaminationState | null
   }
-): physicalExaminationState {
-  // if(action.category === 'vitals'){
-  //   return {
-  //     ...state,
-  //     ['vitals']: {
-  //       ...state.vitalsValues,
-  //       [action.condition_name]: action.value
-  //     }
-  //   }
-  // }
+): physicalExaminationState{
   return {
     ...state,
     [action.category]: {
       ...state[action.category],
       [action.condition_name]: action.value
+    }
+  }
+}
+
+function inputReducer(
+  state: isShowingInput,
+  action: {
+    category: string
+    condition_name: string
+    state: isShowingInput
+  }
+): isShowingInput{
+  if(action.state !== null){
+    return action.state
+  }
+  return {
+    ...state,
+    [action.category]: {
+      ...state[action.category],
+      [action.condition_name]: !state[action.category][action.condition_name]
     }
   }
 }
@@ -186,6 +198,11 @@ const initialSkin: skin = {
   extinction_to_dss: 'not_performed'
 }
 
+//TODO : need motor
+const initialMotor: motor = {
+
+}
+
 const initialCoordination: coordination = {
   intention_tremor: 'not_performed',
   dysdiadochokinesia: 'not_performed',
@@ -197,11 +214,6 @@ const initialGait: gait = {
   narrow_based: 'not_performed',
   walk_in_tandem: 'not_performed',
   romberg_absent: 'not_performed'
-}
-
-//TODO : need motor
-const initialMotor: motor = {
-
 }
 
 const initialMental: mental = {
@@ -242,6 +254,122 @@ const initialPhysicalExaminationsState: physicalExaminationState = {
   coordination: initialCoordination,
   gait: initialGait,
   mental: initialMental
+}
+
+type isShowingInput = {[key:string]: {[key:string]: boolean}}
+
+function get_initial_input_state(default_val: boolean): isShowingInput{
+  return {
+    general: {
+      awake: default_val,
+      cooperative: default_val,
+      interactive: default_val,
+      NAD: default_val
+    },
+    heent: {
+      normocephalic: default_val,
+      anicteric_sclera: default_val,
+      mucous_membranes_moist: default_val,
+      no_lesions: default_val,
+      normal_dentition: default_val
+    },
+    cn_ii: {
+      perrl: default_val,
+      vff: default_val,
+      fundoscopic_exam: default_val
+    },
+    cn_iii: {
+      eomi: default_val,
+      saccades: default_val
+    },
+    cn_v: {
+      facial_sensation: default_val
+    },
+    cn_vii: {
+      facial_droop: default_val
+    },
+    cn_viii: {
+      hearing_intact: default_val
+    },
+    cn_ix: {
+      palate_elevates: default_val
+    },
+    cn_xi: {
+      trapezii_scm_strength: default_val
+    },
+    cn_xii: {
+      tongue_protrude: default_val
+    },
+    neck: {
+      nuchal_rigidity: default_val,
+      thyroid: default_val,
+      cervical_lymphadenopathy: default_val,
+      jvd: default_val
+    },
+    pulmonary: {
+      increased_work: default_val,
+      quiet_breath: default_val,
+      auscultation: default_val,
+      wheezes: default_val
+    },
+    cardiac: {
+      well_perfused: default_val,
+      regular_rhythm: default_val,
+      audible_s1_s2: default_val,
+      murmurs: default_val,
+      pedal_edema: default_val,
+      gynecomastia: default_val
+    },
+    abdomen: {
+      bowels_sounds: default_val,
+      tympanic: default_val,
+      nt_nd: default_val,
+      organomegaly: default_val
+    },
+    skin: {
+      cyanosis: default_val,
+      radial_pulses: default_val,
+      dorsalis_pedis_pulses: default_val,
+      palmar_erythema: default_val,
+      resting_tremor: default_val,
+      rashes_or_lesions: default_val,
+      tattoos: default_val,
+      light_touch: default_val,
+      pinprick: default_val,
+      cold_sensation: default_val,
+      proprioception: default_val,
+      extinction_to_dss: default_val
+    },
+    motor: {
+  
+    },
+    coordination: {
+      intention_tremor: default_val,
+      dysdiadochokinesia: default_val,
+      dysmetria: default_val
+    },
+    gait: {
+      good_initiation: default_val,
+      narrow_based: default_val,
+      walk_in_tandem: default_val,
+      romberg_absent: default_val
+    },
+    mental: {
+      oriented_well: default_val,
+      relate_history: default_val,
+      attentive: default_val,
+      fluent_language: default_val,
+      normal_prosody: default_val,
+      paraphasic_errors: default_val,
+      high_low_frequency_objects: default_val,
+      read_without_difficulty: default_val,
+      dysarthric: default_val,
+      midline_commands: default_val,
+      register_3_objects: default_val,
+      current_events: default_val,
+      apraxia: default_val
+    },
+  }
 }
 
 const nameMap: {[key:string]: string} = {
@@ -375,16 +503,32 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
   transitionName,
   isShowingSidebar,
   patientID,
+  defaultMode
 }) => {
   const history = useHistory();
+
+  const [state, dispatch] = useReducer(reducer, initialPhysicalExaminationsState)
+  const [isShowingCanvasState, canvasDispatch] = useReducer(inputReducer, get_initial_input_state(true))
+  const [isShowingTextState, textDispatch] = useReducer(inputReducer, get_initial_input_state(true))
+
   useEffect(() => {
     if (currentPage === pageName) {
       document.title = `Patient Profile: ${pageName}`;
       history.push(`/patient/${patientID}/physical`);
     }
-  }, [currentPage]);
 
-  const [state, dispatch] = useReducer(reducer, initialPhysicalExaminationsState)
+    canvasDispatch({
+      category: '',
+      condition_name: '',
+      state: get_initial_input_state(canvasInit(defaultMode))
+    })
+
+    textDispatch({
+      category: '',
+      condition_name: '',
+      state: get_initial_input_state(textInit(defaultMode))
+    })
+  }, [currentPage]);
 
   function renderChoices(category: string){
     return (
@@ -393,43 +537,74 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
         {
           Object.keys(state[category]).map((condition: string) => {
             return (
-              <div key={condition}>
-                <div className='radio-group' key={condition+'_np'} style={{display: 'inline-block'}}>
-                  <label>
-                    <input
-                      type='radio'
-                      name={condition+'_np'}
-                      checked={state[category][condition] === 'not_performed'}
-                      onChange={() => {
-                        dispatch({
-                          category: category,
-                          condition_name: condition,
-                          value: 'not_performed',
-                          physicalExaminationState: null
-                        })
-                      }}
-                    />
-                    <p>Not Performed</p>
-                  </label>
+              <div key={condition+'_all'}>
+                <div key={condition}>
+                  <div className='radio-group' key={condition+'_np'} style={{display: 'inline-block'}}>
+                    <label>
+                      <input
+                        type='radio'
+                        name={condition+'_np'}
+                        checked={state[category][condition] === 'not_performed'}
+                        onChange={() => {
+                          dispatch({
+                            category: category,
+                            condition_name: condition,
+                            value: 'not_performed',
+                            physicalExaminationState: null
+                          })
+                        }}
+                      />
+                      <p>Not Performed</p>
+                    </label>
+                  </div>
+                  <div className='radio-group' key={condition+'_h'} style={{display: 'inline-block'}}>
+                    <label>
+                      <input
+                        type='radio'
+                        name={condition+'_c'}
+                        checked={state[category][condition] === 'healthy'}
+                        onChange={() => {
+                          dispatch({
+                            category: category,
+                            condition_name: condition,
+                            value: 'healthy',
+                            physicalExaminationState: null
+                          })
+                        }}
+                      />
+                      <p>{nameMap[condition]}</p>
+                    </label>
+                  </div>
                 </div>
-                <div className='radio-group' key={condition+'_h'} style={{display: 'inline-block'}}>
-                  <label>
-                    <input
-                      type='radio'
-                      name={condition+'_c'}
-                      checked={state[category][condition] === 'healthy'}
-                      onChange={() => {
-                        dispatch({
-                          category: category,
-                          condition_name: condition,
-                          value: 'healthy',
-                          physicalExaminationState: null
-                        })
-                      }}
-                    />
-                    <p>{nameMap[condition]}</p>
-                  </label>
-                </div>
+                {state[category][condition] === 'healthy' && (
+                  <PatientFormInput
+                    dispatch={dispatch}
+                    id={condition+'_i'}
+                    inputType={'text'}
+                    inputVal={null}
+                    placeholder={''}
+                    title={'Specifics'}
+                    isShowingCanvas={isShowingCanvasState[category][condition]}
+                    isShowingText={isShowingTextState[category][condition]}
+                    setIsShowingCanvas={() => {
+                      canvasDispatch({
+                        category: category,
+                        condition_name: condition,
+                        state: null
+                      })
+                    }}
+                    setIsShowingText={() => {
+                      textDispatch({
+                        category: category,
+                        condition_name: condition,
+                        state: null
+                      })
+                    }}
+                    canvasHeight={200}
+                    canvasWidth={600}
+                    isTextArea={false}
+                  />
+                )}
               </div>
             )
           })

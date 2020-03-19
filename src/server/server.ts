@@ -15,6 +15,16 @@ import * as fs from "fs";
 // import Any = jasmine.Any;
 dotenv.config();
 
+//Locale Database Connection
+const client = new Client({
+  "user": "postgres",
+  "password": "kang098",
+  "host": "localhost",
+  "port": 5432,
+  "database": "csc301sk"
+})
+client.connect()
+
 // Database Connection
 // const pool: Pool = new Pool();
 // pool.query('SELECT NOW()').then((res, err) => {

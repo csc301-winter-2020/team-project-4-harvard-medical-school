@@ -13,21 +13,6 @@ export interface AdminClass {
   id: number;
 }
 
-let needToFetch = true;
-
-function getAllClasses(setClasses: any) {
-  fetch("/api/classes/all")
-    .then((res) => {
-      return res.json()
-    })
-    .then((jsonResult) => {
-      console.log(jsonResult);
-      setClasses(jsonResult);
-    }).catch((error) => {
-      console.log("An error occurred with fetch:", error)
-    });
-}
-
 export const AdminPage: React.FC<AdminPageProps> = (props: AdminPageProps) => {
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
   const [classes, setClasses] = useState([]);
@@ -52,11 +37,29 @@ export const AdminPage: React.FC<AdminPageProps> = (props: AdminPageProps) => {
     };
   }, []);
 
-  // TODO: Can we do this with useEffect() somehow?
-  if (needToFetch) {
-    getAllClasses(setClasses);
-    needToFetch = false;
-  }
+  useEffect(() => {
+    fetch(`/api/classes/all`)
+    .then(response => {
+      if (response.status === 200){
+        return response.json()
+      } else {
+        throw new Error(`Error code: ${response.status}, ${response.statusText}`);
+      }
+    })
+    .then((data:any) => {
+      const allClasses:AdminClass[] = [];
+      data.forEach((row:any) => {
+        allClasses.push({
+          name: row.name,
+          id: row.id,
+        });
+      });
+      setClasses(allClasses);
+    })
+    .catch((err:any) => {
+      console.log(err);
+    })
+  }, []);
 
   return (
     <>
@@ -105,7 +108,7 @@ export const AdminPage: React.FC<AdminPageProps> = (props: AdminPageProps) => {
       {showNewClassPopup && (
         <NewAdminClass
           setNewClassPopup={setNewClassPopup}
-          refreshClasses={() => { getAllClasses(setClasses); }}
+          refreshClasses={() => { }}
         />
       )}
     </>

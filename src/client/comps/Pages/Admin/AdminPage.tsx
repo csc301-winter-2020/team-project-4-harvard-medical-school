@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import "../../../scss/admin/admin-page.scss";
 import { Header } from "../../SubComponents/Header";
 import { max } from "../../../utils/utils";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AdminPageRow } from "../../SubComponents/Admin/AdminPageRow";
 import { ToastContainer, toast } from "react-toastify";
+import { NewAdminClass } from "../../SubComponents/Admin/NewAdminClass";
 
 interface AdminPageProps {}
 
@@ -15,10 +15,24 @@ export interface AdminClass {
 
 let needToFetch = true;
 
+function getAllClasses(setClasses) {
+  fetch("/api/classes/all")
+    .then((res) => {
+      return res.json()
+    })
+    .then((jsonResult) => {
+      console.log(jsonResult);
+      setClasses(jsonResult);
+    }).catch((error) => {
+      console.log("An error occurred with fetch:", error)
+    });
+}
+
 export const AdminPage: React.FC<AdminPageProps> = (props: AdminPageProps) => {
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
   const [classes, setClasses] = useState([]);
   const [searchVal, setSearchVal] = useState("");
+  const [showNewClassPopup, setNewClassPopup] = useState(false);
   const [isPortraitMode, setIsPortraitMode] = useState(
     window.innerWidth < 1080
   );
@@ -40,17 +54,7 @@ export const AdminPage: React.FC<AdminPageProps> = (props: AdminPageProps) => {
 
   // TODO: Can we do this with useEffect() somehow?
   if (needToFetch) {
-    fetch("/api/classes/all")
-      .then((res) => {
-        return res.json()
-      })
-      .then((jsonResult) => {
-        console.log(jsonResult);
-        setClasses(jsonResult);
-      }).catch((error) => {
-        console.log("An error occurred with fetch:", error)
-      });
-
+    getAllClasses(setClasses);
     needToFetch = false;
   }
 
@@ -92,11 +96,18 @@ export const AdminPage: React.FC<AdminPageProps> = (props: AdminPageProps) => {
       <div
         className="home-page-create-template-btn"
         onClick={() => {
-          alert('TODO');
+          setNewClassPopup(true);
         }}
       >
         <p>Create Class</p>
       </div>
+
+      {showNewClassPopup && (
+        <NewAdminClass
+          setNewClassPopup={setNewClassPopup}
+          refreshClasses={() => { getAllClasses(setClasses); }}
+        />
+      )}
     </>
   );
 };

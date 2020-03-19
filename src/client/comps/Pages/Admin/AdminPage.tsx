@@ -15,7 +15,7 @@ export interface AdminClass {
 
 let needToFetch = true;
 
-function getAllClasses(setClasses) {
+function getAllClasses(setClasses: any) {
   fetch("/api/classes/all")
     .then((res) => {
       return res.json()

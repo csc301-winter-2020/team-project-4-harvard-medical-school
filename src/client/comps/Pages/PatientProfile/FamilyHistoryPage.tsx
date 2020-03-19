@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { postData } from "./PatientProfilePage";
 import { canvasInit, textInit } from "../../../utils/utils";
 import { toast } from "react-toastify";
+import { MyToast } from "../../../utils/types";
 
 function reducer(
   state: Family_Hist_State,
@@ -63,7 +64,7 @@ export const FamilyHistoryPage: IndividualPatientProfile = ({
   const [showingFamilyHistCanvas, setShowingFamilyHistCanvas] = useState(true);
   const [showingFamilyHistText, setShowingFamilyHistText] = useState(false);
 
-  const myToast: any = toast
+  const myToast:MyToast = toast as any;
 
   useEffect(() => {
     const canvasShow: boolean = canvasInit(defaultMode);

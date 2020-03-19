@@ -7,6 +7,7 @@ import { useHistory } from "react-router";
 import { postData } from "./PatientProfilePage";
 import { canvasInit, textInit } from "../../../utils/utils";
 import { toast } from "react-toastify";
+import { MyToast } from "../../../utils/types";
 
 function reducer(
   state: PMH_State,
@@ -81,7 +82,7 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
   
   const { pastMedHist, pastHospits, medications, allergies } = state;
 
-  const myToast: any = toast
+  const myToast:MyToast = toast as any;
 
   const history = useHistory();
   useEffect(() => {

@@ -800,7 +800,7 @@ router.get(
   "/api/classes/:classID",
   (req: Request, res: Response, next: NextFunction) =>{
     const class_id: number = parseInt(req.params.classID);
-    const query_string: string = "SELECT name FROM csc301db.class WHERE id = $1";
+    const query_string: string = "SELECT * FROM csc301db.class WHERE id = $1";
     pool
       .query(query_string, [class_id])
       .then((result: any) => {
@@ -809,6 +809,29 @@ router.get(
         } else {
           res.status(200).json(result.rows);
         }
+      })
+      .catch((err: any) =>{
+        console.log(err);
+        res.status(400).json({error: err}); 
+      })
+  }
+);
+
+/**
+ * Patch a class name by ID
+ */
+router.patch(
+  "/api/classes/:classID",
+  (req: Request, res: Response, next: NextFunction) =>{
+    const class_id: number = parseInt(req.params.classID);
+    const body: any = req.body;
+    const query_string: string = 
+    "UPDATE csc301db.class SET name = $1, instructor_id = $2, help_enabled = $3 \
+    WHERE id = $4";
+    pool
+      .query(query_string, [body.name, body.instructor_id, body.help_enabled ,class_id])
+      .then((result: any) => {
+        res.status(200).json(result.rows);
       })
       .catch((err: any) =>{
         console.log(err);

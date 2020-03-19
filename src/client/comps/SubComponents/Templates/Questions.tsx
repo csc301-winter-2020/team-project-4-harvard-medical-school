@@ -21,7 +21,7 @@ import {
   TemplatePage,
 } from "../../Pages/TemplatesPage";
 import { Header } from "../Header";
-import { contentType } from "../../../utils/types";
+import { contentType, MyToast } from "../../../utils/types";
 import { DraggableQuestion } from "./DraggableQuestion";
 import { RouteComponentProps, useHistory } from "react-router";
 import { ToastContainer, toast } from "react-toastify";
@@ -140,7 +140,7 @@ export const Questions: React.FC<QuestionCompProps> = (
     useDefault ? defaultTemplate.template_name : "DEFAULT_NAME"
   );
   const [editingTitle, setEditingTitle] = useState(false);
-  const myToast: any = toast;
+  const myToast:MyToast = toast as any;
   const history = useHistory();
 
   useEffect(() => {
@@ -184,10 +184,6 @@ export const Questions: React.FC<QuestionCompProps> = (
       setHighlight(null);
     }
   }, [searchVal]);
-
-  // useEffect(() => {
-  //   console.log(questions);
-  // }, [questions]);
 
   return (
     <>

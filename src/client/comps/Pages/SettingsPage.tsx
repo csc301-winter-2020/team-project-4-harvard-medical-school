@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { defaultAvatar, numberToYearStr } from "../../utils/utils";
 import { HelixLoader } from "../SubComponents/HelixLoader";
 import { toast, ToastContainer } from "react-toastify";
+import { MyToast } from "../../utils/types";
 
 interface SettingsPageProps {}
 
@@ -66,7 +67,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState<userData>(dummyData);
-  const myToast: any = toast;
+  const myToast:MyToast = toast as any;
 
   useEffect(() => {
     getUserSettings().then(data => {
@@ -140,7 +141,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({}) => {
               <div></div>
               {!isEditing && (
                 <h3 className="settings-year-text">
-                  {numberToYearStr[userData.year]} Year Student
+                  {numberToYearStr[userData.year]} Year {userData.user_type}
                 </h3>
               )}
               {isEditing && (

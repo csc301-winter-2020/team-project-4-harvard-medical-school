@@ -7,6 +7,7 @@ import { useHistory } from "react-router";
 import { postData} from "./PatientProfilePage";
 import { canvasInit, textInit } from "../../../utils/utils";
 import { toast } from "react-toastify";
+import { MyToast } from "../../../utils/types";
 
 function reducer(
   state: ImagingResultsState,
@@ -61,7 +62,7 @@ export const ImagingResultsPage: IndividualPatientProfile = ({
   const [showingImagingResultsCanvas, setShowingImagingResultsCanvas] = useState(true);
   const [showingImagingResultsText, setShowingImagingResultsText] = useState(false);
 
-  const myToast: any = toast
+  const myToast:MyToast = toast as any;
 
   useEffect(() => {
     const canvasShow: boolean = canvasInit(defaultMode);

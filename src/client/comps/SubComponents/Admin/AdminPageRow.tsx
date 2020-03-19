@@ -4,6 +4,7 @@ import { AdminClass } from "../../Pages/Admin/AdminPage";
 import Popup from "reactjs-popup";
 import { toast } from "react-toastify";
 import { useHistory } from "react-router";
+import { MyToast } from "../../../utils/types";
 
 interface AdminPageRowProps {
   isPortraitMode: boolean;
@@ -16,7 +17,7 @@ export const AdminPageRow: React.FC<AdminPageRowProps> = ({
 }) => {
   const [isShowing, setIsShowing] = useState(true);
   const history = useHistory();
-  const mToast: any = toast;
+  const mToast:MyToast = toast as any;
 
   return (
     <>

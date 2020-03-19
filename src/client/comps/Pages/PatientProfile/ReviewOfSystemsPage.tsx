@@ -5,6 +5,7 @@ import { useHistory } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../../scss/patient-profiles/patient-profile-form.scss";
 import { toast } from "react-toastify";
+import { MyToast } from "../../../utils/types";
 
 function reducer(
   state: ReviewOfSystemsState,
@@ -456,7 +457,7 @@ export const ReviewOfSystemsPage: IndividualPatientProfile = ({
   // state for keeping track of the gender of the patient
   const [gender, setGender] = useState('undefined')
 
-  const myToast: any = toast
+  const myToast:MyToast = toast as any;
 
   // POST request to update the patient Review of Systems information
   const postToDB = (state: ReviewOfSystemsState) => {

@@ -9,6 +9,7 @@ import { postData } from "./PatientProfilePage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { textInit, canvasInit } from "../../../utils/utils";
 import { toast } from "react-toastify";
+import { MyToast } from "../../../utils/types";
 
 function reducer(
   state: DemographicsState,
@@ -117,7 +118,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
 
   const { firstName, lastName, sex, age, isPregnant, country } = state;
 
-  const myToast: any = toast
+  const myToast:MyToast = toast as any;
 
   useEffect(() => {
     const canvasShow: boolean = canvasInit(defaultMode);

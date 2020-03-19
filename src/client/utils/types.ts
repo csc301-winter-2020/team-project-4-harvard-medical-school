@@ -36,3 +36,18 @@ export const fullTemplate: {[key in contentType]: string[]} ={
   "Social History": ["work", "livingConditions", "sexualHistory", "etOH", "drinksPerWeek", "smoker", "lastTimeSmoked", "packsPerDay", "otherSubstances"],
 }
 
+export type Class = {
+  id: number;
+  help_enabled: boolean;
+  name: string;
+  instructor_id: number;
+}
+
+export type MyToast = {
+  warn: ToastFunc;
+  success: ToastFunc;
+  info: ToastFunc;
+  error: ToastFunc;
+}
+
+type ToastFunc = (msg: string, params?: object) => void;

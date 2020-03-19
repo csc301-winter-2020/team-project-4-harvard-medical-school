@@ -6,6 +6,7 @@ import { AdminPageRow } from "../../SubComponents/Admin/AdminPageRow";
 import { ToastContainer, toast } from "react-toastify";
 import { NewAdminClass } from "../../SubComponents/Admin/NewAdminClass";
 import { useHistory } from "react-router";
+import { HelixLoader } from "../../SubComponents/HelixLoader";
 
 interface AdminPageProps {}
 
@@ -19,9 +20,12 @@ export const AdminPage: React.FC<AdminPageProps> = (props: AdminPageProps) => {
   const [classes, setClasses] = useState([]);
   const [searchVal, setSearchVal] = useState("");
   const [showNewClassPopup, setNewClassPopup] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isPortraitMode, setIsPortraitMode] = useState(
     window.innerWidth < 1080
   );
+
+  const mToast: any = toast;
 
   useEffect(() => {
     document.title = "Scribe: Home";
@@ -59,7 +63,11 @@ export const AdminPage: React.FC<AdminPageProps> = (props: AdminPageProps) => {
     })
     .catch((err:any) => {
       console.log(err);
+      mToast.warn("Could not load classes. Try again.")
     })
+    .finally(() => {
+      setIsLoading(false);
+    });
   });
 
   return (
@@ -72,6 +80,7 @@ export const AdminPage: React.FC<AdminPageProps> = (props: AdminPageProps) => {
         searchValue={searchVal}
         setSearchValue={setSearchVal}
       />
+      {isLoading && <HelixLoader message="Loading Classes..." />}
       <ToastContainer position={toast.POSITION.TOP_RIGHT} />
       <div className="home-page-content-container">
         <div className="home-page-your-patients-title">Your Classes</div>

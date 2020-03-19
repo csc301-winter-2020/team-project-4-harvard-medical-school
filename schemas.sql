@@ -26,10 +26,13 @@ CREATE TABLE users (
     default_sidebar BOOLEAN DEFAULT TRUE
 );
 
+DROP TABLE IF EXISTS class CASCADE;
+
 CREATE TABLE class (
     id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
-    instructor_id int REFERENCES users(id)
+    instructor_id int REFERENCES users(id),
+    help_enabled BOOLEAN DEFAULT false
 );
 
 CREATE TABLE students_enrollment (
@@ -252,14 +255,14 @@ VALUES
 
 --Class Inserts for testing purposes 
 INSERT INTO
-    class (name, instructor_id)
+    class (name, instructor_id, help_enabled)
 VALUES
-    ('CSC369 WINTER 2020', 1);
+    ('CSC369 WINTER 2020', 1, true);
 
 INSERT INTO
-    class (name, instructor_id)
+    class (name, instructor_id, help_enabled)
 VALUES
-    ('CSC343 WINTER 2020', 1);
+    ('CSC343 WINTER 2020', 1, false);
 
 CREATE TABLE templates (
     user_id INT REFERENCES users(id) NOT NULL,

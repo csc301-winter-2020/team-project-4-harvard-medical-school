@@ -4,6 +4,7 @@ import { Header } from "../../SubComponents/Header";
 import { InstructorStudentProfile } from "../../SubComponents/Instructor/InstructorStudentProfile";
 import { ToastContainer, toast } from "react-toastify";
 import { max } from "../../../utils/utils";
+import { HelixLoader } from "../../SubComponents/HelixLoader";
 
 
 interface InstructorPageProps {
@@ -27,6 +28,7 @@ export const InstructorPage: React.FC<InstructorPageProps> = (
   const [instructorName, setInstructorName] = useState("Instructor Name");
   const [students, setStudents] = useState(mockData);
   const [searchVal, setSearchVal] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   return <>
     <Header
@@ -38,6 +40,7 @@ export const InstructorPage: React.FC<InstructorPageProps> = (
       setSearchValue={setSearchVal}
     />
     <ToastContainer position={toast.POSITION.TOP_RIGHT} />
+    {isLoading && <HelixLoader message="Please Wait..." />}
       <div className="home-page-content-container">
         <div className="home-page-your-patients-title">Your Students</div>
         <div className="home-page-separator-line"></div>
@@ -65,11 +68,5 @@ export const InstructorPage: React.FC<InstructorPageProps> = (
       >
         <p>Create Class</p>
       </div>
-    {/* <div className="instructor-page-container">
-      <h1 className="instructor-page-header">Welcome, {instructorName}!</h1>
-      <div className="">
-        
-      </div>
-    </div> */}
   </>;
 };

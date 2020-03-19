@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CanvasDraw from "react-canvas-draw";
 import "../../scss/canvas-draw.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,12 +8,18 @@ interface CanvasCompProps {
   initialHeight: number;
   initialWidth: number;
   id: string;
+  dispatch: Function;
+  saveData: string;
+  // loadSaveData: boolean;
 }
 
 export const CanvasComp: React.FC<CanvasCompProps> = ({
   initialHeight,
   initialWidth,
   id,
+  dispatch,
+  saveData,
+  // loadSaveData,
 }) => {
   const [canvasHeight, setCanvasHeight] = useState(initialHeight);
   const [canvasWidth, setCanvasWidth] = useState(initialWidth);
@@ -22,6 +28,7 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
   const [brushColor, setBrushColor] = useState("black");
   const [lastBrushColor, setLastBrushColor] = useState("black");
   const [catenaryColor, setCatenaryColor] = useState("black");
+  const [loadSaveData, setLoadSaveData] = useState(true);
   const [lastDrag, setLastDrag] = useState(now());
 
   let inputRef: any;
@@ -34,6 +41,14 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
 
   function clearCanvas() {
     inputRef.clear();
+  }
+
+  function dispatchCanvasState() {
+    dispatch({
+      type: 'field',
+      fieldName: id + 'Canvas',
+      value: inputRef.getSaveData()
+    });
   }
 
   function changeColor(color: string) {
@@ -73,6 +88,13 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
     }
   }
 
+  useEffect(() => {
+    if (loadSaveData && saveData) {
+      inputRef.loadSaveData(saveData);
+      setLoadSaveData(false);
+    }
+  }, [saveData]);
+
   return (
     <>
       <div
@@ -83,6 +105,7 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
         <div
           className="canvas-draw-container"
           id={`canvas-draw-container-${id}`}
+          onMouseUp={dispatchCanvasState}
         >
           <CanvasDraw
             ref={(canvasDraw: any) => (inputRef = canvasDraw)}

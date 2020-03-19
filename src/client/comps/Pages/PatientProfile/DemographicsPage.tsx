@@ -2,7 +2,7 @@ import React, { useEffect, useReducer, useState } from "react";
 import "../../../scss/patient-profiles/patient-profile-form.scss";
 import { useHistory } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
-import { IndividualPatientProfile } from "./PatientProfilePage";
+import { IndividualPatientProfile, fetchAllCanvases } from "./PatientProfilePage";
 import "../../../scss/login/inputboxes.scss";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { postData } from "./PatientProfilePage";
@@ -63,11 +63,15 @@ function reducer(
 
 type DemographicsState = {
   firstName: string;
+  firstNameCanvas?: string;
   lastName: string;
+  lastNameCanvas?: string;
   sex: "Male" | "Female" | null;
   age: string;
+  ageCanvas?: string;
   isPregnant: "Y" | "N" | "UNSURE" | null;
   country: string | null;
+  countryCanvas?: string;
 };
 
 const initialState: DemographicsState = {
@@ -82,11 +86,16 @@ const initialState: DemographicsState = {
 async function saveData(url: string, state: DemographicsState) {
   console.log(state);
   allAttributes.first_name = state.firstName;
+  if (state.firstNameCanvas !== undefined) allAttributes.first_name_canvas = state.firstNameCanvas;
   allAttributes.family_name = state.lastName;
+  if (state.lastNameCanvas !== undefined) allAttributes.family_name_canvas = state.lastNameCanvas;
   allAttributes.age = state.age;
+  if (state.ageCanvas !== undefined) allAttributes.age_canvas = state.ageCanvas;
   allAttributes.gender = state.sex;
   allAttributes.pregnant = state.isPregnant;
   allAttributes.country_residence = state.country;
+  if (state.countryCanvas !== undefined) allAttributes.country_residence_canvas = state.countryCanvas;
+  console.log(allAttributes);
 
   const res = await postData(url, allAttributes);
   return await res.message
@@ -115,7 +124,18 @@ export const DemographicsPage: IndividualPatientProfile = ({
   const [showingCountryCanvas, setShowingCountryCanvas] = useState(true);
   const [showingCountryText, setShowingCountryText] = useState(false);
 
-  const { firstName, lastName, sex, age, isPregnant, country } = state;
+  const { 
+    firstName,
+    firstNameCanvas,
+    lastName,
+    lastNameCanvas, 
+    sex, 
+    age, 
+    ageCanvas, 
+    isPregnant, 
+    country, 
+    countryCanvas 
+  } = state;
 
   const myToast: any = toast
 
@@ -145,18 +165,27 @@ export const DemographicsPage: IndividualPatientProfile = ({
           return res.json();
         })
         .then(jsonResult => {
-          allAttributes = jsonResult;
           console.log("Get Demographics");
           console.log(jsonResult);
+
+          return fetchAllCanvases(jsonResult);
+        })
+        .then(jsonResult => {
+          allAttributes = jsonResult;
+
           dispatch({
             type: "many_fields",
             newState: {
               firstName: jsonResult.first_name,
+              firstNameCanvas: jsonResult.first_name_canvas,
               lastName: jsonResult.family_name,
+              lastNameCanvas: jsonResult.last_name_canvas,
               sex: jsonResult.gender,
               age: jsonResult.age,
+              ageCanvas: jsonResult.age_canvas,
               isPregnant: jsonResult.pregnant,
               country: jsonResult.country_residence,
+              countryCanvas: jsonResult.country_residence_canvas,
             },
           });
         })
@@ -200,6 +229,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingFirstNameText}
               canvasHeight={200}
               canvasWidth={600}
+              canvasData={firstNameCanvas}
               isTextArea={false}
             />
 
@@ -216,6 +246,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingLastNameText}
               canvasHeight={200}
               canvasWidth={600}
+              canvasData={lastNameCanvas}
               isTextArea={false}
             />
             <PatientFormInput
@@ -231,6 +262,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingAgeText}
               canvasHeight={200}
               canvasWidth={600}
+              canvasData={ageCanvas}
               isTextArea={false}
             />
             <h3>Sex at Birth</h3>
@@ -314,6 +346,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingCountryText}
               canvasHeight={200}
               canvasWidth={600}
+              canvasData={countryCanvas}
               isTextArea={false}
             />
           </div>

@@ -86,7 +86,7 @@ export const AdminClassStudentsPage: React.FC<AdminProfilePageProps> = (
       console.log(err);
     })
 
-  })
+  }, []);
 
   return (
     <>

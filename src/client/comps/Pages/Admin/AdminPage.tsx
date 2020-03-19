@@ -60,7 +60,7 @@ export const AdminPage: React.FC<AdminPageProps> = (props: AdminPageProps) => {
     .catch((err:any) => {
       console.log(err);
     })
-  }, []);
+  });
 
   return (
     <>

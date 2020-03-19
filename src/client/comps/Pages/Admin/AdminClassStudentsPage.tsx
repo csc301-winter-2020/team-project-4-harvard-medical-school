@@ -19,31 +19,14 @@ interface Student {
   lastName: string;
 }
 
-const mockData: Student[] = [
-  { firstName: "Steve", lastName: "Bobs" },
-  { firstName: "Yoko", lastName: "Taro" },
-  { firstName: "Steven", lastName: "Kang" },
-  { firstName: "Arnold", lastName: "Schwarzenegger" },
-  { firstName: "Elon", lastName: "Musk" },
-  { firstName: "Donald", lastName: "Trump" },
-  { firstName: "Danny", lastName: "Heap" },
-  { firstName: "Diane", lastName: "Horton" },
-  { firstName: "Ima", lastName: "Desktop" },
-  { firstName: "Panda", lastName: "Monium" },
-  { firstName: "Diamond", lastName: "Dozen" },
-  { firstName: "Tyrion", lastName: "Lannister" },
-  { firstName: "Bernie", lastName: "Sanders" },
-];
-
 export const AdminClassStudentsPage: React.FC<AdminProfilePageProps> = (
   props: AdminProfilePageProps
 ) => {
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
-  const [className, setClassName] = useState("Winter 2020");
-  const [students, setStudents] = useState([]);
+  const [className, setClassName] = useState("");
+  const [students, setStudents] = useState<Student[]>([]);
   const [searchVal, setSearchVal] = useState("");
   const [isPortraitMode, setIsPortraitMode] = useState(window.innerWidth < 1080);
-  const [allStudents, setAllStudents] = useState<Student[]>([]);
 
   useEffect(() => {
     document.title = `Scribe: ${className}`;
@@ -61,7 +44,8 @@ export const AdminClassStudentsPage: React.FC<AdminProfilePageProps> = (
   }, []);
 
   useEffect(() => {
-    fetch(`/api/students/all`)
+    console.log(props.classID)
+    fetch(`/api/students/${props.classID}`)
     .then(response => {
       if (response.status === 200){
         return response.json()
@@ -77,11 +61,49 @@ export const AdminClassStudentsPage: React.FC<AdminProfilePageProps> = (
           lastName: d.last_name,
         });
       });
-      setAllStudents(newAllStudents);
+      setStudents(newAllStudents);
     })
     .catch((err:any) => {
       console.log(err);
     })
+  }, []);
+
+  useEffect(() =>{
+    fetch(`/api/classes/${props.classID}`)
+    .then(response => {
+      if (response.status === 200){
+        return response.json()
+      } else {
+        throw new Error(`Error code: ${response.status}, ${response.statusText}`);
+      }
+    })
+    .then((data:any) => {
+      const newClassName = data[0].name
+      setClassName(newClassName);
+    })
+    .catch((err:any) => {
+      console.log(err);
+    })
+
+  }, []);
+
+  useEffect(() =>{
+    fetch(`/api/classes/${props.classID}`)
+    .then(response => {
+      if (response.status === 200){
+        return response.json()
+      } else {
+        throw new Error(`Error code: ${response.status}, ${response.statusText}`);
+      }
+    })
+    .then((data:any) => {
+      const newClassName = data[0].name
+      setClassName(newClassName);
+    })
+    .catch((err:any) => {
+      console.log(err);
+    })
+
   }, []);
 
   return (

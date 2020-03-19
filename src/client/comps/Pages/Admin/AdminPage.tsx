@@ -13,15 +13,11 @@ export interface AdminClass {
   id: number;
 }
 
-const mockData: AdminClass[] = [
-  { name: "Summer 2017", id: 1 },
-  { name: "Fall 2019", id: 2 },
-  { name: "Winter 2020", id: 3 },
-];
+let needToFetch = true;
 
 export const AdminPage: React.FC<AdminPageProps> = (props: AdminPageProps) => {
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
-  const [classes, setClasses] = useState(mockData);
+  const [classes, setClasses] = useState([]);
   const [searchVal, setSearchVal] = useState("");
   const [isPortraitMode, setIsPortraitMode] = useState(
     window.innerWidth < 1080
@@ -41,6 +37,22 @@ export const AdminPage: React.FC<AdminPageProps> = (props: AdminPageProps) => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  // TODO: Can we do this with useEffect() somehow?
+  if (needToFetch) {
+    fetch("/api/classes/all")
+      .then((res) => {
+        return res.json()
+      })
+      .then((jsonResult) => {
+        console.log(jsonResult);
+        setClasses(jsonResult);
+      }).catch((error) => {
+        console.log("An error occurred with fetch:", error)
+      });
+
+    needToFetch = false;
+  }
 
   return (
     <>

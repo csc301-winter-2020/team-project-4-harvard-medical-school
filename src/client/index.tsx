@@ -98,13 +98,11 @@ const browserRouter: JSX.Element = (
         path="/templates/new"
         render={props => <Questions {...props} useDefault={true} />}
       />
-      <Route exact path="/admin" component={AdminPage} />
       <Route
         exact
         path="/admin/:id/students"
         render={props => <AdminClassStudentsPage {...props} classID={props.match.params.id}/>}
       />
-      <Route exact path="/instructor" component={InstructorPage} />
       <Route
         exact
         path="/instructor/student/:id"

@@ -5,6 +5,7 @@ import { max } from "../../../utils/utils";
 import { AdminPageRow } from "../../SubComponents/Admin/AdminPageRow";
 import { ToastContainer, toast } from "react-toastify";
 import { NewAdminClass } from "../../SubComponents/Admin/NewAdminClass";
+import { useHistory } from "react-router";
 
 interface AdminPageProps {}
 

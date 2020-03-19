@@ -33,8 +33,9 @@ export const AllHomePage: React.FC<AllHomePageProps> = ({}) => {
     <>
       {userType === null && <HelixLoader message="Verifying Login Info..." />}
       {userType === "Student" && <HomePage />}
-      {userType === "Admin" && <AdminPage />}
+      {userType === "Administrator" && <AdminPage />}
       {userType === "Educator" && <InstructorPage />}
+      {(!(["Student", "Educator", "Administrator"]).includes(userType) && userType !== null) && <p>"Your user type is undefined. Please contact your administrator to ammend this."</p>}
     </>
   );
 };

@@ -90,7 +90,7 @@ const initializePassport = require("./auth/passport-config");
 initializePassport(passport);
 
 //Bring in our authentication check middleware functions.
-const { checkAuthenticated, checkGuest } = require("./auth/authCheck");
+const { checkAuthenticated, checkAdmin, checkInstructor } = require("./auth/authCheck");
 
 /* Bring the middleware in for our express app */
 // Use the static directory "public" to deliver js, css, html, etc.
@@ -118,6 +118,14 @@ app.use(loginRegisterRouter);
 
 
 app.get(["/home", "/settings", "/templates", "/patient/*", "/template/*"], checkAuthenticated, (req, res) => {
+  res.sendFile(path.resolve(__dirname + "/../public/index.html"));
+});
+
+app.get("/instructor/*", checkAuthenticated, checkInstructor, (req, res) => {
+  res.sendFile(path.resolve(__dirname + "/../public/index.html"));
+});
+
+app.get("/admin/*", checkAuthenticated, checkAdmin, (req, res) => {
   res.sendFile(path.resolve(__dirname + "/../public/index.html"));
 });
 

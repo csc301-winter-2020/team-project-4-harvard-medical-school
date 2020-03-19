@@ -746,6 +746,35 @@ router.get(
 );
 
 /**
+ * Get all students enrollment in a specific class
+ */
+router.get(
+  "/api/students/:classID",
+  (req: Request, res: Response, next: NextFunction) =>{
+    const class_id: number = parseInt(req.params.classID);
+    const query_string: string = 
+    "SELECT first_name, last_name\
+     FROM csc301db.users JOIN csc301db.students_enrollment\
+     ON csc301db.users.id = csc301db.students_enrollment.student_id\
+     WHERE csc301db.students_enrollment.class_id = $1";
+    pool
+      .query(query_string, [class_id])
+      .then((result: any) => {
+        if (result.rowCount === 0) {
+          res.status(404).send("No students in this class");
+        } else {
+          res.status(200).json(result.rows);
+        }
+      })
+      .catch((err: any) =>{
+        console.log(err);
+        res.status(400).json({error: err}); 
+      })
+  }
+);
+
+
+/**
  * Get all classes
  */
 router.get(
@@ -765,21 +794,21 @@ router.get(
 );
 
 /**
- * Get all students enrollment in a specific class
+ * Get a class name by ID
  */
 router.get(
-  "/api/students/:classID",
+  "/api/classes/:classID",
   (req: Request, res: Response, next: NextFunction) =>{
     const class_id: number = parseInt(req.params.classID);
-    const query_string: string = 
-    "SELECT first_name, last_name\
-     FROM csc301db.users JOIN csc301db.students_enrollment\
-     ON csc301db.users.id = csc301db.students_enrollment.student_id\
-     WHERE csc301db.student_enrollment.class_id = ?";
+    const query_string: string = "SELECT name FROM csc301db.class WHERE id = $1";
     pool
       .query(query_string, [class_id])
       .then((result: any) => {
-        res.status(200).json(result.rows);
+        if (result.rowCount === 0) {
+          res.status(404).send("No specified class found");
+        } else {
+          res.status(200).json(result.rows);
+        }
       })
       .catch((err: any) =>{
         console.log(err);

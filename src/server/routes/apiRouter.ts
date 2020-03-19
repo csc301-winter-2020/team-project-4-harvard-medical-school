@@ -808,4 +808,33 @@ router.post(
   }
 );
 
+/**
+ * Deleting a class
+ */
+router.delete(
+  "/api/classes/:classID",
+  (req: Request, res: Response, next: NextFunction) => {
+    const class_id: number = parseInt(req.params.classID);
+    const delete_enrollment: string =
+      "DELETE FROM csc301db.students_enrollment\
+       WHERE class_id = $1";
+    pool
+      .query(delete_enrollment, [class_id])
+      .then((result: any) => {
+        const delete_class: string = 
+          "DELETE FROM csc301db.class\
+           WHERE id = $1"
+          
+          return pool.query(delete_class, [class_id])
+        })
+      .then((result: any) =>{
+        res.status(200).send();
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(400).send();
+      });
+  }
+);
+
 export default router;

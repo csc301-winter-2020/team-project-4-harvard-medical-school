@@ -6,7 +6,9 @@ import { AdminStudentProfile } from "../../SubComponents/Admin/AdminStudentProfi
 import { ToastContainer, toast } from "react-toastify";
 import { response } from "express";
 
-interface AdminProfilePageProps {}
+interface AdminProfilePageProps {
+  classID: number;
+}
 
 interface Student {
   id?: number;
@@ -38,7 +40,7 @@ export const AdminClassStudentsPage: React.FC<AdminProfilePageProps> = (
 ) => {
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
   const [className, setClassName] = useState("Winter 2020");
-  const [students, setStudents] = useState(mockData);
+  const [students, setStudents] = useState([]);
   const [searchVal, setSearchVal] = useState("");
   const [isPortraitMode, setIsPortraitMode] = useState(window.innerWidth < 1080);
   const [allStudents, setAllStudents] = useState<Student[]>([]);

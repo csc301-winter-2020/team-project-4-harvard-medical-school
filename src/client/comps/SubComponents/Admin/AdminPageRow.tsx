@@ -15,10 +15,12 @@ export const AdminPageRow: React.FC<AdminPageRowProps> = ({
   c,
 }) => {
   const [isShowing, setIsShowing] = useState(true);
+  const [isDeleted, setIsDeleted] = useState(false);
   const history = useHistory();
   const mToast:any = toast;
 
   return (
+    !isDeleted &&(
     <>
       {isShowing && (
         <div className="home-patient-profile-container" onClick={(e:any) => {
@@ -61,7 +63,28 @@ export const AdminPageRow: React.FC<AdminPageRowProps> = ({
                       onClick={() => {
                         close();
                         setIsShowing(false);
-                        mToast.success("Successfully deleted (On the front end, theres no HTTP request)!")
+                        fetch(
+                          `/api/classes/${c.id}`,
+                          {
+                            method: "DELETE"
+                          }
+                          )
+                          .then(res => {
+                            if (res.status === 200) {
+                              setIsDeleted(true);
+                              mToast.success("Class Successfully Deleted.");
+                            } else {
+                              throw new Error(
+                                "Could not delete class."
+                              );
+                            }
+                          })
+                          .catch((err: any) => {
+                            console.log(err);
+                            mToast.warn(
+                              "Could not delete patient profile. Try again."
+                            );
+                          });
                       }}
                     >
                       Yes, delete this class.
@@ -75,5 +98,6 @@ export const AdminPageRow: React.FC<AdminPageRowProps> = ({
         </div>
       )}
     </>
+    )
   );
 };

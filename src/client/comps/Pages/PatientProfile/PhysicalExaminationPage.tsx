@@ -142,49 +142,129 @@ const initialCN_XII: cn_xii = {
 }
 
 const initialNeck: neck = {
+  nuchal_rigidity: 'not_performed',
+  thyroid: 'not_performed',
+  cervical_lymphadenopathy: 'not_performed',
+  jvd: 'not_performed'
 }
 
 const initialPulmonary: pulmonary = {
-
+  increased_work: 'not_performed',
+  quiet_breath: 'not_performed',
+  auscultation: 'not_performed',
+  wheezes: 'not_performed'
 }
 
 const initialCardiac: cardiac = {
-
+  well_perfused: 'not_performed',
+  regular_rhythm: 'not_performed',
+  audible_s1_s2: 'not_performed',
+  murmurs: 'not_performed',
+  pedal_edema: 'not_performed',
+  gynecomastia: 'not_performed'
 }
 
 const initialAbdomen: abdomen = {
-
+  bowels_sounds: 'not_performed',
+  tympanic: 'not_performed',
+  nt_nd: 'not_performed',
+  organomegaly: 'not_performed'
 }
 
 const initialSkin: skin = {
-
+  cyanosis: 'not_performed',
+  radial_pulses: 'not_performed',
+  dorsalis_pedis_pulses: 'not_performed',
+  palmar_erythema: 'not_performed',
+  resting_tremor: 'not_performed',
+  rashes_or_lesions: 'not_performed',
+  tattoos: 'not_performed',
+  light_touch: 'not_performed',
+  pinprick: 'not_performed',
+  cold_sensation: 'not_performed',
+  proprioception: 'not_performed',
+  extinction_to_dss: 'not_performed'
 }
 
 const initialCoordination: coordination = {
-
+  intention_tremor: 'not_performed',
+  dysdiadochokinesia: 'not_performed',
+  dysmetria: 'not_performed'
 }
 
 const initialGait: gait = {
-
+  good_initiation: 'not_performed',
+  narrow_based: 'not_performed',
+  walk_in_tandem: 'not_performed',
+  romberg_absent: 'not_performed'
 }
 
 //TODO : need motor
+const initialMotor: motor = {
+
+}
 
 const initialMental: mental = {
-
+  oriented_well: 'not_performed',
+  relate_history: 'not_performed',
+  attentive: 'not_performed',
+  fluent_language: 'not_performed',
+  normal_prosody: 'not_performed',
+  paraphasic_errors: 'not_performed',
+  high_low_frequency_objects: 'not_performed',
+  read_without_difficulty: 'not_performed',
+  dysarthric: 'not_performed',
+  midline_commands: 'not_performed',
+  register_3_objects: 'not_performed',
+  current_events: 'not_performed',
+  apraxia: 'not_performed'
 }
 
 
 const initialPhysicalExaminationsState: physicalExaminationState = {
   vitals: initialVitals,
   general: initialGeneral,
-  heent: initialHeent
+  heent: initialHeent,
+  cn_ii: initialCN_II,
+  cn_iii: initialCN_III,
+  cn_v: initialCN_V,
+  cn_vii: initialCN_VII,
+  cn_viii: initialCN_VIII,
+  cn_ix: initialCN_IX,
+  cn_xi: initialCN_XI,
+  cn_xii: initialCN_XII,
+  neck: initialNeck,
+  pulmonary: initialPulmonary,
+  cardiac: initialCardiac,
+  abdomen: initialAbdomen,
+  skin: initialSkin,
+  motor: initialMotor,
+  coordination: initialCoordination,
+  gait: initialGait,
+  mental: initialMental
 }
 
 const nameMap: {[key:string]: string} = {
   // category names
   general: 'General',
   heent: 'HEENT',
+  cn_ii: 'Cranial Nerves - CN II',
+  cn_iii: 'Cranial Nerves - CN III, IV, VI',
+  cn_v: 'Cranial Nerves - CN V',
+  cn_vii: 'Cranial Nerves - CN VII',
+  cn_viii: 'Cranial Nerves - CN VIII',
+  cn_ix: 'Cranial Nerves - CN IX, X',
+  cn_xi: 'Cranial Nerves - CN XI',
+  cn_xii: 'Cranial Nerves - CN XII',
+  neck: 'Neck',
+  pulmonary: 'Pulmonary',
+  cardiac: 'Cardiac',
+  abdomen: 'Abdomen',
+  skin: 'Skin/Extremities/Sensation',
+  motor: 'Motor',
+  coordination: 'Coordination',
+  gait: 'Gait',
+  mental: 'Mental Status',
   // condition names
   blood_pressure_systolic: 'Systolic Blood Pressure',
   blood_pressure_diastolic: 'Diastolic Blood Pressure',
@@ -201,12 +281,90 @@ const nameMap: {[key:string]: string} = {
   anicteric_sclera: 'Anicteric Sclera',
   mucous_membranes_moist: 'Mucous Membranes Moist',
   no_lesions: 'No Lesions Noted in Oropharynx',
-  normal_dentition: 'Normal Dentition'
+  normal_dentition: 'Normal Dentition',
+  perrl: 'PERRL and Brisk',
+  vff: 'VFF to Confrontation',
+  fundoscopic_exam: 'Crisp Disc Margins with No Papilledema, Exudates, or Hemorrhages in Fundoscopic Exam',
+  eomi: 'EOMI without Nystagmus',
+  saccades: 'Normal Saccades',
+  facial_sensation: 'Facial Sensation Intact to Light Touch',
+  facial_droop: 'No Facial Droop; Facial Musculature Symmetric',
+  hearing_intact: 'Hearing Intact to Finger-Rub Bilaterally',
+  palate_elevates: 'Palate Elevates Symmetrically',
+  trapezii_scm_strength: '5/5 Strength in Trapezii and SCM Bilaterally',
+  tongue_protrude: 'Tongue Protrudes in Midline',
+  nuchal_rigidity: 'Supple; No Nuchal Rigidity',
+  thyroid: 'Thyroid is Normal in Size and Texture; No Dules',
+  cervical_lymphadenopathy: 'No Cervical Lymphyadenopathy',
+  jvd: 'No JVD',
+  increased_work: 'Breathing Non-Laboured on Room Air; No Increased Work of Breathing',
+  quiet_breath: 'Quiet Breath Sounds',
+  auscultation: 'Clear to Auscultation Bilaterally',
+  wheezes: 'No Wheezes, Rhonchi, or Rales',
+  well_perfused: 'Warm and Well Perfused',
+  regular_rhythm: 'Regular Rhythm; Normal Rate',
+  audible_s1_s2: 'Audible S1 and S2',
+  murmurs: 'No Murmurs/Rubs/Gallops',
+  pedal_edema: 'No Pedal Edema',
+  gynecomastia: 'No Gynecomastia',
+  bowels_sounds: 'Normal Bowels Sounds',
+  tympanic: 'Tympanic to Percussion',
+  nt_nd: 'Soft; NT/ND',
+  organomegaly: 'No Masses or Organomegaly',
+  cyanosis: 'No Cyanosis',
+  radial_pulses: 'Radial Pulses 2+',
+  dorsalis_pedis_pulses: 'Dorsalis Pedis Pulses 2+',
+  palmar_erythema: 'No Palmar Erythema',
+  resting_tremor: 'No Resting Tremor',
+  rashes_or_lesions: 'No Rashes or Lesions Noted',
+  tattoos: 'No Tattoos',
+  light_touch: 'No Deficits to Light Touch Throughout',
+  pinprick: 'No Deficits to Pinprick Throughout',
+  cold_sensation: 'No Deficits to Cold Sensations Throughout',
+  proprioception: 'No Deficits to Proprioception Throughout',
+  extinction_to_dss: 'No Extinction to DSS',
+  intention_tremor: 'No Intention Tremor',
+  dysdiadochokinesia: 'No Dysdiadochokinesia Noted',
+  dysmetria: 'No Dysmetra on FNF or HKS Bilaterally',
+  good_initiation: 'Good Initiation',
+  narrow_based: 'Narrow-Based, Normal Stride and Arm Swing',
+  walk_in_tandem: 'Able to Walk in Tandem Without Difficulty',
+  romberg_absent: 'Romberg Absent',
+  oriented_well: 'Awake, Alert, Oriented to Self, Place, Time, and Situation',
+  relate_history: 'Able to Relate History Without Difficulty',
+  attentive: 'Attentive; Able to Name MOY Backward Without Difficulty',
+  fluent_language: 'Language is Fluent with Intact Repetition and Comprehension',
+  normal_prosody: 'Normal Prosody',
+  paraphasic_errors: 'No Parasatic Errors',
+  high_low_frequency_objects: 'Able to Name Both High and Low Frequency Objects',
+  read_without_difficulty: 'Able to Read Without Difficulty',
+  dysarthric: 'Speech was Not dysarthric',
+  midline_commands: 'Able to Follow Both Midline and Appendicular Commands',
+  register_3_objects: 'Able to Register 3 Objects and Recall 3/3 at 5 Minutes',
+  current_events: 'Good Knowledge of Current Events',
+  apraxia: 'No Evidence of Aphraxia or Neglect'
 }
 
 const simpleRenderCategories: string[] = [
   'general',
-  'heent'
+  'heent',
+  'cn_ii',
+  'cn_iii',
+  'cn_v',
+  'cn_vii',
+  'cn_viii',
+  'cn_ix',
+  'cn_xi',
+  'cn_xii',
+  'neck',
+  'pulmonary',
+  'cardiac',
+  'abdomen',
+  'skin',
+  'motor',
+  'coordination',
+  'gait',
+  'mental'
 ]
 
 export const PhysicalExaminationPage: IndividualPatientProfile = ({
@@ -230,7 +388,7 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
 
   function renderChoices(category: string){
     return (
-      <div>
+      <div key={category}>
         <h2>{nameMap[category]}</h2><br></br>
         {
           Object.keys(state[category]).map((condition: string) => {
@@ -254,7 +412,7 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
                     <p>Not Performed</p>
                   </label>
                 </div>
-                <div className='radio-group' key={condition+'_c'} style={{display: 'inline-block'}}>
+                <div className='radio-group' key={condition+'_h'} style={{display: 'inline-block'}}>
                   <label>
                     <input
                       type='radio'

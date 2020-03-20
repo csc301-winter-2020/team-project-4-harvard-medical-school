@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../../scss/admin/admin-page.scss";
 import { Student } from "./AdminClassStudentsPage";
 import { Header } from "../../SubComponents/Header";
@@ -9,25 +9,46 @@ interface AdminAddStudentPageProps {
   classID: number;
 }
 
-const mockData: Student[] = [
-  { id: 1, firstName: "Student", lastName: "A" },
-  { id: 2, firstName: "Student", lastName: "B" },
-  { id: 3, firstName: "First", lastName: "Last" },
-];
-
-function performStudentListRefresh(setNonEnrolledStudents: any) {
-  // TODO: Call setNonEnrolledStudents() with students that are eligible to be enrolled.
-  // Fetch all students that aren't in the current class
-
-}
-
 export const AdminClassAddStudentsPage: React.FC<AdminAddStudentPageProps> = (
   props: AdminAddStudentPageProps
 ) => {
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
   const [searchVal, setSearchVal] = useState("");
-  const [nonEnrolledStudents, setNonEnrolledStudents] = useState(mockData);
+  const [nonEnrolledStudents, setNonEnrolledStudents] = useState<Student[]>([]);
 
+  function performStudentListRefresh(setNonEnrolledStudents: any) {
+    // TODO: Call setNonEnrolledStudents() with students that are eligible to be enrolled.
+    // Fetch all students that aren't in the current class
+    fetch(`/api/students/eligible/${props.classID}`)
+    .then(response => {
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        throw new Error(
+          `Error code: ${response.status}, ${response.statusText}`
+        );
+      }
+    })
+    .then((data: any) => {
+      const allEligibleStudents: Student[] = [];
+      data.forEach((student: any) => {
+        allEligibleStudents.push({
+          id: student.id,
+          firstName: student.first_name,
+          lastName: student.last_name,
+        });
+      });
+      setNonEnrolledStudents(allEligibleStudents);
+    })
+    .catch((err: any) => {
+      console.log(err);
+    });
+  }
+
+  useEffect(() => {
+    performStudentListRefresh(setNonEnrolledStudents);
+  })
+  
   return (
     <>
       <Header

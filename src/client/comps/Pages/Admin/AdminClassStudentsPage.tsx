@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import "../../../scss/admin/admin-page.scss";
 import { max, initialClass } from "../../../utils/utils";
 import { Header } from "../../SubComponents/Header";
 import { AdminStudentProfile } from "../../SubComponents/Admin/AdminStudentProfile";
 import { ToastContainer, toast } from "react-toastify";
-import { response } from "express";
 import { HelixLoader } from "../../SubComponents/HelixLoader";
 import { Class, MyToast } from "../../../utils/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,7 +13,7 @@ interface AdminProfilePageProps {
   classID: number;
 }
 
-interface Student {
+export interface Student {
   id?: number;
   avatar_url?: string;
   year?: 1 | 2 | 3 | 4;
@@ -27,9 +27,8 @@ export const AdminClassStudentsPage: React.FC<AdminProfilePageProps> = (
 ) => {
   const [isAvatarPopup, setIsAvatarPopup] = useState<boolean>(false);
   const [thisClass, setThisClass] = useState<Class>(initialClass);
-  const [students, setStudents] = useState([]);
+  const [students, setStudents] = useState<Student[]>([]);
   const [searchVal, setSearchVal] = useState<string>("");
-  const [allStudents, setAllStudents] = useState<Student[]>([]);
   const [editingTitle, setEditingTitle] = useState(false);
   const [title, setTitle] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -106,7 +105,7 @@ async function patchClass(data:Class){
             lastName: d.last_name,
           });
         });
-        setAllStudents(newAllStudents);
+        setStudents(newAllStudents);
       })
       .catch((err: any) => {
         console.log(err);
@@ -221,11 +220,8 @@ async function patchClass(data:Class){
           </div>
         </div>
       </div>
-      <div
-        className="home-page-create-new-patient-btn home-page-create-user-btn"
-        onClick={() => alert("TODO")}
-      >
-        <p>Add Student</p>
+      <div className="home-page-create-new-patient-btn home-page-create-user-btn">
+        <Link to={`/admin/${props.classID}/add`} className="btn btn-primary">Add Students</Link>
       </div>
       <div
         className="home-page-create-new-patient-btn"

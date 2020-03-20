@@ -42,6 +42,7 @@ import {
   faQuestionCircle,
   faQuestion,
 } from "@fortawesome/free-solid-svg-icons";
+import { AdminClassAddStudentsPage } from "./comps/Pages/Admin/AdminClassAddStudentsPage";
 
 const myLibrary: any = library;
 myLibrary.add(
@@ -99,6 +100,11 @@ const browserRouter: JSX.Element = (
         exact
         path="/admin/:id/students"
         render={props => <AdminClassStudentsPage {...props} classID={props.match.params.id}/>}
+      />
+      <Route
+        exact
+        path="/admin/:id/add"
+        render={props => <AdminClassAddStudentsPage {...props} classID={props.match.params.id}/>}
       />
       <Route
         exact

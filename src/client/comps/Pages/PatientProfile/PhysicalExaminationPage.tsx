@@ -26,7 +26,7 @@ function reducer(
   }
 }
 
-function inputReducer(
+function inputShowingReducer(
   state: isShowingInput,
   action: {
     category: string
@@ -45,6 +45,26 @@ function inputReducer(
     }
   }
 }
+
+function inputReducer(
+  state: inputState,
+  action: {
+    category: string
+    condition_name: string
+    value: string
+  }
+): inputState{
+  return {
+    ...state,
+    [action.category]: {
+      ...state[action.category],
+      [action.condition_name]: action.value
+    }
+  }
+}
+
+type isShowingInput = {[key:string]: {[key:string]: any}}
+type inputState = {[key:string]: {[key:string]: string}}
 
 type fieldValue = 'not_performed' | 'healthy'
 
@@ -232,7 +252,6 @@ const initialMental: mental = {
   apraxia: 'not_performed'
 }
 
-
 const initialPhysicalExaminationsState: physicalExaminationState = {
   vitals: initialVitals,
   general: initialGeneral,
@@ -256,9 +275,7 @@ const initialPhysicalExaminationsState: physicalExaminationState = {
   mental: initialMental
 }
 
-type isShowingInput = {[key:string]: {[key:string]: boolean}}
-
-function get_initial_input_state(default_val: boolean): isShowingInput{
+function get_initial_input_state(default_val: boolean | string): isShowingInput | inputState{
   return {
     general: {
       awake: default_val,
@@ -508,8 +525,10 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
   const history = useHistory();
 
   const [state, dispatch] = useReducer(reducer, initialPhysicalExaminationsState)
-  const [isShowingCanvasState, canvasDispatch] = useReducer(inputReducer, get_initial_input_state(true))
-  const [isShowingTextState, textDispatch] = useReducer(inputReducer, get_initial_input_state(true))
+  const [isShowingCanvasState, canvasShowDispatch] = useReducer(inputShowingReducer, get_initial_input_state(true))
+  const [isShowingTextState, textShowDispatch] = useReducer(inputShowingReducer, get_initial_input_state(true))
+  
+  const [textState, textStateDispatch] = useReducer(inputReducer, get_initial_input_state(''))
 
   useEffect(() => {
     if (currentPage === pageName) {
@@ -517,13 +536,13 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
       history.push(`/patient/${patientID}/physical`);
     }
 
-    canvasDispatch({
+    canvasShowDispatch({
       category: '',
       condition_name: '',
       state: get_initial_input_state(canvasInit(defaultMode))
     })
 
-    textDispatch({
+    textShowDispatch({
       category: '',
       condition_name: '',
       state: get_initial_input_state(textInit(defaultMode))
@@ -578,23 +597,33 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
                 </div>
                 {state[category][condition] === 'healthy' && (
                   <PatientFormInput
-                    dispatch={dispatch}
+                    dispatch={(action: {
+                      type: string
+                      fieldName: string
+                      value: string
+                    }) => {
+                      textStateDispatch({
+                        category: category,
+                        condition_name: condition,
+                        value: action.value
+                      })
+                    }}
                     id={condition+'_i'}
                     inputType={'text'}
-                    inputVal={null}
+                    inputVal={textState[category][condition]}
                     placeholder={''}
                     title={'Specifics'}
                     isShowingCanvas={isShowingCanvasState[category][condition]}
                     isShowingText={isShowingTextState[category][condition]}
                     setIsShowingCanvas={() => {
-                      canvasDispatch({
+                      canvasShowDispatch({
                         category: category,
                         condition_name: condition,
                         state: null
                       })
                     }}
                     setIsShowingText={() => {
-                      textDispatch({
+                      textShowDispatch({
                         category: category,
                         condition_name: condition,
                         state: null

@@ -27,9 +27,8 @@ export const AdminClassStudentsPage: React.FC<AdminProfilePageProps> = (
 ) => {
   const [isAvatarPopup, setIsAvatarPopup] = useState<boolean>(false);
   const [thisClass, setThisClass] = useState<Class>(initialClass);
-  const [students, setStudents] = useState([]);
+  const [students, setStudents] = useState<Student[]>([]);
   const [searchVal, setSearchVal] = useState<string>("");
-  const [allStudents, setAllStudents] = useState<Student[]>([]);
   const [editingTitle, setEditingTitle] = useState(false);
   const [title, setTitle] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -106,7 +105,7 @@ async function patchClass(data:Class){
             lastName: d.last_name,
           });
         });
-        setAllStudents(newAllStudents);
+        setStudents(newAllStudents);
       })
       .catch((err: any) => {
         console.log(err);

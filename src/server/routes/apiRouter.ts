@@ -825,6 +825,33 @@ router.post(
 );
 
 /**
+ * Remove a student from a class
+ */
+router.delete(
+  "/api/classes/:classID/:studentID",
+  (req: Request, res: Response, next: NextFunction) => {
+    const student_id: number = parseInt(req.params.studentID);
+    const class_id: number = parseInt(req.params.classID);
+    const delete_query: string =
+      "DELETE FROM csc301db.students_enrollment\
+       WHERE student_id = $1 AND class_id = $2";
+    pool
+      .query(delete_query, [student_id, class_id])
+      .then((result: any) => {
+        if (result.rowCount === 0) {
+          res.status(404).send("Enrolled student not found");
+        } else {
+          res.status(200).send();
+        }
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(400).send();
+      });
+  }
+);
+
+/**
  * Get all classes
  */
 router.get(

@@ -30,16 +30,12 @@ export const AdminAddStudentRow: React.FC<AdminAddStudentProps> = ({
         console.log("After post");
         if (response.status === 200) {
           requestStudentListRefresh();
-          return response.json();
+          mToast.success("Successfully added student.");
         } else {
           throw new Error(
-            "Could not add this student"
+            "Could not add this student. Refresh and try again."
           );
         }
-      })
-      .then((res) => {
-        console.log("Post request success"); 
-        mToast.success("Successfully added student.");
       })
       .catch((err: any) => {
         mToast.warn(err);

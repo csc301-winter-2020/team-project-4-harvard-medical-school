@@ -14,7 +14,7 @@ interface AdminProfilePageProps {
 }
 
 export interface Student {
-  id?: number;
+  id: number;
   avatar_url?: string;
   year?: 1 | 2 | 3 | 4;
   username?: string;
@@ -103,6 +103,7 @@ async function patchClass(data:Class){
           newAllStudents.push({
             firstName: d.first_name,
             lastName: d.last_name,
+            id: d.id,
           });
         });
         setStudents(newAllStudents);
@@ -194,6 +195,7 @@ async function patchClass(data:Class){
         <div className="home-page-separator-line"></div>
         <div className="home-page-patient-header-grid"></div>
         <div className="home-page-content">
+          {students.length === 0 && <div style={{marginLeft: "10px"}}>Your class is empty! Use the "Add Students" button to add students to your class.</div>}
           {students
             .filter(
               stud =>
@@ -209,6 +211,8 @@ async function patchClass(data:Class){
                   isPortraitMode={isPortraitMode}
                   firstName={student.firstName}
                   lastName={student.lastName}
+                  studentId={student.id}
+                  classId={thisClass.id}
                 />
               );
             })}

@@ -8,12 +8,16 @@ interface AdminStudentProfileProps {
   firstName: string;
   lastName: string;
   isPortraitMode: boolean;
+  studentId: number;
+  classId: number;
 }
 
 export const AdminStudentProfile: React.FC<AdminStudentProfileProps> = ({
   firstName,
   lastName,
   isPortraitMode,
+  studentId,
+  classId,
 }) => {
   const [isShowing, setIsShowing] = useState(true);
 
@@ -54,10 +58,22 @@ export const AdminStudentProfile: React.FC<AdminStudentProfileProps> = ({
                       <button
                         onClick={() => {
                           close();
-                          setIsShowing(false);
-                          mToast.success(
-                            "Successfully removed (On the front end, theres no HTTP request)!"
-                          );
+                          fetch(`/api/classes/${classId}/${studentId}`, {
+                            method: "DELETE"
+                          })
+                          .then(response => {
+                            if (response.status === 200){
+                              mToast.success(
+                                "Successfully removed."
+                              );
+                              setIsShowing(false);
+                            } else {
+                              throw new Error(`Error code: ${response.status}, ${response.statusText}`)
+                            }
+                          })
+                          .catch((err:any) => {
+                            mToast.warn(err);
+                          })
                         }}
                       >
                         Yes, remove this user.

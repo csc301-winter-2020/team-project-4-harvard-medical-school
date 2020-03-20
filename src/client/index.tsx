@@ -6,17 +6,13 @@ import { fab } from "@fortawesome/free-brands-svg-icons";
 import { BrowserRouter } from "react-router-dom";
 import { Switch, Route } from "react-router";
 import { LoginPage } from "./comps/Pages/LoginPage";
-import { HomePage } from "./comps/Pages/StudentHomePage";
 import { AllHomePage } from "./comps/Pages/AllHomePage";
 import { PatientProfilePage } from "./comps/Pages/PatientProfile/PatientProfilePage";
 import { SettingsPage } from "./comps/Pages/SettingsPage";
 import { TemplatesPage } from "./comps/Pages/TemplatesPage";
 import { Questions } from "./comps/SubComponents/Templates/Questions";
 import { Error } from "./comps/Pages/Errors/Error";
-import { AdminPage } from "./comps/Pages/Admin/AdminPage";
 import { AdminClassStudentsPage } from "./comps/Pages/Admin/AdminClassStudentsPage";
-import { AdminClassAddStudentsPage } from "./comps/Pages/Admin/AdminClassAddStudentsPage";
-import { InstructorPage } from "./comps/Pages/Instructor/InstructorPage";
 import { InstructorStudentProfilePage } from "./comps/Pages/Instructor/InstructorStudentProfilePage";
 import { InstructorStudentPatientPage } from "./comps/Pages/Instructor/InstructorStudentPatientPage";
 import {
@@ -46,6 +42,7 @@ import {
   faQuestionCircle,
   faQuestion,
 } from "@fortawesome/free-solid-svg-icons";
+import { AdminClassAddStudentsPage } from "./comps/Pages/Admin/AdminClassAddStudentsPage";
 
 const myLibrary: any = library;
 myLibrary.add(

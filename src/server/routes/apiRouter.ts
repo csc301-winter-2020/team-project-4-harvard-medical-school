@@ -773,6 +773,30 @@ router.get(
   }
 );
 
+/**
+ * Add a student to a class 
+ */
+router.post(
+  "/api/classes/:classID/:studentID",
+  (req: Request, res: Response, next: NextFunction) => {
+      const class_id: number = parseInt(req.params.classID);
+      const student_id: number = parseInt(req.params.studentID);
+      const insert_string: string = "INSERT INTO csc301db.students_enrollment\
+      (class_id, student_id) VALUES ($1, $2)";
+      pool
+        .query(insert_string, [class_id, student_id])
+        .then((result: any) => {
+          if (result.rowCount === 0) {
+            res.status(404).send("Could not find student or class");
+          } else {
+            res.status(200).send("Added student to class");
+          }
+        })
+        .catch((err: any) => {
+          res.status(400).send();
+        });
+  }
+);
 
 /**
  * Get all classes

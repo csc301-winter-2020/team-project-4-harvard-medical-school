@@ -17,6 +17,8 @@ const mockData: Student[] = [
 
 function performStudentListRefresh(setNonEnrolledStudents: any) {
   // TODO: Call setNonEnrolledStudents() with students that are eligible to be enrolled.
+  // Fetch all students that aren't in the current class
+
 }
 
 export const AdminClassAddStudentsPage: React.FC<AdminAddStudentPageProps> = (

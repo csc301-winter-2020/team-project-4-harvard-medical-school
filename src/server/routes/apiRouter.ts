@@ -753,7 +753,7 @@ router.get(
   (req: Request, res: Response, next: NextFunction) =>{
     const class_id: number = parseInt(req.params.classID);
     const query_string: string = 
-    "SELECT first_name, last_name\
+    "SELECT id, first_name, last_name\
      FROM csc301db.users JOIN csc301db.students_enrollment\
      ON csc301db.users.id = csc301db.students_enrollment.student_id\
      WHERE csc301db.students_enrollment.class_id = $1";
@@ -762,6 +762,36 @@ router.get(
       .then((result: any) => {
         if (result.rowCount === 0) {
           res.status(404).send("No students in this class");
+        } else {
+          res.status(200).json(result.rows);
+        }
+      })
+      .catch((err: any) =>{
+        console.log(err);
+        res.status(400).json({error: err}); 
+      })
+  }
+);
+
+/**
+ * Get all students not enrolled in a specific class
+ */
+router.get(
+  "/api/students/eligible/:classID",
+  (req: Request, res: Response, next: NextFunction) =>{
+    const class_id: number = parseInt(req.params.classID);
+    const query_string: string = 
+    "SELECT id, first_name, last_name\
+     FROM csc301db.users U1\
+     WHERE U1.user_type = 'Student' AND NOT EXISTS (SELECT 1\
+      FROM csc301db.users U2 JOIN csc301db.students_enrollment\
+      ON U2.id = csc301db.students_enrollment.student_id\
+      WHERE U1.id = U2.id AND csc301db.students_enrollment.class_id = $1)";
+    pool
+      .query(query_string, [class_id])
+      .then((result: any) => {
+        if (result.rowCount === 0) {
+          res.status(404).send("No eligible students left");
         } else {
           res.status(200).json(result.rows);
         }

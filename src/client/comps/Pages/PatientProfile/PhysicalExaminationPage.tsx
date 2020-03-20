@@ -6,7 +6,6 @@ import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientForm
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../../scss/patient-profiles/patient-physical-form.scss";
 import { textInit, canvasInit } from '../../../utils/utils'
-import { render } from "@testing-library/react";
 
 function reducer(
   state: state,
@@ -14,9 +13,12 @@ function reducer(
     category: string
     condition_name: string
     value: any
-    physicalExaminationState: state | null
+    state: state | null
   }
 ): state{
+  if(action.state !== null){
+    return state
+  }
   return {
     ...state,
     [action.category]: {
@@ -46,232 +48,7 @@ function inputShowingReducer(
   }
 }
 
-function inputReducer(
-  state: state,
-  action: {
-    category: string
-    condition_name: string
-    value: string
-  }
-): state{
-  return {
-    ...state,
-    [action.category]: {
-      ...state[action.category],
-      [action.condition_name]: action.value
-    }
-  }
-}
-
 type state = {[key:string]: {[key:string]: any}}
-
-// type category = vitals
-//               | general
-//               | heent
-//               | cn_ii
-//               | cn_iii
-//               | cn_v
-//               | cn_vii
-//               | cn_viii
-//               | cn_ix
-//               | cn_xi
-//               | cn_xii
-//               | neck
-//               | pulmonary
-//               | cardiac
-//               | abdomen
-//               | skin
-//               | motor
-//               | coordination
-//               | gait
-//               | mental
-
-// type vitals = {[key:string]: number | ''}
-// type general = {[key:string]: fieldValue}
-// type heent = {[key:string]: fieldValue}
-// type cn_ii = {[key:string]: fieldValue}
-// type cn_iii = {[key:string]: fieldValue}
-// type cn_v = {[key:string]: fieldValue}
-// type cn_vii = {[key:string]: fieldValue}
-// type cn_viii = {[key:string]: fieldValue}
-// type cn_ix = {[key:string]: fieldValue}
-// type cn_xi = {[key:string]: fieldValue}
-// type cn_xii = {[key:string]: fieldValue}
-// type neck = {[key:string]: fieldValue}
-// type pulmonary = {[key:string]: fieldValue}
-// type cardiac = {[key:string]: fieldValue}
-// type abdomen = {[key:string]: fieldValue}
-// type skin = {[key:string]: fieldValue}
-// // TODO : check if this is right
-// type motor = {[key:string]: fieldValue}
-// type coordination = {[key:string]: fieldValue}
-// type gait = {[key:string]: fieldValue}
-// type mental = {[key:string]: fieldValue}
-
-// const initialVitals: vitals = {
-//   blood_pressure_systolic: '',
-//   blood_pressure_diastolic: '',
-//   beats_per_minute: '',
-//   respiratory_rate: '',
-//   temperature: '',
-//   o2_saturation: '',
-//   bmi: '' 
-// }
-
-// const initialGeneral: general = {
-//   awake: 'not_performed',
-//   cooperative: 'not_performed',
-//   interactive: 'not_performed',
-//   NAD: 'not_performed'
-// }
-
-// const initialHeent: heent = {
-//   normocephalic: 'not_performed',
-//   anicteric_sclera: 'not_performed',
-//   mucous_membranes_moist: 'not_performed',
-//   no_lesions: 'not_performed',
-//   normal_dentition: 'not_performed'
-// }
-
-// const initialCN_II: cn_ii = {
-//   perrl: 'not_performed',
-//   vff: 'not_performed',
-//   fundoscopic_exam: 'not_performed'
-// }
-
-// const initialCN_III: cn_iii = {
-//   eomi: 'not_performed',
-//   saccades: 'not_performed'
-// }
-
-// const initialCN_V: cn_v = {
-//   facial_sensation: 'not_performed'
-// }
-
-// const initialCN_VII: cn_vii = {
-//   facial_droop: 'not_performed'
-// }
-
-// const initialCN_VIII: cn_viii = {
-//   hearing_intact: 'not_performed'
-// }
-
-// const initialCN_IX: cn_ix = {
-//   palate_elevates: 'not_performed'
-// }
-
-// const initialCN_XI: cn_xi = {
-//   trapezii_scm_strength: 'not_performed'
-// }
-
-// const initialCN_XII: cn_xii = {
-//   tongue_protrude: 'not_performed'
-// }
-
-// const initialNeck: neck = {
-//   nuchal_rigidity: 'not_performed',
-//   thyroid: 'not_performed',
-//   cervical_lymphadenopathy: 'not_performed',
-//   jvd: 'not_performed'
-// }
-
-// const initialPulmonary: pulmonary = {
-//   increased_work: 'not_performed',
-//   quiet_breath: 'not_performed',
-//   auscultation: 'not_performed',
-//   wheezes: 'not_performed'
-// }
-
-// const initialCardiac: cardiac = {
-//   well_perfused: 'not_performed',
-//   regular_rhythm: 'not_performed',
-//   audible_s1_s2: 'not_performed',
-//   murmurs: 'not_performed',
-//   pedal_edema: 'not_performed',
-//   gynecomastia: 'not_performed'
-// }
-
-// const initialAbdomen: abdomen = {
-//   bowels_sounds: 'not_performed',
-//   tympanic: 'not_performed',
-//   nt_nd: 'not_performed',
-//   organomegaly: 'not_performed'
-// }
-
-// const initialSkin: skin = {
-//   cyanosis: 'not_performed',
-//   radial_pulses: 'not_performed',
-//   dorsalis_pedis_pulses: 'not_performed',
-//   palmar_erythema: 'not_performed',
-//   resting_tremor: 'not_performed',
-//   rashes_or_lesions: 'not_performed',
-//   tattoos: 'not_performed',
-//   light_touch: 'not_performed',
-//   pinprick: 'not_performed',
-//   cold_sensation: 'not_performed',
-//   proprioception: 'not_performed',
-//   extinction_to_dss: 'not_performed'
-// }
-
-// //TODO : need motor
-// const initialMotor: motor = {
-//   normal_bulk: 'not_performed',
-//   no_pronator: 'not_performed',
-//   no_adventitious_movements: 'not_performed',
-//   no_asterixis: 'not_performed'
-// }
-
-// const initialCoordination: coordination = {
-//   intention_tremor: 'not_performed',
-//   dysdiadochokinesia: 'not_performed',
-//   dysmetria: 'not_performed'
-// }
-
-// const initialGait: gait = {
-//   good_initiation: 'not_performed',
-//   narrow_based: 'not_performed',
-//   walk_in_tandem: 'not_performed',
-//   romberg_absent: 'not_performed'
-// }
-
-// const initialMental: mental = {
-//   oriented_well: 'not_performed',
-//   relate_history: 'not_performed',
-//   attentive: 'not_performed',
-//   fluent_language: 'not_performed',
-//   normal_prosody: 'not_performed',
-//   paraphasic_errors: 'not_performed',
-//   high_low_frequency_objects: 'not_performed',
-//   read_without_difficulty: 'not_performed',
-//   dysarthric: 'not_performed',
-//   midline_commands: 'not_performed',
-//   register_3_objects: 'not_performed',
-//   current_events: 'not_performed',
-//   apraxia: 'not_performed'
-// }
-
-// const initialPhysicalExaminationsState: physicalExaminationState = {
-//   vitals: initialVitals,
-//   general: initialGeneral,
-//   heent: initialHeent,
-//   cn_ii: initialCN_II,
-//   cn_iii: initialCN_III,
-//   cn_v: initialCN_V,
-//   cn_vii: initialCN_VII,
-//   cn_viii: initialCN_VIII,
-//   cn_ix: initialCN_IX,
-//   cn_xi: initialCN_XI,
-//   cn_xii: initialCN_XII,
-//   neck: initialNeck,
-//   pulmonary: initialPulmonary,
-//   cardiac: initialCardiac,
-//   abdomen: initialAbdomen,
-//   skin: initialSkin,
-//   motor: initialMotor,
-//   coordination: initialCoordination,
-//   gait: initialGait,
-//   mental: initialMental
-// }
 
 function get_initial_state(default_val: boolean | string): state{
   return {
@@ -359,7 +136,8 @@ function get_initial_state(default_val: boolean | string): state{
       normal_bulk: default_val,
       no_pronator: default_val,
       no_adventitious_movements: default_val,
-      no_asterixis: default_val
+      no_asterixis: default_val,
+      plantar_response: default_val
     },
     coordination: {
       intention_tremor: default_val,
@@ -484,6 +262,7 @@ const nameMap: {[key:string]: string} = {
   no_pronator: 'No Pronator Drift Bilaterally',
   no_adventitious_movements: 'No Adventitious Movements such as Tremor Noted',
   no_asterixis: 'No Asterixis Noted',
+  plantar_response: 'Plantar Response was Flexor Bilaterally',
   intention_tremor: 'No Intention Tremor',
   dysdiadochokinesia: 'No Dysdiadochokinesia Noted',
   dysmetria: 'No Dysmetra on FNF or HKS Bilaterally',
@@ -499,7 +278,7 @@ const nameMap: {[key:string]: string} = {
   paraphasic_errors: 'No Parasatic Errors',
   high_low_frequency_objects: 'Able to Name Both High and Low Frequency Objects',
   read_without_difficulty: 'Able to Read Without Difficulty',
-  dysarthric: 'Speech was Not dysarthric',
+  dysarthric: 'Speech Not Dysarthric',
   midline_commands: 'Able to Follow Both Midline and Appendicular Commands',
   register_3_objects: 'Able to Register 3 Objects and Recall 3/3 at 5 Minutes',
   current_events: 'Good Knowledge of Current Events',
@@ -528,6 +307,72 @@ const simpleRenderCategories: string[] = [
   'mental'
 ]
 
+const initialTableState: state = {
+  motor_exam: {
+    delt_l: '',
+    bi_l: '',
+    tri_l: '',
+    wre_l: '',
+    ffi_l: '',
+    fe_l: '',
+    io_l: '',
+    ip_l: '',
+    quad_l: '',
+    ham_l: '',
+    ta_l: '',
+    gastroc_l: '',
+    ehl_l: '',
+    delt_r: '',
+    bi_r: '',
+    tri_r: '',
+    wre_r: '',
+    ffi_r: '',
+    fe_r: '',
+    io_r: '',
+    ip_r: '',
+    quad_r: '',
+    ham_r: '',
+    ta_r: '',
+    gastroc_r: '',
+    ehl_r: ''
+  },
+  deep_tendon_reflexes: {
+    bi_l: '',
+    tri_l: '',
+    brach_l: '',
+    pat_l: '',
+    ach_l: '',
+    bi_r: '',
+    tri_r: '',
+    brach_r: '',
+    pat_r: '',
+    ach_r: '',
+  }
+}
+
+const motor_l: string[] = [
+  'delt_l', 'bi_l', 'tri_l', 'wre_l', 'ffi_l', 'fe_l', 'io_l',
+  'ip_l', 'quad_l', 'ham_l', 'ta_l', 'gastroc_l', 'ehl_l'
+]
+
+const motor_r: string[] = [
+  'delt_r', 'bi_r', 'tri_r', 'wre_r', 'ffi_r', 'fe_r', 'io_r',
+  'ip_r', 'quad_r', 'ham_r', 'ta_r', 'gastroc_r', 'ehl_r'
+]
+
+const ref_l: string[] = ['bi_l', 'tri_l', 'brach_l', 'pat_l', 'ach_l']
+const ref_r: string[] = ['bi_r', 'bri_r', 'brach_r', 'pat_r', 'ach_r']
+
+function round0To5(n: number): number{
+  if(n <= 0){
+    return 0
+  }else if(n >= 5){
+    return 5
+  }else{
+    return Math.round(n)
+  }
+}
+
 export const PhysicalExaminationPage: IndividualPatientProfile = ({
   pageName,
   currentPage,
@@ -541,10 +386,13 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
   const history = useHistory();
 
   const [state, dispatch] = useReducer(reducer, initTest)
+
+  const [tableState, tableDispatch] = useReducer(reducer, initialTableState)
+
   const [isShowingCanvasState, canvasShowDispatch] = useReducer(inputShowingReducer, get_initial_state(true))
   const [isShowingTextState, textShowDispatch] = useReducer(inputShowingReducer, get_initial_state(true))
   
-  const [textState, textStateDispatch] = useReducer(inputReducer, get_initial_state(''))
+  const [textState, textStateDispatch] = useReducer(reducer, get_initial_state(''))
 
   useEffect(() => {
     if (currentPage === pageName) {
@@ -564,6 +412,98 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
       state: get_initial_state(textInit(defaultMode))
     })
   }, [currentPage]);
+
+  function input0to5(table: string, entry: string){
+    return (
+      <input 
+        key={entry}
+        style={{width: '50px', textAlign: 'center'}} 
+        value={tableState[table][entry]}
+        type="number" 
+        placeholder="0~5" 
+        min='0' 
+        max='5'
+        onChange={(e) => {
+          tableDispatch({
+            category: table,
+            condition_name: entry,
+            value: round0To5(parseInt(e.target.value)),
+            state: null
+          })
+        }}
+      />
+    )
+  }
+
+  function renderMotorTables(){
+    return (
+      <>
+        <table><tbody>
+          <tr>
+            <td style={{width: '25px'}}></td>
+            <td>Delt</td>
+            <td>Bic</td>
+            <td>Tri</td>
+            <td>WrE</td>
+            <td>FFI</td>
+            <td>FE</td>
+            <td>IO</td>
+            <td>IP</td>
+            <td>Quad</td>
+            <td>Ham</td>
+            <td>TA</td>
+            <td>Gastroc</td>
+            <td>EHL</td>
+          </tr>
+          <tr>
+            <td>L</td>
+            {
+              motor_l.map((e: string) => {
+                return <td key={'td_'+e}>{input0to5('motor_exam', e)}</td>
+              })
+            }
+          </tr>
+          <tr>
+            <td>R</td>
+            {
+              motor_r.map((e: string) => {
+                return <td key={'td_'+e}>{input0to5('motor_exam', e)}</td>
+              })
+            }
+          </tr>
+        </tbody></table>
+        <br></br>
+        <div style={{fontSize: '1.2rem', fontWeight: 'bold'}}>Deep Tendon Reflexes</div>
+        <br></br>
+        <table><tbody>
+          <tr>
+            <td style={{width: '25px'}}></td>
+            <td>Bi</td>
+            <td>Tri</td>
+            <td>Brach</td>
+            <td>Pat</td>
+            <td>Ach</td>
+          </tr>
+          <tr>
+            <td>L</td>
+            {
+              ref_l.map((e: string) => {
+                return <td key={'td_'+e}>{input0to5('motor_exam', e)}</td>
+              })
+            }
+          </tr>
+          <tr>
+            <td>R</td>
+            {
+              ref_r.map((e: string) => {
+                return <td key={'td_'+e}>{input0to5('motor_exam', e)}</td>
+              })
+            }
+          </tr>
+        </tbody></table>
+      </>
+    )
+  }
 
   function renderChoices(category: string){
     return (
@@ -585,7 +525,7 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
                             category: category,
                             condition_name: condition,
                             value: 'not_performed',
-                            physicalExaminationState: null
+                            state: null
                           })
                         }}
                       />
@@ -603,7 +543,7 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
                             category: category,
                             condition_name: condition,
                             value: 'healthy',
-                            physicalExaminationState: null
+                            state: null
                           })
                         }}
                       />
@@ -621,13 +561,14 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
                       textStateDispatch({
                         category: category,
                         condition_name: condition,
-                        value: action.value
+                        value: action.value,
+                        state: null
                       })
                     }}
                     id={condition+'_i'}
                     inputType={'text'}
                     inputVal={textState[category][condition]}
-                    placeholder={''}
+                    placeholder={'Enter text here'}
                     title={'Specifics'}
                     isShowingCanvas={isShowingCanvasState[category][condition]}
                     isShowingText={isShowingTextState[category][condition]}
@@ -653,6 +594,11 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
               </div>
             )
           })
+        }
+        {
+          category === 'motor' && (
+            renderMotorTables()
+          )
         }
         <br></br>
       </div>
@@ -701,7 +647,7 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
                           category: 'vitals',
                           condition_name: condition,
                           value: e.target.value,
-                          physicalExaminationState: null
+                          state: null
                         })
                       }}
                     />

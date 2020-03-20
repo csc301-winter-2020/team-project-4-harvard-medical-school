@@ -168,8 +168,8 @@ function get_initial_state(default_val: boolean | string): state{
   }
 }
 
-const initTest = get_initial_state('not_performed')
-initTest.vitals = {
+const initialPhysicalExaminationsState = get_initial_state('not_performed')
+initialPhysicalExaminationsState.vitals = {
   blood_pressure_systolic: '',
   blood_pressure_diastolic: '',
   beats_per_minute: '',
@@ -385,7 +385,7 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
 }) => {
   const history = useHistory();
 
-  const [state, dispatch] = useReducer(reducer, initTest)
+  const [state, dispatch] = useReducer(reducer, initialPhysicalExaminationsState)
 
   const [tableState, tableDispatch] = useReducer(reducer, initialTableState)
 

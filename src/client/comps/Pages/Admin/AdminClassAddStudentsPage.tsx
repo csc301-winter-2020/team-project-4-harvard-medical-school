@@ -23,7 +23,9 @@ export const AdminClassAddStudentsPage: React.FC<AdminAddStudentPageProps> = (
     .then(response => {
       if (response.status === 200) {
         return response.json();
-      } else {
+      }else if(response.status === 404){
+        return [];
+      }else {
         throw new Error(
           `Error code: ${response.status}, ${response.statusText}`
         );
@@ -47,7 +49,7 @@ export const AdminClassAddStudentsPage: React.FC<AdminAddStudentPageProps> = (
 
   useEffect(() => {
     performStudentListRefresh(setNonEnrolledStudents);
-  })
+  }, []);
   
   return (
     <>

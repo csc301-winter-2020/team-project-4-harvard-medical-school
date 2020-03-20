@@ -1,5 +1,7 @@
 import React from "react";
 import "../../../scss/admin/admin-student-profile.scss";
+import {toast } from "react-toastify";
+import { MyToast } from "../../../utils/types";
 
 interface AdminAddStudentProps {
   firstName: string;
@@ -9,18 +11,6 @@ interface AdminAddStudentProps {
   requestStudentListRefresh: any;
 }
 
-function addStudentToClass(classID: number, studentID: number, requestStudentListRefresh: any) {
-  console.log(`Adding student ${studentID} to class ${classID}`);
-  // TODO: Make POST call to add `studentID` to `classID`.
-
-  // Once we have added the student, they should be removed from the list after
-  // we call the function below (which will mutate the state by making another
-  // fetch call and repopulating the list).
-  // Since the student will be added async, we should call the following function
-  // inside of the promise.
-  requestStudentListRefresh();
-}
-
 export const AdminAddStudentRow: React.FC<AdminAddStudentProps> = ({
   firstName,
   lastName,
@@ -28,6 +18,36 @@ export const AdminAddStudentRow: React.FC<AdminAddStudentProps> = ({
   studentID,
   requestStudentListRefresh
 }) => {
+  const mToast: MyToast = toast as any;
+
+  function addStudentToClass(classID: number, studentID: number, requestStudentListRefresh: any) {
+    console.log(`Adding student ${studentID} to class ${classID}`);
+    // TODO: Make POST call to add `studentID` to `classID`.
+    fetch(`/api/classes/${classID}/${studentID}`, {
+      method: "POST"
+    })
+      .then(response =>{
+        console.log("After post");
+        if (response.status === 200) {
+          requestStudentListRefresh();
+          return response.json();
+        } else {
+          throw new Error(
+            "Could not add this student"
+          );
+        }
+      })
+      .then((res) => {
+        console.log("Post request success"); 
+        mToast.success("Successfully added student.");
+      })
+      .catch((err: any) => {
+        mToast.warn(err);
+      })
+    
+  }
+
+
   // TODO: OnClick seems to be a bit annoying in clicking it, did we apply it too far down the hierarchy of nodes?
   return (
     <>

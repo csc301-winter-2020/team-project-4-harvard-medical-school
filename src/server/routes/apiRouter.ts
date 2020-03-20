@@ -791,7 +791,7 @@ router.get(
       .query(query_string, [class_id])
       .then((result: any) => {
         if (result.rowCount === 0) {
-          res.status(404).send("No eligible students left");
+          res.status(404).json("No more eligible students");
         } else {
           res.status(200).json(result.rows);
         }
@@ -816,11 +816,7 @@ router.post(
       pool
         .query(insert_string, [class_id, student_id])
         .then((result: any) => {
-          if (result.rowCount === 0) {
-            res.status(404).send("Could not find student or class");
-          } else {
             res.status(200).send("Added student to class");
-          }
         })
         .catch((err: any) => {
           res.status(400).send();

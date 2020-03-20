@@ -438,6 +438,8 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
   function renderMotorTables(){
     return (
       <>
+        <br></br>
+        <div style={{fontSize: '1.2rem', fontWeight: 'bold'}}>Motor Exams</div>
         <table><tbody>
           <tr>
             <td style={{width: '25px'}}></td>

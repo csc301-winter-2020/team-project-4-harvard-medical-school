@@ -152,11 +152,11 @@ CREATE TABLE review_of_systems (
 
 INSERT INTO review_of_systems (patient_id, info) VALUES (1, '{
     "endocrine": {
-        "weightLoss": true,
+        "weightLoss": false,
         "weightGain": false,
         "fatigue": false,
         "difficultySleeping": false,
-        "feelingUnwell": true,
+        "feelingUnwell": false,
         "chronicPain": false,
         "fevers": false,
         "chills": false,

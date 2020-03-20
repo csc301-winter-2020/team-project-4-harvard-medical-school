@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import "../../../scss/admin/admin-page.scss";
 import { max, initialClass } from "../../../utils/utils";
 import { Header } from "../../SubComponents/Header";
 import { AdminStudentProfile } from "../../SubComponents/Admin/AdminStudentProfile";
 import { ToastContainer, toast } from "react-toastify";
-import { response } from "express";
 import { HelixLoader } from "../../SubComponents/HelixLoader";
 import { Class, MyToast } from "../../../utils/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,7 +13,7 @@ interface AdminProfilePageProps {
   classID: number;
 }
 
-interface Student {
+export interface Student {
   id?: number;
   avatar_url?: string;
   year?: 1 | 2 | 3 | 4;
@@ -221,11 +221,8 @@ async function patchClass(data:Class){
           </div>
         </div>
       </div>
-      <div
-        className="home-page-create-new-patient-btn home-page-create-user-btn"
-        onClick={() => alert("TODO")}
-      >
-        <p>Add Student</p>
+      <div className="home-page-create-new-patient-btn home-page-create-user-btn">
+        <Link to={`/admin/${props.classID}/add`} className="btn btn-primary">Add Students</Link>
       </div>
       <div
         className="home-page-create-new-patient-btn"

@@ -15,6 +15,7 @@ import { Questions } from "./comps/SubComponents/Templates/Questions";
 import { Error } from "./comps/Pages/Errors/Error";
 import { AdminPage } from "./comps/Pages/Admin/AdminPage";
 import { AdminClassStudentsPage } from "./comps/Pages/Admin/AdminClassStudentsPage";
+import { AdminClassAddStudentsPage } from "./comps/Pages/Admin/AdminClassAddStudentsPage";
 import { InstructorPage } from "./comps/Pages/Instructor/InstructorPage";
 import { InstructorStudentProfilePage } from "./comps/Pages/Instructor/InstructorStudentProfilePage";
 import { InstructorStudentPatientPage } from "./comps/Pages/Instructor/InstructorStudentPatientPage";
@@ -102,6 +103,11 @@ const browserRouter: JSX.Element = (
         exact
         path="/admin/:id/students"
         render={props => <AdminClassStudentsPage {...props} classID={props.match.params.id}/>}
+      />
+      <Route
+        exact
+        path="/admin/:id/add"
+        render={props => <AdminClassAddStudentsPage {...props} classID={props.match.params.id}/>}
       />
       <Route
         exact

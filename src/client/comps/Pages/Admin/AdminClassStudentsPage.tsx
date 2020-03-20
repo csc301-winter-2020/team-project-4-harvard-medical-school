@@ -72,7 +72,7 @@ async function patchClass(data:Class){
 }
 
   useEffect(() => {
-    document.title = `Scribe: ${thisClass.name}`;
+    document.title = `Scribe`;
     const handleResize = () => {
       if (window.innerWidth < 1080) {
         setIsPortraitMode(true);
@@ -128,6 +128,7 @@ async function patchClass(data:Class){
         console.log(data);
         setThisClass(data[0]);
         setTitle(data[0].name);
+        document.title = `Scribe: ${data[0].name}`;
       })
       .catch((err: any) => {
         console.log(err);

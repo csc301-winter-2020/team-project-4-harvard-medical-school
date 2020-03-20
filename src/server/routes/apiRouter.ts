@@ -29,7 +29,7 @@ const urlExpiredTime: number = 10;
  */
 
 /**
- * TODO: Get the details of the current logged in user in JSON
+ * Get the details of the current logged in user in JSON
  */
 router.get(
   "/api/me",
@@ -38,6 +38,29 @@ router.get(
     const user: any = req.user;
     user.password = undefined; //Dont send password with JSON.
     res.status(200).json(req.user);
+  }
+);
+
+/**
+ * Get the details of a given user.
+ */
+router.get(
+  "/api/users/:userId",
+  (req: Request, res: Response, next: NextFunction) => {
+    const userId: number = parseInt(req.params.userId);
+    const query_string: string = "SELECT * FROM csc301db.users WHERE id = $1";
+    pool
+      .query(query_string, [userId])
+      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
+        if (result.rowCount !== 1) {
+          res.status(404).send();
+        } else {
+          res.status(200).json(result.rows[0]);
+        }
+      })
+      .catch((err: any) => {
+        res.status(400).send();
+      });
   }
 );
 
@@ -573,22 +596,6 @@ router.post(
   }
 );
 
-// const example_template_json = {
-//     "user_id": 1,
-//     "template_name": "MyNewTemplate",
-//     "date_millis": 123123123123123,
-//     "template": [
-//         {
-//             "title": "Social History",
-//             "fields": ["Work"]
-//         },
-//         {
-//             "title": "Demographics",
-//             "fields": ["sexAtBirth", "lastName", "firstname"],
-//         },
-//     ],
-// }
-
 router.get(
   "/api/reviewOfSystems/:patientId",
   (req: Request, res: Response, next: NextFunction) => {
@@ -750,10 +757,10 @@ router.get(
  */
 router.get(
   "/api/students/:classID",
-  (req: Request, res: Response, next: NextFunction) =>{
+  (req: Request, res: Response, next: NextFunction) => {
     const class_id: number = parseInt(req.params.classID);
-    const query_string: string = 
-    "SELECT id, first_name, last_name\
+    const query_string: string =
+      "SELECT id, first_name, last_name\
      FROM csc301db.users JOIN csc301db.students_enrollment\
      ON csc301db.users.id = csc301db.students_enrollment.student_id\
      WHERE csc301db.students_enrollment.class_id = $1";
@@ -766,10 +773,10 @@ router.get(
           res.status(200).json(result.rows);
         }
       })
-      .catch((err: any) =>{
+      .catch((err: any) => {
         console.log(err);
-        res.status(400).json({error: err}); 
-      })
+        res.status(400).json({ error: err });
+      });
   }
 );
 
@@ -778,10 +785,10 @@ router.get(
  */
 router.get(
   "/api/students/eligible/:classID",
-  (req: Request, res: Response, next: NextFunction) =>{
+  (req: Request, res: Response, next: NextFunction) => {
     const class_id: number = parseInt(req.params.classID);
-    const query_string: string = 
-    "SELECT id, first_name, last_name\
+    const query_string: string =
+      "SELECT id, first_name, last_name\
      FROM csc301db.users U1\
      WHERE U1.user_type = 'Student' AND NOT EXISTS (SELECT 1\
       FROM csc301db.users U2 JOIN csc301db.students_enrollment\
@@ -796,31 +803,32 @@ router.get(
           res.status(200).json(result.rows);
         }
       })
-      .catch((err: any) =>{
+      .catch((err: any) => {
         console.log(err);
-        res.status(400).json({error: err}); 
-      })
+        res.status(400).json({ error: err });
+      });
   }
 );
 
 /**
- * Add a student to a class 
+ * Add a student to a class
  */
 router.post(
   "/api/classes/:classID/:studentID",
   (req: Request, res: Response, next: NextFunction) => {
-      const class_id: number = parseInt(req.params.classID);
-      const student_id: number = parseInt(req.params.studentID);
-      const insert_string: string = "INSERT INTO csc301db.students_enrollment\
+    const class_id: number = parseInt(req.params.classID);
+    const student_id: number = parseInt(req.params.studentID);
+    const insert_string: string =
+      "INSERT INTO csc301db.students_enrollment\
       (class_id, student_id) VALUES ($1, $2)";
-      pool
-        .query(insert_string, [class_id, student_id])
-        .then((result: any) => {
-            res.status(200).send("Added student to class");
-        })
-        .catch((err: any) => {
-          res.status(400).send();
-        });
+    pool
+      .query(insert_string, [class_id, student_id])
+      .then((result: any) => {
+        res.status(200).send("Added student to class");
+      })
+      .catch((err: any) => {
+        res.status(400).send();
+      });
   }
 );
 
@@ -856,17 +864,17 @@ router.delete(
  */
 router.get(
   "/api/classes/all",
-  (req: Request, res: Response, next: NextFunction) =>{
+  (req: Request, res: Response, next: NextFunction) => {
     const query_string: string = "SELECT id, name FROM csc301db.class";
     pool
       .query(query_string, [])
       .then((result: any) => {
         res.status(200).json(result.rows);
       })
-      .catch((err: any) =>{
+      .catch((err: any) => {
         console.log(err);
-        res.status(400).json({error: err}); 
-      })
+        res.status(400).json({ error: err });
+      });
   }
 );
 
@@ -875,7 +883,7 @@ router.get(
  */
 router.get(
   "/api/classes/:classID",
-  (req: Request, res: Response, next: NextFunction) =>{
+  (req: Request, res: Response, next: NextFunction) => {
     const class_id: number = parseInt(req.params.classID);
     const query_string: string = "SELECT * FROM csc301db.class WHERE id = $1";
     pool
@@ -887,10 +895,10 @@ router.get(
           res.status(200).json(result.rows);
         }
       })
-      .catch((err: any) =>{
+      .catch((err: any) => {
         console.log(err);
-        res.status(400).json({error: err}); 
-      })
+        res.status(400).json({ error: err });
+      });
   }
 );
 
@@ -899,21 +907,26 @@ router.get(
  */
 router.patch(
   "/api/classes/:classID",
-  (req: Request, res: Response, next: NextFunction) =>{
+  (req: Request, res: Response, next: NextFunction) => {
     const class_id: number = parseInt(req.params.classID);
     const body: any = req.body;
-    const query_string: string = 
-    "UPDATE csc301db.class SET name = $1, instructor_id = $2, help_enabled = $3 \
+    const query_string: string =
+      "UPDATE csc301db.class SET name = $1, instructor_id = $2, help_enabled = $3 \
     WHERE id = $4";
     pool
-      .query(query_string, [body.name, body.instructor_id, body.help_enabled ,class_id])
+      .query(query_string, [
+        body.name,
+        body.instructor_id,
+        body.help_enabled,
+        class_id,
+      ])
       .then((result: any) => {
         res.status(200).json(result.rows);
       })
-      .catch((err: any) =>{
+      .catch((err: any) => {
         console.log(err);
-        res.status(400).json({error: err}); 
-      })
+        res.status(400).json({ error: err });
+      });
   }
 );
 
@@ -923,17 +936,18 @@ router.patch(
 router.post(
   "/api/classes/",
   (req: Request, res: Response, next: NextFunction) => {
-      const new_class = req.body; 
-      const insert_string: string = "INSERT INTO csc301db.class\
+    const new_class = req.body;
+    const insert_string: string =
+      "INSERT INTO csc301db.class\
       (name, instructor_id) VALUES ($1, $2)";
-      pool
-        .query(insert_string, [new_class.name, new_class.instructor_id])
-        .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
-          res.status(200).send("New Class Created");
-        })
-        .catch((err: any) => {
-          res.status(400).send();
-        });
+    pool
+      .query(insert_string, [new_class.name, new_class.instructor_id])
+      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
+        res.status(200).send("New Class Created");
+      })
+      .catch((err: any) => {
+        res.status(400).send();
+      });
   }
 );
 
@@ -950,13 +964,13 @@ router.delete(
     pool
       .query(delete_enrollment, [class_id])
       .then((result: any) => {
-        const delete_class: string = 
+        const delete_class: string =
           "DELETE FROM csc301db.class\
-           WHERE id = $1"
-          
-          return pool.query(delete_class, [class_id])
-        })
-      .then((result: any) =>{
+           WHERE id = $1";
+
+        return pool.query(delete_class, [class_id]);
+      })
+      .then((result: any) => {
         res.status(200).send();
       })
       .catch((err: any) => {

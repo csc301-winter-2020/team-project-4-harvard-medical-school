@@ -43,6 +43,7 @@ import {
   faQuestion,
 } from "@fortawesome/free-solid-svg-icons";
 import { AdminClassAddStudentsPage } from "./comps/Pages/Admin/AdminClassAddStudentsPage";
+import { UserProfile } from "./comps/Pages/UserProfile";
 
 const myLibrary: any = library;
 myLibrary.add(
@@ -115,6 +116,10 @@ const browserRouter: JSX.Element = (
         exact
         path="/instructor/student/:sid/patient/:pid"
         component={InstructorStudentPatientPage}
+      />
+      <Route
+        exact path="/profile/:id"
+        render={props => <UserProfile {...props} id={props.match.params.id}/>}
       />
       <Route
         exact

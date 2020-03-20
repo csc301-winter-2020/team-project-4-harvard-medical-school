@@ -9,14 +9,14 @@ import { textInit, canvasInit } from '../../../utils/utils'
 import { render } from "@testing-library/react";
 
 function reducer(
-  state: physicalExaminationState,
+  state: state,
   action: {
     category: string
     condition_name: string
     value: any
-    physicalExaminationState: physicalExaminationState | null
+    physicalExaminationState: state | null
   }
-): physicalExaminationState{
+): state{
   return {
     ...state,
     [action.category]: {
@@ -27,13 +27,13 @@ function reducer(
 }
 
 function inputShowingReducer(
-  state: isShowingInput,
+  state: state,
   action: {
     category: string
     condition_name: string
-    state: isShowingInput
+    state: state | null
   }
-): isShowingInput{
+): state{
   if(action.state !== null){
     return action.state
   }
@@ -47,13 +47,13 @@ function inputShowingReducer(
 }
 
 function inputReducer(
-  state: inputState,
+  state: state,
   action: {
     category: string
     condition_name: string
     value: string
   }
-): inputState{
+): state{
   return {
     ...state,
     [action.category]: {
@@ -63,219 +63,217 @@ function inputReducer(
   }
 }
 
-type isShowingInput = {[key:string]: {[key:string]: any}}
-type inputState = {[key:string]: {[key:string]: string}}
+type state = {[key:string]: {[key:string]: any}}
 
-type fieldValue = 'not_performed' | 'healthy'
+// type category = vitals
+//               | general
+//               | heent
+//               | cn_ii
+//               | cn_iii
+//               | cn_v
+//               | cn_vii
+//               | cn_viii
+//               | cn_ix
+//               | cn_xi
+//               | cn_xii
+//               | neck
+//               | pulmonary
+//               | cardiac
+//               | abdomen
+//               | skin
+//               | motor
+//               | coordination
+//               | gait
+//               | mental
 
-type category = vitals
-              | general
-              | heent
-              | cn_ii
-              | cn_iii
-              | cn_v
-              | cn_vii
-              | cn_viii
-              | cn_ix
-              | cn_xi
-              | cn_xii
-              | neck
-              | pulmonary
-              | cardiac
-              | abdomen
-              | skin
-              | motor
-              | coordination
-              | gait
-              | mental
+// type vitals = {[key:string]: number | ''}
+// type general = {[key:string]: fieldValue}
+// type heent = {[key:string]: fieldValue}
+// type cn_ii = {[key:string]: fieldValue}
+// type cn_iii = {[key:string]: fieldValue}
+// type cn_v = {[key:string]: fieldValue}
+// type cn_vii = {[key:string]: fieldValue}
+// type cn_viii = {[key:string]: fieldValue}
+// type cn_ix = {[key:string]: fieldValue}
+// type cn_xi = {[key:string]: fieldValue}
+// type cn_xii = {[key:string]: fieldValue}
+// type neck = {[key:string]: fieldValue}
+// type pulmonary = {[key:string]: fieldValue}
+// type cardiac = {[key:string]: fieldValue}
+// type abdomen = {[key:string]: fieldValue}
+// type skin = {[key:string]: fieldValue}
+// // TODO : check if this is right
+// type motor = {[key:string]: fieldValue}
+// type coordination = {[key:string]: fieldValue}
+// type gait = {[key:string]: fieldValue}
+// type mental = {[key:string]: fieldValue}
 
-type vitals = {[key:string]: number | ''}
-type general = {[key:string]: fieldValue}
-type heent = {[key:string]: fieldValue}
-type cn_ii = {[key:string]: fieldValue}
-type cn_iii = {[key:string]: fieldValue}
-type cn_v = {[key:string]: fieldValue}
-type cn_vii = {[key:string]: fieldValue}
-type cn_viii = {[key:string]: fieldValue}
-type cn_ix = {[key:string]: fieldValue}
-type cn_xi = {[key:string]: fieldValue}
-type cn_xii = {[key:string]: fieldValue}
-type neck = {[key:string]: fieldValue}
-type pulmonary = {[key:string]: fieldValue}
-type cardiac = {[key:string]: fieldValue}
-type abdomen = {[key:string]: fieldValue}
-type skin = {[key:string]: fieldValue}
-// TODO : check if this is right
-type motor = {[key:string]: fieldValue}
-type coordination = {[key:string]: fieldValue}
-type gait = {[key:string]: fieldValue}
-type mental = {[key:string]: fieldValue}
+// const initialVitals: vitals = {
+//   blood_pressure_systolic: '',
+//   blood_pressure_diastolic: '',
+//   beats_per_minute: '',
+//   respiratory_rate: '',
+//   temperature: '',
+//   o2_saturation: '',
+//   bmi: '' 
+// }
 
-type physicalExaminationState = {[key:string]: category}
+// const initialGeneral: general = {
+//   awake: 'not_performed',
+//   cooperative: 'not_performed',
+//   interactive: 'not_performed',
+//   NAD: 'not_performed'
+// }
 
-const initialVitals: vitals = {
-  blood_pressure_systolic: '',
-  blood_pressure_diastolic: '',
-  beats_per_minute: '',
-  respiratory_rate: '',
-  temperature: '',
-  o2_saturation: '',
-  bmi: '' 
-}
+// const initialHeent: heent = {
+//   normocephalic: 'not_performed',
+//   anicteric_sclera: 'not_performed',
+//   mucous_membranes_moist: 'not_performed',
+//   no_lesions: 'not_performed',
+//   normal_dentition: 'not_performed'
+// }
 
-const initialGeneral: general = {
-  awake: 'not_performed',
-  cooperative: 'not_performed',
-  interactive: 'not_performed',
-  NAD: 'not_performed'
-}
+// const initialCN_II: cn_ii = {
+//   perrl: 'not_performed',
+//   vff: 'not_performed',
+//   fundoscopic_exam: 'not_performed'
+// }
 
-const initialHeent: heent = {
-  normocephalic: 'not_performed',
-  anicteric_sclera: 'not_performed',
-  mucous_membranes_moist: 'not_performed',
-  no_lesions: 'not_performed',
-  normal_dentition: 'not_performed'
-}
+// const initialCN_III: cn_iii = {
+//   eomi: 'not_performed',
+//   saccades: 'not_performed'
+// }
 
-const initialCN_II: cn_ii = {
-  perrl: 'not_performed',
-  vff: 'not_performed',
-  fundoscopic_exam: 'not_performed'
-}
+// const initialCN_V: cn_v = {
+//   facial_sensation: 'not_performed'
+// }
 
-const initialCN_III: cn_iii = {
-  eomi: 'not_performed',
-  saccades: 'not_performed'
-}
+// const initialCN_VII: cn_vii = {
+//   facial_droop: 'not_performed'
+// }
 
-const initialCN_V: cn_v = {
-  facial_sensation: 'not_performed'
-}
+// const initialCN_VIII: cn_viii = {
+//   hearing_intact: 'not_performed'
+// }
 
-const initialCN_VII: cn_vii = {
-  facial_droop: 'not_performed'
-}
+// const initialCN_IX: cn_ix = {
+//   palate_elevates: 'not_performed'
+// }
 
-const initialCN_VIII: cn_viii = {
-  hearing_intact: 'not_performed'
-}
+// const initialCN_XI: cn_xi = {
+//   trapezii_scm_strength: 'not_performed'
+// }
 
-const initialCN_IX: cn_ix = {
-  palate_elevates: 'not_performed'
-}
+// const initialCN_XII: cn_xii = {
+//   tongue_protrude: 'not_performed'
+// }
 
-const initialCN_XI: cn_xi = {
-  trapezii_scm_strength: 'not_performed'
-}
+// const initialNeck: neck = {
+//   nuchal_rigidity: 'not_performed',
+//   thyroid: 'not_performed',
+//   cervical_lymphadenopathy: 'not_performed',
+//   jvd: 'not_performed'
+// }
 
-const initialCN_XII: cn_xii = {
-  tongue_protrude: 'not_performed'
-}
+// const initialPulmonary: pulmonary = {
+//   increased_work: 'not_performed',
+//   quiet_breath: 'not_performed',
+//   auscultation: 'not_performed',
+//   wheezes: 'not_performed'
+// }
 
-const initialNeck: neck = {
-  nuchal_rigidity: 'not_performed',
-  thyroid: 'not_performed',
-  cervical_lymphadenopathy: 'not_performed',
-  jvd: 'not_performed'
-}
+// const initialCardiac: cardiac = {
+//   well_perfused: 'not_performed',
+//   regular_rhythm: 'not_performed',
+//   audible_s1_s2: 'not_performed',
+//   murmurs: 'not_performed',
+//   pedal_edema: 'not_performed',
+//   gynecomastia: 'not_performed'
+// }
 
-const initialPulmonary: pulmonary = {
-  increased_work: 'not_performed',
-  quiet_breath: 'not_performed',
-  auscultation: 'not_performed',
-  wheezes: 'not_performed'
-}
+// const initialAbdomen: abdomen = {
+//   bowels_sounds: 'not_performed',
+//   tympanic: 'not_performed',
+//   nt_nd: 'not_performed',
+//   organomegaly: 'not_performed'
+// }
 
-const initialCardiac: cardiac = {
-  well_perfused: 'not_performed',
-  regular_rhythm: 'not_performed',
-  audible_s1_s2: 'not_performed',
-  murmurs: 'not_performed',
-  pedal_edema: 'not_performed',
-  gynecomastia: 'not_performed'
-}
+// const initialSkin: skin = {
+//   cyanosis: 'not_performed',
+//   radial_pulses: 'not_performed',
+//   dorsalis_pedis_pulses: 'not_performed',
+//   palmar_erythema: 'not_performed',
+//   resting_tremor: 'not_performed',
+//   rashes_or_lesions: 'not_performed',
+//   tattoos: 'not_performed',
+//   light_touch: 'not_performed',
+//   pinprick: 'not_performed',
+//   cold_sensation: 'not_performed',
+//   proprioception: 'not_performed',
+//   extinction_to_dss: 'not_performed'
+// }
 
-const initialAbdomen: abdomen = {
-  bowels_sounds: 'not_performed',
-  tympanic: 'not_performed',
-  nt_nd: 'not_performed',
-  organomegaly: 'not_performed'
-}
+// //TODO : need motor
+// const initialMotor: motor = {
+//   normal_bulk: 'not_performed',
+//   no_pronator: 'not_performed',
+//   no_adventitious_movements: 'not_performed',
+//   no_asterixis: 'not_performed'
+// }
 
-const initialSkin: skin = {
-  cyanosis: 'not_performed',
-  radial_pulses: 'not_performed',
-  dorsalis_pedis_pulses: 'not_performed',
-  palmar_erythema: 'not_performed',
-  resting_tremor: 'not_performed',
-  rashes_or_lesions: 'not_performed',
-  tattoos: 'not_performed',
-  light_touch: 'not_performed',
-  pinprick: 'not_performed',
-  cold_sensation: 'not_performed',
-  proprioception: 'not_performed',
-  extinction_to_dss: 'not_performed'
-}
+// const initialCoordination: coordination = {
+//   intention_tremor: 'not_performed',
+//   dysdiadochokinesia: 'not_performed',
+//   dysmetria: 'not_performed'
+// }
 
-//TODO : need motor
-const initialMotor: motor = {
+// const initialGait: gait = {
+//   good_initiation: 'not_performed',
+//   narrow_based: 'not_performed',
+//   walk_in_tandem: 'not_performed',
+//   romberg_absent: 'not_performed'
+// }
 
-}
+// const initialMental: mental = {
+//   oriented_well: 'not_performed',
+//   relate_history: 'not_performed',
+//   attentive: 'not_performed',
+//   fluent_language: 'not_performed',
+//   normal_prosody: 'not_performed',
+//   paraphasic_errors: 'not_performed',
+//   high_low_frequency_objects: 'not_performed',
+//   read_without_difficulty: 'not_performed',
+//   dysarthric: 'not_performed',
+//   midline_commands: 'not_performed',
+//   register_3_objects: 'not_performed',
+//   current_events: 'not_performed',
+//   apraxia: 'not_performed'
+// }
 
-const initialCoordination: coordination = {
-  intention_tremor: 'not_performed',
-  dysdiadochokinesia: 'not_performed',
-  dysmetria: 'not_performed'
-}
+// const initialPhysicalExaminationsState: physicalExaminationState = {
+//   vitals: initialVitals,
+//   general: initialGeneral,
+//   heent: initialHeent,
+//   cn_ii: initialCN_II,
+//   cn_iii: initialCN_III,
+//   cn_v: initialCN_V,
+//   cn_vii: initialCN_VII,
+//   cn_viii: initialCN_VIII,
+//   cn_ix: initialCN_IX,
+//   cn_xi: initialCN_XI,
+//   cn_xii: initialCN_XII,
+//   neck: initialNeck,
+//   pulmonary: initialPulmonary,
+//   cardiac: initialCardiac,
+//   abdomen: initialAbdomen,
+//   skin: initialSkin,
+//   motor: initialMotor,
+//   coordination: initialCoordination,
+//   gait: initialGait,
+//   mental: initialMental
+// }
 
-const initialGait: gait = {
-  good_initiation: 'not_performed',
-  narrow_based: 'not_performed',
-  walk_in_tandem: 'not_performed',
-  romberg_absent: 'not_performed'
-}
-
-const initialMental: mental = {
-  oriented_well: 'not_performed',
-  relate_history: 'not_performed',
-  attentive: 'not_performed',
-  fluent_language: 'not_performed',
-  normal_prosody: 'not_performed',
-  paraphasic_errors: 'not_performed',
-  high_low_frequency_objects: 'not_performed',
-  read_without_difficulty: 'not_performed',
-  dysarthric: 'not_performed',
-  midline_commands: 'not_performed',
-  register_3_objects: 'not_performed',
-  current_events: 'not_performed',
-  apraxia: 'not_performed'
-}
-
-const initialPhysicalExaminationsState: physicalExaminationState = {
-  vitals: initialVitals,
-  general: initialGeneral,
-  heent: initialHeent,
-  cn_ii: initialCN_II,
-  cn_iii: initialCN_III,
-  cn_v: initialCN_V,
-  cn_vii: initialCN_VII,
-  cn_viii: initialCN_VIII,
-  cn_ix: initialCN_IX,
-  cn_xi: initialCN_XI,
-  cn_xii: initialCN_XII,
-  neck: initialNeck,
-  pulmonary: initialPulmonary,
-  cardiac: initialCardiac,
-  abdomen: initialAbdomen,
-  skin: initialSkin,
-  motor: initialMotor,
-  coordination: initialCoordination,
-  gait: initialGait,
-  mental: initialMental
-}
-
-function get_initial_input_state(default_val: boolean | string): isShowingInput | inputState{
+function get_initial_state(default_val: boolean | string): state{
   return {
     general: {
       awake: default_val,
@@ -358,7 +356,10 @@ function get_initial_input_state(default_val: boolean | string): isShowingInput 
       extinction_to_dss: default_val
     },
     motor: {
-  
+      normal_bulk: default_val,
+      no_pronator: default_val,
+      no_adventitious_movements: default_val,
+      no_asterixis: default_val
     },
     coordination: {
       intention_tremor: default_val,
@@ -387,6 +388,17 @@ function get_initial_input_state(default_val: boolean | string): isShowingInput 
       apraxia: default_val
     },
   }
+}
+
+const initTest = get_initial_state('not_performed')
+initTest.vitals = {
+  blood_pressure_systolic: '',
+  blood_pressure_diastolic: '',
+  beats_per_minute: '',
+  respiratory_rate: '',
+  temperature: '',
+  o2_saturation: '',
+  bmi: '' 
 }
 
 const nameMap: {[key:string]: string} = {
@@ -468,6 +480,10 @@ const nameMap: {[key:string]: string} = {
   cold_sensation: 'No Deficits to Cold Sensations Throughout',
   proprioception: 'No Deficits to Proprioception Throughout',
   extinction_to_dss: 'No Extinction to DSS',
+  normal_bulk: 'Normal Bulk; Tone Throughout',
+  no_pronator: 'No Pronator Drift Bilaterally',
+  no_adventitious_movements: 'No Adventitious Movements such as Tremor Noted',
+  no_asterixis: 'No Asterixis Noted',
   intention_tremor: 'No Intention Tremor',
   dysdiadochokinesia: 'No Dysdiadochokinesia Noted',
   dysmetria: 'No Dysmetra on FNF or HKS Bilaterally',
@@ -524,11 +540,11 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
 }) => {
   const history = useHistory();
 
-  const [state, dispatch] = useReducer(reducer, initialPhysicalExaminationsState)
-  const [isShowingCanvasState, canvasShowDispatch] = useReducer(inputShowingReducer, get_initial_input_state(true))
-  const [isShowingTextState, textShowDispatch] = useReducer(inputShowingReducer, get_initial_input_state(true))
+  const [state, dispatch] = useReducer(reducer, initTest)
+  const [isShowingCanvasState, canvasShowDispatch] = useReducer(inputShowingReducer, get_initial_state(true))
+  const [isShowingTextState, textShowDispatch] = useReducer(inputShowingReducer, get_initial_state(true))
   
-  const [textState, textStateDispatch] = useReducer(inputReducer, get_initial_input_state(''))
+  const [textState, textStateDispatch] = useReducer(inputReducer, get_initial_state(''))
 
   useEffect(() => {
     if (currentPage === pageName) {
@@ -539,13 +555,13 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
     canvasShowDispatch({
       category: '',
       condition_name: '',
-      state: get_initial_input_state(canvasInit(defaultMode))
+      state: get_initial_state(canvasInit(defaultMode))
     })
 
     textShowDispatch({
       category: '',
       condition_name: '',
-      state: get_initial_input_state(textInit(defaultMode))
+      state: get_initial_state(textInit(defaultMode))
     })
   }, [currentPage]);
 
@@ -631,7 +647,7 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
                     }}
                     canvasHeight={200}
                     canvasWidth={600}
-                    isTextArea={false}
+                    isTextArea={true}
                   />
                 )}
               </div>

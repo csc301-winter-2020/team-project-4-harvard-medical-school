@@ -633,6 +633,49 @@ router.post(
 );
 
 router.get(
+  "/api/physicalExaminations/:patientId",
+  (req: Request, res: Response, next: NextFunction) => {
+    const patientId: number = parseInt(req.params.patientId);
+    const query_string: string =
+      "SELECT info FROM csc301db.physical_examinations\
+      WHERE patient_id = $1";
+    pool
+      .query(query_string, [patientId])
+      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
+        if (result.rowCount === 0) {
+          res.status(404).send();
+        } else {
+          res.status(200).json(result.rows[0].info);
+        }
+      });
+  }
+);
+
+router.post(
+  "/api/physicalExaminations/:patientId",
+  (req: Request, res: Response, next: NextFunction) => {
+    const patientId: number = parseInt(req.params.patientId);
+    const delete_string: string =
+      "DELETE FROM csc301db.physical_examinations \
+    WHERE patient_id = $1";
+    pool
+      .query(delete_string, [patientId])
+      .then((result: any) => {
+        const insert_string: string =
+          "INSERT INTO csc301db.physical_examinations \
+      (patient_id, info ) VALUES ($1, $2)";
+        return pool.query(insert_string, [patientId, JSON.stringify(req.body)]);
+      })
+      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
+        res.status(200).send();
+      })
+      .catch((err: any) => {
+        res.status(400).send();
+      });
+  }
+);
+
+router.get(
   "/api/labResults/:patientId",
   (req: Request, res: Response, next: NextFunction) => {
     const patientId: number = parseInt(req.params.patientId);

@@ -304,6 +304,12 @@ INSERT INTO review_of_systems (patient_id, info) VALUES (1, '{
     }
 }');
 
+CREATE TABLE physical_examinations (
+    id SERIAL PRIMARY KEY,
+    patient_id INT,
+    info JSON
+);
+
 CREATE TABLE lab_results (
     id SERIAL PRIMARY KEY,
     patient_id INT,

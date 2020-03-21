@@ -781,6 +781,30 @@ router.get(
 );
 
 /**
+ * Get all classes that a student is in.
+ */
+router.get(
+  "/api/classesForStudent/:sid",
+  (req: Request, res: Response, next: NextFunction) => {
+    const sid: number = parseInt(req.params.sid);
+    const query_string: string =
+      "SELECT c.* \
+     FROM csc301db.class c JOIN csc301db.students_enrollment se \
+     ON c.id = se.class_id \
+     WHERE se.student_id = $1";
+    pool
+      .query(query_string, [sid])
+      .then((result: any) => {
+        res.status(200).json(result.rows);
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(400).json({ error: err });
+      });
+  }
+);
+
+/**
  * Get all students not enrolled in a specific class
  */
 router.get(
@@ -885,7 +909,9 @@ router.get(
   "/api/classes/:classID",
   (req: Request, res: Response, next: NextFunction) => {
     const class_id: number = parseInt(req.params.classID);
-    const query_string: string = "SELECT * FROM csc301db.class WHERE id = $1";
+    const query_string: string = "SELECT c.*, u.first_name, u.last_name FROM csc301db.class c JOIN csc301db.users u ON \
+    u.id = c.instructor_id \
+    WHERE c.id = $1";
     pool
       .query(query_string, [class_id])
       .then((result: any) => {

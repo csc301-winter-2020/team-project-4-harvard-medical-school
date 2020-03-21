@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../../scss/admin/admin-page.scss";
 import { Header } from "../../SubComponents/Header";
 import { max } from "../../../utils/utils";
-import { AdminPageRow } from "../../SubComponents/Admin/AdminPageRow";
+import { ClassRow } from "../../SubComponents/Admin/ClassRow";
 import { ToastContainer, toast } from "react-toastify";
 import { NewAdminClass } from "../../SubComponents/Admin/NewAdminClass";
 import { useHistory } from "react-router";
@@ -83,7 +83,7 @@ export const AdminPage: React.FC<AdminPageProps> = (props: AdminPageProps) => {
       {isLoading && <HelixLoader message="Loading Classes..." />}
       <ToastContainer position={toast.POSITION.TOP_RIGHT} />
       <div className="home-page-content-container">
-        <div className="home-page-your-patients-title">Your Classes</div>
+        <div className="home-page-your-patients-title">All Classes</div>
         <div className="home-page-separator-line"></div>
         <div className="home-page-patient-header-grid"></div>
         <div className="home-page-content">
@@ -91,10 +91,11 @@ export const AdminPage: React.FC<AdminPageProps> = (props: AdminPageProps) => {
             .filter(c => c.name.toLowerCase().includes(searchVal.toLowerCase()))
             .map((c, index: number) => {
               return (
-                <AdminPageRow
+                <ClassRow
                   key={index}
                   c={c}
                   isPortraitMode={isPortraitMode}
+                  userType={"Admin"}
                 />
               );
             })}

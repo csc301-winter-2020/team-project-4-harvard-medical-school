@@ -44,6 +44,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { AdminClassAddStudentsPage } from "./comps/Pages/Admin/AdminClassAddStudentsPage";
 import { UserProfile } from "./comps/Pages/UserProfile";
+import { HomePage } from "./comps/Pages/StudentHomePage";
 
 const myLibrary: any = library;
 myLibrary.add(
@@ -96,6 +97,11 @@ const browserRouter: JSX.Element = (
         exact
         path="/templates/new"
         render={props => <Questions {...props} useDefault={true} />}
+      />
+      <Route
+        exact
+        path="/class/:id"
+        render={props => <HomePage {...props} classID={props.match.params.id}/>}
       />
       <Route
         exact

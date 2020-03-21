@@ -44,42 +44,68 @@ CREATE TABLE patients (
 CREATE TYPE SMOKING_TYPE AS ENUM('NEVER', 'EX', 'CURRENT');
 
 CREATE TABLE patient_profile (
-     id SERIAL PRIMARY KEY,
-     last_modified TIMESTAMP,
-     student_id INT REFERENCES users(id),
-     patient_id INT,
-     UNIQUE (student_id, patient_id),
-     first_name TEXT,
-     family_name TEXT,
-     age INT NOT NULL CHECK ( age > 0 AND age < 100 ),
-     gender_at_birth SEX_AT_BIRTH,
-     gender TEXT NOT NULL,
-     country TEXT,
-     country_canvas TEXT,
-
-     pregnant TEXT,
-     pregnant_canvas text,
-
-     country_residence TEXT,
-     country_residence_canvas TEXT,
-
-     country_visited TEXT,
-     country_visited_canvas TEXT,
-
-     complaint TEXT ,
-     complaint_canvas TEXT,
-
-     medical_history TEXT,
-     medical_history_canvas TEXT,
-
-     social_history TEXT,
-     social_history_canvas TEXT,
-
-     family_history TEXT,
-     family_history_canvas TEXT,
-
-     HPI TEXT,
-     HPI_canvas TEXT,
+    id SERIAL,
+    last_modified TIMESTAMP,
+    student_id INT REFERENCES users(id),
+    patient_id INT,
+    UNIQUE (student_id, patient_id),
+    first_name TEXT,
+    family_name TEXT,
+    age INT NOT NULL CHECK (
+        age > 0
+        AND age < 100
+    ),
+    gender_at_birth SEX_AT_BIRTH,
+    gender TEXT NOT NULL,
+    country TEXT,
+    country_canvas TEXT,
+    pregnant TEXT,
+    pregnant_canvas text,
+    country_residence TEXT,
+    country_residence_canvas TEXT,
+    country_visited TEXT,
+    country_visited_canvas TEXT,
+    complaint TEXT,
+    complaint_canvas TEXT,
+    medical_history TEXT,
+    medical_history_canvas TEXT,
+    social_history TEXT,
+    social_history_canvas TEXT,
+    family_history TEXT,
+    family_history_canvas TEXT,
+    HPI TEXT,
+    HPI_canvas TEXT,
+    hospital_history TEXT,
+    hospital_history_canvas TEXT,
+    medications TEXT,
+    medications_canvas TEXT,
+    allergies TEXT,
+    allergies_canvas TEXT,
+    work TEXT,
+    work_canvas TEXT,
+    living_conditions TEXT,
+    living_conditions_canvas TEXT,
+    sexual_history TEXT,
+    sexual_history_canvas TEXT,
+    etOH TEXT,
+    etOH_canvas TEXT,
+    drinks_per_week TEXT,
+    drinks_per_week_canvas TEXT,
+    smoker SMOKING_TYPE,
+    last_time_smoked TEXT,
+    last_time_smoked_canvas TEXT,
+    packs_per_day TEXT,
+    packs_per_day_canvas TEXT,
+    other_substances TEXT,
+    other_substances_canvas TEXT,
+    assessments TEXT,
+    assessments_canvas TEXT,
+    imaging TEXT,
+    imaging_canvas TEXT,
+    final_diagnosis TEXT,
+    class_id INT,
+    PRIMARY KEY (id, last_modified)
+);
 
      hospital_history TEXT,
      hospital_history_canvas TEXT,
@@ -152,11 +178,11 @@ CREATE TABLE review_of_systems (
 
 INSERT INTO review_of_systems (patient_id, info) VALUES (1, '{
     "endocrine": {
-        "weightLoss": true,
+        "weightLoss": false,
         "weightGain": false,
         "fatigue": false,
         "difficultySleeping": false,
-        "feelingUnwell": true,
+        "feelingUnwell": false,
         "chronicPain": false,
         "fevers": false,
         "chills": false,
@@ -303,6 +329,12 @@ INSERT INTO review_of_systems (patient_id, info) VALUES (1, '{
         "itching": false
     }
 }');
+
+CREATE TABLE physical_examinations (
+    id SERIAL PRIMARY KEY,
+    patient_id INT,
+    info JSON
+);
 
 CREATE TABLE lab_results (
     id SERIAL PRIMARY KEY,

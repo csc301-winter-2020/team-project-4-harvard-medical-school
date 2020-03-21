@@ -779,20 +779,28 @@ function gender_helper(tmp: string) {
 router.post(
   "/api/analysis/:profile_id", 
   async (req: Request, res: Response, next: NextFunction) => {
-    const image_payload: string = req.body['image'];
-    const request: any = {
-      "image": {
-        "content": image_payload
-      },
-      "features": [
-        {
-          "type": "DOCUMENT_TEXT_DETECTION"
-        }
-      ]
+    const image_payloads: string = req.body;
+    let all_string: string = "";
+    for (let i = 0; i < image_payloads.length; i++) {
+      console.log(i);
+      const image_payload: string = image_payloads[i];
+      const request: any = {
+        "image": {
+          "content": image_payload
+        },
+        "features": [
+          {
+            "type": "DOCUMENT_TEXT_DETECTION"
+          }
+        ]
+      }
+      const [result] = await vision_client.annotateImage(request);
+      if (result.fullTextAnnotation) {
+        const text: string = result.fullTextAnnotation.text;
+        all_string += text;
+      }
     }
-    const [result] = await vision_client.annotateImage(request);
-    console.log(result.fullTextAnnotation.text);
-    const text: string = result.fullTextAnnotation.text;
+    console.log(all_string);
     const profile_id: number = parseInt(req.params.profile_id);
     const db_res = await pool.query('SELECT age, gender_at_birth, pregnant FROM csc301db.patient_profile WHERE id = $1', [profile_id]);
     if (db_res.rowCount === 0) {
@@ -802,12 +810,12 @@ router.post(
     const gender: string = gender_helper(db_res.rows[0].gender_at_birth);
     // TODO: FIX THIS LATER
     const pregnant: string = "n";
-    const isbell_url: string = `https://apisandbox.isabelhealthcare.com/v2/ranked_differential_diagnoses?specialties=28&dob=${age}&sex=${gender}&pregnant=${pregnant}&region=10&querytext=${text}&suggest=suggest+differential+diagnosis&flag=sortbyrw_advanced&searchtype=0&web_service=json&callback=diagnosiscallback&authorization=urOSKOJyYvIOj8BnIgBwJI0KgXT4BR9VYShRyAPDdbcChStimoHWbUE6ILUM0Z4S`;
+    const isbell_url: string = `https://apisandbox.isabelhealthcare.com/v2/ranked_differential_diagnoses?specialties=28&dob=${age}&sex=${gender}&pregnant=${pregnant}&region=10&querytext=${all_string}&suggest=suggest+differential+diagnosis&flag=sortbyrw_advanced&searchtype=0&web_service=json&callback=diagnosiscallback&authorization=urOSKOJyYvIOj8BnIgBwJI0KgXT4BR9VYShRyAPDdbcChStimoHWbUE6ILUM0Z4S`;
     const isbell_res: any = await https.get(isbell_url);
     const final_result: string = isbell_res.data.slice(18, isbell_res.data.length-2);
     // console.log(JSON.parse(final_result));
     res.status(200).json(JSON.parse(final_result));
-  }
+}
 );
 
 export default router;

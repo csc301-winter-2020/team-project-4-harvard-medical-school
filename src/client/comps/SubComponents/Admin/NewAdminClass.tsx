@@ -3,10 +3,12 @@ import "../../../scss/home/home";
 import { toast } from "react-toastify";
 import { Dropdown } from "semantic-ui-react";
 import "../../../scss/semantic";
+import { AdminClass } from "../../Pages/Admin/AdminPage";
 
 interface NewAdminClassProps {
   setNewClassPopup: React.Dispatch<React.SetStateAction<boolean>>;
-  refreshClasses: () => void;
+  classes: AdminClass[];
+  setClasses: React.Dispatch<React.SetStateAction<AdminClass[]>>;
 }
 
 interface Instructor {
@@ -27,16 +29,21 @@ const mockDataOptions = [
 
 export const NewAdminClass: React.FC<NewAdminClassProps> = ({
   setNewClassPopup,
-  refreshClasses,
+  classes,
+  setClasses,
 }) => {
   const [newClassName, setNewClassName] = useState("");
   const [instructors, setInstructors] = useState(mockData);
-  const [selectedInstructor, setSelectedInstructor] = useState(null);
+  const [selectedInstructor, setSelectedInstructor] = useState<string>("");
   const mToast: any = toast;
 
   const createNewClass = async () => {
     if (newClassName === "") {
       mToast.warn("Missing class name!");
+      return;
+    }
+    if (selectedInstructor === ""){
+      mToast.warn("Missing instructor!");
       return;
     }
 
@@ -59,7 +66,13 @@ export const NewAdminClass: React.FC<NewAdminClassProps> = ({
       console.log("Error trying to create new class:", newClassName);
     }
 
-    refreshClasses();
+    setClasses([
+      ...classes,
+      {
+        name: data.name,
+        id: data.instructor_id
+      }
+    ]);
     setNewClassPopup(false);
   };
 
@@ -95,7 +108,10 @@ export const NewAdminClass: React.FC<NewAdminClassProps> = ({
             fluid
             search
             selection
-            onChange={(event: any, { key, value }: { key: any, value: any }) => {
+            onChange={(
+              event: any,
+              { key, value }: { key: any; value: any }
+            ) => {
               console.log(value);
               setSelectedInstructor(value);
             }}
@@ -110,9 +126,7 @@ export const NewAdminClass: React.FC<NewAdminClassProps> = ({
                 ? "home-page-create-new-patient-popup-btn"
                 : "home-page-create-new-patient-popup-btn-gray"
             }
-            onClick={
-              selectedInstructor && newClassName ? createNewClass : () => {}
-            }
+            onClick={createNewClass}
           >
             <p>Create</p>
           </div>

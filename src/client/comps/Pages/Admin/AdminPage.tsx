@@ -17,7 +17,7 @@ export interface AdminClass {
 
 export const AdminPage: React.FC<AdminPageProps> = (props: AdminPageProps) => {
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
-  const [classes, setClasses] = useState([]);
+  const [classes, setClasses] = useState<AdminClass[]>([]);
   const [searchVal, setSearchVal] = useState("");
   const [showNewClassPopup, setNewClassPopup] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -121,7 +121,8 @@ export const AdminPage: React.FC<AdminPageProps> = (props: AdminPageProps) => {
       {showNewClassPopup && (
         <NewAdminClass
           setNewClassPopup={setNewClassPopup}
-          refreshClasses={() => {}}
+          classes={classes}
+          setClasses={setClasses}
         />
       )}
     </>

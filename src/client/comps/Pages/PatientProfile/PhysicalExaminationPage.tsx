@@ -6,6 +6,7 @@ import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientForm
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../../scss/patient-profiles/patient-physical-form.scss";
 import { textInit, canvasInit } from '../../../utils/utils'
+import { toast } from "react-toastify";
 
 function reducer(
   state: state,
@@ -377,6 +378,23 @@ function round0To5(n: string): string{
   }
 }
 
+async function getPhysicalExaminationsInfo(patientID: number){
+  const res = await fetch(`/api/physicalExaminations/${patientID}`, {method: 'GET'})
+  return await res.json()
+}
+
+async function postPhysicalExaminationsInfo(patientID: number, data: state){
+  const spec = {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  }
+  const res = await fetch(`/api/physicalExaminations/${patientID}`, spec)
+  return res
+}
+
 export const PhysicalExaminationPage: IndividualPatientProfile = ({
   pageName,
   currentPage,
@@ -398,11 +416,52 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
   
   const [textState, textStateDispatch] = useReducer(reducer, get_initial_state(''))
 
+  const myToast: any = toast
+
+  const postToDB = (state: state, tableState: state, textState: state) => {
+    postPhysicalExaminationsInfo(patientID, {
+      state: state,
+      tableState: tableState,
+      textState: textState
+    }).then((data) => {
+      console.log(data)
+      myToast.success('Information saved')
+    }).catch((err) => {
+      console.log(err)
+      myToast.error('Information could not be saved')
+    })
+  }
+
   useEffect(() => {
     if (currentPage === pageName) {
       document.title = `Patient Profile: ${pageName}`;
       history.push(`/patient/${patientID}/physical`);
     }
+
+    getPhysicalExaminationsInfo(patientID).then((data) => {
+      dispatch({
+        category: '',
+        condition_name: '',
+        value: '',
+        state: data.state
+      })
+
+      tableDispatch({
+        category: '',
+        condition_name: '',
+        value: '',
+        state: data.tableState
+      })
+
+      textStateDispatch({
+        category: '',
+        condition_name: '',
+        value: '',
+        state: data.textState
+      })
+    }).catch((err) => {
+      console.log('could not get Physical Examinations data from database')
+    })
 
     canvasShowDispatch({
       category: '',
@@ -671,8 +730,7 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
           </div>
           <div className="patient-profile-nav-btns">
             <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
-              // TODO : add POST request function here
-              
+              postToDB(state, tableState, textState)
             }}>
               <FontAwesomeIcon icon="save" size="2x" />
             </div>

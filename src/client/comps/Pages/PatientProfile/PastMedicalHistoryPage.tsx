@@ -31,12 +31,16 @@ function reducer(
 type PMH_State = {
   pastMedHist: string;
   pastMedHistCanvas?: string;
+  pastMedHistImage?: string;
   pastHospits: string;
   pastHospitsCanvas?: string;
+  pastHospitsImage?: string;
   medications: string;
   medicationsCanvas?: string;
+  medicationsImage?: string;
   allergies: string;
-  allergiesCanvas?: string; 
+  allergiesCanvas?: string;
+  allergiesImage?: string;
 }
 
 const initialState: PMH_State = {
@@ -46,7 +50,7 @@ const initialState: PMH_State = {
   allergies: "",
 };
 
-async function saveData(url: string, state: any) {
+async function saveData(patientID: number, state: any) {
   console.log(state)
   allAttributes.medical_history = state.pastMedHist;
 
@@ -71,8 +75,19 @@ async function saveData(url: string, state: any) {
   if (state.allergiesCanvas !== undefined) {
     allAttributes.allergies_canvas = state.allergiesCanvas; 
   }
+
+  if (state.pastMedHistImage !== undefined) {
+    console.log(state.pastMedHistImage);
+    let isabelRes = await postData(
+      '/api/analysis/' + patientID, 
+      { image: state.pastMedHistImage },
+      'POST'
+    );
+
+    console.log(isabelRes);
+  }
   
-  const res = await postData(url, allAttributes)
+  const res = await postData("/api/patientprofile/" + patientID, allAttributes)
   return await res.message
 }
 
@@ -182,7 +197,7 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
         console.log(lastState);
         console.log(state);
 
-        saveData("/api/patientprofile/" + patientID, state).then((data) => {
+        saveData(patientID, state).then((data) => {
           console.log(data);
           myToast.success('Autosaved');
         }).catch((err) => {
@@ -284,7 +299,7 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
           <div className="patient-profile-nav-btns">
             <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
               // TODO : add POST request function here
-              saveData('/api/patientprofile/' + patientID, state).then((data) => {
+              saveData(patientID, state).then((data) => {
                 console.log(data)
                 myToast.success('Information saved')
               }).catch((err) => {

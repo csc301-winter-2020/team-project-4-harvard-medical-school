@@ -10,7 +10,17 @@ interface CanvasCompProps {
   id: string;
   dispatch: Function;
   saveData: string;
+  hidden?: boolean;
 }
+
+const HANDWRITING_CANVASES = [
+  'chiefComplaint', 
+  'HPI', 
+  'pastMedHist', 
+  'pastHospits', 
+  'medications', 
+  'allergies'
+]
 
 const CANVAS_BLACK = 'black';
 const CANVAS_RED = '#a51c30';
@@ -24,6 +34,7 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
   id,
   dispatch,
   saveData,
+  hidden,
 }) => {
   const [canvasHeight, setCanvasHeight] = useState(initialHeight);
   const [canvasWidth, setCanvasWidth] = useState(initialWidth);
@@ -47,15 +58,9 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
     inputRef.clear();
   }
 
-  function dispatchCanvasState() {
-    dispatch({
-      type: 'field',
-      fieldName: id + 'Canvas',
-      value: inputRef.getSaveData()
-    });
-
-    // We only need the canvas image for parsing the chief complaint field
-    if (id === 'chiefComplaint') {
+  function sendCanvasImages() {
+    // Send the canvas as an image for fields that need handwriting recognition
+    if (HANDWRITING_CANVASES.includes(id)) {
       dispatch({
         type: 'field',
         fieldName: id + 'Image',
@@ -64,6 +69,16 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
           .replace('data:image/png;base64,', '')
       });
     }
+  }
+
+  function dispatchCanvasState() {
+    dispatch({
+      type: 'field',
+      fieldName: id + 'Canvas',
+      value: inputRef.getSaveData()
+    });
+
+    sendCanvasImages();
   }
 
   function changeColor(color: string) {
@@ -107,6 +122,7 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
     if (loadSaveData && inputRef && saveData) {
       inputRef.loadSaveData(saveData, true);
       setLoadSaveData(false);
+      sendCanvasImages();
     }
   }
 
@@ -123,7 +139,11 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
       <div
         id={id}
         className="canvas-draw-outermost"
-        style={{ width: String(canvasWidth), height: String(canvasHeight) }}
+        style={{ 
+          width: String(canvasWidth), 
+          height: String(canvasHeight), 
+          visibility: hidden? 'hidden' : 'visible' 
+        }}
       >
         <div
           className="canvas-draw-container"

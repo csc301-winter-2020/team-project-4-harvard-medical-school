@@ -300,23 +300,22 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
             {initNavDots()}
           </div>
           <div className="patient-profile-nav-btns">
-            <div className="nav-btn-leftmost nav-btn">
+            <div 
+              className="nav-btn-leftmost nav-btn"
+              // onClick={}  
+            >
               <FontAwesomeIcon icon="question-circle" size="2x" />
             </div>
 
             <div
               className="nav-btn-left nav-btn"
-              onClick={() => {
-                decrementPage();
-              }}
+              onClick={decrementPage}
             >
               <FontAwesomeIcon icon="arrow-left" size="2x" />
             </div>
             <div
               className="nav-btn-right nav-btn"
-              onClick={() => {
-                incrementPage();
-              }}
+              onClick={incrementPage}
             >
               <FontAwesomeIcon icon="arrow-right" size="2x" />
             </div>

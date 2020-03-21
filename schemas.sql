@@ -23,7 +23,8 @@ CREATE TABLE users (
     user_type Valid_user_types,
     date_create DATE NOT NULL,
     default_mode default_modes NOT NULL DEFAULT 'Both',
-    default_sidebar BOOLEAN DEFAULT TRUE
+    default_sidebar BOOLEAN DEFAULT TRUE,
+    location TEXT NOT NULL
 );
 
 DROP TABLE IF EXISTS class CASCADE;
@@ -121,7 +122,8 @@ INSERT INTO
         password,
         year,
         user_type,
-        date_create
+        date_create,
+        location
     )
 VALUES
     (
@@ -133,7 +135,8 @@ VALUES
         'will',
         1,
         'Student',
-        '20190101'
+        '20190101',
+        'Mount Sinai Hospital'
     );
 
 INSERT INTO
@@ -146,7 +149,8 @@ INSERT INTO
         password,
         year,
         user_type,
-        date_create
+        date_create,
+        location
     )
 VALUES
     (
@@ -158,7 +162,8 @@ VALUES
         'student',
         1,
         'Student',
-        '20190101'
+        '20190101',
+        'Toronto Western Hospital'
     );
 
 INSERT INTO
@@ -171,7 +176,8 @@ INSERT INTO
         password,
         year,
         user_type,
-        date_create
+        date_create,
+        location
     )
 VALUES
     (
@@ -183,7 +189,8 @@ VALUES
         'instructor',
         1,
         'Educator',
-        '20190101'
+        '20190101',
+        'Toronto General Hospital'
     );
 
 INSERT INTO
@@ -196,7 +203,8 @@ INSERT INTO
         password,
         year,
         user_type,
-        date_create
+        date_create,
+        location
     )
 VALUES
     (
@@ -208,7 +216,8 @@ VALUES
         'admin',
         1,
         'Administrator',
-        '20190101'
+        '20190101',
+        'Sick Kids'
     );
 
 INSERT INTO

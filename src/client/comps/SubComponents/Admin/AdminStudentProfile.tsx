@@ -3,6 +3,7 @@ import "../../../scss/admin/admin-student-profile.scss";
 import Popup from "reactjs-popup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { toast } from "react-toastify";
+import { useHistory } from "react-router";
 
 interface AdminStudentProfileProps {
   firstName: string;
@@ -20,13 +21,25 @@ export const AdminStudentProfile: React.FC<AdminStudentProfileProps> = ({
   classId,
 }) => {
   const [isShowing, setIsShowing] = useState(true);
+  const history = useHistory();
 
   const mToast: any = toast;
   return (
     <>
       {isShowing && (
         <>
-          <div className="home-patient-profile-container">
+          <div className="home-patient-profile-container"
+          onClick={(e: any) => {
+            // Only redirect if we are clicking on the container, not the icon.
+            if (
+              e.target.className !== "home-patient-profile-info-btn" &&
+              e.target.className !== "home-patient-profile-info-icon" &&
+              e.target.nodeName !== "path" &&
+              e.target.nodeName !== "svg"
+            ) {
+              history.push(`/profile/${studentId}`);
+            }
+          }}>
             <div className="home-patient-profile-name-col">
               {lastName}, {firstName}
             </div>

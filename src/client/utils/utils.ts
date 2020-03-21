@@ -1,4 +1,4 @@
-import { contentType, Class } from "./types";
+import { contentType, Class, userData } from "./types";
 import _ from "underscore";
 
 const dateFormat = require("dateformat");
@@ -128,3 +128,17 @@ export const initialClass:Class = {
   name: "DEFAULT_CLASS_NAME",
   instructor_id: -1,
 }
+
+export const dummyData: userData = {
+  id: -1,
+  username: "",
+  first_name: "",
+  last_name: "",
+  email: "",
+  year: 0,
+  user_type: "Student",
+  avatar_url: defaultAvatar,
+  default_mode: "Typing",
+  default_sidebar: true,
+  location: "Nowhere",
+};

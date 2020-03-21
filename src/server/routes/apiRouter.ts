@@ -760,7 +760,7 @@ router.get(
   (req: Request, res: Response, next: NextFunction) => {
     const class_id: number = parseInt(req.params.classID);
     const query_string: string =
-      "SELECT id, first_name, last_name\
+      "SELECT id, first_name, last_name, avatar_url\
      FROM csc301db.users JOIN csc301db.students_enrollment\
      ON csc301db.users.id = csc301db.students_enrollment.student_id\
      WHERE csc301db.students_enrollment.class_id = $1";

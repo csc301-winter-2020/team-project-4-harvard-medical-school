@@ -823,7 +823,6 @@ router.post(
     "INSERT INTO csc301db.analysis \
     (time_submitted, profile_id, student_input, isbell_result) VALUES \
     (current_timestamp, $1, $2, $3)";
-    
     await pool.query(insert_string, [profile_id, all_string, parsed_result]);
     res.status(200).send();
     } catch (err) {

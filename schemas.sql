@@ -311,7 +311,7 @@ CREATE TABLE lab_results (
 );
 
 CREATE TABLE analysis (
-    profile_id INT PRIMARY KEY,
+    profile_id INT,
     student_input TEXT,
     isbell_result JSON,
     time_submitted TIMESTAMP

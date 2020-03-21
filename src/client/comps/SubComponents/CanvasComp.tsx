@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CanvasDraw from "react-canvas-draw";
 import "../../scss/canvas-draw.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,23 +8,35 @@ interface CanvasCompProps {
   initialHeight: number;
   initialWidth: number;
   id: string;
+  dispatch: Function;
+  saveData: string;
 }
+
+const CANVAS_BLACK = 'black';
+const CANVAS_RED = '#a51c30';
+const CANVAS_DARK_RED = '#791523';
+const CANVAS_BLUE = '#0097D1';
+const CANVAS_GREEN = '#30a51c';
 
 export const CanvasComp: React.FC<CanvasCompProps> = ({
   initialHeight,
   initialWidth,
   id,
+  dispatch,
+  saveData,
 }) => {
   const [canvasHeight, setCanvasHeight] = useState(initialHeight);
   const [canvasWidth, setCanvasWidth] = useState(initialWidth);
   const [brushRadius, setBrushRadius] = useState(3);
   const [isErasing, setIsErasing] = useState(false);
-  const [brushColor, setBrushColor] = useState("black");
-  const [lastBrushColor, setLastBrushColor] = useState("black");
-  const [catenaryColor, setCatenaryColor] = useState("black");
+  const [loadSaveData, setLoadSaveData] = useState(true);
+  const [brushColor, setBrushColor] = useState(CANVAS_BLACK);
+  const [lastBrushColor, setLastBrushColor] = useState(CANVAS_BLACK);
+  const [catenaryColor, setCatenaryColor] = useState(CANVAS_BLACK);
   const [lastDrag, setLastDrag] = useState(now());
+  const [inputRef, setInputRef] = useState(null);
 
-  let inputRef: any;
+  // let inputRef: any;
   function saveCanvas() {
     let image: any = inputRef.canvas.drawing
       .toDataURL("image/png")
@@ -34,6 +46,14 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
 
   function clearCanvas() {
     inputRef.clear();
+  }
+
+  function dispatchCanvasState() {
+    dispatch({
+      type: 'field',
+      fieldName: id + 'Canvas',
+      value: inputRef.getSaveData()
+    });
   }
 
   function changeColor(color: string) {
@@ -56,7 +76,7 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
       setBrushRadius(12);
       setIsErasing(true);
       setLastBrushColor(brushColor);
-      setBrushColor("rgba(250,250,250,1)");
+      setBrushColor("rgba(255,255,255,1)");
     }
   }
 
@@ -73,6 +93,21 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
     }
   }
 
+  function loadCanvas() {
+    if (loadSaveData && inputRef && saveData) {
+      inputRef.loadSaveData(saveData, true);
+      setLoadSaveData(false);
+    }
+  }
+
+  useEffect(() => {
+    async function loadAsync() {
+      setTimeout(loadCanvas, 100);
+    };
+
+    loadAsync();
+  }, [inputRef, saveData]);
+
   return (
     <>
       <div
@@ -83,11 +118,13 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
         <div
           className="canvas-draw-container"
           id={`canvas-draw-container-${id}`}
+          onMouseUp={dispatchCanvasState}
         >
           <CanvasDraw
-            ref={(canvasDraw: any) => (inputRef = canvasDraw)}
+            ref={(canvasDraw: any) => (setInputRef(canvasDraw))}
             canvasWidth={canvasWidth}
             canvasHeight={canvasHeight}
+            hideGrid={true}
             lazyRadius={0}
             brushRadius={brushRadius}
             brushColor={brushColor}
@@ -98,23 +135,23 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
         <div className="canvas-draw-colors">
           <div
             className="canvas-draw-btn"
-            style={{ backgroundColor: "black" }}
-            onClick={() => changeColor("black")}
+            style={{ backgroundColor: CANVAS_BLACK }}
+            onClick={() => changeColor(CANVAS_BLACK)}
           ></div>
           <div
             className="canvas-draw-btn"
-            style={{ backgroundColor: "#a51c30" }}
-            onClick={() => changeColor("#a51c30")}
+            style={{ backgroundColor: CANVAS_RED }}
+            onClick={() => changeColor(CANVAS_RED)}
           ></div>
           <div
             className="canvas-draw-btn"
-            style={{ backgroundColor: "#30a51c" }}
-            onClick={() => changeColor("#30a51c")}
+            style={{ backgroundColor: CANVAS_GREEN }}
+            onClick={() => changeColor(CANVAS_GREEN)}
           ></div>
           <div
             className="canvas-draw-btn"
-            style={{ backgroundColor: "#0097D1" }}
-            onClick={() => changeColor("#0097D1")}
+            style={{ backgroundColor: CANVAS_BLUE }}
+            onClick={() => changeColor(CANVAS_BLUE)}
           ></div>
         </div>
 
@@ -129,7 +166,7 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
             className="canvas-draw-btn"
             id="canvasEraser"
             onClick={toggleErase}
-            style={{backgroundColor: !isErasing ? "#791523" : "#a51c30"}}
+            style={{backgroundColor: !isErasing ? CANVAS_DARK_RED : CANVAS_RED}}
           >
             <FontAwesomeIcon icon="eraser" size="1x" />
           </div>

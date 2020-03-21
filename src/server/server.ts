@@ -86,8 +86,8 @@ const { checkAuthenticated, checkGuest } = require("./auth/authCheck");
 // Use the static directory "public" to deliver js, css, html, etc.
 app.use(express.static(path.join(__dirname, "../public")));
 // Use bodyparser middleware to tell parse HTTP request bodies in JSON. Needed to make HTTP requests in JSON to our API.
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: false }));
+app.use(bodyParser.json({ limit: '50mb' }));
 app.use(
   session({
     secret: process.env.SECRET,
@@ -105,8 +105,6 @@ app.use(apiRouter);
 app.use(loginRegisterRouter);
 
 // Setup default routes for the server.
-
-
 app.get(["/home", "/settings", "/templates", "/patient/*", "/template/*"], checkAuthenticated, (req, res) => {
   res.sendFile(path.resolve(__dirname + "/../public/index.html"));
 });

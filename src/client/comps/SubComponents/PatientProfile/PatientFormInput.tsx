@@ -15,6 +15,7 @@ interface PatientFormInputProps {
   id: string;
   canvasHeight: number;
   canvasWidth: number;
+  canvasData?: string;
   isTextArea: boolean;
 }
 
@@ -32,6 +33,7 @@ export const PatientFormInput: React.FC<PatientFormInputProps> = ({
   canvasHeight,
   isTextArea,
   canvasWidth,
+  canvasData,
 }) => {
   return (
     <>
@@ -45,8 +47,11 @@ export const PatientFormInput: React.FC<PatientFormInputProps> = ({
       {isShowingCanvas && (
         <CanvasComp
           id={id}
+          dispatch={dispatch}
           initialHeight={canvasHeight}
           initialWidth={canvasWidth}
+          saveData={canvasData}
+          // loadSaveData={true}
         />
       )}
       {isShowingText && !isTextArea && (

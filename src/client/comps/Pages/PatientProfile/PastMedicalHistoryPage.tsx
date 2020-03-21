@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useReducer } from "react";
 import { CSSTransition } from "react-transition-group";
-import { IndividualPatientProfile } from "./PatientProfilePage";
+import { IndividualPatientProfile, fetchAllCanvases } from "./PatientProfilePage";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router";
@@ -30,9 +30,13 @@ function reducer(
 
 type PMH_State = {
   pastMedHist: string;
+  pastMedHistCanvas?: string;
   pastHospits: string;
+  pastHospitsCanvas?: string;
   medications: string;
+  medicationsCanvas?: string;
   allergies: string;
+  allergiesCanvas?: string; 
 }
 
 const initialState: PMH_State = {
@@ -45,15 +49,35 @@ const initialState: PMH_State = {
 async function saveData(url: string, state: any) {
   console.log(state)
   allAttributes.medical_history = state.pastMedHist;
+
+  if (state.pastMedHistCanvas !== undefined) {
+    allAttributes.medical_history_canvas = state.pastMedHistCanvas; 
+  }
+  
   allAttributes.hospital_history = state.pastHospits;
+
+  if (state.pastHospitsCanvas !== undefined) {
+    allAttributes.hospital_history_canvas = state.pastHospitsCanvas; 
+  }
+  
   allAttributes.medications = state.medications;
+
+  if (state.medicationsCanvas !== undefined) {
+    allAttributes.medications_canvas = state.medicationsCanvas; 
+  }
+  
   allAttributes.allergies = state.allergies;
 
+  if (state.allergiesCanvas !== undefined) {
+    allAttributes.allergies_canvas = state.allergiesCanvas; 
+  }
+  
   const res = await postData(url, allAttributes)
   return await res.message
 }
 
 var allAttributes: any;
+
 
 export const PastMedicalHistoryPage: IndividualPatientProfile = ({
   pageName,
@@ -66,6 +90,7 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
   defaultMode
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [lastState, setLastState] = useState(state);
 
   const [showingPastMedHistCanvas, setShowingPastMedHistCanvas] = useState(true);
   const [showingPastMedHistText, setShowingPastMedHistText] = useState(false);
@@ -79,7 +104,16 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
   const [showingAllergiesCanvas, setShowingAllergiesCanvas] = useState(true);
   const [showingAllergiesText, setShowingAllergiesText] = useState(false);
   
-  const { pastMedHist, pastHospits, medications, allergies } = state;
+  const { 
+    pastMedHist, 
+    pastMedHistCanvas, 
+    pastHospits, 
+    pastHospitsCanvas,
+    medications, 
+    medicationsCanvas,
+    allergies,
+    allergiesCanvas
+  } = state;
 
   const myToast: any = toast
 
@@ -109,15 +143,26 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
         .then((res) => {
           return res.json()
         })
+        .then(jsonResult => {
+          return fetchAllCanvases(jsonResult);
+        })
         .then((jsonResult) => {
           console.log("Get PMH")
           console.log(jsonResult)
           allAttributes = jsonResult;
-          dispatch({ type: "many_fields", newState:{
-            "pastMedHist": jsonResult.medical_history,
-            "pastHospits": jsonResult.hospital_history, 
-            "medications": jsonResult.medications,
-            "allergies": jsonResult.allergies,}});
+          dispatch({ 
+            type: "many_fields", 
+            newState:{
+              pastMedHist: jsonResult.medical_history,
+              pastMedHistCanvas: jsonResult.medical_history_canvas,
+              pastHospits: jsonResult.hospital_history,
+              pastHospitsCanvas: jsonResult.hospital_history_canvas,
+              medications: jsonResult.medications,
+              medicationsCanvas: jsonResult.medications_canvas,
+              allergies: jsonResult.allergies,
+              allergiesCanvas: jsonResult.allergies_canvas,
+            }
+          });
 
         }).catch((error) => {
           console.log("An error occured with fetch:", error)
@@ -125,6 +170,31 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
 
     }
   }, [currentPage]);
+
+  useEffect(() => {
+    if (lastState === initialState) {
+      setLastState(state);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      if (currentPage == pageName && state && state !== lastState) {
+        console.log(lastState);
+        console.log(state);
+
+        saveData("/api/patientprofile/" + patientID, state).then((data) => {
+          console.log(data);
+          myToast.success('Autosaved');
+        }).catch((err) => {
+          myToast.success('Autosave failed');
+        });
+
+        setLastState(state);
+      }
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [state, lastState]);
 
   return (
     <>
@@ -153,6 +223,7 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingPastMedHistText}
               canvasHeight={600}
               canvasWidth={600}
+              canvasData={pastMedHistCanvas}
               isTextArea={true}
             />
 
@@ -169,6 +240,7 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingPastHospitsText}
               canvasHeight={600}
               canvasWidth={600}
+              canvasData={pastHospitsCanvas}
               isTextArea={true}
             />
 
@@ -185,6 +257,7 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingMedicationsText}
               canvasHeight={600}
               canvasWidth={600}
+              canvasData={medicationsCanvas}
               isTextArea={true}
             />
 
@@ -201,6 +274,7 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingAllergiesText}
               canvasHeight={600}
               canvasWidth={600}
+              canvasData={allergiesCanvas}
               isTextArea={true}
             />
           </div>

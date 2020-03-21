@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useReducer } from "react";
 import { CSSTransition } from "react-transition-group";
-import { IndividualPatientProfile } from "./PatientProfilePage";
+import { IndividualPatientProfile, fetchAllCanvases } from "./PatientProfilePage";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router";
 import { postData } from "./PatientProfilePage";
 import { canvasInit, textInit } from "../../../utils/utils";
 import { toast } from "react-toastify";
+
 function reducer(
   state: CCHPI_State,
   action: { type: string; fieldName?: string; value?: string; newState?: {[key: string]: string |boolean|number|null} }
@@ -29,7 +30,9 @@ function reducer(
 
 type CCHPI_State = {
   chiefComplaint: string;
+  chiefComplaintCanvas?: string;
   HPI: string;
+  HPICanvas?: string;
 };
 
 const initialState: CCHPI_State = {
@@ -38,12 +41,22 @@ const initialState: CCHPI_State = {
 };
 
 async function saveData(url: string, state: any) {
-  console.log(state)
+  console.log(state);
   allAttributes.complaint = state.chiefComplaint;
+
+  if (state.chiefComplaintCanvas !== undefined) {
+    allAttributes.complaint_canvas = state.chiefComplaintCanvas;
+  }
+
   allAttributes.hpi = state.HPI;
 
+  if (state.HPICanvas !== undefined) {
+    allAttributes.hpi_canvas = state.HPICanvas;
+  }
+
+  console.log(allAttributes);
   const res = await postData(url, allAttributes);
-  return await res.message
+  return await res.message;
 }
 
 var allAttributes: any;
@@ -71,13 +84,21 @@ export const CCHPIPage: IndividualPatientProfile = ({
           return res.json()
         })
         .then((jsonResult) => {
+          return fetchAllCanvases(jsonResult);
+        })
+        .then(jsonResult => {
           allAttributes = jsonResult; 
-          console.log("Get CCHPI")
-          console.log(jsonResult)
-          dispatch({ type: "many_fields", newState:{
-            "chiefComplaint": jsonResult.complaint, 
-            "HPI": jsonResult.hpi}});
-
+          console.log("Get CCHPI");
+          console.log(jsonResult);
+          dispatch({ 
+            type: "many_fields", 
+            newState:{
+              chiefComplaint: jsonResult.complaint,
+              chiefComplaintCanvas: jsonResult.complaint_canvas,
+              HPI: jsonResult.hpi,
+              HPICanvas: jsonResult.hpi_canvas
+            }
+          });
         }).catch((error) => {
           console.log("An error occured with fetch:", error)
         });
@@ -85,6 +106,7 @@ export const CCHPIPage: IndividualPatientProfile = ({
     }
   }, [currentPage]);
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [lastState, setLastState] = useState(state);
 
   const [showingChiefComplaintCanvas, setShowingChiefComplaintCanvas] = useState(true);
   const [showingChiefComplaintText, setShowingChiefComplaintText] = useState(false);
@@ -92,7 +114,7 @@ export const CCHPIPage: IndividualPatientProfile = ({
   const [showingHPICanvas, setShowingHPICanvas] = useState(true);
   const [showingHPIText, setShowingHPIText] = useState(false);
 
-  const { chiefComplaint, HPI } = state;
+  const { chiefComplaint, chiefComplaintCanvas, HPI, HPICanvas } = state;
 
   const myToast: any = toast
 
@@ -104,6 +126,31 @@ export const CCHPIPage: IndividualPatientProfile = ({
     setShowingHPICanvas(canvasShow);
     setShowingHPIText(textShow);
   }, [defaultMode]);
+
+  useEffect(() => {
+    if (lastState === initialState) {
+      setLastState(state);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      if (currentPage == pageName && state && state !== lastState) {
+        console.log(lastState);
+        console.log(state);
+
+        saveData("/api/patientprofile/" + patientID, state).then((data) => {
+          console.log(data);
+          myToast.success('Autosaved');
+        }).catch((err) => {
+          myToast.success('Autosave failed');
+        });
+
+        setLastState(state);
+      }
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [state, lastState]);
 
   return (
     <>
@@ -132,6 +179,7 @@ export const CCHPIPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingChiefComplaintText}
               canvasHeight={600}
               canvasWidth={600}
+              canvasData={chiefComplaintCanvas}
               isTextArea={true}
             />
 
@@ -148,6 +196,7 @@ export const CCHPIPage: IndividualPatientProfile = ({
               setIsShowingText={setShowingHPIText}
               canvasHeight={600}
               canvasWidth={600}
+              canvasData={HPICanvas}
               isTextArea={true}
             />
           </div>

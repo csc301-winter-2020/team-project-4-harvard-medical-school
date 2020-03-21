@@ -68,6 +68,31 @@ export async function postData(url: string, data: any) {
   return await response.json();
 }
 
+export async function fetchAllCanvases(jsonResult: any) {
+  for (let key in jsonResult) {
+    if (key.endsWith('_canvas') && jsonResult[key] !== undefined) {
+      let res = await fetch(jsonResult[key]);
+      let canvasString = await res.text();
+      jsonResult[key] = formatCanvas(canvasString);
+    }
+  }
+  return jsonResult;
+}
+
+function formatCanvas(canvas: string) {
+  try {
+    let formattedCanvas = canvas.replace(/\\/g, '').slice(1, -1);
+
+    // Try to parse this cavas
+    JSON.parse(formattedCanvas);
+    return formattedCanvas;
+  } catch(err) {
+    // Empty canvas
+    console.log(err);
+    return '{"lines":[],"width":600,"height":200}';
+  }
+}
+
 const initNavDots = () => {
   const container = [];
   for (let i = 0; i < contents.length; i++) {

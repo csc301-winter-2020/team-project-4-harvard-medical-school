@@ -2,12 +2,16 @@ import React from "react";
 import "../../../scss/instructor/instructor-student-patient-encounter";
 import { useHistory } from "react-router";
 
-interface InstructorStudentProfileProps {
+interface InstructorStudentProfileRowProps {
+  studentID: number;
+  classID: number;
   name: string;
   imageURL: string;
 }
 
-export const InstructorStudentProfile: React.FC<InstructorStudentProfileProps> = ({
+export const InstructorStudentProfileRow: React.FC<InstructorStudentProfileRowProps> = ({
+  studentID,
+  classID,
   name,
   imageURL,
 }) => {
@@ -15,7 +19,7 @@ export const InstructorStudentProfile: React.FC<InstructorStudentProfileProps> =
   return (
     <>
       <div className="instructor-page-list" onClick={() => {
-        history.push(`/instructor/student/${1}`);
+        history.push(`/instructor/${classID}/student/${studentID}`);
       }}>
         
         <div className="instructor-page-list-name-col">{name}</div>

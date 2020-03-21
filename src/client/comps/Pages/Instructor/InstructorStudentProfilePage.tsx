@@ -41,9 +41,11 @@ export const InstructorStudentProfilePage: React.FC<InstructorStudentProfilePage
         {studentName}'s Profile
       </div>
       <div>
-        <button className="instructor-student-profile-page-button" onClick={() => alert('TODO')}>
-          Contact Student
-        </button>
+        <a href={"mailto:student@some.student.domain.com"}>
+          <button className="instructor-student-profile-page-button">
+            Contact Student
+          </button>
+        </a>
         <button className="instructor-student-profile-page-button" onClick={() => alert('TODO')}>
           Unlock Help/Tips
         </button>

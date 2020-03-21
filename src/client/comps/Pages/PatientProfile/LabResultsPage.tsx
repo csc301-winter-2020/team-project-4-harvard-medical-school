@@ -7,7 +7,7 @@ import "../../../scss/patient-profiles/lab-results.scss";
 
 import { defaultLabResults } from "../../../utils/defaultLabResults";
 
-import "../../../scss/home/home";
+import { toast } from "react-toastify";
 
 interface LabResultData {
     "% Hemoglobin A1c": {value: string, added: boolean},
@@ -117,6 +117,8 @@ export const LabResultsPage: IndividualPatientProfile = ({
   let nameInput = "";
   let valueInput = "";
 
+  const mToast: any = toast;
+
   return (
     <>
       <CSSTransition
@@ -151,20 +153,25 @@ export const LabResultsPage: IndividualPatientProfile = ({
                   })}
                   <tr key="addInputs">
                       <td>
-                          <input
-                            type="text"
-                            id="nameInput"
-                            placeholder="New Lab Result Name"
-                            onChange={(e: any) => {nameInput = e.target.value;}}
-                          />
+                          <div className = "new-lab-result-input">
+                            <input
+                              type="text"
+                              id="nameInput"
+                              placeholder="New Lab Result Name"
+                              onChange={(e: any) => {nameInput = e.target.value;}}
+                            />
+                          </div>
+                          
                       </td>
                       <td>
-                        <input
+                          <div className = "new-lab-result-input">
+                            <input
                               type="text"
                               id="valueInput"
                               placeholder="New Lab Result Value"
                               onChange={(e: any) => {valueInput = e.target.value;}}
                             />
+                          </div>
                       </td>
                   </tr>
                 </tbody>
@@ -173,20 +180,22 @@ export const LabResultsPage: IndividualPatientProfile = ({
 
             <button className="lab-results-add-value-button" 
               onClick={() => {
-                if(nameInput in defaultLabResults){
+                console.log(nameInput)
+                console.log(valueInput)
+                if(nameInput in defaultLabResults && valueInput != ""){
                   dispatch({ type: 'addEntry', value: [nameInput, valueInput] });
+                  console.log(valueInput);
                   (document.getElementById("nameInput") as HTMLInputElement).value = "";
                   (document.getElementById("valueInput") as HTMLInputElement).value = "";
                 }
                 else{
-                  alert("Not a valid lab result");
-                  console.log(state.data);
+                  mToast.warn("Invalid Lab Result");
+                  return;
                 }
-                
+                console.log(state.data)
               }}>
               Add Lab Result
             </button>
-            
 
           </div>
           <div className="patient-profile-nav-btns">

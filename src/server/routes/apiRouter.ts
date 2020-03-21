@@ -1006,4 +1006,27 @@ router.delete(
   }
 );
 
+/**
+ * Get all classes that an instructor teaches 
+ */
+router.get(
+  "/api/classesOfInstructors/:instructorId",
+  (req: Request, res: Response, next: NextFunction) => {
+    const instructor_id: number = parseInt(req.params.instructorId);
+    const query_string: string =
+      "SELECT name \
+     FROM csc301db.class \
+     WHERE csc301db.class.instructor_id = $1";
+    pool
+      .query(query_string, [instructor_id])
+      .then((result: any) => {
+        res.status(200).json(result.rows);
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(400).json({ error: err });
+      });
+  }
+);
+
 export default router;

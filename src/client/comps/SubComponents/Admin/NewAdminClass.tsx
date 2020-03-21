@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../../scss/home/home";
 import { toast } from "react-toastify";
 import { Dropdown } from "semantic-ui-react";
@@ -11,21 +11,18 @@ interface NewAdminClassProps {
   setClasses: React.Dispatch<React.SetStateAction<AdminClass[]>>;
 }
 
-interface Instructor {
+interface InstructorOptions {
   id: number;
   firstName: string;
   lastName: string;
+  key: string; 
+  value: string;
+  text: string; 
 }
 
-const mockData: Instructor[] = [
-  { id: 0, firstName: "First", lastName: "Last" },
-  { id: 2, firstName: "Steven", lastName: "Kang" },
-];
-
-const mockDataOptions = [
-  { key: "First Last", value: "First Last", text: "First Last" },
-  { key: "Steven Kang", value: "Steven Kang", text: "Steven Kang" },
-];
+function setSelectedTemplate(stuff: any) {
+  console.log('>>>', stuff);
+}
 
 export const NewAdminClass: React.FC<NewAdminClassProps> = ({
   setNewClassPopup,
@@ -33,8 +30,8 @@ export const NewAdminClass: React.FC<NewAdminClassProps> = ({
   setClasses,
 }) => {
   const [newClassName, setNewClassName] = useState("");
-  const [instructors, setInstructors] = useState(mockData);
-  const [selectedInstructor, setSelectedInstructor] = useState<string>("");
+  const [instructors, setInstructors] = useState<InstructorOptions[]>([]);
+  const [selectedInstructorId, setSelectedInstructorId] = useState<number>(null);
   const mToast: any = toast;
 
   const createNewClass = async () => {
@@ -42,16 +39,16 @@ export const NewAdminClass: React.FC<NewAdminClassProps> = ({
       mToast.warn("Missing class name!");
       return;
     }
-    if (selectedInstructor === ""){
+    if (selectedInstructorId === null){
       mToast.warn("Missing instructor!");
       return;
     }
 
     let data = {
       name: newClassName,
-      instructor_id: (await (await fetch(`/api/me`)).json()).id,
+      instructor_id: selectedInstructorId
     };
-
+    console.log(data)
     const res = await fetch(`/api/classes/`, {
       method: "POST",
       headers: {
@@ -75,6 +72,36 @@ export const NewAdminClass: React.FC<NewAdminClassProps> = ({
     ]);
     setNewClassPopup(false);
   };
+
+  useEffect(() => {
+    fetch(`/api/instructors/all`)
+      .then(response => {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          throw new Error(
+            `Error code: ${response.status}, ${response.statusText}`
+          );
+        }
+      })
+      .then((data: any) => {
+        const allInstructors: InstructorOptions[] = [];
+        data.forEach((row: any) => {
+          allInstructors.push({
+            firstName: row.first_name,
+            lastName: row.last_name,
+            id: row.id,
+            key: row.id,
+            value: row.id,
+            text: row.first_name + " " + row.last_name
+          });
+        });
+        setInstructors(allInstructors);
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <div
@@ -108,23 +135,18 @@ export const NewAdminClass: React.FC<NewAdminClassProps> = ({
             fluid
             search
             selection
-            onChange={(
-              event: any,
-              { key, value }: { key: any; value: any }
-            ) => {
-              console.log(value);
-              setSelectedInstructor(value);
+            onChange={(event: any, { value }: {value: any}) => {
+              setSelectedInstructorId(value);
             }}
-            options={mockDataOptions}
+            options={instructors}
           />
         </div>
         <br />
         <div className="home-page-create-new-patient-btn-cntr">
           <div
-            className={
-              selectedInstructor && newClassName
-                ? "home-page-create-new-patient-popup-btn"
-                : "home-page-create-new-patient-popup-btn-gray"
+            className={selectedInstructorId && newClassName ?
+              "home-page-create-new-patient-popup-btn" :
+              "home-page-create-new-patient-popup-btn-gray"
             }
             onClick={createNewClass}
           >

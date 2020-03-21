@@ -1029,4 +1029,30 @@ router.get(
   }
 );
 
+/**
+ * Get all instructors 
+ */
+router.get(
+  "/api/instructors/all",
+  (req: Request, res: Response, next: NextFunction) => {
+    const query_string: string =
+    "SELECT id, first_name, last_name \
+     FROM csc301db.users \
+     WHERE csc301db.users.user_type = 'Educator'";
+    pool
+      .query(query_string)
+      .then((result: any) => {
+        if (result.rowCount === 0) {
+          res.status(404).send("No instructors exist");
+        } else {
+          res.status(200).json(result.rows);
+        }
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(400).json({ error: err });
+      });
+  }
+);
+
 export default router;

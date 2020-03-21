@@ -13,6 +13,7 @@ import { TemplatesPage } from "./comps/Pages/TemplatesPage";
 import { Questions } from "./comps/SubComponents/Templates/Questions";
 import { Error } from "./comps/Pages/Errors/Error";
 import { AdminClassStudentsPage } from "./comps/Pages/Admin/AdminClassStudentsPage";
+import { InstructorStudentsPage } from "./comps/Pages/Instructor/InstructorStudentsPage";
 import { InstructorStudentProfilePage } from "./comps/Pages/Instructor/InstructorStudentProfilePage";
 import { InstructorStudentPatientPage } from "./comps/Pages/Instructor/InstructorStudentPatientPage";
 import {
@@ -115,13 +116,29 @@ const browserRouter: JSX.Element = (
       />
       <Route
         exact
-        path="/instructor/student/:id"
-        component={InstructorStudentProfilePage}
+        path="/instructor/:cid/students"
+        render={props => <InstructorStudentsPage {...props} classID={props.match.params.cid}/>}
       />
       <Route
         exact
-        path="/instructor/student/:sid/patient/:pid"
-        component={InstructorStudentPatientPage}
+        path="/instructor/:cid/student/:sid"
+        render={props =>
+          <InstructorStudentProfilePage {...props}
+            classID={props.match.params.cid}
+            studentID={props.match.params.sid}
+          />
+        }
+      />
+      <Route
+        exact
+        path="/instructor/:cid/student/:sid/patient/:pid"
+        render={props =>
+          <InstructorStudentPatientPage {...props}
+            classID={props.match.params.cid}
+            studentID={props.match.params.sid}
+            patientID={props.match.params.pid}
+          />
+        }
       />
       <Route
         exact path="/profile/:id"

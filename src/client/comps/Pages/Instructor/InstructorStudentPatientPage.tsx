@@ -3,12 +3,12 @@ import "../../../scss/instructor/instructor-student-patient-page.scss";
 import { Header } from "../../SubComponents/Header";
 
 interface InstructorStudentPatientPageProps {
+  classID: number;
+  studentID: number;
+  patientID: number;
 }
 
-interface InstructorStudentPatient {
-}
-
-export const InstructorStudentPatientPage: React.FC<InstructorStudentPatient> = (
+export const InstructorStudentPatientPage: React.FC<InstructorStudentPatientPageProps> = (
   props: InstructorStudentPatientPageProps
 ) => {
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);

@@ -5,6 +5,8 @@ import { max } from "../../../utils/utils";
 import { InstructorStudentPatientEncounter } from "../../SubComponents/Instructor/InstructorStudentPatientEncounter";
 
 interface InstructorStudentProfilePageProps {
+  classID: number;
+  studentID: number;
 }
 
 interface InstructorStudentProfile {
@@ -20,7 +22,7 @@ const mockData: InstructorStudentProfile[] = [
   { date: new Date(1827489172), patientFirstName: 'Steven', patientLastName: 'Kang' },
 ];
 
-export const InstructorStudentProfilePage: React.FC<InstructorStudentProfile> = (
+export const InstructorStudentProfilePage: React.FC<InstructorStudentProfilePageProps> = (
   props: InstructorStudentProfilePageProps
 ) => {
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);

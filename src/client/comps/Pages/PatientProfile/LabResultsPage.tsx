@@ -1,88 +1,111 @@
-import React, {useEffect, useReducer} from "react";
+import React, {useEffect, useReducer, useState} from "react";
 import { CSSTransition } from "react-transition-group";
 import { IndividualPatientProfile } from "./PatientProfilePage";
 import { useHistory } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../../scss/patient-profiles/lab-results.scss";
 
+import { NewLabResultPopup } from "../../SubComponents/PatientProfile/NewLabResultPopup";
+
+import "../../../scss/home/home";
+
 interface LabResultData {
   name: string,
-  value: number,
-  lower: number,
-  upper: number,
-  scale: string
+  value: string,
+  added: boolean
 }
 
 interface LabResultsState {
   data: LabResultData[];
 }
 
-const mockData: Array<LabResultData> = [
-  { name: 'Na', value: 11.5, lower: 7.1, upper: 18.2, scale: 'nmol/mL' },
-  { name: 'K', value: 4.5, lower: 3.0, upper: 4.5, scale: 'mmol/mL' },
-  { name: 'ALT', value: 0.15, lower: 0.5, upper: 0.8, scale: 'ng/L' },
-  { name: 'AST', value: 1.2, lower: 1.2, upper: 18.5, scale: 'peptides/mL' },
-  { name: 'Glucose', value: 4.1, lower: 2.1, upper: 12.7, scale: 'nmol/mL' },
-  { name: 'Iron', value: 12.8, lower: 8.8, upper: 29.2, scale: 'g/L' },
-  { name: 'Erythrocytes', value: 0.0, lower: 0.0, upper: 44.8, scale: 'g/mL' },
-  { name: 'Sedimentation Rate', value: 0.0, lower: 0.0, upper: 25.0, scale: 'g' },
-  { name: 'Neutrophils', value: 0.1, lower: 0.2, upper: 44.5, scale: 'mg/L' },
-  { name: 'Basophils', value: 0.0, lower: 0.0, upper: 100.0, scale: 'g/L' }
+const initialData: Array<LabResultData> = [
+  { name: '% Hemoglobin A1c', value: '0', added: true },
+  { name: 'Alanine Aminotransfererase (ALT)', value: '0', added: true },
+  { name: 'Albumin', value: '0', added: false },
+  { name: 'Alkaline Phosphatase', value: '0', added: false },
+  { name: 'Amylase', value: '0', added: false },
+  { name: 'Anti-nuclear Antibody', value: '0', added: false },
+  { name: 'Asparate Aminotransferace (AST)', value: '0', added: false },
+  { name: 'Bicarbonate', value: '0', added: false },
+  { name: 'Bilirubin, Direct', value: '0', added: false },
+  { name: 'Bilirubin, Total', value: '0', added: false },
+  { name: 'C-Reactive Protein', value: '0', added: false },
+  { name: 'Calcium, Total', value: '0', added: false },
+  { name: 'Carcinoembyronic Antigen (CEA)', value: '0', added: false },
+  { name: 'CD4 Absolute', value: '0', added: false },
+  { name: 'CD4 Cells, Percent', value: '0', added: false },
+  { name: 'Chloride', value: '0', added: false },
+  { name: 'Cholesterol, HDL', value: '0', added: false },
+  { name: 'Cholesterol, LDL, Calculated', value: '0', added: false },
+  { name: 'Cholesterol, LDL, Measured', value: '0', added: false },
+  { name: 'Cholesterol, Total', value: '0', added: false },
+  { name: 'Creatine Kinase (CK)', value: '0', added: false },
+  { name: 'Creatinine, Urine', value: '0', added: false },
+  { name: 'Creatinine', value: '0', added: false },
+  { name: 'Ferritin', value: '0', added: false },
+  { name: 'Folate', value: '0', added: false },
+  { name: 'FSH', value: '0', added: false },
+  { name: 'Glucose', value: '0', added: false },
+  { name: 'Granulocyte Count', value: '0', added: false },
+  { name: 'Granulocyte Count', value: '0', added: false },
+  { name: 'Hematocrit', value: '0', added: false },
+  { name: 'Hemoglobin', value: '0', added: false },
+  { name: 'Hepatitis A Virus Antibody', value: '0', added: false },
+  { name: 'Hepatitis B Surface Antibody', value: '0', added: false },
+  { name: 'Hepatitis B Surface Antigen', value: '0', added: false },
+  { name: 'Hepatitis B Virus Core Antibody', value: '0', added: false },
+  { name: 'Hepatitis C Virus Antibody', value: '0', added: false },
+  { name: 'HIV Antibody', value: '0', added: false },
+  { name: 'Homocysteine', value: '0', added: false },
+  { name: 'Human Chorionic Gonadotropin', value: '0', added: false },
+  { name: 'INR(PT)', value: '0', added: false },
+  { name: 'Iron', value: '0', added: false },
+  { name: 'Lactate Dehydrogenase (LD)', value: '0', added: false },
+  { name: 'Lipase', value: '0', added: false },
+  { name: 'Magnesium', value: '0', added: false },
+  { name: 'Phosphate', value: '0', added: false },
+  { name: 'Platelet Count', value: '0', added: false },
+  { name: 'Potassium', value: '0', added: false },
+  { name: 'Problem Specimen', value: '0', added: false },
+  { name: 'Prostate Specific Antigen', value: '0', added: false },
+  { name: 'Protein, Total', value: '0', added: false },
+  { name: 'PTT', value: '0', added: false },
+  { name: 'Sedimentation Rate', value: '0', added: false },
+  { name: 'Sodium', value: '0', added: false },
+  { name: 'Thyroid Stimulating Hormone', value: '0', added: false },
+  { name: 'Thyroxine (T4), Free', value: '0', added: false },
+  { name: 'Triglycerides', value: '0', added: false },
+  { name: 'Urea Nitrogen', value: '0', added: false },
+  { name: 'Uric Acid', value: '0', added: false },
+  { name: 'Vitamin B12', value: '0', added: false },
+  { name: 'White Blood Cells', value: '0', added: false },
+  { name: 'proBNP', value: '0', added: false },
 ];
 
 const initialState: LabResultsState = {
   // TODO: This is only for the demo! This must be changed to `data: []` later on.
-  data: mockData
+  data: initialData
 };
 
 function reducer(
   state: LabResultsState,
-  action: { type: string, fieldName?: string, value: string }
+  action: { 
+    type: string, 
+    fieldName?: string, 
+    value: string,
+    newState?: { [key: string]: string | boolean | number | null }
+  }
 ): LabResultsState {
+
   let newState:LabResultsState = JSON.parse(JSON.stringify(state));
+
   switch (action.type) {
     case "addEntry":
       newState.data.push({
         name: action.value,
-        value: 0,
-        lower: 0,
-        upper: 0,
-        scale: "mg/L"
-      });
-      break;
-    case "updateName":
-      newState.data.forEach(result => {
-        if (result.name === action.fieldName) {
-          result.name = action.value;
-        }
-      });
-      break;
-    case "updateValue":
-      newState.data.forEach(result => {
-        if (result.name === action.fieldName) {
-          result.value = Number(action.value);
-        }
-      });
-      break;
-    case "updateLower":
-      newState.data.forEach(result => {
-        if (result.name === action.fieldName) {
-          result.lower = Number(action.value);
-        }
-      });
-      break;
-    case "updateUpper":
-      newState.data.forEach(result => {
-        if (result.name === action.fieldName) {
-          result.upper = Number(action.value);
-        }
-      });
-      break;
-    case "updateScale":
-      newState.data.forEach(result => {
-        if (result.name === action.fieldName) {
-          result.scale = action.value;
-        }
+        value: "SWAG",
+        added: true
       });
       break;
     default:
@@ -98,7 +121,9 @@ export const LabResultsPage: IndividualPatientProfile = ({
   setCurrentPage,
   transitionDuration,
   transitionName,
+  isShowingSidebar,
   patientID,
+  defaultMode,
 }) => {
   const history = useHistory();
   useEffect(() => {
@@ -109,6 +134,8 @@ export const LabResultsPage: IndividualPatientProfile = ({
   }, [currentPage]);
 
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  const [showNewLabResultPopup, setNewLabResultPopup] = useState(false);
 
   return (
     <>
@@ -122,31 +149,34 @@ export const LabResultsPage: IndividualPatientProfile = ({
         <div className="lab-results-page-outermost-container patient-profile-window">
           <div className="patient-profile-page-title">
             <h1>{pageName}</h1>
-            <table id="labResultsTable" className="lab-results-table">
-              <thead>
-                <tr>
-                  <td>Test</td>
-                  <td>Value</td>
-                  <td>Range</td>
-                  <td>Concentration</td>
-                </tr>
-              </thead>
-              <tbody>
-              {state.data.map(row => {
-                const outOfRange = row.value < row.lower || row.value > row.upper;
-                const rowClass = outOfRange ? 'lab-results-out-of-range-red' : '';
-                return (
-                  <tr className={`${rowClass}`} key={row.name}>
-                    <td>{row.name}</td>
-                    <td>{row.value}</td>
-                    <td>{row.lower}, {row.upper}</td>
-                    <td>{row.scale}</td>
+            <div style={{ width: "400px" }}>
+              <table id="labResultsTable" className="lab-results-table">
+                <thead>
+                  <tr>
+                    <td>Test</td>
+                    <td>Value</td>
                   </tr>
-                );
-              })}
-              </tbody>
-            </table>
-            <button className="lab-results-add-value-button" onClick={() => dispatch({ type: 'addEntry', value: 'New' })}>
+                </thead>
+                <tbody>
+                {state.data.filter(row => row.added).map(row => {
+                  const rowClass = '';
+                  return (
+                    <tr className={`${rowClass}`} 
+                      //key={row.name}
+                      >
+                      <td>{row.name}</td>
+                      <td>{row.value}</td>
+                    </tr>
+                  );
+                })}
+                </tbody>
+              </table>
+            </div>
+            <button className="lab-results-add-value-button" 
+              onClick={() => {
+                dispatch({ type: 'addEntry', value: 'New' });
+                setNewLabResultPopup(true);
+                }}>
               Add Lab Result
             </button>
           </div>
@@ -158,6 +188,14 @@ export const LabResultsPage: IndividualPatientProfile = ({
               <FontAwesomeIcon icon="save" size="2x" />
             </div>
           </div>
+
+          {showNewLabResultPopup && (
+          <NewLabResultPopup
+            history={history}
+            setShowNewLabResultPopup={setNewLabResultPopup}
+          ></NewLabResultPopup>
+        )}
+
         </div>
       </CSSTransition>
     </>

@@ -363,13 +363,17 @@ const motor_r: string[] = [
 const ref_l: string[] = ['bi_l', 'tri_l', 'brach_l', 'pat_l', 'ach_l']
 const ref_r: string[] = ['bi_r', 'bri_r', 'brach_r', 'pat_r', 'ach_r']
 
-function round0To5(n: number): number{
-  if(n <= 0){
-    return 0
-  }else if(n >= 5){
-    return 5
+function round0To5(n: string): string{
+  if(n === ''){
+    return n
+  }
+  const n_parsed = parseInt(n) % 10
+  if(n_parsed <= 0){
+    return '0'
+  }else if(n_parsed >= 5){
+    return '5'
   }else{
-    return Math.round(n)
+    return Math.round(n_parsed).toString()
   }
 }
 
@@ -427,7 +431,7 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
           tableDispatch({
             category: table,
             condition_name: entry,
-            value: round0To5(parseInt(e.target.value)),
+            value: round0To5(e.target.value),
             state: null
           })
         }}

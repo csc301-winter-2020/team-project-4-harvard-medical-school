@@ -51,7 +51,6 @@ export const PatientFormInput: React.FC<PatientFormInputProps> = ({
           initialHeight={canvasHeight}
           initialWidth={canvasWidth}
           saveData={canvasData}
-          // loadSaveData={true}
         />
       )}
       {isShowingText && !isTextArea && (

@@ -290,7 +290,6 @@ const nameMap: nameMap = {
   musculoskeletal: 'Musculoskeletal Symptoms',
   mental: 'Mental Health Symptoms',
   skinHair: 'Skin and Hair Symptoms',
-
   weightLoss: 'Weight Loss',
   weightGain: 'Weight Gain',
   fatigue: 'Fatigue',

@@ -31,6 +31,7 @@ function reducer(
 type CCHPI_State = {
   chiefComplaint: string;
   chiefComplaintCanvas?: string;
+  chiefComplaintImage?: string;
   HPI: string;
   HPICanvas?: string;
 };
@@ -40,22 +41,29 @@ const initialState: CCHPI_State = {
   HPI: "",
 };
 
-async function saveData(url: string, state: any) {
+async function saveData(patientID: number, state: any) {
   console.log(state);
   allAttributes.complaint = state.chiefComplaint;
-
   if (state.chiefComplaintCanvas !== undefined) {
     allAttributes.complaint_canvas = state.chiefComplaintCanvas;
   }
 
   allAttributes.hpi = state.HPI;
-
   if (state.HPICanvas !== undefined) {
     allAttributes.hpi_canvas = state.HPICanvas;
   }
 
+  if (state.chiefComplaintImage !== undefined) {
+    console.log(state.chiefComplaintImage);
+    const isabelRes = await postData(
+      '/api/analysis/' + patientID, 
+      { image: state.chiefComplaintImage }
+    );
+
+    console.log(await isabelRes.message);
+  }
   console.log(allAttributes);
-  const res = await postData(url, allAttributes);
+  const res = await postData('/api/patientprofile/'+ patientID, allAttributes);
   return await res.message;
 }
 
@@ -138,7 +146,7 @@ export const CCHPIPage: IndividualPatientProfile = ({
         console.log(lastState);
         console.log(state);
 
-        saveData("/api/patientprofile/" + patientID, state).then((data) => {
+        saveData(patientID, state).then((data) => {
           console.log(data);
           myToast.success('Autosaved');
         }).catch((err) => {
@@ -205,7 +213,7 @@ export const CCHPIPage: IndividualPatientProfile = ({
           </div>
           <div className="patient-profile-nav-btns">
             <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
-              saveData('/api/patientprofile/'+ patientID, state).then((data) => {
+              saveData(patientID, state).then((data) => {
                 console.log(data)
                 myToast.success('Information saved')
               }).catch((err) => {

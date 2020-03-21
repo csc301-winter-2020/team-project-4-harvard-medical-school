@@ -36,7 +36,6 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
   const [lastDrag, setLastDrag] = useState(now());
   const [inputRef, setInputRef] = useState(null);
 
-  // let inputRef: any;
   function saveCanvas() {
     let image: any = inputRef.canvas.drawing
       .toDataURL("image/png")
@@ -54,6 +53,17 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
       fieldName: id + 'Canvas',
       value: inputRef.getSaveData()
     });
+
+    // We only need the canvas image for parsing the chief complaint field
+    if (id === 'chiefComplaint') {
+      dispatch({
+        type: 'field',
+        fieldName: id + 'Image',
+        value: inputRef.canvas.drawing
+          .toDataURL('image/png')
+          .replace('data:image/png;base64,', '')
+      });
+    }
   }
 
   function changeColor(color: string) {

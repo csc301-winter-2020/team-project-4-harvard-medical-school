@@ -195,6 +195,33 @@ VALUES
         'Toronto General Hospital'
     );
 
+    INSERT INTO
+    users (
+        username,
+        first_name,
+        last_name,
+        avatar_url,
+        email,
+        password,
+        year,
+        user_type,
+        date_create,
+        location
+    )
+    VALUES
+    (
+        'i',
+        'Instructor',
+        'McInstructor',
+        'https://www.pphfoundation.ca/wp-content/uploads/2018/05/default-avatar.png',
+        'instrc@gmail.com',
+        'i',
+        1,
+        'Educator',
+        '20190101',
+        'Toronto General Hospital'
+    );
+
 INSERT INTO
     users (
         username,

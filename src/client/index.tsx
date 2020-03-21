@@ -42,6 +42,7 @@ import {
   faGripVertical,
   faQuestionCircle,
   faQuestion,
+  faEnvelope,
 } from "@fortawesome/free-solid-svg-icons";
 import { AdminClassAddStudentsPage } from "./comps/Pages/Admin/AdminClassAddStudentsPage";
 import { UserProfile } from "./comps/Pages/UserProfile";
@@ -74,7 +75,8 @@ myLibrary.add(
   faEraser,
   faGripVertical,
   faQuestionCircle,
-  faQuestion
+  faQuestion,
+  faEnvelope,
 );
 
 const browserRouter: JSX.Element = (

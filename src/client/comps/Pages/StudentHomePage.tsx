@@ -336,7 +336,6 @@ export const HomePage: React.FC<HomePageProps> = ({ classID }) => {
                   isPortraitMode={windowWidth < 1080}
                   firstName={p.firstName}
                   lastName={p.lastName}
-                  title={p.title}
                   date={p.date}
                   lastModified={p.lastModified}
                   sex={p.sex}
@@ -344,6 +343,7 @@ export const HomePage: React.FC<HomePageProps> = ({ classID }) => {
                   country={p.country}
                   isPregnant={p.isPregnant}
                   patientID={p.patientID}
+                  deletable={true}
                 />
               );
             })}
@@ -371,7 +371,7 @@ export const HomePage: React.FC<HomePageProps> = ({ classID }) => {
           <NewPatient
             history={history}
             setShowNewPatientPopup={setNewPatientPopup}
-          ></NewPatient>
+          />
         )}
       </div>
     </Fragment>

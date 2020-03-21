@@ -42,7 +42,7 @@ export const AdminPage: React.FC<AdminPageProps> = (props: AdminPageProps) => {
     };
   }, []);
 
-  useEffect(() => {
+  function refresh() {
     fetch(`/api/classes/all`)
       .then(response => {
         if (response.status === 200) {
@@ -71,6 +71,10 @@ export const AdminPage: React.FC<AdminPageProps> = (props: AdminPageProps) => {
       .finally(() => {
         setIsLoading(false);
       });
+  }
+
+  useEffect(() => {
+    refresh();
   }, []);
 
   return (
@@ -119,11 +123,7 @@ export const AdminPage: React.FC<AdminPageProps> = (props: AdminPageProps) => {
         <p>Create Class</p>
       </div>
       {showNewClassPopup && (
-        <NewAdminClass
-          setNewClassPopup={setNewClassPopup}
-          classes={classes}
-          setClasses={setClasses}
-        />
+        <NewAdminClass setNewClassPopup={setNewClassPopup} refresh={refresh} />
       )}
     </>
   );

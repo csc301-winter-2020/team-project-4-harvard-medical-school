@@ -7,31 +7,31 @@ import { AdminClass } from "../../Pages/Admin/AdminPage";
 
 interface NewAdminClassProps {
   setNewClassPopup: React.Dispatch<React.SetStateAction<boolean>>;
-  classes: AdminClass[];
-  setClasses: React.Dispatch<React.SetStateAction<AdminClass[]>>;
+  refresh: Function;
 }
 
 interface InstructorOptions {
   id: number;
   firstName: string;
   lastName: string;
-  key: string; 
+  key: string;
   value: string;
-  text: string; 
+  text: string;
 }
 
 function setSelectedTemplate(stuff: any) {
-  console.log('>>>', stuff);
+  console.log(">>>", stuff);
 }
 
 export const NewAdminClass: React.FC<NewAdminClassProps> = ({
   setNewClassPopup,
-  classes,
-  setClasses,
+  refresh,
 }) => {
   const [newClassName, setNewClassName] = useState("");
   const [instructors, setInstructors] = useState<InstructorOptions[]>([]);
-  const [selectedInstructorId, setSelectedInstructorId] = useState<number>(null);
+  const [selectedInstructorId, setSelectedInstructorId] = useState<number>(
+    null
+  );
   const mToast: any = toast;
 
   const createNewClass = async () => {
@@ -39,16 +39,16 @@ export const NewAdminClass: React.FC<NewAdminClassProps> = ({
       mToast.warn("Missing class name!");
       return;
     }
-    if (selectedInstructorId === null){
+    if (selectedInstructorId === null) {
       mToast.warn("Missing instructor!");
       return;
     }
 
     let data = {
       name: newClassName,
-      instructor_id: selectedInstructorId
+      instructor_id: selectedInstructorId,
     };
-    console.log(data)
+    console.log(data);
     const res = await fetch(`/api/classes/`, {
       method: "POST",
       headers: {
@@ -62,14 +62,10 @@ export const NewAdminClass: React.FC<NewAdminClassProps> = ({
     } else {
       console.log("Error trying to create new class:", newClassName);
     }
+    const jsonResponse = await res.json();
+    console.log(jsonResponse);
 
-    setClasses([
-      ...classes,
-      {
-        name: data.name,
-        id: data.instructor_id
-      }
-    ]);
+    refresh();
     setNewClassPopup(false);
   };
 
@@ -93,7 +89,7 @@ export const NewAdminClass: React.FC<NewAdminClassProps> = ({
             id: row.id,
             key: row.id,
             value: row.id,
-            text: row.first_name + " " + row.last_name
+            text: row.first_name + " " + row.last_name,
           });
         });
         setInstructors(allInstructors);
@@ -135,7 +131,7 @@ export const NewAdminClass: React.FC<NewAdminClassProps> = ({
             fluid
             search
             selection
-            onChange={(event: any, { value }: {value: any}) => {
+            onChange={(event: any, { value }: { value: any }) => {
               setSelectedInstructorId(value);
             }}
             options={instructors}
@@ -144,9 +140,10 @@ export const NewAdminClass: React.FC<NewAdminClassProps> = ({
         <br />
         <div className="home-page-create-new-patient-btn-cntr">
           <div
-            className={selectedInstructorId && newClassName ?
-              "home-page-create-new-patient-popup-btn" :
-              "home-page-create-new-patient-popup-btn-gray"
+            className={
+              selectedInstructorId && newClassName
+                ? "home-page-create-new-patient-popup-btn"
+                : "home-page-create-new-patient-popup-btn-gray"
             }
             onClick={createNewClass}
           >

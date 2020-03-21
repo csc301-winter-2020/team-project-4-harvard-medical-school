@@ -5,6 +5,7 @@ import { InstructorStudentProfileRow } from "../../SubComponents/Instructor/Inst
 import { ToastContainer, toast } from "react-toastify";
 import { max } from "../../../utils/utils";
 import { HelixLoader } from "../../SubComponents/HelixLoader";
+import { MyToast } from "../../../utils/types";
 
 interface InstructorPageProps {
   classID: number;
@@ -23,7 +24,9 @@ export const InstructorStudentsPage: React.FC<InstructorPageProps> = (
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
   const [students, setStudents] = useState<InstructorStudent[]>([]);
   const [searchVal, setSearchVal] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const myToast:MyToast = toast as any;
 
   useEffect(() => {
     fetch(`/api/students/${props.classID}`)
@@ -50,7 +53,11 @@ export const InstructorStudentsPage: React.FC<InstructorPageProps> = (
       })
       .catch((err: any) => {
         console.log(err);
-      });
+        myToast.warn(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      })
   }, []);
 
   return <>

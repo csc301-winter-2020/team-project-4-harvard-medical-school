@@ -107,7 +107,7 @@ router.get(
       .then(
         (query_result: { rowCount: number; rows: { [x: string]: any } }) => {
           if (query_result.rowCount === 0) {
-            res.status(404).send();
+            res.status(200).json([]);
           } else {
             const attributes: Array<string> = [
               "pregnant",
@@ -969,7 +969,8 @@ router.post(
     pool
       .query(insert_string, [new_class.name, new_class.instructor_id])
       .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
-        res.status(200).send("New Class Created");
+        console.log(result);
+        res.status(200).json(result);
       })
       .catch((err: any) => {
         res.status(400).send();

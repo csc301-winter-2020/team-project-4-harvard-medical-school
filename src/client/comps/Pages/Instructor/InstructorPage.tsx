@@ -20,7 +20,7 @@ export const InstructorPage: React.FC<InstructorPageProps> = (
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
   const [classes, setClasses] = useState<InstructorClass[]>([]);
   const [searchVal, setSearchVal] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
 
   useEffect(() => {

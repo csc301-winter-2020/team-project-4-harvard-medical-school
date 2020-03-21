@@ -70,6 +70,8 @@ export const ClassRow: React.FC<ClassRowProps> = ({
                     <div id="modal-btn-container">
                       <button
                         onClick={() => {
+                          console.log(c.id);
+                          console.log("blah")
                           close();
                           fetch(`/api/classes/${c.id}`, {
                             method: "DELETE",

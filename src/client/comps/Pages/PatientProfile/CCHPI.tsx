@@ -57,7 +57,8 @@ async function saveData(patientID: number, state: any) {
     console.log(state.chiefComplaintImage);
     const isabelRes = await postData(
       '/api/analysis/' + patientID, 
-      { image: state.chiefComplaintImage }
+      { image: state.chiefComplaintImage },
+      'POST'
     );
 
     console.log(await isabelRes.message);

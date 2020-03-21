@@ -52,9 +52,11 @@ export type IndividualPatientProfile = React.FC<
   IndividualPatientProfilePageProps
 >;
 
-export async function postData(url: string, data: any) {
+export async function postData(url: string, data: any, method?: string) {
+  if (method === undefined) method = 'PATCH';
+
   const response = await fetch(url, {
-    method: "PATCH",
+    method: method,
     mode: "cors",
     cache: "no-cache",
     credentials: "same-origin",

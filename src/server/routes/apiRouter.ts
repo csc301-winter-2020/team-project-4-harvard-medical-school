@@ -792,7 +792,10 @@ router.post(
           {
             "type": "DOCUMENT_TEXT_DETECTION"
           }
-        ]
+        ],
+        "imageContext": {
+          "languageHints": ["en-t-i0-handwrit"]
+        }
       }
       const [result] = await vision_client.annotateImage(request);
       if (result.fullTextAnnotation) {

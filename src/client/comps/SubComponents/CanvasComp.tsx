@@ -46,6 +46,7 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
 
   function clearCanvas() {
     inputRef.clear();
+    dispatchCanvasState();
   }
 
   function dispatchCanvasState() {

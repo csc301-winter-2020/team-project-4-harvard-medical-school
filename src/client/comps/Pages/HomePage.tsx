@@ -318,7 +318,6 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
                   country={p.country}
                   isPregnant={p.isPregnant}
                   patientID={p.patientID}
-                  deletable={true}
                 />
               );
             })}

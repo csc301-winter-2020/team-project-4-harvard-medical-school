@@ -29,7 +29,7 @@ const urlExpiredTime: number = 10;
  */
 
 /**
- * Get the details of the current logged in user in JSON
+ * TODO: Get the details of the current logged in user in JSON
  */
 router.get(
   "/api/me",
@@ -37,30 +37,7 @@ router.get(
   (req: Request, res: Response, next: NextFunction) => {
     const user: any = req.user;
     user.password = undefined; //Dont send password with JSON.
-    res.status(200).json(user);
-  }
-);
-
-/**
- * Get the details of a given user.
- */
-router.get(
-  "/api/users/:userId",
-  (req: Request, res: Response, next: NextFunction) => {
-    const userId: number = parseInt(req.params.userId);
-    const query_string: string = "SELECT * FROM csc301db.users WHERE id = $1";
-    pool
-      .query(query_string, [userId])
-      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
-        if (result.rowCount !== 1) {
-          res.status(404).send();
-        } else {
-          res.status(200).json(result.rows[0]);
-        }
-      })
-      .catch((err: any) => {
-        res.status(400).send();
-      });
+    res.status(200).json(req.user);
   }
 );
 
@@ -94,7 +71,7 @@ router.post(
 );
 
 /**
- * Return all the patient profiles that a user has.
+ * TODO: Return all the patient profiles that a user has.
  */
 router.get(
   "/api/student/:userId/patientprofiles",
@@ -107,7 +84,7 @@ router.get(
       .then(
         (query_result: { rowCount: number; rows: { [x: string]: any } }) => {
           if (query_result.rowCount === 0) {
-            res.status(200).json([]);
+            res.status(404).send();
           } else {
             const attributes: Array<string> = [
               "pregnant",
@@ -160,7 +137,7 @@ router.get(
 );
 
 /**
- * Return the patient profile of this id
+ * TODO: Return the patient profile of this id
  */
 router.get(
   "/api/patientprofile/:Id",
@@ -467,7 +444,7 @@ router.patch(
 );
 
 /**
- * Return all templates for a user
+ * TODO: Return all templates for a user
  */
 router.get(
   "/api/student/:userId/templates",
@@ -595,6 +572,22 @@ router.post(
       });
   }
 );
+
+// const example_template_json = {
+//     "user_id": 1,
+//     "template_name": "MyNewTemplate",
+//     "date_millis": 123123123123123,
+//     "template": [
+//         {
+//             "title": "Social History",
+//             "fields": ["Work"]
+//         },
+//         {
+//             "title": "Demographics",
+//             "fields": ["sexAtBirth", "lastName", "firstname"],
+//         },
+//     ],
+// }
 
 router.get(
   "/api/reviewOfSystems/:patientId",
@@ -733,326 +726,24 @@ router.delete(
 );
 
 /**
- * Get all the users of type student.
+ * TODO: Return all the classes this user (student) is in
  */
 router.get(
-  "/api/students/all",
+  "/api/student/:userId/classes",
   (req: Request, res: Response, next: NextFunction) => {
-    const query_string: string =
-      "SELECT * FROM csc301db.users WHERE user_type = 'Student'";
-    pool
-      .query(query_string, [])
-      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
-        res.status(200).json(result.rows);
-      })
-      .catch((err: any) => {
-        console.log(err);
-        res.status(500).json({ error: err });
-      });
+    const userId: string = req.params.userId;
+    res.status(200).json("");
   }
 );
 
 /**
- * Get all students enrollment in a specific class
+ * TODO: Return all the classes this instructor manages
  */
 router.get(
-  "/api/students/:classID",
+  "/api/instructor/:userId/classes",
   (req: Request, res: Response, next: NextFunction) => {
-    const class_id: number = parseInt(req.params.classID);
-    const query_string: string =
-      "SELECT id, first_name, last_name, avatar_url\
-     FROM csc301db.users JOIN csc301db.students_enrollment\
-     ON csc301db.users.id = csc301db.students_enrollment.student_id\
-     WHERE csc301db.students_enrollment.class_id = $1";
-    pool
-      .query(query_string, [class_id])
-      .then((result: any) => {
-        if (result.rowCount === 0) {
-          res.status(404).send("No students in this class");
-        } else {
-          res.status(200).json(result.rows);
-        }
-      })
-      .catch((err: any) => {
-        console.log(err);
-        res.status(400).json({ error: err });
-      });
-  }
-);
-
-/**
- * Get all classes that a student is in.
- */
-router.get(
-  "/api/classesForStudent/:sid",
-  (req: Request, res: Response, next: NextFunction) => {
-    const sid: number = parseInt(req.params.sid);
-    const query_string: string =
-      "SELECT c.* \
-     FROM csc301db.class c JOIN csc301db.students_enrollment se \
-     ON c.id = se.class_id \
-     WHERE se.student_id = $1";
-    pool
-      .query(query_string, [sid])
-      .then((result: any) => {
-        res.status(200).json(result.rows);
-      })
-      .catch((err: any) => {
-        console.log(err);
-        res.status(400).json({ error: err });
-      });
-  }
-);
-
-/**
- * Get all students not enrolled in a specific class
- */
-router.get(
-  "/api/students/eligible/:classID",
-  (req: Request, res: Response, next: NextFunction) => {
-    const class_id: number = parseInt(req.params.classID);
-    const query_string: string =
-      "SELECT id, first_name, last_name\
-     FROM csc301db.users U1\
-     WHERE U1.user_type = 'Student' AND NOT EXISTS (SELECT 1\
-      FROM csc301db.users U2 JOIN csc301db.students_enrollment\
-      ON U2.id = csc301db.students_enrollment.student_id\
-      WHERE U1.id = U2.id AND csc301db.students_enrollment.class_id = $1)";
-    pool
-      .query(query_string, [class_id])
-      .then((result: any) => {
-        if (result.rowCount === 0) {
-          res.status(404).json("No more eligible students");
-        } else {
-          res.status(200).json(result.rows);
-        }
-      })
-      .catch((err: any) => {
-        console.log(err);
-        res.status(400).json({ error: err });
-      });
-  }
-);
-
-/**
- * Add a student to a class
- */
-router.post(
-  "/api/classes/:classID/:studentID",
-  (req: Request, res: Response, next: NextFunction) => {
-    const class_id: number = parseInt(req.params.classID);
-    const student_id: number = parseInt(req.params.studentID);
-    const insert_string: string =
-      "INSERT INTO csc301db.students_enrollment\
-      (class_id, student_id) VALUES ($1, $2)";
-    pool
-      .query(insert_string, [class_id, student_id])
-      .then((result: any) => {
-        res.status(200).send("Added student to class");
-      })
-      .catch((err: any) => {
-        res.status(400).send();
-      });
-  }
-);
-
-/**
- * Remove a student from a class
- */
-router.delete(
-  "/api/classes/:classID/:studentID",
-  (req: Request, res: Response, next: NextFunction) => {
-    const student_id: number = parseInt(req.params.studentID);
-    const class_id: number = parseInt(req.params.classID);
-    const delete_query: string =
-      "DELETE FROM csc301db.students_enrollment\
-       WHERE student_id = $1 AND class_id = $2";
-    pool
-      .query(delete_query, [student_id, class_id])
-      .then((result: any) => {
-        if (result.rowCount === 0) {
-          res.status(404).send("Enrolled student not found");
-        } else {
-          res.status(200).send();
-        }
-      })
-      .catch((err: any) => {
-        console.log(err);
-        res.status(400).send();
-      });
-  }
-);
-
-/**
- * Get all classes
- */
-router.get(
-  "/api/classes/all",
-  (req: Request, res: Response, next: NextFunction) => {
-    const query_string: string = "SELECT * FROM csc301db.class";
-    pool
-      .query(query_string, [])
-      .then((result: any) => {
-        res.status(200).json(result.rows);
-      })
-      .catch((err: any) => {
-        console.log(err);
-        res.status(400).json({ error: err });
-      });
-  }
-);
-
-/**
- * Get a class name by ID
- */
-router.get(
-  "/api/classes/:classID",
-  (req: Request, res: Response, next: NextFunction) => {
-    const class_id: number = parseInt(req.params.classID);
-    const query_string: string = "SELECT c.*, u.first_name, u.last_name FROM csc301db.class c JOIN csc301db.users u ON \
-    u.id = c.instructor_id \
-    WHERE c.id = $1";
-    pool
-      .query(query_string, [class_id])
-      .then((result: any) => {
-        if (result.rowCount === 0) {
-          res.status(404).send("No specified class found");
-        } else {
-          res.status(200).json(result.rows);
-        }
-      })
-      .catch((err: any) => {
-        console.log(err);
-        res.status(400).json({ error: err });
-      });
-  }
-);
-
-/**
- * Patch a class name by ID
- */
-router.patch(
-  "/api/classes/:classID",
-  (req: Request, res: Response, next: NextFunction) => {
-    const class_id: number = parseInt(req.params.classID);
-    const body: any = req.body;
-    const query_string: string =
-      "UPDATE csc301db.class SET name = $1, instructor_id = $2, help_enabled = $3 \
-    WHERE id = $4";
-    pool
-      .query(query_string, [
-        body.name,
-        body.instructor_id,
-        body.help_enabled,
-        class_id,
-      ])
-      .then((result: any) => {
-        res.status(200).json(result.rows);
-      })
-      .catch((err: any) => {
-        console.log(err);
-        res.status(400).json({ error: err });
-      });
-  }
-);
-
-/**
- * Create new class
- */
-router.post(
-  "/api/classes/",
-  (req: Request, res: Response, next: NextFunction) => {
-    const new_class = req.body;
-    const insert_string: string =
-      "INSERT INTO csc301db.class\
-      (name, instructor_id) VALUES ($1, $2)";
-    pool
-      .query(insert_string, [new_class.name, new_class.instructor_id])
-      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
-        console.log(result);
-        res.status(200).json(result);
-      })
-      .catch((err: any) => {
-        res.status(400).send();
-      });
-  }
-);
-
-/**
- * Deleting a class
- */
-router.delete(
-  "/api/classes/:classID",
-  (req: Request, res: Response, next: NextFunction) => {
-    const class_id: number = parseInt(req.params.classID);
-    const delete_enrollment: string =
-      "DELETE FROM csc301db.students_enrollment\
-       WHERE class_id = $1";
-    pool
-      .query(delete_enrollment, [class_id])
-      .then((result: any) => {
-        const delete_class: string =
-          "DELETE FROM csc301db.class\
-           WHERE id = $1";
-
-        return pool.query(delete_class, [class_id]);
-      })
-      .then((result: any) => {
-        res.status(200).send();
-      })
-      .catch((err: any) => {
-        console.log(err);
-        res.status(400).send();
-      });
-  }
-);
-
-/**
- * Get all classes that an instructor teaches 
- */
-router.get(
-  "/api/classesOfInstructors/:instructorId",
-  (req: Request, res: Response, next: NextFunction) => {
-    const instructor_id: number = parseInt(req.params.instructorId);
-    const query_string: string =
-      "SELECT id, name \
-     FROM csc301db.class \
-     WHERE csc301db.class.instructor_id = $1";
-    pool
-      .query(query_string, [instructor_id])
-      .then((result: any) => {
-        res.status(200).json(result.rows);
-      })
-      .catch((err: any) => {
-        console.log(err);
-        res.status(400).json({ error: err });
-      });
-  }
-);
-
-/**
- * Get all instructors 
- */
-router.get(
-  "/api/instructors/all",
-  (req: Request, res: Response, next: NextFunction) => {
-    const query_string: string =
-    "SELECT id, first_name, last_name \
-     FROM csc301db.users \
-     WHERE csc301db.users.user_type = 'Educator'";
-    pool
-      .query(query_string)
-      .then((result: any) => {
-        if (result.rowCount === 0) {
-          res.status(404).send("No instructors exist");
-        } else {
-          res.status(200).json(result.rows);
-        }
-      })
-      .catch((err: any) => {
-        console.log(err);
-        res.status(400).json({ error: err });
-      });
+    const userId: string = req.params.userId;
+    res.status(200).json("");
   }
 );
 

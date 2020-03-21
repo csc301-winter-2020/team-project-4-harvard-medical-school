@@ -108,9 +108,8 @@ router.patch(
         year = $6, \
         user_type = $7, \
         default_mode = $8, \
-        default_sidebar = $9, \
-        location = $10 \
-        WHERE id = $11";
+        default_sidebar = $9 \
+        WHERE id = $10";
     pool
       .query(query, [
         body.username,
@@ -122,7 +121,6 @@ router.patch(
         body.user_type,
         body.default_mode,
         body.default_sidebar,
-        body.location,
         userId,
       ])
       .then((result: any) => {

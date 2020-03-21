@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { defaultPatientProfile } from "../../../utils/defaultPatientProfile";
 import "../../../scss/home/home";
 import { toast } from "react-toastify";
-import { MyToast } from "../../../utils/types";
 
 interface NewPatientProps {
   history?: any;
@@ -18,7 +17,7 @@ export const NewPatient: React.FC<NewPatientProps> = ({
   history,
   setShowNewPatientPopup,
 }) => {
-  const mToast:MyToast = toast as any;
+  const mToast:any = toast;
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const newPatient = async () => {

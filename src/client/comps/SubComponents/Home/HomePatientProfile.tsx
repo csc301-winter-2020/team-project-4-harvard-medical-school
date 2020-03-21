@@ -17,10 +17,10 @@ interface HomePatientProfileProps {
   country: string;
   patientID: number;
   isPortraitMode: boolean;
-  deletable: boolean;
 }
 
 export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
+  title, //unused
   date,
   lastModified,
   firstName,
@@ -31,7 +31,6 @@ export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
   country,
   isPortraitMode,
   patientID,
-  deletable,
 }) => {
   const history = useHistory();
   const [isShowingInfo, setIsShowingInfo] = useState(false);
@@ -120,81 +119,77 @@ export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
               <div className="home-patient-profile-info-export-btn">
                 Export Patient as PDF
               </div>
-              {deletable && (
-                <Popup
-                  trigger={
-                    <div className="home-patient-profile-info-delete-btn">
-                      Delete Patient Profile
-                    </div>
-                  }
-                  modal
-                  closeOnDocumentClick
-                >
-                  {(close: Function) => (
-                    <div id="modal-container">
-                      <div id="modal-header"> Delete Patient Profile </div>
-                      <div id="modal-content">
-                        {" "}
-                        Deleting a patient profile is permenant. Are you sure
-                        you want to continue?
-                        <div id="modal-btn-container">
-                          <button
-                            onClick={() => {
-                              close();
-                              if (userID === null) {
-                                console.log(
-                                  "User ID is null. Failed the api/me HTTP request."
-                                );
-                                mToast.warn(
-                                  "Could not delete patient profile. Try logging in again."
-                                );
-                              } else {
-                                fetch(
-                                  `/api/patientProfile/${patientID}/${userID}`,
-                                  {
-                                    method: "DELETE",
-                                    mode: "cors",
-                                    cache: "no-cache",
-                                    credentials: "same-origin",
-                                    headers: {
-                                      "Content-Type": "application/json",
-                                    },
-                                    redirect: "follow",
-                                    referrerPolicy: "no-referrer",
-                                  }
-                                )
-                                  .then(res => {
-                                    if (res.status === 200) {
-                                      setIsDeleted(true);
-                                      mToast.success(
-                                        "Patient profile deleted."
-                                      );
-                                    } else {
-                                      throw new Error(
-                                        "Could not delete Patient Profile."
-                                      );
-                                    }
-                                  })
-                                  .catch((err: any) => {
-                                    console.log(err);
-                                    mToast.warn(
-                                      "Could not delete patient profile. Try again."
+              <Popup
+                trigger={
+                  <div className="home-patient-profile-info-delete-btn">
+                    Delete Patient Profile
+                  </div>
+                }
+                modal
+                closeOnDocumentClick
+              >
+                {(close: Function) => (
+                  <div id="modal-container">
+                    <div id="modal-header"> Delete Patient Profile </div>
+                    <div id="modal-content">
+                      {" "}
+                      Deleting a patient profile is permenant. Are you sure you
+                      want to continue?
+                      <div id="modal-btn-container">
+                        <button
+                          onClick={() => {
+                            close();
+                            if (userID === null) {
+                              console.log(
+                                "User ID is null. Failed the api/me HTTP request."
+                              );
+                              mToast.warn(
+                                "Could not delete patient profile. Try logging in again."
+                              );
+                            } else {
+                              fetch(
+                                `/api/patientProfile/${patientID}/${userID}`,
+                                {
+                                  method: "DELETE",
+                                  mode: "cors",
+                                  cache: "no-cache",
+                                  credentials: "same-origin",
+                                  headers: {
+                                    "Content-Type": "application/json",
+                                  },
+                                  redirect: "follow",
+                                  referrerPolicy: "no-referrer",
+                                }
+                              )
+                                .then(res => {
+                                  if (res.status === 200) {
+                                    setIsDeleted(true);
+                                    mToast.success("Patient profile deleted.");
+                                  } else {
+                                    throw new Error(
+                                      "Could not delete Patient Profile."
                                     );
-                                  });
-                              }
-                            }}
-                          >
-                            Yes, delete this profile.
-                          </button>
-                          <button onClick={() => close()}>
-                            No, take me back!
-                          </button>
-                        </div>
+                                  }
+                                })
+                                .catch((err: any) => {
+                                  console.log(err);
+                                  mToast.warn(
+                                    "Could not delete patient profile. Try again."
+                                  );
+                                });
+                            }
+                          }}
+                        >
+                          Yes, delete this profile.
+                        </button>
+                        <button onClick={() => close()}>
+                          No, take me back!
+                        </button>
                       </div>
                     </div>
-                  )}
-                </Popup>
-              )}
+                  </div>
+                )}
+              </Popup>
             </div>
           </div>
         )}

@@ -36,32 +36,3 @@ export const fullTemplate: {[key in contentType]: string[]} ={
   "Social History": ["work", "livingConditions", "sexualHistory", "etOH", "drinksPerWeek", "smoker", "lastTimeSmoked", "packsPerDay", "otherSubstances"],
 }
 
-export type Class = {
-  id: number;
-  help_enabled: boolean;
-  name: string;
-  instructor_id: number;
-}
-
-export type MyToast = {
-  warn: ToastFunc;
-  success: ToastFunc;
-  info: ToastFunc;
-  error: ToastFunc;
-}
-
-type ToastFunc = (msg: string, params?: object) => void;
-
-export type userData = {
-  id: number;
-  username: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  year: number;
-  user_type: "Student" | "Educator" | "Administrator";
-  avatar_url: string;
-  default_mode: "Typing" | "Both" | "Writing";
-  default_sidebar: boolean;
-  location: string;
-};

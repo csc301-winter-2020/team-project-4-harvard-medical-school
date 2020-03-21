@@ -2,20 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Header } from "../SubComponents/Header";
 import "../../scss/settings/settings.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { defaultAvatar, numberToYearStr, dummyData } from "../../utils/utils";
+import { defaultAvatar, numberToYearStr } from "../../utils/utils";
 import { HelixLoader } from "../SubComponents/HelixLoader";
 import { toast, ToastContainer } from "react-toastify";
-import { MyToast, userData } from "../../utils/types";
 
 interface SettingsPageProps {}
 
 async function getUserSettings() {
-  try {
-    const res = await fetch(`/api/me`, { method: "GET" });
-    return await res.json();
-  } catch {
-    console.log("Something went wrong... IN SETTINGS PAGE GET USER SETTINGS FUNC");
-  }
+  const res = await fetch(`/api/me`, { method: "GET" });
+  return await res.json();
 }
 
 async function patchUserInfo(data: userData) {
@@ -40,12 +35,38 @@ async function patchUserInfo(data: userData) {
     });
 }
 
+type userData = {
+  id: number;
+  username: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  year: number;
+  user_type: "Student" | "Educator" | "Administrator";
+  avatar_url: string;
+  default_mode: "Typing" | "Both" | "Writing";
+  default_sidebar: boolean;
+};
+
+const dummyData: userData = {
+  id: -1,
+  username: "",
+  first_name: "",
+  last_name: "",
+  email: "",
+  year: 0,
+  user_type: "Student",
+  avatar_url: defaultAvatar,
+  default_mode: "Typing",
+  default_sidebar: true,
+};
+
 export const SettingsPage: React.FC<SettingsPageProps> = ({}) => {
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState<userData>(dummyData);
-  const myToast: MyToast = toast as any;
+  const myToast: any = toast;
 
   useEffect(() => {
     getUserSettings().then(data => {
@@ -60,7 +81,6 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({}) => {
         avatar_url: data.avatar_url,
         default_mode: data.default_mode,
         default_sidebar: data.default_sidebar,
-        location: data.location,
       });
 
       setIsLoading(false);
@@ -120,7 +140,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({}) => {
               <div></div>
               {!isEditing && (
                 <h3 className="settings-year-text">
-                  {numberToYearStr[userData.year]} Year {userData.user_type}
+                  {numberToYearStr[userData.year]} Year Student
                 </h3>
               )}
               {isEditing && (
@@ -142,33 +162,13 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({}) => {
                   <h3 className="settings-year-text">Year Student</h3>
                 </>
               )}
-              {!isEditing && (
-                <h3 style={{ marginBottom: "10px" }}>{userData.location}</h3>
-              )}
-              {isEditing && (
-                <>
-                  <input
-                    id="settings-avatar-input"
-                    type="text"
-                    placeholder="Location"
-                    value={userData.location}
-                    onChange={(e: any) => {
-                      setUserData({
-                        ...userData,
-                        location: e.target.value,
-                      });
-                    }}
-                  />
-                  <div></div>
-                </>
-              )}
+              <h3 style={{ marginBottom: "10px" }}>Toronto General Hospital</h3>
               {isEditing && (
                 <>
                   <h3 className="settings-avatar-text">Avatar URL:</h3>
                   <input
                     type="text"
                     id="settings-avatar-input"
-                    placeholder="https://www.example.com/my_picture.jpg"
                     value={userData.avatar_url}
                     onChange={(e: any) => {
                       setUserData({
@@ -297,7 +297,6 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({}) => {
                 year: userData.year,
                 user_type: userData.user_type,
                 avatar_url: userData.avatar_url,
-                location: userData.location,
               })
                 .then(res => {
                   console.log(res);

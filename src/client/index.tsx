@@ -6,16 +6,12 @@ import { fab } from "@fortawesome/free-brands-svg-icons";
 import { BrowserRouter } from "react-router-dom";
 import { Switch, Route } from "react-router";
 import { LoginPage } from "./comps/Pages/LoginPage";
-import { AllHomePage } from "./comps/Pages/AllHomePage";
+import { HomePage } from "./comps/Pages/HomePage";
 import { PatientProfilePage } from "./comps/Pages/PatientProfile/PatientProfilePage";
 import { SettingsPage } from "./comps/Pages/SettingsPage";
 import { TemplatesPage } from "./comps/Pages/TemplatesPage";
 import { Questions } from "./comps/SubComponents/Templates/Questions";
 import { Error } from "./comps/Pages/Errors/Error";
-import { AdminClassStudentsPage } from "./comps/Pages/Admin/AdminClassStudentsPage";
-import { InstructorStudentsPage } from "./comps/Pages/Instructor/InstructorStudentsPage";
-import { InstructorStudentProfilePage } from "./comps/Pages/Instructor/InstructorStudentProfilePage";
-import { InstructorStudentPatientPage } from "./comps/Pages/Instructor/InstructorStudentPatientPage";
 import {
   faCheckSquare,
   faCoffee,
@@ -42,11 +38,8 @@ import {
   faGripVertical,
   faQuestionCircle,
   faQuestion,
-  faEnvelope,
 } from "@fortawesome/free-solid-svg-icons";
-import { AdminClassAddStudentsPage } from "./comps/Pages/Admin/AdminClassAddStudentsPage";
-import { UserProfile } from "./comps/Pages/UserProfile";
-import { HomePage } from "./comps/Pages/StudentHomePage";
+import { HelixLoader } from "./comps/SubComponents/HelixLoader";
 
 const myLibrary: any = library;
 myLibrary.add(
@@ -75,15 +68,14 @@ myLibrary.add(
   faEraser,
   faGripVertical,
   faQuestionCircle,
-  faQuestion,
-  faEnvelope,
+  faQuestion
 );
 
 const browserRouter: JSX.Element = (
   <BrowserRouter>
     <Switch>
       <Route exact path="/" component={LoginPage} />
-      <Route exact path="/home" component={AllHomePage} />
+      <Route exact path="/home" component={HomePage} />
       <Route
         exact
         path={["/patient/:id", "/patient/:id/:pageName"]}
@@ -94,66 +86,15 @@ const browserRouter: JSX.Element = (
       <Route
         exact
         path="/template/:id"
-        render={props => <Questions {...props} useDefault={false} />}
+        render={(props) => <Questions {...props} useDefault={false}  />}
       />
       <Route
         exact
         path="/templates/new"
-        render={props => <Questions {...props} useDefault={true} />}
+        render={(props) => <Questions {...props} useDefault={true} />}
       />
-      <Route
-        exact
-        path="/class/:id"
-        render={props => <HomePage {...props} classID={props.match.params.id}/>}
-      />
-      <Route
-        exact
-        path="/admin/:id/students"
-        render={props => <AdminClassStudentsPage {...props} classID={props.match.params.id}/>}
-      />
-      <Route
-        exact
-        path="/admin/:id/add"
-        render={props => <AdminClassAddStudentsPage {...props} classID={props.match.params.id}/>}
-      />
-      <Route
-        exact
-        path="/instructor/:cid/students"
-        render={props => <InstructorStudentsPage {...props} classID={props.match.params.cid}/>}
-      />
-      <Route
-        exact
-        path="/instructor/:cid/student/:sid"
-        render={props =>
-          <InstructorStudentProfilePage {...props}
-            classID={props.match.params.cid}
-            studentID={props.match.params.sid}
-          />
-        }
-      />
-      <Route
-        exact
-        path="/instructor/:cid/student/:sid/patient/:pid"
-        render={props =>
-          <InstructorStudentPatientPage {...props}
-            classID={props.match.params.cid}
-            studentID={props.match.params.sid}
-            patientID={props.match.params.pid}
-          />
-        }
-      />
-      <Route
-        exact path="/profile/:id"
-        render={props => <UserProfile {...props} id={props.match.params.id}/>}
-      />
-      <Route
-        exact
-        path="/err/:num/:msg"
-        render={props => <Error {...props} urlErr={true} />}
-      />
-      <Route
-        render={props => <Error {...props} errNo={404} urlErr={false} />}
-      />
+      <Route exact path="/err/:num/:msg" render={(props) => <Error {...props} urlErr={true}/>} />
+      <Route render={(props) => <Error {...props} errNo={404} urlErr={false}/>} />
     </Switch>
   </BrowserRouter>
 );

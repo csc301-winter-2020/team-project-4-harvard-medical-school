@@ -1,4 +1,4 @@
-import { contentType, Class, userData } from "./types";
+import { contentType } from "./types";
 import _ from "underscore";
 
 const dateFormat = require("dateformat");
@@ -120,25 +120,3 @@ export const nameToUrl: {[name in contentType]: string} = _.invert(urlToName);
 export function scrollIntoView(id: string){
   document.querySelector(`#${id}-draggable`).scrollIntoView();
 }
-
-
-export const initialClass:Class = {
-  id: -1,
-  help_enabled: false,
-  name: "DEFAULT_CLASS_NAME",
-  instructor_id: -1,
-}
-
-export const dummyData: userData = {
-  id: -1,
-  username: "",
-  first_name: "",
-  last_name: "",
-  email: "",
-  year: 0,
-  user_type: "Student",
-  avatar_url: defaultAvatar,
-  default_mode: "Typing",
-  default_sidebar: true,
-  location: "Nowhere",
-};

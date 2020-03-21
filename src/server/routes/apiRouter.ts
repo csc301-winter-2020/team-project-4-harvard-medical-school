@@ -814,6 +814,7 @@ router.post(
     // TODO: FIX THIS LATER
     const pregnant: string = "n";
     const isbell_url: string = `https://apisandbox.isabelhealthcare.com/v2/ranked_differential_diagnoses?specialties=28&dob=${age}&sex=${gender}&pregnant=${pregnant}&region=10&querytext=${all_string}&suggest=suggest+differential+diagnosis&flag=sortbyrw_advanced&searchtype=0&web_service=json&callback=diagnosiscallback&authorization=urOSKOJyYvIOj8BnIgBwJI0KgXT4BR9VYShRyAPDdbcChStimoHWbUE6ILUM0Z4S`;
+    try {
     const isbell_res: any = await https.get(isbell_url);
     const final_result: string = isbell_res.data.slice(18, isbell_res.data.length-2);
     // console.log(JSON.parse(final_result));
@@ -822,7 +823,7 @@ router.post(
     "INSERT INTO csc301db.analysis \
     (time_submitted, profile_id, student_input, isbell_result) VALUES \
     (current_timestamp, $1, $2, $3)";
-    try {
+    
     await pool.query(insert_string, [profile_id, all_string, parsed_result]);
     res.status(200).send();
     } catch (err) {

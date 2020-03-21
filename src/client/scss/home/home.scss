@@ -360,6 +360,11 @@ input:focus {
   vertical-align: middle;
   padding: 10px;
 
+  &-large {
+    @extend .home-page-create-new-patient-popup-inner;
+    height: 400px;
+  }
+
   div {
     text-align: center;
   }
@@ -404,10 +409,20 @@ input:focus {
   margin: auto;
   margin-bottom: 16px;
   transition: all 0.15s ease;
+
+  &-gray {
+    @extend .home-page-create-new-patient-popup-btn;
+    background-color: #b5b5b5;
+    transition: none;
+  }
 }
 
 .home-page-create-new-patient-popup-btn:hover{
   background-color: $color-primary-dim;
+}
+
+.home-page-create-new-patient-popup-btn-gray:hover{
+  background-color: #b5b5b5;
 }
 
 .home-page-create-new-patient-btn-cntr{

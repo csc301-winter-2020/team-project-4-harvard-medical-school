@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../../scss/instructor/instructor-page.scss";
 import { Header } from "../../SubComponents/Header";
 import { InstructorClassRow } from "../../SubComponents/Instructor/InstructorClassRow";
@@ -14,18 +14,55 @@ interface InstructorClass {
   id: number;
 }
 
-const mockData: InstructorClass[] = [
-  { name: 'MED123 - Intro To Anatomy', id: 0 },
-  { name: 'MED210 - Patient Care', id: 2 }
-];
-
 export const InstructorPage: React.FC<InstructorPageProps> = (
   props: InstructorPageProps
 ) => {
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
-  const [classes, setClasses] = useState(mockData);
+  const [classes, setClasses] = useState<InstructorClass[]>([]);
   const [searchVal, setSearchVal] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+
+  useEffect(() => {
+    fetch((`/api/me`))
+    .then(response => {
+      if(response.status === 200){
+        return response.json()  
+      }else {
+        throw new Error(`Error code: ${response.status}, ${response.statusText}`);
+      }
+    })
+    .then((data:any) => {
+      console.log(data.id)
+      return data.id;
+    })
+    .then((instructorId: number) =>{
+      return fetch(`/api/classesOfInstructors/${instructorId}`)
+    })
+    .then(response => {
+      if (response.status === 200){
+        return response.json()
+      } else {
+        throw new Error(`Error code: ${response.status}, ${response.statusText}`);
+      }
+    })
+    .then((data:any) => {
+      const allClasses:InstructorClass[] = [];
+      data.forEach((row:any) => {
+        allClasses.push({
+          name: row.name,
+          id: row.id,
+        });
+      });
+      setClasses(allClasses);
+    })
+    .catch((err:any) => {
+      console.log(err);
+    })
+    .finally(() => {
+      setIsLoading(false);
+    });
+  }, []);
 
   return <>
     <Header

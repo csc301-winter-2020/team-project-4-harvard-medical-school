@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../../scss/instructor/instructor-page.scss";
 import { Header } from "../../SubComponents/Header";
 import { InstructorStudentProfileRow } from "../../SubComponents/Instructor/InstructorStudentProfileRow";
@@ -12,23 +12,46 @@ interface InstructorPageProps {
 
 interface InstructorStudent {
   id: number;
-  name: string;
+  firstName: string; 
+  lastName: string;
   pictureURL: string;
 }
-
-const mockData: InstructorStudent[] = [
-  { id: 0, name: 'Student A', pictureURL: "https://content.thriveglobal.com/wp-content/uploads/2018/01/Happy_guy.jpg" },
-  { id: 1, name: 'Student B', pictureURL: "https://img.huffingtonpost.com/asset/5c2d06271d00002c0231b4e4.jpeg?ops=800_450", },
-  { id: 3, name: 'Steven Kang', pictureURL: "https://i.ytimg.com/vi/S2kbmUyBaM4/hqdefault.jpg" },
-];
 
 export const InstructorStudentsPage: React.FC<InstructorPageProps> = (
   props: InstructorPageProps
 ) => {
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
-  const [students, setStudents] = useState(mockData);
+  const [students, setStudents] = useState<InstructorStudent[]>([]);
   const [searchVal, setSearchVal] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    fetch(`/api/students/${props.classID}`)
+      .then(response => {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          throw new Error(
+            `Error code: ${response.status}, ${response.statusText}`
+          );
+        }
+      })
+      .then((data: any) => {
+        const newAllStudents: InstructorStudent[] = [];
+        data.forEach((row: any) => {
+          newAllStudents.push({
+            firstName: row.first_name,
+            lastName: row.last_name,
+            id: row.id,
+            pictureURL: row.avatar_url 
+          });
+        });
+        setStudents(newAllStudents);
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
+  }, []);
 
   return <>
     <Header
@@ -46,11 +69,11 @@ export const InstructorStudentsPage: React.FC<InstructorPageProps> = (
       <div className="home-page-separator-line"/>
       <div className="home-page-patient-header-grid"/>
       <div className="home-page-content">
-        {students.filter(s => s.name.toLowerCase().includes(searchVal.toLowerCase())).map(student =>
+        {students.filter(s => s.firstName.toLowerCase().includes(searchVal.toLowerCase()) || s.lastName.toLowerCase().includes(searchVal.toLowerCase())).map(student =>
           <InstructorStudentProfileRow
             studentID={student.id}
             classID={props.classID}
-            name={student.name}
+            name={student.firstName}
             imageURL={student.pictureURL}
           />
         )}

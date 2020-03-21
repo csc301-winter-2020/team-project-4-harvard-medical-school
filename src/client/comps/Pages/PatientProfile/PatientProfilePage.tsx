@@ -67,6 +67,8 @@ export async function postData(url: string, data: any, method?: string) {
     referrerPolicy: "no-referrer", // no-referrer
     body: JSON.stringify(data),
   });
+
+  console.log(response);
   return await response.json();
 }
 

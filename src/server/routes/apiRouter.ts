@@ -889,7 +889,7 @@ router.delete(
 router.get(
   "/api/classes/all",
   (req: Request, res: Response, next: NextFunction) => {
-    const query_string: string = "SELECT id, name FROM csc301db.class";
+    const query_string: string = "SELECT * FROM csc301db.class";
     pool
       .query(query_string, [])
       .then((result: any) => {

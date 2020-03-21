@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import "../../../scss/home/home";
 import { toast } from "react-toastify";
-import { Dropdown } from 'semantic-ui-react';
+import { Dropdown } from "semantic-ui-react";
+import "../../../scss/semantic";
 
 interface NewAdminClassProps {
   setNewClassPopup: React.Dispatch<React.SetStateAction<boolean>>;
-  refreshClasses: () => void
+  refreshClasses: () => void;
 }
 
 interface Instructor {
@@ -15,22 +16,18 @@ interface Instructor {
 }
 
 const mockData: Instructor[] = [
-  { id: 0, firstName: 'First', lastName: 'Last' },
-  { id: 2, firstName: 'Steven', lastName: 'Kang' },
+  { id: 0, firstName: "First", lastName: "Last" },
+  { id: 2, firstName: "Steven", lastName: "Kang" },
 ];
 
 const mockDataOptions = [
-  { key: 'First Last', value: 'First Last', text: 'First Last' },
-  { key: 'Steven Kang', value: 'Steven Kang', text: 'Steven Kang' },
+  { key: "First Last", value: "First Last", text: "First Last" },
+  { key: "Steven Kang", value: "Steven Kang", text: "Steven Kang" },
 ];
-
-function setSelectedTemplate(stuff: any) {
-  console.log('>>>', stuff);
-}
 
 export const NewAdminClass: React.FC<NewAdminClassProps> = ({
   setNewClassPopup,
-  refreshClasses
+  refreshClasses,
 }) => {
   const [newClassName, setNewClassName] = useState("");
   const [instructors, setInstructors] = useState(mockData);
@@ -45,7 +42,7 @@ export const NewAdminClass: React.FC<NewAdminClassProps> = ({
 
     let data = {
       name: newClassName,
-      instructor_id: (await (await fetch(`/api/me`)).json()).id
+      instructor_id: (await (await fetch(`/api/me`)).json()).id,
     };
 
     const res = await fetch(`/api/classes/`, {
@@ -92,20 +89,14 @@ export const NewAdminClass: React.FC<NewAdminClassProps> = ({
             }}
           />
         </div>
-        <div>
-          {
-            <link
-              rel="stylesheet"
-              href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.1/dist/semantic.min.css"
-            />
-          }
-          <br />
+        <div id="dropdown-container">
           <Dropdown
-            placeholder='Select Instructor'
+            placeholder="Select Instructor"
             fluid
             search
             selection
-            onChange={(event: any, { value }: {value: any}) => {
+            onChange={(event: any, { key, value }: { key: any, value: any }) => {
+              console.log(value);
               setSelectedInstructor(value);
             }}
             options={mockDataOptions}
@@ -114,13 +105,13 @@ export const NewAdminClass: React.FC<NewAdminClassProps> = ({
         <br />
         <div className="home-page-create-new-patient-btn-cntr">
           <div
-            className={selectedInstructor && newClassName ?
-              "home-page-create-new-patient-popup-btn" :
-              "home-page-create-new-patient-popup-btn-gray"
+            className={
+              selectedInstructor && newClassName
+                ? "home-page-create-new-patient-popup-btn"
+                : "home-page-create-new-patient-popup-btn-gray"
             }
-            onClick={selectedInstructor && newClassName ?
-              createNewClass :
-              () => {}
+            onClick={
+              selectedInstructor && newClassName ? createNewClass : () => {}
             }
           >
             <p>Create</p>

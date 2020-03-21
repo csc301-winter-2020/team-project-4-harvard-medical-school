@@ -44,31 +44,34 @@ export const AdminPage: React.FC<AdminPageProps> = (props: AdminPageProps) => {
 
   useEffect(() => {
     fetch(`/api/classes/all`)
-    .then(response => {
-      if (response.status === 200){
-        return response.json()
-      } else {
-        throw new Error(`Error code: ${response.status}, ${response.statusText}`);
-      }
-    })
-    .then((data:any) => {
-      const allClasses:AdminClass[] = [];
-      data.forEach((row:any) => {
-        allClasses.push({
-          name: row.name,
-          id: row.id,
+      .then(response => {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          throw new Error(
+            `Error code: ${response.status}, ${response.statusText}`
+          );
+        }
+      })
+      .then((data: any) => {
+        const allClasses: AdminClass[] = [];
+        data.forEach((row: any) => {
+          allClasses.push({
+            name: row.name,
+            id: row.id,
+          });
         });
+        console.log(data);
+        setClasses(allClasses);
+      })
+      .catch((err: any) => {
+        console.log(err);
+        mToast.warn("Could not load classes. Try again.");
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
-      setClasses(allClasses);
-    })
-    .catch((err:any) => {
-      console.log(err);
-      mToast.warn("Could not load classes. Try again.")
-    })
-    .finally(() => {
-      setIsLoading(false);
-    });
-  });
+  }, []);
 
   return (
     <>
@@ -115,11 +118,10 @@ export const AdminPage: React.FC<AdminPageProps> = (props: AdminPageProps) => {
       >
         <p>Create Class</p>
       </div>
-
       {showNewClassPopup && (
         <NewAdminClass
           setNewClassPopup={setNewClassPopup}
-          refreshClasses={() => { }}
+          refreshClasses={() => {}}
         />
       )}
     </>

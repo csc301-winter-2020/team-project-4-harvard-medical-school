@@ -37,7 +37,7 @@ router.get(
   (req: Request, res: Response, next: NextFunction) => {
     const user: any = req.user;
     user.password = undefined; //Dont send password with JSON.
-    res.status(200).json(req.user);
+    res.status(200).json(user);
   }
 );
 
@@ -94,7 +94,7 @@ router.post(
 );
 
 /**
- * TODO: Return all the patient profiles that a user has.
+ * Return all the patient profiles that a user has.
  */
 router.get(
   "/api/student/:userId/patientprofiles",
@@ -160,7 +160,7 @@ router.get(
 );
 
 /**
- * TODO: Return the patient profile of this id
+ * Return the patient profile of this id
  */
 router.get(
   "/api/patientprofile/:Id",
@@ -467,7 +467,7 @@ router.patch(
 );
 
 /**
- * TODO: Return all templates for a user
+ * Return all templates for a user
  */
 router.get(
   "/api/student/:userId/templates",

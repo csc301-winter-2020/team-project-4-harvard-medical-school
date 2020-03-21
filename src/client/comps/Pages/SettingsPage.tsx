@@ -10,8 +10,12 @@ import { MyToast, userData } from "../../utils/types";
 interface SettingsPageProps {}
 
 async function getUserSettings() {
-  const res = await fetch(`/api/me`, { method: "GET" });
-  return await res.json();
+  try {
+    const res = await fetch(`/api/me`, { method: "GET" });
+    return await res.json();
+  } catch {
+    console.log("Something went wrong... IN SETTINGS PAGE GET USER SETTINGS FUNC");
+  }
 }
 
 async function patchUserInfo(data: userData) {

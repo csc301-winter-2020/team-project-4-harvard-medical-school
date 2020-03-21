@@ -181,6 +181,7 @@ export const CCHPIPage: IndividualPatientProfile = ({
               inputVal={chiefComplaint}
               placeholder={`Enter text here`}
               title={"Chief Complaint"}
+              subtext={'If you would like to receive diagnoses tips, please write symptoms as comma separated values'}
               isShowingCanvas={showingChiefComplaintCanvas}
               isShowingText={showingChiefComplaintText}
               setIsShowingCanvas={setShowingChiefComplaintCanvas}

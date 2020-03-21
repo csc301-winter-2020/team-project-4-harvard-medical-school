@@ -814,7 +814,38 @@ router.post(
     const isbell_res: any = await https.get(isbell_url);
     const final_result: string = isbell_res.data.slice(18, isbell_res.data.length-2);
     // console.log(JSON.parse(final_result));
-    res.status(200).json(JSON.parse(final_result));
+    const parsed_result: any = JSON.parse(final_result);
+    const insert_string: string = 
+    "INSERT INTO csc301db.analysis \
+    (time_submitted, profile_id, student_input, isbell_result) VALUES \
+    (current_timestamp, $1, $2, $3)";
+    try {
+    await pool.query(insert_string, [profile_id, all_string, parsed_result]);
+    res.status(200).send();
+    } catch (err) {
+      console.log(err);
+      res.status(400).send();
+    }
+}
+);
+
+router.get(
+  "/api/analysis/:profile_id", 
+  async (req: Request, res: Response, next: NextFunction) => {
+    const profile_id = req.params.profile_id;
+    const query_string: string = "SELECT * FROM csc301db.analysis\
+     WHERE profile_id = $1 ORDER BY time_submitted DESC"
+    try {
+    const result: any = await pool.query(query_string, [profile_id]);
+    if (result.rowCount === 0) {
+      res.status(404).send();
+    } else {
+      res.status(200).json(result.rows[0]);
+    }
+    } catch (err) {
+      console.log(err);
+      res.status(400).send()
+    }
 }
 );
 

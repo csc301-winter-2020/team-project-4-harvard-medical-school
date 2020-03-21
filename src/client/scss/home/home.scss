@@ -108,9 +108,9 @@ input:focus {
   top: 60px;
   background-color: $color-primary;
   width: 250px;
-  height: 322px;
   padding: 3px;
   border-bottom-left-radius: 5px;
+  padding-bottom: 16px;
 }
 
 .home-page-header-avatar-drop-name{
@@ -389,9 +389,6 @@ input:focus {
 
   h1 {
     text-align: center;
-  }
-  p {
-    margin-bottom: 10px;
   }
 }
 

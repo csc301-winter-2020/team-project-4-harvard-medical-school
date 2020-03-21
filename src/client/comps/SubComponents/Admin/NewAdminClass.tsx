@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "../../../scss/home/home";
 import { toast } from "react-toastify";
-import { Dropdown } from 'semantic-ui-react';
+import { Dropdown } from "semantic-ui-react";
+import "../../../scss/semantic";
 
 interface NewAdminClassProps {
   setNewClassPopup: React.Dispatch<React.SetStateAction<boolean>>;
-  refreshClasses: () => void
+  refreshClasses: () => void;
 }
 
 interface InstructorOptions {
@@ -23,7 +24,7 @@ function setSelectedTemplate(stuff: any) {
 
 export const NewAdminClass: React.FC<NewAdminClassProps> = ({
   setNewClassPopup,
-  refreshClasses
+  refreshClasses,
 }) => {
   const [newClassName, setNewClassName] = useState("");
   const [instructors, setInstructors] = useState<InstructorOptions[]>([]);
@@ -115,16 +116,9 @@ export const NewAdminClass: React.FC<NewAdminClassProps> = ({
             }}
           />
         </div>
-        <div>
-          {
-            <link
-              rel="stylesheet"
-              href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.1/dist/semantic.min.css"
-            />
-          }
-          <br />
+        <div id="dropdown-container">
           <Dropdown
-            placeholder='Select Instructor'
+            placeholder="Select Instructor"
             fluid
             search
             selection

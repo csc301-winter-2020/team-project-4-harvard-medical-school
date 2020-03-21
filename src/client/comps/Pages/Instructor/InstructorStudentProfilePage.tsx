@@ -41,6 +41,7 @@ export const InstructorStudentProfilePage: React.FC<InstructorStudentProfilePage
         {studentName}'s Profile
       </div>
       <div>
+        {/* TODO: Get student email to go here! */}
         <a href={"mailto:student@some.student.domain.com"}>
           <button className="instructor-student-profile-page-button">
             Contact Student

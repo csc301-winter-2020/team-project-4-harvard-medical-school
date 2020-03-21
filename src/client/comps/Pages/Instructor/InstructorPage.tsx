@@ -57,13 +57,5 @@ export const InstructorPage: React.FC<InstructorPageProps> = (
           </div>
         </div>
       </div>
-      <div
-        className="home-page-create-template-btn"
-        onClick={() => {
-          alert('TODO');
-        }}
-      >
-        <p>Create Class</p>
-      </div>
   </>;
 };

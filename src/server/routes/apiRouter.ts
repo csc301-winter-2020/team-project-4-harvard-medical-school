@@ -1014,7 +1014,7 @@ router.get(
   (req: Request, res: Response, next: NextFunction) => {
     const instructor_id: number = parseInt(req.params.instructorId);
     const query_string: string =
-      "SELECT name \
+      "SELECT id, name \
      FROM csc301db.class \
      WHERE csc301db.class.instructor_id = $1";
     pool

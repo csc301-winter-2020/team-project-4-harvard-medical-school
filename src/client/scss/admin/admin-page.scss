@@ -1,0 +1,56 @@
+@import "../app.scss";
+
+.admin-page {
+  text-align: center;
+  margin-right: auto;
+  margin-left: auto;
+  width: 50%;
+}
+
+.admin-page-header {
+  text-align: center;
+  font-size: 50px;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.admin-page-list-button {
+  color: white;
+  background-color: $color-primary-dim;
+  font-size: 30px;
+  height: 70px;
+  width: 100%;
+  margin-bottom: 15px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+
+.admin-page-list-button:hover {
+  background-color: $color-primary;
+}
+
+.admin-page-button {
+  color: white;
+  background-color: $color-primary-dim;
+  font-size: 35px;
+  height: 100px;
+  width: 400px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+
+.admin-page-button:hover {
+  background-color: $color-primary;
+}
+
+.admin-page-button-margins {
+  margin-top: 3px;
+  margin-bottom: 30px;
+}
+
+.right-margin-button {
+  margin-right: 50px;
+}

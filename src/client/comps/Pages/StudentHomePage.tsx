@@ -8,8 +8,11 @@ import { now, max } from "../../utils/utils";
 import { useHistory } from "react-router";
 import { HelixLoader } from "../SubComponents/HelixLoader";
 import { ToastContainer, toast } from "react-toastify";
+import { Class } from "../../utils/types";
 
-interface HomePageProps {}
+interface HomePageProps {
+  classID: number;
+}
 
 type PatientProfile = {
   title: string;
@@ -104,7 +107,7 @@ const lastModSorterDesc = (a: PatientProfile, b: PatientProfile) => {
   return a.lastModified > b.lastModified ? 1 : -1;
 };
 
-export const HomePage: React.FC<HomePageProps> = ({}) => {
+export const HomePage: React.FC<HomePageProps> = ({ classID }) => {
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
   const [state, dispatch] = useReducer(reducer, initialState);
   const { nameSort, createdSort, lastModifiedSort, changed } = state;
@@ -114,6 +117,9 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [isLoading, setIsLoading] = useState(true);
   const [showNewPatientPopup, setNewPatientPopup] = useState(false);
+  const [currentClass, setCurrentClass] = useState<Class>(null);
+  const [instrFirstName, setInstrFirstName] = useState<string>(null)
+  const [instrLastName, setInstrLastName] = useState<string>(null)
 
   const history = useHistory();
 
@@ -136,7 +142,6 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
         }
       })
       .then((data: any) => {
-        console.log(data);
         return fetch(`/api/studentHomepage/${data.id}`);
       })
       .then((res: any) => {
@@ -148,7 +153,6 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
       })
       .then((data: any) => {
         const patientsListNew: PatientProfile[] = [];
-        console.log(data);
         // TODO: some fields don't have the right data
         for (let i = 0; i < data.length; i++) {
           patientsListNew.push({
@@ -166,6 +170,24 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
         }
         setAllPatients(patientsListNew);
         setPatientsList(patientsListNew);
+        return fetch(`/api/classes/${classID}`)
+      })
+      .then(res => {
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          throw new Error("did not find that class in the DB");
+        }
+      })
+      .then((data:any) => {
+        setCurrentClass({
+          help_enabled: data[0].help_enabled,
+          id:data[0].id,
+          instructor_id:data[0].instructor_id,
+          name:data[0].name,
+        });
+        setInstrFirstName(data[0].first_name);
+        setInstrLastName(data[0].last_name);
         setIsLoading(false);
       })
       .catch((err: any) => {
@@ -259,6 +281,10 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
         <ToastContainer position={toast.POSITION.TOP_RIGHT} />
         {isLoading && <HelixLoader message="Loading Patients..." />}
         <div className="home-page-content-container">
+          <p style={{ marginLeft: "10px" }}>
+            Current Class:{" "}
+            {currentClass === null ? "No Class Selected" : `${currentClass.name} - Instructed by ${instrLastName}, ${instrFirstName}.`}
+          </p>
           <div className="home-page-your-patients-title">Your Patients</div>
           <div className="home-page-separator-line"></div>
           <div className="home-page-patient-header-grid">
@@ -310,7 +336,6 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
                   isPortraitMode={windowWidth < 1080}
                   firstName={p.firstName}
                   lastName={p.lastName}
-                  title={p.title}
                   date={p.date}
                   lastModified={p.lastModified}
                   sex={p.sex}
@@ -346,7 +371,7 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
           <NewPatient
             history={history}
             setShowNewPatientPopup={setNewPatientPopup}
-          ></NewPatient>
+          />
         )}
       </div>
     </Fragment>

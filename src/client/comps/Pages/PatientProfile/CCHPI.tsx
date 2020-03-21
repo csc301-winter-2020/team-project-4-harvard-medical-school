@@ -61,7 +61,7 @@ async function saveData(patientID: number, state: any) {
       'POST'
     );
 
-    console.log(await isabelRes.message);
+    console.log(isabelRes);
   }
   console.log(allAttributes);
   const res = await postData('/api/patientprofile/'+ patientID, allAttributes);

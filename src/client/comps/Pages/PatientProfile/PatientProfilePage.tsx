@@ -13,16 +13,9 @@ import { ImagingResultsPage } from "./ImagingResultsPage";
 import { LabResultsPage } from "./LabResultsPage";
 import { AssessmentAndPlanPage } from "./AssessmentAndPlanPage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { contentType, contents } from "../../../utils/types";
+import { contentType, contents, MyToast } from "../../../utils/types";
 import { urlToName, inputMode } from "../../../utils/utils";
 import { ToastContainer, toast } from "react-toastify";
-
-/**
- * To create a new type of page, firstly make the react FC and then import it here.
- * Then add the string to the contentType type.
- * Then add the string to the const contents array.
- * Then add the react component to the contentsPages component array.
- * */
 
 const contentsPages: IndividualPatientProfile[] = [
   DemographicsPage,
@@ -97,6 +90,7 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
   props: PatientProfilePageProps
 ) => {
   const myProps: any = props;
+  const myToast: MyToast = toast as any;
   const thisPatientID = myProps.match.params.id;
   const initialPage =
     "pageName" in myProps.match.params &&
@@ -105,12 +99,11 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
       : "Demographics";
 
   const [currentPage, setCurrentPage] = useState<contentType>(initialPage);
-  const [isShowingSidebar, setIsShowingSidebar] = useState(true);
-  const [prevPage, setPrevPage] = useState<contentType | null>(null);
-  const [isAvatarPopup, setIsAvatarPopup] = useState(false);
-  const [defaultMode, setDefaultMode] = useState<inputMode>(
-    "Both"
-  );
+  const [isShowingSidebar, setIsShowingSidebar] = useState<boolean>(true);
+  const [prevPage, setPrevPage] = useState<contentType>(null);
+  const [isAvatarPopup, setIsAvatarPopup] = useState<boolean>(false);
+  const [defaultMode, setDefaultMode] = useState<inputMode>("Both");
+  const [showHelpPopup, setShowHelpPopup] = useState<boolean>(false);
 
   const incrementPage = () => {
     transitionName = "slide-left";
@@ -212,6 +205,22 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
         showSearch={false}
       />
       <ToastContainer position={toast.POSITION.TOP_RIGHT} />
+      {showHelpPopup && (
+        <div
+          className="patient-profile-popup-outermost"
+          onClick={(e: any) => {
+            if (e.className !== "patient-profile-popup-container") {
+              setShowHelpPopup(false);
+            }
+          }}
+        >
+          <div className="patient-profile-popup-container">
+            <p>Help and Tips:</p>
+            <p>Have you considered the following options?</p>
+            <div className="patient-profile-popup-close">Close</div>
+          </div>
+        </div>
+      )}
       <div className="patient-profile-page-outermost-container">
         <nav
           className="patient-profile-page-sidebar-container"
@@ -271,7 +280,15 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
             {initNavDots()}
           </div>
           <div className="patient-profile-nav-btns">
-            <div className="nav-btn-leftmost nav-btn">
+            <div
+              className="nav-btn-leftmost nav-btn"
+              onClick={() => {
+                setShowHelpPopup(true);
+                myToast.warn(
+                  "If the class_id for this PatientProfile had help disabled, then you need to warn appropriately here."
+                );
+              }}
+            >
               <FontAwesomeIcon icon="question-circle" size="2x" />
             </div>
 

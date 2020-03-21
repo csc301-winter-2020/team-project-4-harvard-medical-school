@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer } from "react";
 import { CSSTransition } from "react-transition-group";
 import { IndividualPatientProfile } from "./PatientProfilePage";
 import { useHistory } from "react-router";
@@ -18,7 +18,7 @@ function reducer(
   }
 ): state{
   if(action.state !== null){
-    return state
+    return action.state
   }
   return {
     ...state,
@@ -368,13 +368,13 @@ function round0To5(n: string): string{
   if(n === ''){
     return n
   }
-  const n_parsed = parseInt(n) % 10
+  const n_parsed = parseFloat(n)
   if(n_parsed <= 0){
     return '0'
   }else if(n_parsed >= 5){
     return '5'
   }else{
-    return Math.round(n_parsed).toString()
+    return n_parsed.toString()
   }
 }
 
@@ -384,7 +384,7 @@ async function getPhysicalExaminationsInfo(patientID: number){
 }
 
 async function postPhysicalExaminationsInfo(patientID: number, data: state){
-  const spec = {
+  const spec = { 
     method: 'POST',
     headers: {
       'Content-type': 'application/json'
@@ -411,8 +411,8 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
 
   const [tableState, tableDispatch] = useReducer(reducer, initialTableState)
 
-  const [isShowingCanvasState, canvasShowDispatch] = useReducer(inputShowingReducer, get_initial_state(true))
-  const [isShowingTextState, textShowDispatch] = useReducer(inputShowingReducer, get_initial_state(true))
+  const [isShowingCanvasState, canvasShowDispatch] = useReducer(inputShowingReducer, get_initial_state(false))
+  const [isShowingTextState, textShowDispatch] = useReducer(inputShowingReducer, get_initial_state(false))
   
   const [textState, textStateDispatch] = useReducer(reducer, get_initial_state(''))
 
@@ -436,44 +436,45 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
     if (currentPage === pageName) {
       document.title = `Patient Profile: ${pageName}`;
       history.push(`/patient/${patientID}/physical`);
+
+      getPhysicalExaminationsInfo(patientID).then((data) => {
+        dispatch({
+          category: '',
+          condition_name: '',
+          value: '',
+          state: data.state
+        })
+  
+        tableDispatch({
+          category: '',
+          condition_name: '',
+          value: '',
+          state: data.tableState
+        })
+  
+        textStateDispatch({
+          category: '',
+          condition_name: '',
+          value: '',
+          state: data.textState
+        })
+        console.log('data retrieved from the database successfully')
+      }).catch((err) => {
+        console.log('could not get Physical Examinations data from database')
+      })
+
+      canvasShowDispatch({
+        category: '',
+        condition_name: '',
+        state: get_initial_state(canvasInit(defaultMode))
+      })
+  
+      textShowDispatch({
+        category: '',
+        condition_name: '',
+        state: get_initial_state(textInit(defaultMode))
+      })
     }
-
-    getPhysicalExaminationsInfo(patientID).then((data) => {
-      dispatch({
-        category: '',
-        condition_name: '',
-        value: '',
-        state: data.state
-      })
-
-      tableDispatch({
-        category: '',
-        condition_name: '',
-        value: '',
-        state: data.tableState
-      })
-
-      textStateDispatch({
-        category: '',
-        condition_name: '',
-        value: '',
-        state: data.textState
-      })
-    }).catch((err) => {
-      console.log('could not get Physical Examinations data from database')
-    })
-
-    canvasShowDispatch({
-      category: '',
-      condition_name: '',
-      state: get_initial_state(canvasInit(defaultMode))
-    })
-
-    textShowDispatch({
-      category: '',
-      condition_name: '',
-      state: get_initial_state(textInit(defaultMode))
-    })
   }, [currentPage]);
 
   function input0to5(table: string, entry: string){
@@ -570,7 +571,7 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
     )
   }
 
-  function renderChoices(category: string){
+  function renderChoices(state: state, category: string){
     return (
       <div key={category}>
         <h2>{nameMap[category]}</h2><br></br>
@@ -724,10 +725,10 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
             </tbody></table><br></br>
             {
               simpleRenderCategories.map((category: string) => {
-                return renderChoices(category)
+                return renderChoices(state, category)
               })
             }
-          </div>
+          </div>lab_results
           <div className="patient-profile-nav-btns">
             <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
               postToDB(state, tableState, textState)

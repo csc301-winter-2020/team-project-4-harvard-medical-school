@@ -139,9 +139,8 @@ export const LabResultsPage: IndividualPatientProfile = ({
     if (currentPage === pageName) {
       document.title = `Patient Profile: ${pageName}`;
       history.push(`/patient/${patientID}/lab`);
-    }
 
-    getLabResults(patientID)
+      getLabResults(patientID)
       .then(data => {
         dispatch({ type: "full_load", value: data });
         console.log("get data");
@@ -150,6 +149,8 @@ export const LabResultsPage: IndividualPatientProfile = ({
       .catch(err => {
         console.log("could not get Lab Results data from database");
       });
+    }
+
   }, [currentPage]);
 
   let nameInput = "";
@@ -208,6 +209,7 @@ export const LabResultsPage: IndividualPatientProfile = ({
                               } else {
                                 nameInput = e.target.textContent;
                               }
+                              console.log("nameInput changed to " + nameInput)
                             }}
                           />
                         </div>
@@ -250,6 +252,12 @@ export const LabResultsPage: IndividualPatientProfile = ({
                   ) as HTMLInputElement).value = "";
                 } else {
                   mToast.warn("Invalid Lab Result");
+                  console.log(
+                    "attempted to add lab result " +
+                      nameInput +
+                      " with value " +
+                      valueInput
+                  );
                   return;
                 }
               }}

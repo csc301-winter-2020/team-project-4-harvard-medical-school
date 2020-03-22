@@ -15,6 +15,16 @@ import * as fs from "fs";
 // import Any = jasmine.Any;
 dotenv.config();
 
+//Locale Database Connection
+const client = new Client({
+  "user": "postgres",
+  "password": "kang098",
+  "host": "localhost",
+  "port": 5432,
+  "database": "csc301sk"
+})
+client.connect()
+
 // Database Connection
 // const pool: Pool = new Pool();
 // pool.query('SELECT NOW()').then((res, err) => {
@@ -80,7 +90,7 @@ const initializePassport = require("./auth/passport-config");
 initializePassport(passport);
 
 //Bring in our authentication check middleware functions.
-const { checkAuthenticated, checkGuest } = require("./auth/authCheck");
+const { checkAuthenticated, checkAdmin, checkInstructor } = require("./auth/authCheck");
 
 /* Bring the middleware in for our express app */
 // Use the static directory "public" to deliver js, css, html, etc.
@@ -106,6 +116,14 @@ app.use(loginRegisterRouter);
 
 // Setup default routes for the server.
 app.get(["/home", "/settings", "/templates", "/patient/*", "/template/*"], checkAuthenticated, (req, res) => {
+  res.sendFile(path.resolve(__dirname + "/../public/index.html"));
+});
+
+app.get("/instructor/*", checkAuthenticated, checkInstructor, (req, res) => {
+  res.sendFile(path.resolve(__dirname + "/../public/index.html"));
+});
+
+app.get("/admin/*", checkAuthenticated, checkAdmin, (req, res) => {
   res.sendFile(path.resolve(__dirname + "/../public/index.html"));
 });
 

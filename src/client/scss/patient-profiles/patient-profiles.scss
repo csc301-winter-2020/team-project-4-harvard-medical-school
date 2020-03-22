@@ -213,3 +213,12 @@ $dot-size: 15px;
     transform: translateY(-50%);
   }
 }
+
+.patient-profile-instructor-barrier{
+  position: fixed;
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.35);
+  width: 100%;
+  height: calc(100% - 60px);
+  top: 60px;
+}

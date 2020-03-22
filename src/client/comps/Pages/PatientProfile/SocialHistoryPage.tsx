@@ -1,7 +1,10 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import "../../../scss/patient-profiles/social-history.scss";
-import { IndividualPatientProfile, fetchAllCanvases } from "./PatientProfilePage";
+import {
+  IndividualPatientProfile,
+  fetchAllCanvases,
+} from "./PatientProfilePage";
 import { useHistory } from "react-router";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -103,26 +106,26 @@ async function saveData(url: string, state: any, classID: number) {
     allAttributes.sexual_history_canvas = state.sexualHistoryCanvas;
   }
   if (state.livingConditionsCanvas !== undefined) {
-    allAttributes.living_conditions_canvas = state.livingConditionsCanvas; 
+    allAttributes.living_conditions_canvas = state.livingConditionsCanvas;
   }
   if (state.etOHCanvas !== undefined) {
-    allAttributes.etoh_canvas = state.etOHCanvas; 
+    allAttributes.etoh_canvas = state.etOHCanvas;
   }
   if (state.drinksPerWeekCanvas !== undefined) {
-    allAttributes.drinks_per_week_canvas = state.drinksPerWeekCanvas; 
+    allAttributes.drinks_per_week_canvas = state.drinksPerWeekCanvas;
   }
   if (state.lastTimeSmokedCanvas !== undefined) {
-    allAttributes.last_time_smoked_canvas = state.lastTimeSmokedCanvas; 
+    allAttributes.last_time_smoked_canvas = state.lastTimeSmokedCanvas;
   }
   if (state.packsPerDayCanvas !== undefined) {
-    allAttributes.packs_per_day_canvas = state.packsPerDayCanvas; 
+    allAttributes.packs_per_day_canvas = state.packsPerDayCanvas;
   }
   if (state.otherSubstancesCanvas !== undefined) {
     allAttributes.other_substances_canvas = state.otherSubstancesCanvas;
   }
   allAttributes.class_id = classID;
   const res = await postData(url, allAttributes);
-  return await res.message
+  return await res.message;
 }
 
 var allAttributes: any;
@@ -137,6 +140,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
   patientID,
   defaultMode,
   classID,
+  userType,
 }) => {
   const history = useHistory();
   useEffect(() => {
@@ -186,7 +190,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
     }
   }, [currentPage]);
 
-  const myToast:MyToast = toast as any;
+  const myToast: MyToast = toast as any;
 
   const [state, dispatch] = useReducer(reducer, initialState);
   const [lastState, setLastState] = useState(state);
@@ -203,29 +207,43 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
     setShowingLivingConditionsText,
   ] = useState(false);
 
-  const [showingSexualHistoryCanvas, setShowingSexualHistoryCanvas] = useState(true);
-  const [showingSexualHistoryText, setShowingSexualHistoryText] = useState(false);
+  const [showingSexualHistoryCanvas, setShowingSexualHistoryCanvas] = useState(
+    true
+  );
+  const [showingSexualHistoryText, setShowingSexualHistoryText] = useState(
+    false
+  );
 
   const [showingEtOHCanvas, setShowingEtOHCanvas] = useState(true);
   const [showingEtOHText, setShowingEtOHText] = useState(false);
 
-  const [showingDrinksPerWeekCanvas, setShowingDrinksPerWeekCanvas] = useState(true);
-  const [showingDrinksPerWeekText, setShowingDrinksPerWeekText] = useState(false);
+  const [showingDrinksPerWeekCanvas, setShowingDrinksPerWeekCanvas] = useState(
+    true
+  );
+  const [showingDrinksPerWeekText, setShowingDrinksPerWeekText] = useState(
+    false
+  );
 
   const [
     showingLastTimeSmokedCanvas,
     setShowingLastTimeSmokedCanvas,
   ] = useState(true);
-  const [showingLastTimeSmokedText, setShowingLastTimeSmokedText] = useState(false);
+  const [showingLastTimeSmokedText, setShowingLastTimeSmokedText] = useState(
+    false
+  );
 
-  const [showingPacksPerDayCanvas, setShowingPacksPerDayCanvas] = useState(true);
+  const [showingPacksPerDayCanvas, setShowingPacksPerDayCanvas] = useState(
+    true
+  );
   const [showingPacksPerDayText, setShowingPacksPerDayText] = useState(false);
 
   const [
     showingOtherSubstancesCanvas,
     setShowingOtherSubstancesCanvas,
   ] = useState(true);
-  const [showingOtherSubstancesText, setShowingOtherSubstancesText] = useState(false);
+  const [showingOtherSubstancesText, setShowingOtherSubstancesText] = useState(
+    false
+  );
 
   const {
     work,
@@ -275,18 +293,20 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
     }
 
     const timer = setTimeout(() => {
-      if (currentPage == pageName && state && state !== lastState) {
+      if (userType === "Student" && currentPage == pageName && state && state !== lastState) {
         console.log(lastState);
         console.log(state);
 
-        saveData("/api/patientprofile/" + patientID, state, classID).then((data) => {
-          console.log(data);
-          myToast.success('Autosaved.', {
-            autoClose: 1000,
+        saveData("/api/patientprofile/" + patientID, state, classID)
+          .then(data => {
+            console.log(data);
+            myToast.success("Autosaved.", {
+              autoClose: 1000,
+            });
+          })
+          .catch(err => {
+            myToast.warn("Autosave failed.");
           });
-        }).catch((err) => {
-          myToast.warn('Autosave failed.');
-        });
 
         setLastState(state);
       }
@@ -498,27 +518,31 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
           <div className="form-whitespace">
             <div className="home-page-content-whitespace-logo"></div>
           </div>
-          <div className="patient-profile-nav-btns">
-            <div
-              className="nav-btn"
-              style={{
-                right: "20px",
-                top: "70px",
-                position: "fixed",
-                borderRadius: "5px",
-              }}
-              onClick={() => {
-                saveData("/api/patientprofile/" + patientID, state, classID).then((data) => {
-                  console.log(data)
-                  myToast.success('Information saved')
-                }).catch((err) => {
-                  myToast.success('Information could not be saved')
-                })
-              }}
-            >
-              <FontAwesomeIcon icon="save" size="2x" />
+          {userType === "Student" && (
+            <div className="patient-profile-nav-btns">
+              <div
+                className="nav-btn"
+                style={{
+                  right: "20px",
+                  top: "70px",
+                  position: "fixed",
+                  borderRadius: "5px",
+                }}
+                onClick={() => {
+                  saveData("/api/patientprofile/" + patientID, state, classID)
+                    .then(data => {
+                      console.log(data);
+                      myToast.success("Information saved");
+                    })
+                    .catch(err => {
+                      myToast.success("Information could not be saved");
+                    });
+                }}
+              >
+                <FontAwesomeIcon icon="save" size="2x" />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </CSSTransition>
     </>

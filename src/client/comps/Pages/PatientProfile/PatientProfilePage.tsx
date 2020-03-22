@@ -42,6 +42,7 @@ interface IndividualPatientProfilePageProps {
   defaultMode: inputMode;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   classID: number;
+  userType: "Student" | "Educator";
 }
 
 export type IndividualPatientProfile = React.FC<
@@ -140,6 +141,7 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
   const [isShowingSidebarDefault, setIsShowingSidebarDefault] = useState<boolean>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [userType, setUserType] = useState(null);
   const [classId, setClassId] = useState(-1);
   
 
@@ -237,6 +239,10 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
         setIsShowingSidebar(data.default_sidebar);
         setIsShowingSidebarDefault(data.default_sidebar);
         setDefaultMode(data.default_mode);
+        setUserType(data.user_type);
+        if (data.user_type === "Educator"){
+          myToast.warn("As an instructor, no changes you make to this patient's profile will be saved.");
+        }
       })
       .catch((err: any) => {
         console.log(err);
@@ -250,6 +256,7 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
   }, [windowWidth])
 
   useEffect(() => {
+    
     fetch(`/api/patientprofile/${thisPatientID}`)
     .then(response => {
       if (response.status === 200){
@@ -345,6 +352,7 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
                 defaultMode={defaultMode}
                 setIsLoading={setIsLoading}
                 classID={classId}
+                userType={userType}
               />
             );
           })}

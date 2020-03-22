@@ -102,10 +102,7 @@ async function saveData(patientID: number, state: any, classID: number) {
   // console.log(await (await fetch('/api/analysis/' + patientID)).json())
   allAttributes.class_id = classID;
   console.log(allAttributes);
-  const res = await postData(
-    "/api/patientprofile/" + patientID,
-    allAttributes
-  );
+  const res = await postData("/api/patientprofile/" + patientID, allAttributes);
   return await res.message;
 }
 
@@ -121,10 +118,9 @@ export const CCHPIPage: IndividualPatientProfile = ({
   patientID,
   defaultMode,
   classID,
+  userType,
 }) => {
   const history = useHistory();
-
-
 
   useEffect(() => {
     if (currentPage === pageName) {
@@ -207,7 +203,7 @@ export const CCHPIPage: IndividualPatientProfile = ({
     }
 
     const timer = setTimeout(() => {
-      if (currentPage == pageName && state && state !== lastState) {
+      if (userType === "Student" && currentPage == pageName && state && state !== lastState) {
         console.log(lastState);
         console.log(state);
 
@@ -328,29 +324,31 @@ export const CCHPIPage: IndividualPatientProfile = ({
           <div className="form-whitespace">
             <div className="home-page-content-whitespace-logo"></div>
           </div>
-          <div className="patient-profile-nav-btns">
-            <div
-              className="nav-btn"
-              style={{
-                right: "20px",
-                top: "70px",
-                position: "fixed",
-                borderRadius: "5px",
-              }}
-              onClick={() => {
-                saveData(patientID, state, classID)
-                  .then(data => {
-                    console.log(data);
-                    myToast.success("Information saved");
-                  })
-                  .catch(err => {
-                    myToast.success("Information could not be saved");
-                  });
-              }}
-            >
-              <FontAwesomeIcon icon="save" size="2x" />
+          {userType === "Student" && (
+            <div className="patient-profile-nav-btns">
+              <div
+                className="nav-btn"
+                style={{
+                  right: "20px",
+                  top: "70px",
+                  position: "fixed",
+                  borderRadius: "5px",
+                }}
+                onClick={() => {
+                  saveData(patientID, state, classID)
+                    .then(data => {
+                      console.log(data);
+                      myToast.success("Information saved");
+                    })
+                    .catch(err => {
+                      myToast.success("Information could not be saved");
+                    });
+                }}
+              >
+                <FontAwesomeIcon icon="save" size="2x" />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </CSSTransition>
     </>

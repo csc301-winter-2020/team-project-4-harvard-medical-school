@@ -2,7 +2,10 @@ import React, { useEffect, useReducer, useState } from "react";
 import "../../../scss/patient-profiles/patient-profile-form.scss";
 import { useHistory } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
-import { IndividualPatientProfile, fetchAllCanvases } from "./PatientProfilePage";
+import {
+  IndividualPatientProfile,
+  fetchAllCanvases,
+} from "./PatientProfilePage";
 import "../../../scss/login/inputboxes.scss";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { postData } from "./PatientProfilePage";
@@ -96,7 +99,8 @@ export const DemographicsPage: IndividualPatientProfile = ({
   patientID,
   defaultMode,
   setIsLoading,
-  classID
+  classID,
+  userType,
 }) => {
   const history = useHistory();
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -104,35 +108,39 @@ export const DemographicsPage: IndividualPatientProfile = ({
   const [showingCountryCanvas, setShowingCountryCanvas] = useState(true);
   const [showingCountryText, setShowingCountryText] = useState(false);
 
-  const { 
+  const {
     firstName,
     lastName,
-    sex, 
-    age, 
-    isPregnant, 
-    country, 
-    countryCanvas 
+    sex,
+    age,
+    isPregnant,
+    country,
+    countryCanvas,
   } = state;
 
-  const myToast:MyToast = toast as any;
+  const myToast: MyToast = toast as any;
 
   async function saveData(url: string, state: DemographicsState) {
     console.log(state);
     allAttributes.first_name = state.firstName;
-    if (state.firstNameCanvas !== undefined) allAttributes.first_name_canvas = state.firstNameCanvas;
+    if (state.firstNameCanvas !== undefined)
+      allAttributes.first_name_canvas = state.firstNameCanvas;
     allAttributes.family_name = state.lastName;
-    if (state.lastNameCanvas !== undefined) allAttributes.family_name_canvas = state.lastNameCanvas;
+    if (state.lastNameCanvas !== undefined)
+      allAttributes.family_name_canvas = state.lastNameCanvas;
     allAttributes.age = state.age;
-    if (state.ageCanvas !== undefined) allAttributes.age_canvas = state.ageCanvas;
+    if (state.ageCanvas !== undefined)
+      allAttributes.age_canvas = state.ageCanvas;
     allAttributes.gender = state.sex;
     allAttributes.pregnant = state.isPregnant;
     allAttributes.country_residence = state.country;
-    if (state.countryCanvas !== undefined) allAttributes.country_residence_canvas = state.countryCanvas;
+    if (state.countryCanvas !== undefined)
+      allAttributes.country_residence_canvas = state.countryCanvas;
     allAttributes.class_id = classID;
     console.log("ALL ATTRIBUTES");
     console.log(allAttributes);
     const res = await postData(url, allAttributes);
-    return await res.message
+    return await res.message;
   }
 
   useEffect(() => {
@@ -142,18 +150,20 @@ export const DemographicsPage: IndividualPatientProfile = ({
     }
 
     const timer = setTimeout(() => {
-      if (currentPage == pageName && state && state !== lastState) {
+      if (userType === "Student" && currentPage == pageName && state && state !== lastState) {
         console.log(lastState);
         console.log(state);
 
-        saveData("/api/patientprofile/" + patientID, state).then((data) => {
-          console.log(data);
-          myToast.success('Autosaved.', {
-            autoClose: 1000,
+        saveData("/api/patientprofile/" + patientID, state)
+          .then(data => {
+            console.log(data);
+            myToast.success("Autosaved.", {
+              autoClose: 1000,
+            });
+          })
+          .catch(err => {
+            myToast.warn("Autosave failed.");
           });
-        }).catch((err) => {
-          myToast.warn('Autosave failed.');
-        });
 
         setLastState(state);
       }
@@ -161,7 +171,6 @@ export const DemographicsPage: IndividualPatientProfile = ({
 
     return () => clearTimeout(timer);
   }, [state, lastState]);
-  
 
   useEffect(() => {
     const canvasShow: boolean = canvasInit(defaultMode);
@@ -173,7 +182,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
   useEffect(() => {
     if (currentPage === pageName) {
       document.title = `Patient Profile: ${pageName}`;
-      
+
       history.push(`/patient/${patientID}/demographics`);
       setIsLoading(true);
       // Get request
@@ -211,7 +220,6 @@ export const DemographicsPage: IndividualPatientProfile = ({
           console.log("An error occured with fetch:", error);
         })
         .finally(() => setIsLoading(false));
-      
     }
   }, [currentPage]);
 
@@ -369,28 +377,32 @@ export const DemographicsPage: IndividualPatientProfile = ({
           <div className="form-whitespace">
             <div className="home-page-content-whitespace-logo"></div>
           </div>
-          <div className="patient-profile-nav-btns">
-            <div
-              className="nav-btn"
-              style={{
-                right: "20px",
-                top: "70px",
-                position: "fixed",
-                borderRadius: "5px",
-              }}
-              onClick={() => {
-                // TODO : add POST request function here
-                saveData("/api/patientprofile/" + patientID, state).then((data) => {
-                  console.log(data)
-                  myToast.success('Information saved')
-                }).catch((err) => {
-                  myToast.success('Information could not be saved')
-                })
-              }}
-            >
-              <FontAwesomeIcon icon="save" size="2x" />
+          {userType === "Student" && (
+            <div className="patient-profile-nav-btns">
+              <div
+                className="nav-btn"
+                style={{
+                  right: "20px",
+                  top: "70px",
+                  position: "fixed",
+                  borderRadius: "5px",
+                }}
+                onClick={() => {
+                  // TODO : add POST request function here
+                  saveData("/api/patientprofile/" + patientID, state)
+                    .then(data => {
+                      console.log(data);
+                      myToast.success("Information saved");
+                    })
+                    .catch(err => {
+                      myToast.success("Information could not be saved");
+                    });
+                }}
+              >
+                <FontAwesomeIcon icon="save" size="2x" />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </CSSTransition>
     </>

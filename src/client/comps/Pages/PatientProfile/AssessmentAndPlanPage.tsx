@@ -51,7 +51,8 @@ export const AssessmentAndPlanPage: IndividualPatientProfile = ({
   isShowingSidebar,
   patientID,
   defaultMode,
-  classID
+  classID,
+  userType
 }) => {
 
   async function saveData(url: string, state: any) {
@@ -123,7 +124,7 @@ export const AssessmentAndPlanPage: IndividualPatientProfile = ({
     }
 
     const timer = setTimeout(() => {
-      if (currentPage == pageName && state && state !== lastState) {
+      if (userType === "Student" && currentPage == pageName && state && state !== lastState) {
         console.log(lastState);
         console.log(state);
 
@@ -177,7 +178,8 @@ export const AssessmentAndPlanPage: IndividualPatientProfile = ({
           <div className="form-whitespace">
             <div className="home-page-content-whitespace-logo"></div>
           </div>
-          <div className="patient-profile-nav-btns">
+          {
+            userType === "Student" && <div className="patient-profile-nav-btns">
             <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
               // TODO : add POST request function here
               saveData('/api/patientprofile/' + patientID, state).then((data) => {
@@ -190,6 +192,8 @@ export const AssessmentAndPlanPage: IndividualPatientProfile = ({
               <FontAwesomeIcon icon="save" size="2x" />
             </div>
           </div>
+          }
+          
         </div>
       </CSSTransition>
     </>

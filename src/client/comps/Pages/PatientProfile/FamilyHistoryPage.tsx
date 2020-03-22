@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useReducer } from "react";
 import { CSSTransition } from "react-transition-group";
-import { IndividualPatientProfile, fetchAllCanvases } from "./PatientProfilePage";
+import {
+  IndividualPatientProfile,
+  fetchAllCanvases,
+} from "./PatientProfilePage";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { useHistory } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,7 +14,12 @@ import { MyToast } from "../../../utils/types";
 
 function reducer(
   state: Family_Hist_State,
-  action: { type: string; fieldName?: string; value?: string; newState?: { [key: string]: string | boolean | number | null } }
+  action: {
+    type: string;
+    fieldName?: string;
+    value?: string;
+    newState?: { [key: string]: string | boolean | number | null };
+  }
 ): Family_Hist_State {
   switch (action.type) {
     case "field":
@@ -31,14 +39,12 @@ function reducer(
 
 type Family_Hist_State = {
   familyHist: string;
-  familyHistCanvas?: string; 
-}
+  familyHistCanvas?: string;
+};
 
 const initialState: Family_Hist_State = {
   familyHist: "",
 };
-
-
 
 var allAttributes: any;
 
@@ -51,7 +57,8 @@ export const FamilyHistoryPage: IndividualPatientProfile = ({
   isShowingSidebar,
   patientID,
   defaultMode,
-  classID
+  classID,
+  userType,
 }) => {
   const history = useHistory();
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -60,15 +67,15 @@ export const FamilyHistoryPage: IndividualPatientProfile = ({
   const [showingFamilyHistCanvas, setShowingFamilyHistCanvas] = useState(true);
   const [showingFamilyHistText, setShowingFamilyHistText] = useState(false);
 
-  const myToast:MyToast = toast as any;
+  const myToast: MyToast = toast as any;
 
   async function saveData(url: string, state: any) {
-    console.log(state.familyHist)
+    console.log(state.familyHist);
     allAttributes.family_history = state.familyHist;
     allAttributes.family_history_canvas = state.familyHistCanvas;
     allAttributes.class_id = classID;
     const res = await postData(url, allAttributes);
-    return await res.message
+    return await res.message;
   }
 
   useEffect(() => {
@@ -77,7 +84,6 @@ export const FamilyHistoryPage: IndividualPatientProfile = ({
 
     setShowingFamilyHistCanvas(canvasShow);
     setShowingFamilyHistText(textShow);
-
   }, [defaultMode]);
 
   useEffect(() => {
@@ -87,18 +93,20 @@ export const FamilyHistoryPage: IndividualPatientProfile = ({
     }
 
     const timer = setTimeout(() => {
-      if (currentPage == pageName && state && state !== lastState) {
+      if (userType === "Student" && currentPage == pageName && state && state !== lastState) {
         console.log(lastState);
         console.log(state);
 
-        saveData("/api/patientprofile/" + patientID, state).then((data) => {
-          console.log(data);
-          myToast.success('Autosaved.', {
-            autoClose: 1000,
+        saveData("/api/patientprofile/" + patientID, state)
+          .then(data => {
+            console.log(data);
+            myToast.success("Autosaved.", {
+              autoClose: 1000,
+            });
+          })
+          .catch(err => {
+            myToast.warn("Autosave failed.");
           });
-        }).catch((err) => {
-          myToast.warn('Autosave failed.');
-        });
 
         setLastState(state);
       }
@@ -115,12 +123,12 @@ export const FamilyHistoryPage: IndividualPatientProfile = ({
       history.push(`/patient/${patientID}/family`);
 
       // Get request
-      const url = '/api/patientprofile/' + patientID;
+      const url = "/api/patientprofile/" + patientID;
       fetch(url)
-        .then((res) => {
-          return res.json()
+        .then(res => {
+          return res.json();
         })
-        .then((jsonResult) => {
+        .then(jsonResult => {
           return fetchAllCanvases(jsonResult);
         })
         .then(jsonResult => {
@@ -129,15 +137,15 @@ export const FamilyHistoryPage: IndividualPatientProfile = ({
 
           allAttributes = jsonResult;
           dispatch({
-            type: "many_fields", 
+            type: "many_fields",
             newState: {
               familyHist: jsonResult.family_history,
               familyHistCanvas: jsonResult.family_history_canvas,
-            }
+            },
           });
-
-        }).catch((error) => {
-          console.log("An error occured with fetch:", error)
+        })
+        .catch(error => {
+          console.log("An error occured with fetch:", error);
         });
     }
   }, [currentPage]);
@@ -152,13 +160,22 @@ export const FamilyHistoryPage: IndividualPatientProfile = ({
         classNames={transitionName}
       >
         <>
-          <div className={isShowingSidebar ? "patient-profile-window" : "patient-profile-window width-100"}>
+          <div
+            className={
+              isShowingSidebar
+                ? "patient-profile-window"
+                : "patient-profile-window width-100"
+            }
+          >
             <div className="patient-profile-page-title">
               <h2>{pageName}</h2>
             </div>
-            <div className="patient-profile-form-container" onClick={() => {
-              console.log(familyHist);
-            }}>
+            <div
+              className="patient-profile-form-container"
+              onClick={() => {
+                console.log(familyHist);
+              }}
+            >
               <PatientFormInput
                 dispatch={dispatch}
                 id={"familyHist"}
@@ -179,20 +196,32 @@ export const FamilyHistoryPage: IndividualPatientProfile = ({
             <div className="form-whitespace">
               <div className="home-page-content-whitespace-logo"></div>
             </div>
-            <div className="patient-profile-nav-btns">
-              <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
-                saveData('/api/patientprofile/' + patientID, state).then((data) => {
-                  console.log(data)
-                  myToast.success('Information saved')
-                }).catch((err) => {
-                  myToast.success('Information could not be saved')
-                })
-              }}>
-                <FontAwesomeIcon icon="save" size="2x" />
+            {userType === "Student" && (
+              <div className="patient-profile-nav-btns">
+                <div
+                  className="nav-btn"
+                  style={{
+                    right: "20px",
+                    top: "70px",
+                    position: "fixed",
+                    borderRadius: "5px",
+                  }}
+                  onClick={() => {
+                    saveData("/api/patientprofile/" + patientID, state)
+                      .then(data => {
+                        console.log(data);
+                        myToast.success("Information saved");
+                      })
+                      .catch(err => {
+                        myToast.success("Information could not be saved");
+                      });
+                  }}
+                >
+                  <FontAwesomeIcon icon="save" size="2x" />
+                </div>
               </div>
-            </div>
+            )}
           </div>
-
         </>
       </CSSTransition>
     </>

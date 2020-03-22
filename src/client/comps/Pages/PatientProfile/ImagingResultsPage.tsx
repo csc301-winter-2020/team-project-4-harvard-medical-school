@@ -58,6 +58,7 @@ export const ImagingResultsPage: IndividualPatientProfile = ({
   patientID,
   defaultMode,
   classID,
+  userType,
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [lastState, setLastState] = useState(state);
@@ -138,7 +139,12 @@ export const ImagingResultsPage: IndividualPatientProfile = ({
     }
 
     const timer = setTimeout(() => {
-      if (currentPage == pageName && state && state !== lastState) {
+      if (
+        userType === "Student" &&
+        currentPage == pageName &&
+        state &&
+        state !== lastState
+      ) {
         console.log(lastState);
         console.log(state);
 
@@ -200,30 +206,33 @@ export const ImagingResultsPage: IndividualPatientProfile = ({
           <div className="form-whitespace">
             <div className="home-page-content-whitespace-logo"></div>
           </div>
-          <div className="patient-profile-nav-btns">
-            <div
-              className="nav-btn"
-              style={{
-                right: "20px",
-                top: "70px",
-                position: "fixed",
-                borderRadius: "5px",
-              }}
-              onClick={() => {
-                // TODO : add POST request function here
-                saveData("/api/patientprofile/" + patientID, state)
-                  .then(data => {
-                    console.log(data);
-                    myToast.success("Information saved");
-                  })
-                  .catch(err => {
-                    myToast.success("Information could not be saved");
-                  });
-              }}
-            >
-              <FontAwesomeIcon icon="save" size="2x" />
+
+          {userType === "Student" && (
+            <div className="patient-profile-nav-btns">
+              <div
+                className="nav-btn"
+                style={{
+                  right: "20px",
+                  top: "70px",
+                  position: "fixed",
+                  borderRadius: "5px",
+                }}
+                onClick={() => {
+                  // TODO : add POST request function here
+                  saveData("/api/patientprofile/" + patientID, state)
+                    .then(data => {
+                      console.log(data);
+                      myToast.success("Information saved");
+                    })
+                    .catch(err => {
+                      myToast.success("Information could not be saved");
+                    });
+                }}
+              >
+                <FontAwesomeIcon icon="save" size="2x" />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </CSSTransition>
     </>

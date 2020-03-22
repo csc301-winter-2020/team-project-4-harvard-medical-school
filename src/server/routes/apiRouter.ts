@@ -795,6 +795,26 @@ router.get(
 );
 
 /**
+ * Get all the users.
+ */
+router.get(
+  "/api/all/users",
+  (req: Request, res: Response, next: NextFunction) => {
+    const query_string: string =
+      "SELECT * FROM csc301db.users";
+    pool
+      .query(query_string, [])
+      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
+        res.status(200).json(result.rows);
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(500).json({ error: err });
+      });
+  }
+);
+
+/**
  * Get all students enrollment in a specific class
  */
 router.get(

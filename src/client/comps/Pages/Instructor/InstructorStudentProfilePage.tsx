@@ -76,17 +76,19 @@ export const InstructorStudentProfilePage: React.FC<InstructorStudentProfilePage
         console.log(data);
         const newEncountersArr: Encounter[] = [];
         data.forEach(d => {
-          newEncountersArr.push({
-            date: new Date(d.last_modified).getTime(), //Change this to be date of creation.
-            patientFirstName: d.first_name,
-            patientLastName: d.family_name,
-            age: d.age,
-            country: d.country,
-            isPregnant: d.pregnant,
-            lastModified: new Date(d.last_modified).getTime(),
-            patientID: d.id,
-            sex: d.gender_at_birth,
-          });
+          if (Number(d.class_id) === Number(classID)) {
+            newEncountersArr.push({
+              date: new Date(d.last_modified).getTime(), //Change this to be date of creation.
+              patientFirstName: d.first_name,
+              patientLastName: d.family_name,
+              age: d.age,
+              country: d.country,
+              isPregnant: d.pregnant,
+              lastModified: new Date(d.last_modified).getTime(),
+              patientID: d.id,
+              sex: d.gender_at_birth,
+            });
+          }
         });
         setEncounters(newEncountersArr);
         setIsLoading(false);

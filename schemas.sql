@@ -260,12 +260,12 @@ VALUES
 INSERT INTO
     class (name, instructor_id, help_enabled)
 VALUES
-    ('CSC369 WINTER 2020', 1, true);
+    ('CSC369 WINTER 2020', 3, true);
 
 INSERT INTO
     class (name, instructor_id, help_enabled)
 VALUES
-    ('CSC343 WINTER 2020', 1, false);
+    ('CSC343 WINTER 2020', 3, false);
 
 
 CREATE TABLE templates (

@@ -415,6 +415,7 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
   const [isShowingTextState, textShowDispatch] = useReducer(inputShowingReducer, get_initial_state(false))
   
   const [textState, textStateDispatch] = useReducer(reducer, get_initial_state(''))
+  const [canvasState, canvasStateDispatch] = useReducer(reducer, get_initial_state(undefined))
 
   const myToast: any = toast
 
@@ -422,7 +423,8 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
     postPhysicalExaminationsInfo(patientID, {
       state: state,
       tableState: tableState,
-      textState: textState
+      textState: textState,
+      canvasState: canvasState
     }).then((data) => {
       console.log(data)
       myToast.success('Information saved')
@@ -457,6 +459,13 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
           condition_name: '',
           value: '',
           state: data.textState
+        })
+        
+        canvasStateDispatch({
+          category: '',
+          condition_name: '',
+          value: '',
+          state: data.canvasState
         })
         console.log('data retrieved from the database successfully')
       }).catch((err) => {
@@ -626,12 +635,21 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
                       fieldName: string
                       value: string
                     }) => {
-                      textStateDispatch({
-                        category: category,
-                        condition_name: condition,
-                        value: action.value,
-                        state: null
-                      })
+                      if(action.fieldName.endsWith('Canvas')){
+                        canvasStateDispatch({
+                          category: category,
+                          condition_name: condition,
+                          value: action.value,
+                          state: null
+                        })
+                      }else{
+                        textStateDispatch({
+                          category: category,
+                          condition_name: condition,
+                          value: action.value,
+                          state: null
+                        })
+                      }
                     }}
                     id={condition+'_i'}
                     inputType={'text'}
@@ -656,6 +674,7 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
                     }}
                     canvasHeight={200}
                     canvasWidth={600}
+                    canvasData={canvasState[category][condition]}
                     isTextArea={true}
                   />
                 )}

@@ -434,15 +434,15 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
     })
   }
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if(currentPage === pageName){
-        postToDB(state, tableState, textState, canvasState)
-      }
-    }, 5000)
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     if(currentPage === pageName){
+  //       postToDB(state, tableState, textState, canvasState)
+  //     }
+  //   }, 5000)
 
-    return () => clearTimeout(timer)
-  }, [state, tableState, textState, canvasState])
+  //   return () => clearTimeout(timer)
+  // }, [state, tableState, textState, canvasState])
 
   useEffect(() => {
     if (currentPage === pageName) {
@@ -481,6 +481,14 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
       }).catch((err) => {
         console.log('could not get Physical Examinations data from database')
       })
+
+      const interval = setInterval(() => {
+        if(currentPage === pageName){
+          postToDB(state, tableState, textState, canvasState)
+        }
+      }, 30000)
+  
+      return () => clearInterval(interval)
     }
   }, [currentPage]);
 

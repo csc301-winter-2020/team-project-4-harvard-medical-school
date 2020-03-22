@@ -67,40 +67,34 @@ async function saveData(patientID: number, state: any) {
   const canvasImages = []
   if (state.chiefComplaintImage !== undefined) {
     canvasImages.push(state.chiefComplaintImage);
-    console.log(state.chiefComplaintImage);
   }
 
   if (state.HPIImage !== undefined) {
     canvasImages.push(state.HPIImage);
-    console.log(state.HPIImage);
   }
 
   if (state.pastHospitsImage !== undefined) {
     canvasImages.push(state.pastHospitsImage);
-    console.log(state.pastHospitsImage);
   }
 
   if (state.pastMedHistImage !== undefined) {
     canvasImages.push(state.pastMedHistImage);
-    console.log(state.pastMedHistImage);
   }
 
   if (state.medicationsImage !== undefined) {
     canvasImages.push(state.medicationsImage);
-    console.log(state.medicationsImage);
   }
 
   if (state.allergiesImage !== undefined) {
     canvasImages.push(state.allergiesImage);
-    console.log(state.allergiesImage);
   }
 
-  const isabelRes = await postData(
+  await postData(
     '/api/analysis/' + patientID, 
     canvasImages,
     'POST'
   );
-  console.log(isabelRes);
+  // console.log(await (await fetch('/api/analysis/' + patientID)).json())
 
   console.log(allAttributes);
   const res = await postData('/api/patientprofile/'+ patientID, allAttributes);

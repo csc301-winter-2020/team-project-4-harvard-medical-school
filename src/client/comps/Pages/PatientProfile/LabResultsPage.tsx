@@ -9,62 +9,23 @@ import { defaultLabResults } from "../../../utils/defaultLabResults";
 
 import { toast } from "react-toastify";
 
-interface LabResultData {
-    "% Hemoglobin A1c": {value: string, added: boolean},
-    "Alanine Aminotransferase (ALT)": {value: string, added: boolean},
-    "Albumin": {value: string, added: boolean},
-    "Alkaline Phosphatase": {value: string, added: boolean},
-    "Amylase": {value: string, added: boolean},
-    "Anti-Nuclear Antibody": {value: string, added: boolean},
-    "Asparate Aminotransferase (AST)": {value: string, added: boolean},
-    "Bicarbonate": {value: string, added: boolean},
-    "Bilirubin, Direct": {value: string, added: boolean},
-    "Bilirubin, Total": {value: string, added: boolean},
-    "C-Reactive Protein": {value: string, added: boolean},
-    "Calcium, Total": {value: string, added: boolean},
-    "Carcinoembyronic Antigen (CEA)": {value: string, added: boolean},
-    "CD4 Absolute": {value: string, added: boolean},
-    "CD4 Cells, Percent": {value: string, added: boolean},
-    "Chloride": {value: string, added: boolean},
-    "Cholesterol, HDL": {value: string, added: boolean},
-    "Cholesterol, LDL, Calculated": {value: string, added: boolean},
-    "Cholesterol, LDL, Measured": {value: string, added: boolean},
-    "Cholesterol, Total": {value: string, added: boolean},
-    "Creatine Kinase (CK)": {value: string, added: boolean},
-    "Creatinine, Urine": {value: string, added: boolean},
-    "Creatinine": {value: string, added: boolean},
-    "Ferritin": {value: string, added: boolean},
-    "Folate": {value: string, added: boolean},
-    "FSH": {value: string, added: boolean},
-    "Glucose": {value: string, added: boolean},
-    "Granulocyte Count": {value: string, added: boolean},
-    "HCG, Maternal Screening": {value: string, added: boolean},
-    "Hematocrit": {value: string, added: boolean},
-    "Hemoglobin": {value: string, added: boolean},
-    "Hepatitis A Virus Antibody": {value: string, added: boolean},
-    "Hepatitis B Surface Antibody": {value: string, added: boolean},
-    "Hepatitis B Surface Antigen": {value: string, added: boolean},
-    "Hepatitis B Virus Core Antibody": {value: string, added: boolean},
-    "Hepatitis C Virus Antibody": {value: string, added: boolean},
-    "HIV Antibody": {value: string, added: boolean},
-    "Homocysteine": {value: string, added: boolean},
-    "Human Chorionic Gonadotropin": {value: string, added: boolean},
-    "INR(PT)": {value: string, added: boolean},
-    "Iron": {value: string, added: boolean},
-    "Lactate Dehydrogenase (LD)": {value: string, added: boolean},
-    "Lipase": {value: string, added: boolean},
-    "Magnesium": {value: string, added: boolean},
-    "Phosphate": {value: string, added: boolean},
-    "Platelet Count": {value: string, added: boolean},
-    "Potassium":{value: string, added: boolean},
-}
+import { Dropdown } from 'semantic-ui-react';
 
 interface LabResultsState {
-  data: any;
+  data: {
+    [key:string]: any
+  };
 }
 
+const labResultOptions = (Object.entries(defaultLabResults)).map(lr => {
+  return {
+    key: lr[0],
+    text: lr[0],
+    value: lr[0],
+  }
+})
+
 const initialState: LabResultsState = {
-  // replace with get request
   data: JSON.parse(JSON.stringify(defaultLabResults))
 };
 
@@ -94,11 +55,6 @@ function reducer(
       throw new Error("Invalid type on action.");
   }
   return newState;
-}
-
-async function getPatientInfo(patientID: number){
-  const res = await fetch(`/api/patientprofile/${patientID}`, {method: 'GET'})
-  return await res.json()
 }
 
 async function getLabResults(patientID: number){
@@ -203,6 +159,16 @@ export const LabResultsPage: IndividualPatientProfile = ({
                               placeholder="New Lab Result Name"
                               onChange={(e: any) => {nameInput = e.target.value;}}
                             />
+                            
+                            <div id='dropdown-container'><Dropdown
+                              placeholder= 'Select Lab Result'
+                              search
+                              fluid
+                              selection
+                              options={labResultOptions}
+                              onChange={(e: any) => {nameInput = e.target.value;}}
+                            /></div>
+                            
                           </div>
                           
                       </td>

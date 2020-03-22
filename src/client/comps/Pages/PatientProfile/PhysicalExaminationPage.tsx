@@ -728,7 +728,7 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
                 return renderChoices(state, category)
               })
             }
-          </div>lab_results
+          </div>
           <div className="patient-profile-nav-btns">
             <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
               postToDB(state, tableState, textState)

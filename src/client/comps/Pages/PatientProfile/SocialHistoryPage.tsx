@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { postData } from "./PatientProfilePage";
 import { canvasInit, textInit } from "../../../utils/utils";
 import { toast } from "react-toastify";
+import { MyToast } from "../../../utils/types";
 
 function reducer(
   state: SocialHistState,
@@ -184,7 +185,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
     }
   }, [currentPage]);
 
-  const myToast: any = toast
+  const myToast:MyToast = toast as any;
 
   const [state, dispatch] = useReducer(reducer, initialState);
   const [lastState, setLastState] = useState(state);

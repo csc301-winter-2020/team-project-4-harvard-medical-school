@@ -108,9 +108,9 @@ input:focus {
   top: 60px;
   background-color: $color-primary;
   width: 250px;
-  height: 300px;
   padding: 3px;
   border-bottom-left-radius: 5px;
+  padding-bottom: 16px;
 }
 
 .home-page-header-avatar-drop-name{
@@ -318,6 +318,10 @@ input:focus {
   bottom: 20px;
 }
 
+.home-page-create-user-btn{
+  bottom: 200px;
+}
+
 .home-page-content-whitespace-logo{
   height: 400px;
   width: 400px;
@@ -356,6 +360,11 @@ input:focus {
   vertical-align: middle;
   padding: 10px;
 
+  &-large {
+    @extend .home-page-create-new-patient-popup-inner;
+    height: 400px;
+  }
+
   div {
     text-align: center;
   }
@@ -381,9 +390,6 @@ input:focus {
   h1 {
     text-align: center;
   }
-  p {
-    margin-bottom: 10px;
-  }
 }
 
 .home-page-create-new-patient-popup-btn {
@@ -400,10 +406,20 @@ input:focus {
   margin: auto;
   margin-bottom: 16px;
   transition: all 0.15s ease;
+
+  &-gray {
+    @extend .home-page-create-new-patient-popup-btn;
+    background-color: #b5b5b5;
+    transition: none;
+  }
 }
 
 .home-page-create-new-patient-popup-btn:hover{
   background-color: $color-primary-dim;
+}
+
+.home-page-create-new-patient-popup-btn-gray:hover{
+  background-color: #b5b5b5;
 }
 
 .home-page-create-new-patient-btn-cntr{

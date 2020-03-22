@@ -6,6 +6,7 @@ import { Questions } from "./Questions";
 import { useHistory } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { toast } from "react-toastify";
+import { MyToast } from "../../../utils/types";
 
 interface TemplateRowProps {
   name: string;
@@ -23,7 +24,7 @@ export const TemplateRow: React.FC<TemplateRowProps> = ({
   const history = useHistory();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [isShowing, setIsShowing] = useState(true);
-  const mToast:any = toast;
+  const mToast:MyToast = toast as any;
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);

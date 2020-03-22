@@ -27,6 +27,7 @@ export const Header: React.FC<HeaderProps> = ({
   const [lastName, setLastName] = useState("LAST");
   const [avatar, setAvatar] = useState(defaultAvatar);
   const [year, setYear] = useState(1);
+  const [userType, setUserType] = useState("null");
   useEffect(() => {
     const hamburger = document.querySelector("#header-hamburger-btn");
     if (isAvatarPopup) {
@@ -50,6 +51,7 @@ export const Header: React.FC<HeaderProps> = ({
       setLastName(data.last_name);
       setAvatar(data.avatar_url);
       setYear(data.year);
+      setUserType(data.user_type);
     })
     .catch((err: any) => {
       console.log("Could not verify your session.");
@@ -105,6 +107,7 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="home-page-header-avatar-image" style={{backgroundImage: `url("${avatar}")`}}></div>
           <div className="home-page-header-avatar-drop-name">
             {`${firstName} ${lastName}`}
+            <p>{userType}</p>
             <p>{numberToYearStr[year]} Year</p>
           </div>
           <div

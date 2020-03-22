@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import { IndividualPatientProfile } from "./PatientProfilePage";
 import { useHistory } from "react-router";
@@ -419,7 +419,7 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
 
   const myToast: any = toast
 
-  const postToDB = (state: state, tableState: state, textState: state) => {
+  const postToDB = (state: state, tableState: state, textState: state, canvasState: state) => {
     postPhysicalExaminationsInfo(patientID, {
       state: state,
       tableState: tableState,
@@ -433,6 +433,16 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
       myToast.error('Information could not be saved')
     })
   }
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if(currentPage === pageName){
+        postToDB(state, tableState, textState, canvasState)
+      }
+    }, 5000)
+
+    return () => clearTimeout(timer)
+  }, [state, tableState, textState, canvasState])
 
   useEffect(() => {
     if (currentPage === pageName) {
@@ -752,7 +762,7 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
           </div>
           <div className="patient-profile-nav-btns">
             <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
-              postToDB(state, tableState, textState)
+              postToDB(state, tableState, textState, canvasState)
             }}>
               <FontAwesomeIcon icon="save" size="2x" />
             </div>

@@ -1195,7 +1195,7 @@ router.post(
       [profile_id]
     );
     if (db_res.rowCount === 0) {
-      res.status(404).send();
+      res.status(404)..json({});
     }
     const age: number = age_helper(db_res.rows[0].age);
     const gender: string = db_res.rows[0].gender_at_birth === "Male" ? "m" : "f";
@@ -1233,13 +1233,13 @@ router.get(
     try {
       const result: any = await pool.query(query_string, [profile_id]);
       if (result.rowCount === 0) {
-        res.status(404).send();
+        res.status(404).json({});
       } else {
         res.status(200).json(result.rows[0]);
       }
     } catch (err) {
       console.log(err);
-      res.status(400).send();
+      res.status(400).json({});
     }
   }
 );

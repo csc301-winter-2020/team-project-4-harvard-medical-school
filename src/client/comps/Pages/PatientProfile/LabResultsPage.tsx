@@ -60,7 +60,7 @@ interface LabResultData {
 }
 
 interface LabResultsState {
-  data: LabResultData;
+  data: any;
 }
 
 const initialState: LabResultsState = {
@@ -73,7 +73,7 @@ function reducer(
   action: { 
     type: string, 
     fieldName?: string, 
-    value: string[],
+    value: any,
     newState?: { [key: string]: string | boolean | number | null }
   }
 ): LabResultsState {
@@ -87,11 +87,35 @@ function reducer(
         added: true
       };
       break;
+    case "full_load":
+      newState = action.value;
+      break;
     default:
       throw new Error("Invalid type on action.");
   }
-
   return newState;
+}
+
+async function getPatientInfo(patientID: number){
+  const res = await fetch(`/api/patientprofile/${patientID}`, {method: 'GET'})
+  return await res.json()
+}
+
+async function getLabResults(patientID: number){
+  const res = await fetch(`/api/labResults/${patientID}`, {method: 'GET'})
+  return await res.json()
+}
+
+async function postLabResultsInfo(patientID: number, data: LabResultsState){
+  const spec = { 
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  }
+  const res = await fetch(`/api/labResults/${patientID}`, spec)
+  return res
 }
 
 export const LabResultsPage: IndividualPatientProfile = ({
@@ -104,20 +128,38 @@ export const LabResultsPage: IndividualPatientProfile = ({
   patientID,
   defaultMode,
 }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
   const history = useHistory();
   useEffect(() => {
     if (currentPage === pageName) {
       document.title = `Patient Profile: ${pageName}`;
       history.push(`/patient/${patientID}/lab`);
     }
-  }, [currentPage]);
+    
+    getLabResults(patientID).then((data) => {
+      dispatch({type: 'full_load', value: data})
+      console.log("get data")
+      console.log(state.data)
+    }).catch((err) => {
+      console.log('could not get Lab Results data from database')
+    })
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  }, [currentPage]);
 
   let nameInput = "";
   let valueInput = "";
 
   const mToast: any = toast;
+
+  const postToDB = (state: LabResultsState) => {
+    postLabResultsInfo(patientID, state).then((data) => {
+      console.log(data)
+      mToast.success('Information saved')
+    }).catch((err) => {
+      mToast.error('Information could not be saved')
+    })
+  }
 
   return (
     <>
@@ -140,7 +182,8 @@ export const LabResultsPage: IndividualPatientProfile = ({
                   </tr>
                 </thead>
                 <tbody>
-                  {(Object.entries(state.data).filter(entry => entry[1]['added'])).map(row => {
+                  { 
+                    (Object.entries(state.data).filter(entry => entry[1]['added'])).map(row => {
                     const rowClass = '';
                     return (
                       <tr className={`${rowClass}`} 
@@ -184,7 +227,7 @@ export const LabResultsPage: IndividualPatientProfile = ({
                 console.log(valueInput)
                 if(nameInput in defaultLabResults && valueInput != ""){
                   dispatch({ type: 'addEntry', value: [nameInput, valueInput] });
-                  console.log(valueInput);
+                  // clear inputs
                   (document.getElementById("nameInput") as HTMLInputElement).value = "";
                   (document.getElementById("valueInput") as HTMLInputElement).value = "";
                 }
@@ -192,7 +235,7 @@ export const LabResultsPage: IndividualPatientProfile = ({
                   mToast.warn("Invalid Lab Result");
                   return;
                 }
-                console.log(state.data)
+                
               }}>
               Add Lab Result
             </button>
@@ -201,7 +244,7 @@ export const LabResultsPage: IndividualPatientProfile = ({
           <div className="patient-profile-nav-btns">
             <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
               // TODO : add POST request function here
-              
+              postToDB(state);
             }}>
               <FontAwesomeIcon icon="save" size="2x" />
             </div>

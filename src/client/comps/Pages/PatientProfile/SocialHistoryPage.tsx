@@ -265,6 +265,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
     setShowingPacksPerDayCanvas(canvasShow);
     setShowingPacksPerDayText(textShow);
     setShowingOtherSubstancesText(textShow);
+    setShowingOtherSubstancesCanvas(canvasShow);
   }, [defaultMode]);
 
   useEffect(() => {

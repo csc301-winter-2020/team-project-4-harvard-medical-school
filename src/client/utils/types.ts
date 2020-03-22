@@ -50,7 +50,7 @@ export type MyToast = {
   error: ToastFunc;
 }
 
-type ToastFunc = (msg: string, params?: object) => void;
+type ToastFunc = (msg: string, params?: {autoClose: number}) => void;
 
 export type userData = {
   id: number;

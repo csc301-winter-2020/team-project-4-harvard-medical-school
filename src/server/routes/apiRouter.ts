@@ -1020,6 +1020,32 @@ router.patch(
 );
 
 /**
+ * Patch a class for just help and tips for a given ID.
+ */
+router.patch(
+  "/api/classesTips/:classID",
+  (req: Request, res: Response, next: NextFunction) => {
+    const class_id: number = parseInt(req.params.classID);
+    const body: any = req.body;
+    const query_string: string =
+      "UPDATE csc301db.class SET help_enabled = $1 \
+    WHERE id = $2";
+    pool
+      .query(query_string, [
+        body.help_enabled,
+        class_id,
+      ])
+      .then((result: any) => {
+        res.status(200).json(result.rows);
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(400).json({ error: err });
+      });
+  }
+);
+
+/**
  * Create new class
  */
 router.post(

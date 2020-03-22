@@ -117,23 +117,14 @@ export const DemographicsPage: IndividualPatientProfile = ({
   const history = useHistory();
   const [state, dispatch] = useReducer(reducer, initialState);
   const [lastState, setLastState] = useState(state);
-  const [showingFirstNameCanvas, setShowingFirstNameCanvas] = useState(true);
-  const [showingFirstNameText, setShowingFirstNameText] = useState(false);
-  const [showingLastNameCanvas, setShowingLastNameCanvas] = useState(true);
-  const [showingLastNameText, setShowingLastNameText] = useState(false);
-  const [showingAgeCanvas, setShowingAgeCanvas] = useState(true);
-  const [showingAgeText, setShowingAgeText] = useState(false);
   const [showingCountryCanvas, setShowingCountryCanvas] = useState(true);
   const [showingCountryText, setShowingCountryText] = useState(false);
 
   const { 
     firstName,
-    firstNameCanvas,
     lastName,
-    lastNameCanvas, 
     sex, 
     age, 
-    ageCanvas, 
     isPregnant, 
     country, 
     countryCanvas 
@@ -170,12 +161,6 @@ export const DemographicsPage: IndividualPatientProfile = ({
   useEffect(() => {
     const canvasShow: boolean = canvasInit(defaultMode);
     const textShow: boolean = textInit(defaultMode);
-    setShowingFirstNameCanvas(canvasShow);
-    setShowingFirstNameText(textShow);
-    setShowingLastNameCanvas(canvasShow);
-    setShowingLastNameText(textShow);
-    setShowingAgeCanvas(canvasShow);
-    setShowingAgeText(textShow);
     setShowingCountryCanvas(canvasShow);
     setShowingCountryText(textShow);
   }, [defaultMode]);
@@ -251,13 +236,12 @@ export const DemographicsPage: IndividualPatientProfile = ({
               inputVal={firstName}
               placeholder={"Ex. John"}
               title={"First Name"}
-              isShowingCanvas={showingFirstNameCanvas}
-              isShowingText={showingFirstNameText}
-              setIsShowingCanvas={setShowingFirstNameCanvas}
-              setIsShowingText={setShowingFirstNameText}
+              isShowingCanvas={false}
+              isShowingText={true}
+              setIsShowingCanvas={() => {}}
+              setIsShowingText={() => {}}
               canvasHeight={200}
               canvasWidth={600}
-              canvasData={firstNameCanvas}
               isTextArea={false}
             />
 
@@ -268,13 +252,12 @@ export const DemographicsPage: IndividualPatientProfile = ({
               inputVal={lastName}
               placeholder={"Ex. Doe"}
               title={"Last Name"}
-              isShowingCanvas={showingLastNameCanvas}
-              isShowingText={showingLastNameText}
-              setIsShowingCanvas={setShowingLastNameCanvas}
-              setIsShowingText={setShowingLastNameText}
+              isShowingCanvas={false}
+              isShowingText={true}
+              setIsShowingCanvas={() => {}}
+              setIsShowingText={() => {}}
               canvasHeight={200}
               canvasWidth={600}
-              canvasData={lastNameCanvas}
               isTextArea={false}
             />
             <PatientFormInput
@@ -284,13 +267,12 @@ export const DemographicsPage: IndividualPatientProfile = ({
               inputVal={age}
               placeholder={"Ex. 18"}
               title={"Age"}
-              isShowingCanvas={showingAgeCanvas}
-              isShowingText={showingAgeText}
-              setIsShowingCanvas={setShowingAgeCanvas}
-              setIsShowingText={setShowingAgeText}
+              isShowingCanvas={false}
+              isShowingText={true}
+              setIsShowingCanvas={() => {}}
+              setIsShowingText={() => {}}
               canvasHeight={200}
               canvasWidth={600}
-              canvasData={ageCanvas}
               isTextArea={false}
             />
             <h3>Sex at Birth</h3>

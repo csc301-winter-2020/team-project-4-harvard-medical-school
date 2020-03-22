@@ -1056,4 +1056,109 @@ router.get(
   }
 );
 
+
+const vision: any = require("@google-cloud/vision");
+const vision_client = new vision.ImageAnnotatorClient();
+const https: any = require('axios')
+
+function age_helper(age: number) {
+  if (age <= 1) {
+    return 1;
+  } else if (age <= 5) {
+    return 3;
+  } else if (age <= 16) {
+    return 4;
+  } else if (age <= 29) {
+    return 7;
+  } else if (age <= 39) {
+    return 5;
+  } else {
+    return 8;
+  }
+}
+
+function gender_helper(tmp: string) {
+  if (tmp === "Male") {
+    return 'm';
+  } else {
+    return 'f';
+  }
+}
+
+router.post(
+  "/api/analysis/:profile_id", 
+  async (req: Request, res: Response, next: NextFunction) => {
+    const image_payloads: string = req.body;
+    let all_string: string = "";
+    for (let i = 0; i < image_payloads.length; i++) {
+      console.log(i);
+      const image_payload: string = image_payloads[i];
+      const request: any = {
+        "image": {
+          "content": image_payload
+        },
+        "features": [
+          {
+            "type": "DOCUMENT_TEXT_DETECTION"
+          }
+        ],
+        "imageContext": {
+          "languageHints": ["en-t-i0-handwrit"]
+        }
+      }
+      const [result] = await vision_client.annotateImage(request);
+      if (result.fullTextAnnotation) {
+        const text: string = result.fullTextAnnotation.text;
+        all_string += text;
+      }
+    }
+    console.log(all_string);
+    const profile_id: number = parseInt(req.params.profile_id);
+    const db_res = await pool.query('SELECT age, gender_at_birth, pregnant FROM csc301db.patient_profile WHERE id = $1', [profile_id]);
+    if (db_res.rowCount === 0) {
+      res.status(404).send();
+    }
+    const age: number = age_helper(db_res.rows[0].age);
+    const gender: string = gender_helper(db_res.rows[0].gender_at_birth);
+    // TODO: FIX THIS LATER
+    const pregnant: string = "n";
+    const isbell_url: string = `https://apisandbox.isabelhealthcare.com/v2/ranked_differential_diagnoses?specialties=28&dob=${age}&sex=${gender}&pregnant=${pregnant}&region=10&querytext=${all_string}&suggest=suggest+differential+diagnosis&flag=sortbyrw_advanced&searchtype=0&web_service=json&callback=diagnosiscallback&authorization=urOSKOJyYvIOj8BnIgBwJI0KgXT4BR9VYShRyAPDdbcChStimoHWbUE6ILUM0Z4S`;
+    try {
+    const isbell_res: any = await https.get(isbell_url);
+    const final_result: string = isbell_res.data.slice(18, isbell_res.data.length-2);
+    // console.log(JSON.parse(final_result));
+    const parsed_result: any = JSON.parse(final_result);
+    const insert_string: string = 
+    "INSERT INTO csc301db.analysis \
+    (time_submitted, profile_id, student_input, isbell_result) VALUES \
+    (current_timestamp, $1, $2, $3)";
+    await pool.query(insert_string, [profile_id, all_string, parsed_result]);
+    res.status(200).json({});
+    } catch (err) {
+      console.log(err);
+      res.status(400).json({});
+    }
+}
+);
+
+router.get(
+  "/api/analysis/:profile_id", 
+  async (req: Request, res: Response, next: NextFunction) => {
+    const profile_id = req.params.profile_id;
+    const query_string: string = "SELECT * FROM csc301db.analysis\
+     WHERE profile_id = $1 ORDER BY time_submitted DESC"
+    try {
+    const result: any = await pool.query(query_string, [profile_id]);
+    if (result.rowCount === 0) {
+      res.status(404).send();
+    } else {
+      res.status(200).json(result.rows[0]);
+    }
+    } catch (err) {
+      console.log(err);
+      res.status(400).send()
+    }
+}
+);
+
 export default router;

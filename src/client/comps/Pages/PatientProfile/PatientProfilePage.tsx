@@ -45,9 +45,11 @@ export type IndividualPatientProfile = React.FC<
   IndividualPatientProfilePageProps
 >;
 
-export async function postData(url: string, data: any) {
+export async function postData(url: string, data: any, method?: string) {
+  if (method === undefined) method = 'PATCH';
+
   const response = await fetch(url, {
-    method: "PATCH",
+    method: method,
     mode: "cors",
     cache: "no-cache",
     credentials: "same-origin",
@@ -58,6 +60,8 @@ export async function postData(url: string, data: any) {
     referrerPolicy: "no-referrer", // no-referrer
     body: JSON.stringify(data),
   });
+
+  console.log(response);
   return await response.json();
 }
 
@@ -319,17 +323,13 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
 
             <div
               className="nav-btn-left nav-btn"
-              onClick={() => {
-                decrementPage();
-              }}
+              onClick={decrementPage}
             >
               <FontAwesomeIcon icon="arrow-left" size="2x" />
             </div>
             <div
               className="nav-btn-right nav-btn"
-              onClick={() => {
-                incrementPage();
-              }}
+              onClick={incrementPage}
             >
               <FontAwesomeIcon icon="arrow-right" size="2x" />
             </div>

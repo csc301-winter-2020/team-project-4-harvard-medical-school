@@ -8,6 +8,7 @@ import { postData } from "./PatientProfilePage";
 import { canvasInit, textInit } from "../../../utils/utils";
 import { toast } from "react-toastify";
 import { MyToast } from "../../../utils/types";
+import { CanvasComp } from "../../SubComponents/CanvasComp";
 
 function reducer(
   state: PMH_State,
@@ -32,12 +33,20 @@ function reducer(
 type PMH_State = {
   pastMedHist: string;
   pastMedHistCanvas?: string;
+  pastMedHistImage?: string;
   pastHospits: string;
   pastHospitsCanvas?: string;
+  pastHospitsImage?: string;
   medications: string;
   medicationsCanvas?: string;
+  medicationsImage?: string;
   allergies: string;
-  allergiesCanvas?: string; 
+  allergiesCanvas?: string;
+  allergiesImage?: string;
+  chiefComplaintCanvas?: string;
+  chiefComplaintImage?: string;
+  HPICanvas?: string;
+  HPIImage?: string;
 }
 
 const initialState: PMH_State = {
@@ -47,7 +56,7 @@ const initialState: PMH_State = {
   allergies: "",
 };
 
-async function saveData(url: string, state: any) {
+async function saveData(patientID: number, state: any) {
   console.log(state)
   allAttributes.medical_history = state.pastMedHist;
 
@@ -72,8 +81,40 @@ async function saveData(url: string, state: any) {
   if (state.allergiesCanvas !== undefined) {
     allAttributes.allergies_canvas = state.allergiesCanvas; 
   }
+
+  const canvasImages = []
+  if (state.chiefComplaintImage !== undefined) {
+    canvasImages.push(state.chiefComplaintImage);
+  }
+
+  if (state.HPIImage !== undefined) {
+    canvasImages.push(state.HPIImage);
+  }
+
+  if (state.pastHospitsImage !== undefined) {
+    canvasImages.push(state.pastHospitsImage);
+  }
+
+  if (state.pastMedHistImage !== undefined) {
+    canvasImages.push(state.pastMedHistImage);
+  }
+
+  if (state.medicationsImage !== undefined) {
+    canvasImages.push(state.medicationsImage);
+  }
+
+  if (state.allergiesImage !== undefined) {
+    canvasImages.push(state.allergiesImage);
+  }
+
+  const isabelRes = await postData(
+    '/api/analysis/' + patientID, 
+    canvasImages,
+    'POST'
+  );
+  console.log(isabelRes);
   
-  const res = await postData(url, allAttributes)
+  const res = await postData("/api/patientprofile/" + patientID, allAttributes)
   return await res.message
 }
 
@@ -106,14 +147,16 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
   const [showingAllergiesText, setShowingAllergiesText] = useState(false);
   
   const { 
-    pastMedHist, 
+    pastMedHist,
     pastMedHistCanvas, 
     pastHospits, 
     pastHospitsCanvas,
-    medications, 
+    medications,
     medicationsCanvas,
     allergies,
-    allergiesCanvas
+    allergiesCanvas,
+    chiefComplaintCanvas,
+    HPICanvas,
   } = state;
 
   const myToast:MyToast = toast as any;
@@ -162,6 +205,9 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
               medicationsCanvas: jsonResult.medications_canvas,
               allergies: jsonResult.allergies,
               allergiesCanvas: jsonResult.allergies_canvas,
+
+              HPICanvas: jsonResult.hpi_canvas,
+              chiefComplaintCanvas: jsonResult.complaint_convas,
             }
           });
 
@@ -183,7 +229,7 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
         console.log(lastState);
         console.log(state);
 
-        saveData("/api/patientprofile/" + patientID, state).then((data) => {
+        saveData(patientID, state).then((data) => {
           console.log(data);
           myToast.success('Autosaved');
         }).catch((err) => {
@@ -278,14 +324,31 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
               canvasData={allergiesCanvas}
               isTextArea={true}
             />
+
+            <CanvasComp 
+              id={'medications'}
+              dispatch={dispatch}
+              initialWidth={600}
+              initialHeight={600}
+              saveData={chiefComplaintCanvas}
+              hidden={true}
+            />
+
+            <CanvasComp 
+              id={'allergies'}
+              dispatch={dispatch}
+              initialWidth={600}
+              initialHeight={600}
+              saveData={HPICanvas}
+              hidden={true}
+            />
           </div>
           <div className="form-whitespace">
             <div className="home-page-content-whitespace-logo"></div>
           </div>
           <div className="patient-profile-nav-btns">
             <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
-              // TODO : add POST request function here
-              saveData('/api/patientprofile/' + patientID, state).then((data) => {
+              saveData(patientID, state).then((data) => {
                 console.log(data)
                 myToast.success('Information saved')
               }).catch((err) => {

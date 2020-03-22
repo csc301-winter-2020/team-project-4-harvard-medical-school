@@ -486,3 +486,10 @@ CREATE TABLE lab_results (
     patient_id INT,
     info JSON
 );
+
+CREATE TABLE analysis (
+    profile_id INT,
+    student_input TEXT,
+    isbell_result JSON,
+    time_submitted TIMESTAMP
+);

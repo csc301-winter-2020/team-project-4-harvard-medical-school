@@ -30,7 +30,7 @@ router.post(
 router.post("/register", (req: Request, res: Response, next: NextFunction) => {
   const body: any = req.body;
   const query: string =
-    "INSERT INTO csc301db.users (username, first_name, last_name, avatar_url, email, password, year, user_type, date_create) VALUES($1, $2, $3, $4, $5, $6, $7, $8, NOW())";
+    "INSERT INTO csc301db.users (username, first_name, last_name, avatar_url, email, password, year, user_type, date_create, location) VALUES($1, $2, $3, $4, $5, $6, $7, $8, NOW(), $9)";
   pool
     .query(query, [
       body.username,
@@ -41,6 +41,7 @@ router.post("/register", (req: Request, res: Response, next: NextFunction) => {
       body.password,
       body.year,
       body.user_type,
+      "Toronto General Hospital"
     ])
     .then((result: any) => {
       console.log(result);

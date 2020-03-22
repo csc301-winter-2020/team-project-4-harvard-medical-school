@@ -16,6 +16,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { contentType, contents, MyToast } from "../../../utils/types";
 import { urlToName, inputMode } from "../../../utils/utils";
 import { ToastContainer, toast } from "react-toastify";
+import { HelixLoader } from "../../SubComponents/HelixLoader";
 
 const contentsPages: IndividualPatientProfile[] = [
   DemographicsPage,
@@ -39,6 +40,7 @@ interface IndividualPatientProfilePageProps {
   isShowingSidebar: boolean;
   patientID: number;
   defaultMode: inputMode;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export type IndividualPatientProfile = React.FC<
@@ -133,6 +135,10 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
   const [isAvatarPopup, setIsAvatarPopup] = useState<boolean>(false);
   const [defaultMode, setDefaultMode] = useState<inputMode>("Both");
   const [showHelpPopup, setShowHelpPopup] = useState<boolean>(false);
+  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
+  const [isShowingSidebarDefault, setIsShowingSidebarDefault] = useState<boolean>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  
 
   const incrementPage = () => {
     transitionName = "slide-left";
@@ -147,6 +153,14 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
     const newIndex = index === 0 ? contents.length - 1 : index - 1;
     setCurrentPage(contents[newIndex]);
   };
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  });
 
   // Observer for currentPage
   useEffect(() => {
@@ -218,12 +232,19 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
       })
       .then((data: any) => {
         setIsShowingSidebar(data.default_sidebar);
+        setIsShowingSidebarDefault(data.default_sidebar);
         setDefaultMode(data.default_mode);
       })
       .catch((err: any) => {
         console.log(err);
       });
   }, []);
+
+  useEffect(() => {
+    if (windowWidth < 1080 && isShowingSidebar){
+      setIsShowingSidebar(false);
+    }
+  }, [windowWidth])
 
   return (
     <>
@@ -233,6 +254,7 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
         setIsAvatarPopup={setIsAvatarPopup}
         showSearch={false}
       />
+      {/* {isLoading && <HelixLoader message="Fetching Patient Info..." />} */}
       <ToastContainer position={toast.POSITION.TOP_RIGHT} />
       {showHelpPopup && (
         <div
@@ -301,6 +323,7 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
                 transitionDuration={transitionDuration}
                 transitionName={transitionName}
                 defaultMode={defaultMode}
+                setIsLoading={setIsLoading}
               />
             );
           })}

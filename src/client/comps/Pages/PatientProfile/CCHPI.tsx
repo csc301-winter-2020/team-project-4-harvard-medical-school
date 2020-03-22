@@ -197,9 +197,11 @@ export const CCHPIPage: IndividualPatientProfile = ({
 
         saveData(patientID, state).then((data) => {
           console.log(data);
-          myToast.success('Autosaved');
+          myToast.success('Autosaved.', {
+            autoClose: 1000,
+          });
         }).catch((err) => {
-          myToast.success('Autosave failed');
+          myToast.warn('Autosave failed.');
         });
 
         setLastState(state);

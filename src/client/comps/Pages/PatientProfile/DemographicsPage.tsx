@@ -113,6 +113,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
   isShowingSidebar,
   patientID,
   defaultMode,
+  setIsLoading,
 }) => {
   const history = useHistory();
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -145,9 +146,11 @@ export const DemographicsPage: IndividualPatientProfile = ({
 
         saveData("/api/patientprofile/" + patientID, state).then((data) => {
           console.log(data);
-          myToast.success('Autosaved');
+          myToast.success('Autosaved.', {
+            autoClose: 1000,
+          });
         }).catch((err) => {
-          myToast.success('Autosave failed');
+          myToast.warn('Autosave failed.');
         });
 
         setLastState(state);
@@ -170,7 +173,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
       document.title = `Patient Profile: ${pageName}`;
       
       history.push(`/patient/${patientID}/demographics`);
-
+      setIsLoading(true);
       // Get request
       const url = "/api/patientprofile/" + patientID;
       fetch(url)
@@ -204,7 +207,8 @@ export const DemographicsPage: IndividualPatientProfile = ({
         })
         .catch(error => {
           console.log("An error occured with fetch:", error);
-        });
+        })
+        .finally(() => setIsLoading(false));
       
     }
   }, [currentPage]);

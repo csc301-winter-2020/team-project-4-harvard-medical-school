@@ -1076,14 +1076,6 @@ function age_helper(age: number) {
   }
 }
 
-function gender_helper(tmp: string) {
-  if (tmp === "Male") {
-    return "m";
-  } else {
-    return "f";
-  }
-}
-
 router.post(
   "/api/analysis/:profile_id",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -1121,7 +1113,7 @@ router.post(
       res.status(404).send();
     }
     const age: number = age_helper(db_res.rows[0].age);
-    const gender: string = gender_helper(db_res.rows[0].gender_at_birth);
+    const gender: string = db_res.rows[0].gender_at_birth === "Male" ? "m" : "f";
     // TODO: FIX THIS LATER
     const pregnant: string = "n";
     const isbell_url: string = `https://apisandbox.isabelhealthcare.com/v2/ranked_differential_diagnoses?specialties=28&dob=${age}&sex=${gender}&pregnant=${pregnant}&region=10&querytext=${all_string}&suggest=suggest+differential+diagnosis&flag=sortbyrw_advanced&searchtype=0&web_service=json&callback=diagnosiscallback&authorization=urOSKOJyYvIOj8BnIgBwJI0KgXT4BR9VYShRyAPDdbcChStimoHWbUE6ILUM0Z4S`;

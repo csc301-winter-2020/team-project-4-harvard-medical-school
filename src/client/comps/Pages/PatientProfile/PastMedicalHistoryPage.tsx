@@ -56,7 +56,7 @@ const initialState: PMH_State = {
   allergies: "",
 };
 
-async function saveData(patientID: number, state: any) {
+async function saveData(patientID: number, state: any, classID:number) {
   console.log(state)
   allAttributes.medical_history = state.pastMedHist;
 
@@ -113,7 +113,7 @@ async function saveData(patientID: number, state: any) {
     'POST'
   );
   console.log(isabelRes);
-  
+  allAttributes.class_id = classID;
   const res = await postData("/api/patientprofile/" + patientID, allAttributes)
   return await res.message
 }
@@ -129,7 +129,8 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
   transitionName,
   isShowingSidebar,
   patientID,
-  defaultMode
+  defaultMode,
+  classID
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [lastState, setLastState] = useState(state);
@@ -229,7 +230,7 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
         console.log(lastState);
         console.log(state);
 
-        saveData(patientID, state).then((data) => {
+        saveData(patientID, state, classID).then((data) => {
           console.log(data);
           myToast.success('Autosaved.', {
             autoClose: 1000,
@@ -350,7 +351,7 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
           </div>
           <div className="patient-profile-nav-btns">
             <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
-              saveData(patientID, state).then((data) => {
+              saveData(patientID, state, classID).then((data) => {
                 console.log(data)
                 myToast.success('Information saved')
               }).catch((err) => {

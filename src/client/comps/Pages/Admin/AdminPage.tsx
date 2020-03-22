@@ -80,7 +80,7 @@ export const AdminPage: React.FC<AdminPageProps> = (props: AdminPageProps) => {
   return (
     <>
       <Header
-        placeholder={"Search classes..."}
+        placeholder={"Search Classes..."}
         isAvatarPopup={isAvatarPopup}
         setIsAvatarPopup={setIsAvatarPopup}
         showSearch={true}

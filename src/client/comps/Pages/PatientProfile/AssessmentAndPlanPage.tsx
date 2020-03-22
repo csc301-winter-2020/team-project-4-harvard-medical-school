@@ -38,14 +38,7 @@ const initialState: Assessment_State = {
   assessment: "",
 };
 
-async function saveData(url: string, state: any) {
-  console.log(state)
-  allAttributes.assessments = state.assessment;
-  if (state.assessmentCanvas !== undefined) allAttributes.assessments_canvas = state.assessmentCanvas;
 
-  const res = await postData(url, allAttributes);
-  return await res.message
-}
 
 var allAttributes: any;
 
@@ -58,7 +51,17 @@ export const AssessmentAndPlanPage: IndividualPatientProfile = ({
   isShowingSidebar,
   patientID,
   defaultMode,
+  classID
 }) => {
+
+  async function saveData(url: string, state: any) {
+    console.log(state)
+    allAttributes.assessments = state.assessment;
+    if (state.assessmentCanvas !== undefined) allAttributes.assessments_canvas = state.assessmentCanvas;
+    allAttributes.class_id = classID;
+    const res = await postData(url, allAttributes);
+    return await res.message
+  }
   
   const [state, dispatch] = useReducer(reducer, initialState);
   const [lastState, setLastState] = useState(state);

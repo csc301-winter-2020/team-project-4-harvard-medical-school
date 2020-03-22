@@ -84,24 +84,6 @@ const initialState: DemographicsState = {
   country: "",
 };
 
-async function saveData(url: string, state: DemographicsState) {
-  console.log(state);
-  allAttributes.first_name = state.firstName;
-  if (state.firstNameCanvas !== undefined) allAttributes.first_name_canvas = state.firstNameCanvas;
-  allAttributes.family_name = state.lastName;
-  if (state.lastNameCanvas !== undefined) allAttributes.family_name_canvas = state.lastNameCanvas;
-  allAttributes.age = state.age;
-  if (state.ageCanvas !== undefined) allAttributes.age_canvas = state.ageCanvas;
-  allAttributes.gender = state.sex;
-  allAttributes.pregnant = state.isPregnant;
-  allAttributes.country_residence = state.country;
-  if (state.countryCanvas !== undefined) allAttributes.country_residence_canvas = state.countryCanvas;
-  console.log(allAttributes);
-
-  const res = await postData(url, allAttributes);
-  return await res.message
-}
-
 var allAttributes: any;
 
 export const DemographicsPage: IndividualPatientProfile = ({
@@ -114,6 +96,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
   patientID,
   defaultMode,
   setIsLoading,
+  classID
 }) => {
   const history = useHistory();
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -132,6 +115,25 @@ export const DemographicsPage: IndividualPatientProfile = ({
   } = state;
 
   const myToast:MyToast = toast as any;
+
+  async function saveData(url: string, state: DemographicsState) {
+    console.log(state);
+    allAttributes.first_name = state.firstName;
+    if (state.firstNameCanvas !== undefined) allAttributes.first_name_canvas = state.firstNameCanvas;
+    allAttributes.family_name = state.lastName;
+    if (state.lastNameCanvas !== undefined) allAttributes.family_name_canvas = state.lastNameCanvas;
+    allAttributes.age = state.age;
+    if (state.ageCanvas !== undefined) allAttributes.age_canvas = state.ageCanvas;
+    allAttributes.gender = state.sex;
+    allAttributes.pregnant = state.isPregnant;
+    allAttributes.country_residence = state.country;
+    if (state.countryCanvas !== undefined) allAttributes.country_residence_canvas = state.countryCanvas;
+    allAttributes.class_id = classID;
+    console.log("ALL ATTRIBUTES");
+    console.log(allAttributes);
+    const res = await postData(url, allAttributes);
+    return await res.message
+  }
 
   useEffect(() => {
     if (lastState === initialState) {

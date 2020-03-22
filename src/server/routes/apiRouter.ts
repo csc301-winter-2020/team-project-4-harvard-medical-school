@@ -258,7 +258,6 @@ router.post(
     console.log(req.body);
     const params_arr: any = [];
     params_arr.push(new_patient.student_id);
-    // params_arr.push(new_patient.patient_id);
     params_arr.push(new_patient.first_name);
     params_arr.push(new_patient.family_name);
     params_arr.push(new_patient.age);
@@ -296,7 +295,6 @@ router.post(
     for (let i = 0; i < attributes.length; i++) {
       const time: number = Date.now();
       const key_name: string = `canvas_${req.user}_${attributes[i]}_${time}`;
-      console.log(key_name);
       if (new_patient[attributes[i] + "_canvas"] === null) {
         upload_promise.push(Promise.resolve(null));
       } else {
@@ -305,7 +303,6 @@ router.post(
         );
       }
     }
-    console.log(upload_promise);
     Promise.all(upload_promise)
       .then(values => {
         for (let i = 0; i < values.length; i++) {
@@ -339,13 +336,13 @@ router.post(
             etoh_canvas, drinks_per_week_canvas, \
              last_time_smoked_canvas, \
             packs_per_day_canvas, other_substances_canvas, \
-             assessments_canvas, imaging_canvas \
+             assessments_canvas, imaging_canvas, class_id \
             ) VALUES (current_timestamp, $1, $2, $3, $4, $5, $6, $7, $8, $9\
                 ,$10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21,\
                 $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, \
                 $33, $34, $35, $36, $37, $38, $39, $40, $41, $42, $43, $44,\
-                $45, $46, $47, $48, $49, $50, $51) RETURNING id;";
-        return pool.query(insert_query, params_arr);
+                $45, $46, $47, $48, $49, $50, $51, $52) RETURNING id;";
+        return pool.query(insert_query, [...params_arr, new_patient.class_id]);
       })
       .then((result: any) => {
         console.log(result);
@@ -359,16 +356,15 @@ router.post(
 );
 
 /**
- * Create a new patient profile for patient <patientId>
+ * Patch a patient profile for patient <patientId>
  */
 router.patch(
   "/api/patientprofile/:id",
   (req: Request, res: Response, next: NextFunction) => {
     const profile_id: string = req.params.id;
     const new_patient: any = req.body;
-    console.log(req.body);
+    const class_id: string = new_patient.class_id;
     const params_arr: any = [];
-    // params_arr.push(profile_id);
     params_arr.push(new_patient.student_id);
     params_arr.push(new_patient.first_name);
     params_arr.push(new_patient.family_name);
@@ -450,13 +446,13 @@ router.patch(
             etoh_canvas, drinks_per_week_canvas, \
              last_time_smoked_canvas, \
             packs_per_day_canvas, other_substances_canvas, \
-             assessments_canvas, imaging_canvas, id \
+             assessments_canvas, imaging_canvas, id, class_id \
             ) VALUES (current_timestamp, $1, $2, $3, $4, $5, $6, $7, $8, $9\
                 ,$10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21,\
                 $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, \
                 $33, $34, $35, $36, $37, $38, $39, $40, $41, $42, $43, $44,\
-                $45, $46, $47, $48, $49, $50, $51, $52) RETURNING id;";
-        return pool.query(insert_query, params_arr.concat([profile_id]));
+                $45, $46, $47, $48, $49, $50, $51, $52, $53) RETURNING id;";
+        return pool.query(insert_query, [...params_arr, profile_id, class_id]);
       })
       .then((result: any) => {
         console.log(result);
@@ -737,7 +733,7 @@ router.get(
     const student_id: number = parseInt(req.params.studentID);
     const query_string: string =
       "SELECT \
-        id, last_modified, first_name, family_name, gender, age, country_residence, pregnant\
+        id, last_modified, first_name, family_name, gender, age, country_residence, pregnant, class_id\
         FROM csc301db.patient_profile WHERE student_id = $1";
     pool
       .query(query_string, [student_id])

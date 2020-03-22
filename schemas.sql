@@ -53,6 +53,7 @@ CREATE TYPE SMOKING_TYPE AS ENUM('NEVER', 'EX', 'CURRENT');
 CREATE TABLE patient_profile (
     id SERIAL,
     last_modified TIMESTAMP,
+    created_date TIMESTAMP,
     student_id INT REFERENCES users(id),
     patient_id INT,
     UNIQUE (student_id, patient_id),
@@ -110,9 +111,10 @@ CREATE TABLE patient_profile (
     imaging TEXT,
     imaging_canvas TEXT,
     final_diagnosis TEXT,
-    class_id INT,
+    class_id INT REFERENCES class(id),
     PRIMARY KEY (id, last_modified)
 );
+
 
 INSERT INTO
     users (
@@ -157,8 +159,8 @@ INSERT INTO
 VALUES
     (
         'student',
-        'will',
-        'qie',
+        'student',
+        'McStudent',
         'https://www.pphfoundation.ca/wp-content/uploads/2018/05/default-avatar.png',
         'willqie@gmail.com',
         'student',
@@ -184,8 +186,8 @@ INSERT INTO
 VALUES
     (
         'instructor',
-        'will',
-        'qie',
+        'Will',
+        'Qie',
         'https://www.pphfoundation.ca/wp-content/uploads/2018/05/default-avatar.png',
         'willqie@gmail.com',
         'instructor',
@@ -254,44 +256,7 @@ INSERT INTO
 VALUES
     (NULL);
 
-INSERT INTO
-    patient_profile (
-        last_modified,
-        student_id,
-        patient_id,
-        first_name,
-        family_name,
-        age,
-        gender_at_birth,
-        gender,
-        pregnant,
-        country_residence,
-        country_visited,
-        complaint,
-        medical_history,
-        social_history,
-        family_history
-    )
-VALUES
-    (
-        current_timestamp,
-        1,
-        1,
-        'will',
-        'qie',
-        20,
-        'Male',
-        'Male',
-        'NO',
-        'CA',
-        NULL,
-        'ddd',
-        'fff',
-        'zzz',
-        'vvv'
-    );
-
---Class Inserts for testing purposes 
+    --Class Inserts for testing purposes 
 INSERT INTO
     class (name, instructor_id, help_enabled)
 VALUES
@@ -301,6 +266,7 @@ INSERT INTO
     class (name, instructor_id, help_enabled)
 VALUES
     ('CSC343 WINTER 2020', 1, false);
+
 
 CREATE TABLE templates (
     user_id INT REFERENCES users(id) NOT NULL,
@@ -493,3 +459,44 @@ CREATE TABLE analysis (
     isbell_result JSON,
     time_submitted TIMESTAMP
 );
+
+INSERT INTO
+    patient_profile (
+        last_modified,
+        created_date,
+        student_id,
+        patient_id,
+        first_name,
+        family_name,
+        age,
+        gender_at_birth,
+        gender,
+        pregnant,
+        country_residence,
+        country_visited,
+        complaint,
+        medical_history,
+        social_history,
+        family_history,
+        class_id
+    )
+VALUES
+    (
+        current_timestamp,
+        current_timestamp,
+        1,
+        1,
+        'Joe',
+        'Smith',
+        20,
+        'Male',
+        'Male',
+        'NO',
+        'CA',
+        NULL,
+        'ddd',
+        'fff',
+        'zzz',
+        'vvv',
+        1
+    );

@@ -41,6 +41,7 @@ interface IndividualPatientProfilePageProps {
   patientID: number;
   defaultMode: inputMode;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  classID: number;
 }
 
 export type IndividualPatientProfile = React.FC<
@@ -49,7 +50,8 @@ export type IndividualPatientProfile = React.FC<
 
 export async function postData(url: string, data: any, method?: string) {
   if (method === undefined) method = 'PATCH';
-
+  console.log("PATCHING WITH DATA");
+  console.log(data);
   const response = await fetch(url, {
     method: method,
     mode: "cors",
@@ -138,6 +140,7 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
   const [isShowingSidebarDefault, setIsShowingSidebarDefault] = useState<boolean>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [classId, setClassId] = useState(-1);
   
 
   const incrementPage = () => {
@@ -246,6 +249,23 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
     }
   }, [windowWidth])
 
+  useEffect(() => {
+    fetch(`/api/patientprofile/${thisPatientID}`)
+    .then(response => {
+      if (response.status === 200){
+        return response.json();
+      } else {
+        throw new Error("Cant find this patient profile.");
+      }
+    })
+    .then((data:any) => {
+      setClassId(data.class_id);
+    })
+    .catch((err:any) => {
+      console.log(err)
+    });
+  }, []);
+
   return (
     <>
       <Header
@@ -324,6 +344,7 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
                 transitionName={transitionName}
                 defaultMode={defaultMode}
                 setIsLoading={setIsLoading}
+                classID={classId}
               />
             );
           })}

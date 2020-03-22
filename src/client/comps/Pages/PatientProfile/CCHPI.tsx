@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useReducer } from "react";
 import { CSSTransition } from "react-transition-group";
-import { IndividualPatientProfile, fetchAllCanvases } from "./PatientProfilePage";
+import {
+  IndividualPatientProfile,
+  fetchAllCanvases,
+} from "./PatientProfilePage";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router";
@@ -12,7 +15,12 @@ import { CanvasComp } from "../../SubComponents/CanvasComp";
 
 function reducer(
   state: CCHPI_State,
-  action: { type: string; fieldName?: string; value?: string; newState?: {[key: string]: string |boolean|number|null} }
+  action: {
+    type: string;
+    fieldName?: string;
+    value?: string;
+    newState?: { [key: string]: string | boolean | number | null };
+  }
 ): CCHPI_State {
   switch (action.type) {
     case "field":
@@ -53,7 +61,7 @@ const initialState: CCHPI_State = {
   HPI: "",
 };
 
-async function saveData(patientID: number, state: any) {
+async function saveData(patientID: number, state: any, classID: number) {
   console.log(state);
   allAttributes.complaint = state.chiefComplaint;
   if (state.chiefComplaintCanvas !== undefined) {
@@ -65,7 +73,7 @@ async function saveData(patientID: number, state: any) {
     allAttributes.hpi_canvas = state.HPICanvas;
   }
 
-  const canvasImages = []
+  const canvasImages = [];
   if (state.chiefComplaintImage !== undefined) {
     canvasImages.push(state.chiefComplaintImage);
   }
@@ -90,15 +98,14 @@ async function saveData(patientID: number, state: any) {
     canvasImages.push(state.allergiesImage);
   }
 
-  await postData(
-    '/api/analysis/' + patientID, 
-    canvasImages,
-    'POST'
-  );
+  await postData("/api/analysis/" + patientID, canvasImages, "POST");
   // console.log(await (await fetch('/api/analysis/' + patientID)).json())
-
+  allAttributes.class_id = classID;
   console.log(allAttributes);
-  const res = await postData('/api/patientprofile/'+ patientID, allAttributes);
+  const res = await postData(
+    "/api/patientprofile/" + patientID,
+    allAttributes
+  );
   return await res.message;
 }
 
@@ -113,29 +120,33 @@ export const CCHPIPage: IndividualPatientProfile = ({
   isShowingSidebar,
   patientID,
   defaultMode,
+  classID,
 }) => {
   const history = useHistory();
+
+
+
   useEffect(() => {
     if (currentPage === pageName) {
       document.title = `Patient Profile: ${pageName}`;
       history.push(`/patient/${patientID}/cchpi`);
 
       // Get request
-      const url = '/api/patientprofile/' + patientID;
+      const url = "/api/patientprofile/" + patientID;
       fetch(url)
-        .then((res) => {
-          return res.json()
+        .then(res => {
+          return res.json();
         })
-        .then((jsonResult) => {
+        .then(jsonResult => {
           return fetchAllCanvases(jsonResult);
         })
         .then(jsonResult => {
-          allAttributes = jsonResult; 
+          allAttributes = jsonResult;
           console.log("Get CCHPI");
           console.log(jsonResult);
-          dispatch({ 
-            type: "many_fields", 
-            newState:{
+          dispatch({
+            type: "many_fields",
+            newState: {
               chiefComplaint: jsonResult.complaint,
               chiefComplaintCanvas: jsonResult.complaint_canvas,
               HPI: jsonResult.hpi,
@@ -145,35 +156,40 @@ export const CCHPIPage: IndividualPatientProfile = ({
               pastHospitsCanvas: jsonResult.hospital_history_canvas,
               medicationsCanvas: jsonResult.medications_canvas,
               allergiesCanvas: jsonResult.allergies_canvas,
-            }
+            },
           });
-        }).catch((error) => {
-          console.log("An error occured with fetch:", error)
+        })
+        .catch(error => {
+          console.log("An error occured with fetch:", error);
         });
-
     }
   }, [currentPage]);
   const [state, dispatch] = useReducer(reducer, initialState);
   const [lastState, setLastState] = useState(state);
 
-  const [showingChiefComplaintCanvas, setShowingChiefComplaintCanvas] = useState(true);
-  const [showingChiefComplaintText, setShowingChiefComplaintText] = useState(false);
+  const [
+    showingChiefComplaintCanvas,
+    setShowingChiefComplaintCanvas,
+  ] = useState(true);
+  const [showingChiefComplaintText, setShowingChiefComplaintText] = useState(
+    false
+  );
 
   const [showingHPICanvas, setShowingHPICanvas] = useState(true);
   const [showingHPIText, setShowingHPIText] = useState(false);
 
-  const { 
-    chiefComplaint, 
-    chiefComplaintCanvas, 
-    HPI, 
+  const {
+    chiefComplaint,
+    chiefComplaintCanvas,
+    HPI,
     HPICanvas,
     pastMedHistCanvas,
     pastHospitsCanvas,
     medicationsCanvas,
-    allergiesCanvas
+    allergiesCanvas,
   } = state;
 
-  const myToast:MyToast = toast as any;
+  const myToast: MyToast = toast as any;
 
   useEffect(() => {
     const canvasShow: boolean = canvasInit(defaultMode);
@@ -195,14 +211,16 @@ export const CCHPIPage: IndividualPatientProfile = ({
         console.log(lastState);
         console.log(state);
 
-        saveData(patientID, state).then((data) => {
-          console.log(data);
-          myToast.success('Autosaved.', {
-            autoClose: 1000,
+        saveData(patientID, state, classID)
+          .then(data => {
+            console.log(data);
+            myToast.success("Autosaved.", {
+              autoClose: 1000,
+            });
+          })
+          .catch(err => {
+            myToast.warn("Autosave failed.");
           });
-        }).catch((err) => {
-          myToast.warn('Autosave failed.');
-        });
 
         setLastState(state);
       }
@@ -220,7 +238,13 @@ export const CCHPIPage: IndividualPatientProfile = ({
         onEnter={() => setCurrentPage(pageName)}
         classNames={transitionName}
       >
-        <div className={ isShowingSidebar ? "patient-profile-window" : "patient-profile-window width-100"}>
+        <div
+          className={
+            isShowingSidebar
+              ? "patient-profile-window"
+              : "patient-profile-window width-100"
+          }
+        >
           <div className="patient-profile-page-title">
             <h2>{pageName}</h2>
           </div>
@@ -232,7 +256,9 @@ export const CCHPIPage: IndividualPatientProfile = ({
               inputVal={chiefComplaint}
               placeholder={`Enter text here`}
               title={"Chief Complaint"}
-              subtext={'If you would like to receive diagnoses tips, please write symptoms as comma separated values'}
+              subtext={
+                "If you would like to receive diagnoses tips, please write symptoms as comma separated values"
+              }
               isShowingCanvas={showingChiefComplaintCanvas}
               isShowingText={showingChiefComplaintText}
               setIsShowingCanvas={setShowingChiefComplaintCanvas}
@@ -250,7 +276,9 @@ export const CCHPIPage: IndividualPatientProfile = ({
               inputVal={HPI}
               placeholder={`Enter text here`}
               title={"History of Present Illness"}
-              subtext={'If you would like to receive diagnoses tips, please write history as comma separated values'}
+              subtext={
+                "If you would like to receive diagnoses tips, please write history as comma separated values"
+              }
               isShowingCanvas={showingHPICanvas}
               isShowingText={showingHPIText}
               setIsShowingCanvas={setShowingHPICanvas}
@@ -261,8 +289,8 @@ export const CCHPIPage: IndividualPatientProfile = ({
               isTextArea={true}
             />
 
-            <CanvasComp 
-              id={'pastMedHist'}
+            <CanvasComp
+              id={"pastMedHist"}
               dispatch={dispatch}
               initialWidth={600}
               initialHeight={600}
@@ -270,8 +298,8 @@ export const CCHPIPage: IndividualPatientProfile = ({
               hidden={true}
             />
 
-            <CanvasComp 
-              id={'pastHospits'}
+            <CanvasComp
+              id={"pastHospits"}
               dispatch={dispatch}
               initialWidth={600}
               initialHeight={600}
@@ -279,8 +307,8 @@ export const CCHPIPage: IndividualPatientProfile = ({
               hidden={true}
             />
 
-            <CanvasComp 
-              id={'medications'}
+            <CanvasComp
+              id={"medications"}
               dispatch={dispatch}
               initialWidth={600}
               initialHeight={600}
@@ -288,8 +316,8 @@ export const CCHPIPage: IndividualPatientProfile = ({
               hidden={true}
             />
 
-            <CanvasComp 
-              id={'allergies'}
+            <CanvasComp
+              id={"allergies"}
               dispatch={dispatch}
               initialWidth={600}
               initialHeight={600}
@@ -301,14 +329,25 @@ export const CCHPIPage: IndividualPatientProfile = ({
             <div className="home-page-content-whitespace-logo"></div>
           </div>
           <div className="patient-profile-nav-btns">
-            <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
-              saveData(patientID, state).then((data) => {
-                console.log(data)
-                myToast.success('Information saved')
-              }).catch((err) => {
-                myToast.success('Information could not be saved')
-              })
-            }}>
+            <div
+              className="nav-btn"
+              style={{
+                right: "20px",
+                top: "70px",
+                position: "fixed",
+                borderRadius: "5px",
+              }}
+              onClick={() => {
+                saveData(patientID, state, classID)
+                  .then(data => {
+                    console.log(data);
+                    myToast.success("Information saved");
+                  })
+                  .catch(err => {
+                    myToast.success("Information could not be saved");
+                  });
+              }}
+            >
               <FontAwesomeIcon icon="save" size="2x" />
             </div>
           </div>

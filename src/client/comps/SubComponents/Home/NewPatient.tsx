@@ -7,6 +7,7 @@ import { MyToast } from "../../../utils/types";
 interface NewPatientProps {
   history?: any;
   setShowNewPatientPopup: React.Dispatch<React.SetStateAction<boolean>>;
+  classID: number;
 }
 
 interface NewPatientState {
@@ -17,6 +18,7 @@ interface NewPatientState {
 export const NewPatient: React.FC<NewPatientProps> = ({
   history,
   setShowNewPatientPopup,
+  classID,
 }) => {
   const mToast:MyToast = toast as any;
   const [firstName, setFirstName] = useState("");
@@ -29,6 +31,7 @@ export const NewPatient: React.FC<NewPatientProps> = ({
     let data = JSON.parse(JSON.stringify(defaultPatientProfile));
     data["first_name"] = firstName;
     data["family_name"] = lastName;
+    data["class_id"] = classID;
     // data['age'] = age;
     data["student_id"] = (await (await fetch(`/api/me`)).json()).id;
     delete data["patient_id"];

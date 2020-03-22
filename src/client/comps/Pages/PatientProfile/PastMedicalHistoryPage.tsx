@@ -7,6 +7,7 @@ import { useHistory } from "react-router";
 import { postData } from "./PatientProfilePage";
 import { canvasInit, textInit } from "../../../utils/utils";
 import { toast } from "react-toastify";
+import { CanvasComp } from "../../SubComponents/CanvasComp";
 
 function reducer(
   state: PMH_State,
@@ -41,6 +42,10 @@ type PMH_State = {
   allergies: string;
   allergiesCanvas?: string;
   allergiesImage?: string;
+  chiefComplaintCanvas?: string;
+  chiefComplaintImage?: string;
+  HPICanvas?: string;
+  HPIImage?: string;
 }
 
 const initialState: PMH_State = {
@@ -76,16 +81,43 @@ async function saveData(patientID: number, state: any) {
     allAttributes.allergies_canvas = state.allergiesCanvas; 
   }
 
-  if (state.pastMedHistImage !== undefined) {
-    console.log(state.pastMedHistImage);
-    let isabelRes = await postData(
-      '/api/analysis/' + patientID, 
-      { image: state.pastMedHistImage },
-      'POST'
-    );
-
-    console.log(isabelRes);
+  const canvasImages = []
+  if (state.chiefComplaintImage !== undefined) {
+    canvasImages.push(state.chiefComplaintImage);
+    console.log(state.chiefComplaintImage);
   }
+
+  if (state.HPIImage !== undefined) {
+    canvasImages.push(state.HPIImage);
+    console.log(state.HPIImage);
+  }
+
+  if (state.pastHospitsImage !== undefined) {
+    canvasImages.push(state.pastHospitsImage);
+    console.log(state.pastHospitsImage);
+  }
+
+  if (state.pastMedHistImage !== undefined) {
+    canvasImages.push(state.pastMedHistImage);
+    console.log(state.pastMedHistImage);
+  }
+
+  if (state.medicationsImage !== undefined) {
+    canvasImages.push(state.medicationsImage);
+    console.log(state.medicationsImage);
+  }
+
+  if (state.allergiesImage !== undefined) {
+    canvasImages.push(state.allergiesImage);
+    console.log(state.allergiesImage);
+  }
+
+  const isabelRes = await postData(
+    '/api/analysis/' + patientID, 
+    canvasImages,
+    'POST'
+  );
+  console.log(isabelRes);
   
   const res = await postData("/api/patientprofile/" + patientID, allAttributes)
   return await res.message
@@ -120,14 +152,16 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
   const [showingAllergiesText, setShowingAllergiesText] = useState(false);
   
   const { 
-    pastMedHist, 
+    pastMedHist,
     pastMedHistCanvas, 
     pastHospits, 
     pastHospitsCanvas,
-    medications, 
+    medications,
     medicationsCanvas,
     allergies,
-    allergiesCanvas
+    allergiesCanvas,
+    chiefComplaintCanvas,
+    HPICanvas,
   } = state;
 
   const myToast: any = toast
@@ -176,6 +210,9 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
               medicationsCanvas: jsonResult.medications_canvas,
               allergies: jsonResult.allergies,
               allergiesCanvas: jsonResult.allergies_canvas,
+
+              HPICanvas: jsonResult.hpi_canvas,
+              chiefComplaintCanvas: jsonResult.complaint_convas,
             }
           });
 
@@ -292,13 +329,30 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
               canvasData={allergiesCanvas}
               isTextArea={true}
             />
+
+            <CanvasComp 
+              id={'medications'}
+              dispatch={dispatch}
+              initialWidth={600}
+              initialHeight={600}
+              saveData={chiefComplaintCanvas}
+              hidden={true}
+            />
+
+            <CanvasComp 
+              id={'allergies'}
+              dispatch={dispatch}
+              initialWidth={600}
+              initialHeight={600}
+              saveData={HPICanvas}
+              hidden={true}
+            />
           </div>
           <div className="form-whitespace">
             <div className="home-page-content-whitespace-logo"></div>
           </div>
           <div className="patient-profile-nav-btns">
             <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
-              // TODO : add POST request function here
               saveData(patientID, state).then((data) => {
                 console.log(data)
                 myToast.success('Information saved')

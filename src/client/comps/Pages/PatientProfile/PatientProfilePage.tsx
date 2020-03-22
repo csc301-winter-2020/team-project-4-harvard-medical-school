@@ -300,10 +300,7 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
             {initNavDots()}
           </div>
           <div className="patient-profile-nav-btns">
-            <div 
-              className="nav-btn-leftmost nav-btn"
-              // onClick={}  
-            >
+            <div className="nav-btn-leftmost nav-btn">
               <FontAwesomeIcon icon="question-circle" size="2x" />
             </div>
 

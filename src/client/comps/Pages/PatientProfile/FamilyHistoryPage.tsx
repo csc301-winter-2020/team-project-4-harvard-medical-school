@@ -38,14 +38,7 @@ const initialState: Family_Hist_State = {
   familyHist: "",
 };
 
-async function saveData(url: string, state: any) {
-  console.log(state.familyHist)
-  allAttributes.family_history = state.familyHist;
-  allAttributes.family_history_canvas = state.familyHistCanvas;
 
-  const res = await postData(url, allAttributes);
-  return await res.message
-}
 
 var allAttributes: any;
 
@@ -58,6 +51,7 @@ export const FamilyHistoryPage: IndividualPatientProfile = ({
   isShowingSidebar,
   patientID,
   defaultMode,
+  classID
 }) => {
   const history = useHistory();
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -67,6 +61,15 @@ export const FamilyHistoryPage: IndividualPatientProfile = ({
   const [showingFamilyHistText, setShowingFamilyHistText] = useState(false);
 
   const myToast:MyToast = toast as any;
+
+  async function saveData(url: string, state: any) {
+    console.log(state.familyHist)
+    allAttributes.family_history = state.familyHist;
+    allAttributes.family_history_canvas = state.familyHistCanvas;
+    allAttributes.class_id = classID;
+    const res = await postData(url, allAttributes);
+    return await res.message
+  }
 
   useEffect(() => {
     const canvasShow: boolean = canvasInit(defaultMode);
@@ -90,9 +93,11 @@ export const FamilyHistoryPage: IndividualPatientProfile = ({
 
         saveData("/api/patientprofile/" + patientID, state).then((data) => {
           console.log(data);
-          myToast.success('Autosaved');
+          myToast.success('Autosaved.', {
+            autoClose: 1000,
+          });
         }).catch((err) => {
-          myToast.success('Autosave failed');
+          myToast.warn('Autosave failed.');
         });
 
         setLastState(state);

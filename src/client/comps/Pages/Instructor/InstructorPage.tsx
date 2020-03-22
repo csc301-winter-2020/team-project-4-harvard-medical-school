@@ -47,6 +47,7 @@ export const InstructorPage: React.FC<InstructorPageProps> = (
       }
     })
     .then((data:any) => {
+      console.log(data);
       const allClasses:InstructorClass[] = [];
       data.forEach((row:any) => {
         allClasses.push({
@@ -80,6 +81,9 @@ export const InstructorPage: React.FC<InstructorPageProps> = (
         <div className="home-page-separator-line"/>
         <div className="home-page-patient-header-grid"/>
         <div className="home-page-content">
+          {
+            classes.length === 0 && <p style={{marginLeft: "10px"}}>You do not have any classes you are instructing. Please ask your administrator to assign you to a class.</p>
+          }
         {classes.filter(s => s.name.toLowerCase().includes(searchVal.toLowerCase())).map(c =>
           <InstructorClassRow
             name={c.name}

@@ -5,11 +5,13 @@ import { AdminPage } from "./Admin/AdminPage";
 import { InstructorPage } from "./Instructor/InstructorPage";
 import { HelixLoader } from "../SubComponents/HelixLoader";
 import { StudentClassSelectPage } from "./Student/StudentClassSelectPage";
+import { Header } from "../SubComponents/Header";
 
 interface AllHomePageProps {}
 
 export const AllHomePage: React.FC<AllHomePageProps> = ({}) => {
   const [userType, setUserType] = useState(null);
+  const [isAvatarPopup, setIsAvatarPopup] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
@@ -32,11 +34,27 @@ export const AllHomePage: React.FC<AllHomePageProps> = ({}) => {
   }, []);
   return (
     <>
-      {userType === null && <HelixLoader message="Verifying Login Info..." />}
+      {userType === null && (
+        <>
+          <Header
+            placeholder={""}
+            isAvatarPopup={isAvatarPopup}
+            setIsAvatarPopup={setIsAvatarPopup}
+            showSearch={false}
+          />{" "}
+          <HelixLoader message="Verifying Login Info..." />
+        </>
+      )}
       {userType === "Student" && <StudentClassSelectPage />}
       {userType === "Administrator" && <AdminPage />}
       {userType === "Educator" && <InstructorPage />}
-      {(!(["Student", "Educator", "Administrator"]).includes(userType) && userType !== null) && <p>"Your user type is undefined. Please contact your administrator to ammend this."</p>}
+      {!["Student", "Educator", "Administrator"].includes(userType) &&
+        userType !== null && (
+          <p>
+            "Your user type is undefined. Please contact your administrator to
+            ammend this."
+          </p>
+        )}
     </>
   );
 };

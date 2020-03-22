@@ -84,7 +84,7 @@ const initialState: SocialHistState = {
   otherSubstances: "",
 };
 
-async function saveData(url: string, state: any) {
+async function saveData(url: string, state: any, classID: number) {
   console.log(state);
   allAttributes.work = state.work;
   allAttributes.sexual_history = state.sexualHistory;
@@ -120,7 +120,7 @@ async function saveData(url: string, state: any) {
   if (state.otherSubstancesCanvas !== undefined) {
     allAttributes.other_substances_canvas = state.otherSubstancesCanvas;
   }
-  
+  allAttributes.class_id = classID;
   const res = await postData(url, allAttributes);
   return await res.message
 }
@@ -136,6 +136,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
   isShowingSidebar,
   patientID,
   defaultMode,
+  classID,
 }) => {
   const history = useHistory();
   useEffect(() => {
@@ -277,11 +278,13 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
         console.log(lastState);
         console.log(state);
 
-        saveData("/api/patientprofile/" + patientID, state).then((data) => {
+        saveData("/api/patientprofile/" + patientID, state, classID).then((data) => {
           console.log(data);
-          myToast.success('Autosaved');
+          myToast.success('Autosaved.', {
+            autoClose: 1000,
+          });
         }).catch((err) => {
-          myToast.success('Autosave failed');
+          myToast.warn('Autosave failed.');
         });
 
         setLastState(state);
@@ -504,7 +507,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
                 borderRadius: "5px",
               }}
               onClick={() => {
-                saveData("/api/patientprofile/" + patientID, state).then((data) => {
+                saveData("/api/patientprofile/" + patientID, state, classID).then((data) => {
                   console.log(data)
                   myToast.success('Information saved')
                 }).catch((err) => {

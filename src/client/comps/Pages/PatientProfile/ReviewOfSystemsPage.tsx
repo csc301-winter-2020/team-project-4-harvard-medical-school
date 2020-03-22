@@ -291,7 +291,6 @@ const nameMap: nameMap = {
   musculoskeletal: 'Musculoskeletal Symptoms',
   mental: 'Mental Health Symptoms',
   skinHair: 'Skin and Hair Symptoms',
-
   weightLoss: 'Weight Loss',
   weightGain: 'Weight Gain',
   fatigue: 'Fatigue',
@@ -484,9 +483,11 @@ export const ReviewOfSystemsPage: IndividualPatientProfile = ({
 
         postReviewOfSystemsInfo(patientID, state).then((data) => {
           console.log(data);
-          myToast.success('Autosaved');
+          myToast.success('Autosaved.', {
+            autoClose: 1000,
+          });
         }).catch((err) => {
-          myToast.success('Autosave failed');
+          myToast.warn('Autosave failed.');
         });
 
         setLastState(state);
@@ -595,9 +596,7 @@ export const ReviewOfSystemsPage: IndividualPatientProfile = ({
                                         reviewOfSystems: null
                                       })
                                     }
-                                    onChange={
-                                      () => {}
-                                    }
+                                    onChange={() => {}}
                                   />
                                   <p>{nameMap[symptomName]}</p>
                                 </label>

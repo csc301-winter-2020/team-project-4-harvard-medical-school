@@ -83,6 +83,12 @@ export const StudentClassSelectPage: React.FC<StudentClassSelectPageProps> = ({}
         <div className="home-page-separator-line"></div>
         <div className="home-page-patient-header-grid"></div>
         <div className="home-page-content">
+          {classes.length === 0 && (
+            <p style={{ marginLeft: "10px" }}>
+              You are not enrolled in any classes. Please notify your
+              administrator to enroll you in a class.
+            </p>
+          )}
           {classes
             .filter(c =>
               c.name.toLowerCase().includes(searchValue.toLowerCase())

@@ -38,14 +38,7 @@ const initialState: Assessment_State = {
   assessment: "",
 };
 
-async function saveData(url: string, state: any) {
-  console.log(state)
-  allAttributes.assessments = state.assessment;
-  if (state.assessmentCanvas !== undefined) allAttributes.assessments_canvas = state.assessmentCanvas;
 
-  const res = await postData(url, allAttributes);
-  return await res.message
-}
 
 var allAttributes: any;
 
@@ -58,7 +51,17 @@ export const AssessmentAndPlanPage: IndividualPatientProfile = ({
   isShowingSidebar,
   patientID,
   defaultMode,
+  classID
 }) => {
+
+  async function saveData(url: string, state: any) {
+    console.log(state)
+    allAttributes.assessments = state.assessment;
+    if (state.assessmentCanvas !== undefined) allAttributes.assessments_canvas = state.assessmentCanvas;
+    allAttributes.class_id = classID;
+    const res = await postData(url, allAttributes);
+    return await res.message
+  }
   
   const [state, dispatch] = useReducer(reducer, initialState);
   const [lastState, setLastState] = useState(state);
@@ -126,9 +129,11 @@ export const AssessmentAndPlanPage: IndividualPatientProfile = ({
 
         saveData("/api/patientprofile/" + patientID, state).then((data) => {
           console.log(data);
-          myToast.success('Autosaved');
+          myToast.success('Autosaved.', {
+            autoClose: 1000,
+          });
         }).catch((err) => {
-          myToast.success('Autosave failed');
+          myToast.warn('Autosave failed.');
         });
 
         setLastState(state);

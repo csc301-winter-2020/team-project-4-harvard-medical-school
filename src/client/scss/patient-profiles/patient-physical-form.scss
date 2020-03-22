@@ -1,5 +1,19 @@
 @import "../app.scss";
 
+.patient-form-textarea{
+  display: block;
+  margin-top: 20px;
+  font-size: 1rem;
+  width: 600px;
+  height: 200px;
+  border-style: solid;
+  border-color: #555;
+  border-radius: 3px;
+  border-width: 2px;
+  outline-color: $color-primary-dim;
+  padding: 20px;
+}
+
 .physical-exam-table-title {
   font-weight: bold;
   font-size: 30px;

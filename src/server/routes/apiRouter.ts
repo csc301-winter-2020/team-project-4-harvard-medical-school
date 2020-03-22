@@ -1,5 +1,8 @@
 import * as express from "express";
 const { checkAuthenticated, checkGuest } = require("../auth/authCheck");
+const vision: any = require("@google-cloud/vision");
+const vision_client = new vision.ImageAnnotatorClient();
+const https: any = require("axios");
 import * as dotenv from "dotenv";
 // @ts-ignore
 import bodyParser = require("body-parser");
@@ -255,7 +258,6 @@ router.post(
     console.log(req.body);
     const params_arr: any = [];
     params_arr.push(new_patient.student_id);
-    // params_arr.push(new_patient.patient_id);
     params_arr.push(new_patient.first_name);
     params_arr.push(new_patient.family_name);
     params_arr.push(new_patient.age);
@@ -293,7 +295,6 @@ router.post(
     for (let i = 0; i < attributes.length; i++) {
       const time: number = Date.now();
       const key_name: string = `canvas_${req.user}_${attributes[i]}_${time}`;
-      console.log(key_name);
       if (new_patient[attributes[i] + "_canvas"] === null) {
         upload_promise.push(Promise.resolve(null));
       } else {
@@ -302,7 +303,6 @@ router.post(
         );
       }
     }
-    console.log(upload_promise);
     Promise.all(upload_promise)
       .then(values => {
         for (let i = 0; i < values.length; i++) {
@@ -336,13 +336,13 @@ router.post(
             etoh_canvas, drinks_per_week_canvas, \
              last_time_smoked_canvas, \
             packs_per_day_canvas, other_substances_canvas, \
-             assessments_canvas, imaging_canvas \
+             assessments_canvas, imaging_canvas, class_id \
             ) VALUES (current_timestamp, $1, $2, $3, $4, $5, $6, $7, $8, $9\
                 ,$10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21,\
                 $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, \
                 $33, $34, $35, $36, $37, $38, $39, $40, $41, $42, $43, $44,\
-                $45, $46, $47, $48, $49, $50, $51) RETURNING id;";
-        return pool.query(insert_query, params_arr);
+                $45, $46, $47, $48, $49, $50, $51, $52) RETURNING id;";
+        return pool.query(insert_query, [...params_arr, new_patient.class_id]);
       })
       .then((result: any) => {
         console.log(result);
@@ -356,16 +356,15 @@ router.post(
 );
 
 /**
- * Create a new patient profile for patient <patientId>
+ * Patch a patient profile for patient <patientId>
  */
 router.patch(
   "/api/patientprofile/:id",
   (req: Request, res: Response, next: NextFunction) => {
     const profile_id: string = req.params.id;
     const new_patient: any = req.body;
-    console.log(req.body);
+    const class_id: string = new_patient.class_id;
     const params_arr: any = [];
-    // params_arr.push(profile_id);
     params_arr.push(new_patient.student_id);
     params_arr.push(new_patient.first_name);
     params_arr.push(new_patient.family_name);
@@ -447,13 +446,13 @@ router.patch(
             etoh_canvas, drinks_per_week_canvas, \
              last_time_smoked_canvas, \
             packs_per_day_canvas, other_substances_canvas, \
-             assessments_canvas, imaging_canvas, id \
+             assessments_canvas, imaging_canvas, id, class_id \
             ) VALUES (current_timestamp, $1, $2, $3, $4, $5, $6, $7, $8, $9\
                 ,$10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21,\
                 $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, \
                 $33, $34, $35, $36, $37, $38, $39, $40, $41, $42, $43, $44,\
-                $45, $46, $47, $48, $49, $50, $51, $52) RETURNING id;";
-        return pool.query(insert_query, params_arr.concat([profile_id]));
+                $45, $46, $47, $48, $49, $50, $51, $52, $53) RETURNING id;";
+        return pool.query(insert_query, [...params_arr, profile_id, class_id]);
       })
       .then((result: any) => {
         console.log(result);
@@ -640,6 +639,49 @@ router.post(
 );
 
 router.get(
+  "/api/physicalExaminations/:patientId",
+  (req: Request, res: Response, next: NextFunction) => {
+    const patientId: number = parseInt(req.params.patientId);
+    const query_string: string =
+      "SELECT info FROM csc301db.physical_examinations\
+      WHERE patient_id = $1";
+    pool
+      .query(query_string, [patientId])
+      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
+        if (result.rowCount === 0) {
+          res.status(404).send();
+        } else {
+          res.status(200).json(result.rows[0].info);
+        }
+      });
+  }
+);
+
+router.post(
+  "/api/physicalExaminations/:patientId",
+  (req: Request, res: Response, next: NextFunction) => {
+    const patientId: number = parseInt(req.params.patientId);
+    const delete_string: string =
+      "DELETE FROM csc301db.physical_examinations \
+    WHERE patient_id = $1";
+    pool
+      .query(delete_string, [patientId])
+      .then((result: any) => {
+        const insert_string: string =
+          "INSERT INTO csc301db.physical_examinations \
+      (patient_id, info ) VALUES ($1, $2)";
+        return pool.query(insert_string, [patientId, JSON.stringify(req.body)]);
+      })
+      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
+        res.status(200).send();
+      })
+      .catch((err: any) => {
+        res.status(400).send();
+      });
+  }
+);
+
+router.get(
   "/api/labResults/:patientId",
   (req: Request, res: Response, next: NextFunction) => {
     const patientId: number = parseInt(req.params.patientId);
@@ -691,7 +733,7 @@ router.get(
     const student_id: number = parseInt(req.params.studentID);
     const query_string: string =
       "SELECT \
-        id, last_modified, first_name, family_name, gender, age, country_residence, pregnant\
+        id, last_modified, first_name, family_name, gender, age, country_residence, pregnant, class_id\
         FROM csc301db.patient_profile WHERE student_id = $1";
     pool
       .query(query_string, [student_id])
@@ -740,6 +782,26 @@ router.get(
   (req: Request, res: Response, next: NextFunction) => {
     const query_string: string =
       "SELECT * FROM csc301db.users WHERE user_type = 'Student'";
+    pool
+      .query(query_string, [])
+      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
+        res.status(200).json(result.rows);
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(500).json({ error: err });
+      });
+  }
+);
+
+/**
+ * Get all the users.
+ */
+router.get(
+  "/api/all/users",
+  (req: Request, res: Response, next: NextFunction) => {
+    const query_string: string =
+      "SELECT * FROM csc301db.users";
     pool
       .query(query_string, [])
       .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
@@ -909,7 +971,8 @@ router.get(
   "/api/classes/:classID",
   (req: Request, res: Response, next: NextFunction) => {
     const class_id: number = parseInt(req.params.classID);
-    const query_string: string = "SELECT c.*, u.first_name, u.last_name FROM csc301db.class c JOIN csc301db.users u ON \
+    const query_string: string =
+      "SELECT c.*, u.first_name, u.last_name FROM csc301db.class c JOIN csc301db.users u ON \
     u.id = c.instructor_id \
     WHERE c.id = $1";
     pool
@@ -1008,7 +1071,7 @@ router.delete(
 );
 
 /**
- * Get all classes that an instructor teaches 
+ * Get all classes that an instructor teaches
  */
 router.get(
   "/api/classesOfInstructors/:instructorId",
@@ -1031,13 +1094,13 @@ router.get(
 );
 
 /**
- * Get all instructors 
+ * Get all instructors
  */
 router.get(
   "/api/instructors/all",
   (req: Request, res: Response, next: NextFunction) => {
     const query_string: string =
-    "SELECT id, first_name, last_name \
+      "SELECT id, first_name, last_name \
      FROM csc301db.users \
      WHERE csc301db.users.user_type = 'Educator'";
     pool
@@ -1053,6 +1116,105 @@ router.get(
         console.log(err);
         res.status(400).json({ error: err });
       });
+  }
+);
+
+function age_helper(age: number) {
+  if (age <= 1) {
+    return 1;
+  } else if (age <= 5) {
+    return 3;
+  } else if (age <= 16) {
+    return 4;
+  } else if (age <= 29) {
+    return 7;
+  } else if (age <= 39) {
+    return 5;
+  } else {
+    return 8;
+  }
+}
+
+router.post(
+  "/api/analysis/:profile_id",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const image_payloads: string = req.body;
+    let all_string: string = "";
+    for (let i = 0; i < image_payloads.length; i++) {
+      console.log(i);
+      const image_payload: string = image_payloads[i];
+      const request: any = {
+        image: {
+          content: image_payload,
+        },
+        features: [
+          {
+            type: "DOCUMENT_TEXT_DETECTION",
+          },
+        ],
+        imageContext: {
+          languageHints: ["en-t-i0-handwrit"],
+        },
+      };
+      const [result] = await vision_client.annotateImage(request);
+      if (result.fullTextAnnotation) {
+        const text: string = result.fullTextAnnotation.text;
+        all_string += text;
+      }
+    }
+    console.log(all_string);
+    const profile_id: number = parseInt(req.params.profile_id);
+    const db_res = await pool.query(
+      "SELECT age, gender_at_birth, pregnant FROM csc301db.patient_profile WHERE id = $1",
+      [profile_id]
+    );
+    if (db_res.rowCount === 0) {
+      res.status(404).send();
+    }
+    const age: number = age_helper(db_res.rows[0].age);
+    const gender: string = db_res.rows[0].gender_at_birth === "Male" ? "m" : "f";
+    // TODO: FIX THIS LATER
+    const pregnant: string = "n";
+    const isbell_url: string = `https://apisandbox.isabelhealthcare.com/v2/ranked_differential_diagnoses?specialties=28&dob=${age}&sex=${gender}&pregnant=${pregnant}&region=10&querytext=${all_string}&suggest=suggest+differential+diagnosis&flag=sortbyrw_advanced&searchtype=0&web_service=json&callback=diagnosiscallback&authorization=urOSKOJyYvIOj8BnIgBwJI0KgXT4BR9VYShRyAPDdbcChStimoHWbUE6ILUM0Z4S`;
+    try {
+      const isbell_res: any = await https.get(isbell_url);
+      const final_result: string = isbell_res.data.slice(
+        18,
+        isbell_res.data.length - 2
+      );
+      // console.log(JSON.parse(final_result));
+      const parsed_result: any = JSON.parse(final_result);
+      const insert_string: string =
+        "INSERT INTO csc301db.analysis \
+    (time_submitted, profile_id, student_input, isbell_result) VALUES \
+    (current_timestamp, $1, $2, $3)";
+      await pool.query(insert_string, [profile_id, all_string, parsed_result]);
+      res.status(200).json({});
+    } catch (err) {
+      console.log(err);
+      res.status(400).json({});
+    }
+  }
+);
+
+router.get(
+  "/api/analysis/:profile_id",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const profile_id = req.params.profile_id;
+    const query_string: string =
+      "SELECT * FROM csc301db.analysis\
+     WHERE profile_id = $1 ORDER BY time_submitted DESC";
+    try {
+      const result: any = await pool.query(query_string, [profile_id]);
+      if (result.rowCount === 0) {
+        res.status(404).send();
+      } else {
+        res.status(200).json(result.rows[0]);
+      }
+    } catch (err) {
+      console.log(err);
+      res.status(400).send();
+    }
   }
 );
 

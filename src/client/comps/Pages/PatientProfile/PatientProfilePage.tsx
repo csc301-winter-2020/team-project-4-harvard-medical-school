@@ -16,6 +16,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { contentType, contents, MyToast } from "../../../utils/types";
 import { urlToName, inputMode } from "../../../utils/utils";
 import { ToastContainer, toast } from "react-toastify";
+import { HelixLoader } from "../../SubComponents/HelixLoader";
 
 const contentsPages: IndividualPatientProfile[] = [
   DemographicsPage,
@@ -39,15 +40,20 @@ interface IndividualPatientProfilePageProps {
   isShowingSidebar: boolean;
   patientID: number;
   defaultMode: inputMode;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  classID: number;
 }
 
 export type IndividualPatientProfile = React.FC<
   IndividualPatientProfilePageProps
 >;
 
-export async function postData(url: string, data: any) {
+export async function postData(url: string, data: any, method?: string) {
+  if (method === undefined) method = 'PATCH';
+  console.log("PATCHING WITH DATA");
+  console.log(data);
   const response = await fetch(url, {
-    method: "PATCH",
+    method: method,
     mode: "cors",
     cache: "no-cache",
     credentials: "same-origin",
@@ -58,6 +64,8 @@ export async function postData(url: string, data: any) {
     referrerPolicy: "no-referrer", // no-referrer
     body: JSON.stringify(data),
   });
+
+  console.log(response);
   return await response.json();
 }
 
@@ -129,6 +137,11 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
   const [isAvatarPopup, setIsAvatarPopup] = useState<boolean>(false);
   const [defaultMode, setDefaultMode] = useState<inputMode>("Both");
   const [showHelpPopup, setShowHelpPopup] = useState<boolean>(false);
+  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
+  const [isShowingSidebarDefault, setIsShowingSidebarDefault] = useState<boolean>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [classId, setClassId] = useState(-1);
+  
 
   const incrementPage = () => {
     transitionName = "slide-left";
@@ -143,6 +156,14 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
     const newIndex = index === 0 ? contents.length - 1 : index - 1;
     setCurrentPage(contents[newIndex]);
   };
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  });
 
   // Observer for currentPage
   useEffect(() => {
@@ -214,11 +235,35 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
       })
       .then((data: any) => {
         setIsShowingSidebar(data.default_sidebar);
+        setIsShowingSidebarDefault(data.default_sidebar);
         setDefaultMode(data.default_mode);
       })
       .catch((err: any) => {
         console.log(err);
       });
+  }, []);
+
+  useEffect(() => {
+    if (windowWidth < 1080 && isShowingSidebar){
+      setIsShowingSidebar(false);
+    }
+  }, [windowWidth])
+
+  useEffect(() => {
+    fetch(`/api/patientprofile/${thisPatientID}`)
+    .then(response => {
+      if (response.status === 200){
+        return response.json();
+      } else {
+        throw new Error("Cant find this patient profile.");
+      }
+    })
+    .then((data:any) => {
+      setClassId(data.class_id);
+    })
+    .catch((err:any) => {
+      console.log(err)
+    });
   }, []);
 
   return (
@@ -229,6 +274,7 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
         setIsAvatarPopup={setIsAvatarPopup}
         showSearch={false}
       />
+      {/* {isLoading && <HelixLoader message="Fetching Patient Info..." />} */}
       <ToastContainer position={toast.POSITION.TOP_RIGHT} />
       {showHelpPopup && (
         <div
@@ -297,6 +343,8 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
                 transitionDuration={transitionDuration}
                 transitionName={transitionName}
                 defaultMode={defaultMode}
+                setIsLoading={setIsLoading}
+                classID={classId}
               />
             );
           })}
@@ -319,17 +367,13 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
 
             <div
               className="nav-btn-left nav-btn"
-              onClick={() => {
-                decrementPage();
-              }}
+              onClick={decrementPage}
             >
               <FontAwesomeIcon icon="arrow-left" size="2x" />
             </div>
             <div
               className="nav-btn-right nav-btn"
-              onClick={() => {
-                incrementPage();
-              }}
+              onClick={incrementPage}
             >
               <FontAwesomeIcon icon="arrow-right" size="2x" />
             </div>

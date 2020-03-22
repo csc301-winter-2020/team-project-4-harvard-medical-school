@@ -85,6 +85,45 @@ export const LabResultsPage: IndividualPatientProfile = ({
   defaultMode,
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [lastState, setLastState] = useState(state);
+
+  const mToast: any = toast;
+
+  const postToDB = (state: LabResultsState) => {
+    postLabResultsInfo(patientID, state).then((data) => {
+      console.log(data)
+      mToast.success('Information saved')
+    }).catch((err) => {
+      mToast.error('Information could not be saved')
+    })
+  }
+
+  useEffect(() => {
+    if (lastState === initialState) {
+      setLastState(state);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      if (currentPage == pageName && state && state !== lastState) {
+        console.log(lastState);
+        console.log(state);
+
+        postLabResultsInfo(patientID, state).then((data) => {
+          console.log(data);
+          mToast.success('Autosaved.', {
+            autoClose: 1000,
+          });
+        }).catch((err) => {
+          mToast.warn('Autosave failed.');
+        });
+
+        setLastState(state);
+      }
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [state, lastState]);
 
   const history = useHistory();
   useEffect(() => {
@@ -105,17 +144,6 @@ export const LabResultsPage: IndividualPatientProfile = ({
 
   let nameInput = "";
   let valueInput = "";
-
-  const mToast: any = toast;
-
-  const postToDB = (state: LabResultsState) => {
-    postLabResultsInfo(patientID, state).then((data) => {
-      console.log(data)
-      mToast.success('Information saved')
-    }).catch((err) => {
-      mToast.error('Information could not be saved')
-    })
-  }
 
   return (
     <>
@@ -153,12 +181,6 @@ export const LabResultsPage: IndividualPatientProfile = ({
                   <tr key="addInputs">
                       <td>
                           <div className = "new-lab-result-input">
-                            {/* <input
-                              type="text"
-                              id="nameInput"
-                              placeholder="New Lab Result Name"
-                              onChange={(e: any) => {nameInput = e.target.value;}}
-                            /> */}
                             
                             <div id='dropdown-container'><Dropdown
                               placeholder= 'Select Lab Result'
@@ -167,15 +189,12 @@ export const LabResultsPage: IndividualPatientProfile = ({
                               selection
                               options={labResultOptions}
                               onChange={(e: any) => {
-                                  let targetElem = document.querySelector('#dropdown-container .ui.fluid.dropdown .text');
-                                  //console.log(targetElem.textContent)
                                   if(e.target.classList.contains('active selected item')){
                                     nameInput = e.target.querySelector('.text').textContent;
                                   }
                                   else{
                                     nameInput = e.target.textContent;
                                   }
-                                  console.log("lab result set to " + nameInput)
                               }}
                             /></div>
                             
@@ -200,6 +219,7 @@ export const LabResultsPage: IndividualPatientProfile = ({
             <button className="lab-results-add-value-button" 
               onClick={() => {
                 if(nameInput in defaultLabResults && valueInput != ""){
+                  console.log("added lab result " + nameInput + " with value " + valueInput);
                   dispatch({ type: 'addEntry', value: [nameInput, valueInput] });
                   // clear input
                   (document.getElementById("valueInput") as HTMLInputElement).value = "";
@@ -208,7 +228,6 @@ export const LabResultsPage: IndividualPatientProfile = ({
                   mToast.warn("Invalid Lab Result");
                   return;
                 }
-                
               }}>
               Add Lab Result
             </button>

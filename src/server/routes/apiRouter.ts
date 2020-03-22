@@ -97,6 +97,30 @@ router.post(
 );
 
 /**
+ * Update a final diagnosis for a patient profile with this ID.
+ */
+router.patch(
+  "/api/patientprofilefinaldiagnosis/:id",
+  (req: Request, res: Response) => {
+    const profile_id: number = parseInt(req.params.id);
+    const body: any = req.body;
+    const query_string: string =
+      "UPDATE csc301db.patient_profile SET \
+        final_diagnosis = $1 \
+        WHERE id = $2";
+    pool
+      .query(query_string, [body.final_diagnosis, profile_id])
+      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
+        res.status(200).json({ message: "Successful update." });
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(500).json({ error: err });
+      });
+  }
+);
+
+/**
  * Return all the patient profiles that a user has.
  */
 router.get(

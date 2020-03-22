@@ -84,8 +84,9 @@ export const InstructorPage: React.FC<InstructorPageProps> = (
           {
             classes.length === 0 && <p style={{marginLeft: "10px"}}>You do not have any classes you are instructing. Please ask your administrator to assign you to a class.</p>
           }
-        {classes.filter(s => s.name.toLowerCase().includes(searchVal.toLowerCase())).map(c =>
+        {classes.filter(s => s.name.toLowerCase().includes(searchVal.toLowerCase())).map((c, index:number) =>
           <InstructorClassRow
+            key={index}
             name={c.name}
             classID={c.id}
           />

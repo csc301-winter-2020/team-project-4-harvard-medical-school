@@ -24,6 +24,7 @@ interface Encounter {
   isPregnant: string | null;
   country: string;
   patientID: number;
+  finalDiagnosis: string;
 }
 
 export const InstructorStudentProfilePage: React.FC<InstructorStudentProfilePageProps> = (
@@ -87,6 +88,7 @@ export const InstructorStudentProfilePage: React.FC<InstructorStudentProfilePage
               lastModified: new Date(d.last_modified).getTime(),
               patientID: d.id,
               sex: d.gender_at_birth,
+              finalDiagnosis:  d.final_diagnosis,
             });
           }
         });
@@ -135,7 +137,8 @@ export const InstructorStudentProfilePage: React.FC<InstructorStudentProfilePage
                   patientID={e.patientID}
                   sex={e.sex}
                   isPortraitMode={windowWidth < 1080}
-                  deletable={false}
+                  isInstructorView={true}
+                  givenFinalDiagnosis={e.finalDiagnosis}
                 />
               );
             })}

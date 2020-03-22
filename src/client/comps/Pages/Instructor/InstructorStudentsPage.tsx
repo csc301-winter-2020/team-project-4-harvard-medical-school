@@ -110,8 +110,9 @@ export const InstructorStudentsPage: React.FC<InstructorPageProps> = (
                 s.firstName.toLowerCase().includes(searchVal.toLowerCase()) ||
                 s.lastName.toLowerCase().includes(searchVal.toLowerCase())
             )
-            .map(student => (
+            .map((student, index:number) => (
               <InstructorStudentProfileRow
+                key={index}
                 studentID={student.id}
                 classID={props.classID}
                 name={`${student.lastName}, ${student.firstName}`}

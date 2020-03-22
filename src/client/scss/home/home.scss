@@ -11,7 +11,7 @@
   grid-template-rows: 50px;
 }
 
-.home-page-outermost{
+.home-page-outermost {
   height: 100%;
   background-color: $background-dim;
 }
@@ -87,21 +87,21 @@ input:focus {
   background-size: contain;
 }
 
-.home-page-header-avatar-image{
+.home-page-header-avatar-image {
   height: 100px;
   width: 100px;
-  
+
   background-size: contain;
   border-radius: 50%;
   margin: auto;
   transition: all 0.1s ease;
 }
 
-.home-page-header-avatar-image:hover{
-  box-shadow: 0 0 0 6px rgba(0,0,0,0.08);
+.home-page-header-avatar-image:hover {
+  box-shadow: 0 0 0 6px rgba(0, 0, 0, 0.08);
 }
 
-.home-page-header-avatar-popup-container{
+.home-page-header-avatar-popup-container {
   z-index: 99;
   position: absolute;
   right: 0;
@@ -113,7 +113,7 @@ input:focus {
   padding-bottom: 16px;
 }
 
-.home-page-header-avatar-drop-name{
+.home-page-header-avatar-drop-name {
   color: white;
   margin-bottom: 30px;
   text-align: center;
@@ -124,7 +124,8 @@ input:focus {
   }
 }
 
-.home-page-header-avatar-drop-logout, .home-page-header-avatar-drop-settings{
+.home-page-header-avatar-drop-logout,
+.home-page-header-avatar-drop-settings {
   width: 90%;
   height: 40px;
   line-height: 40px;
@@ -138,11 +139,12 @@ input:focus {
   transition: all 0.15s ease;
 }
 
-.home-page-header-avatar-drop-settings{
+.home-page-header-avatar-drop-settings {
   margin-bottom: 15px;
 }
 
-.home-page-header-avatar-drop-logout:hover, .home-page-header-avatar-drop-settings:hover {
+.home-page-header-avatar-drop-logout:hover,
+.home-page-header-avatar-drop-settings:hover {
   background-color: $color-primary-very-very-light;
 }
 
@@ -272,15 +274,15 @@ input:focus {
   color: black;
 }
 
-.home-patient-profile-info-container{
+.home-patient-profile-info-container {
   margin-left: 20px;
 }
-.home-patient-profile-info-quick-info-container{
+.home-patient-profile-info-quick-info-container {
   width: calc(100% - 200px);
   display: inline-block;
 }
 
-.home-patient-profile-info-btn-container{
+.home-patient-profile-info-btn-container {
   display: inline-block;
   width: 200px;
 
@@ -294,12 +296,13 @@ input:focus {
     text-align: center;
     border-radius: 3px;
   }
-  div:hover{
+  div:hover {
     background-color: $color-primary-dim;
   }
 }
 
-.home-page-create-new-patient-btn, .home-page-create-template-btn{
+.home-page-create-new-patient-btn,
+.home-page-create-template-btn {
   position: fixed;
   background-color: $color-primary;
   border-radius: 3px;
@@ -314,15 +317,15 @@ input:focus {
   transition: all 0.1s ease;
 }
 
-.home-page-create-template-btn{
+.home-page-create-template-btn {
   bottom: 20px;
 }
 
-.home-page-create-user-btn{
+.home-page-create-user-btn {
   bottom: 200px;
 }
 
-.home-page-content-whitespace-logo{
+.home-page-content-whitespace-logo {
   height: 400px;
   width: 400px;
   margin: auto;
@@ -331,29 +334,30 @@ input:focus {
   background-size: contain;
 }
 
-.home-page-create-new-patient-btn:hover, .home-page-create-template-btn:hover{
+.home-page-create-new-patient-btn:hover,
+.home-page-create-template-btn:hover {
   background-color: $color-primary-dim;
   transition: all 0.1s ease;
 }
 
-.home-page-create-new-patient-popup {  
+.home-page-create-new-patient-popup {
   position: fixed;
-  width: 100%;  
-  height: 100%;  
-  top: 0;  
-  left: 0;  
-  right: 0;  
-  bottom: 0;  
-  margin: auto;  
-  background-color: rgba(0,0,0, 0.5);  
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
-.home-page-create-new-patient-popup-inner {  
-  position: absolute;  
-  left: 25%;  
-  right: 25%;  
+.home-page-create-new-patient-popup-inner {
+  position: absolute;
+  left: 25%;
+  right: 25%;
   top: 30%;
-  margin: auto;  
+  margin: auto;
   border-radius: 3px;
   height: 300px;
   background: white;
@@ -379,7 +383,7 @@ input:focus {
     margin: 5px;
   }
   input[type="text"]:hover,
-  input[type="number"]:hover{
+  input[type="number"]:hover {
     border-color: $color-primary-very-light;
   }
   input[type="text"]:focus,
@@ -414,15 +418,15 @@ input:focus {
   }
 }
 
-.home-page-create-new-patient-popup-btn:hover{
+.home-page-create-new-patient-popup-btn:hover {
   background-color: $color-primary-dim;
 }
 
-.home-page-create-new-patient-popup-btn-gray:hover{
+.home-page-create-new-patient-popup-btn-gray:hover {
   background-color: #b5b5b5;
 }
 
-.home-page-create-new-patient-btn-cntr{
+.home-page-create-new-patient-btn-cntr {
   margin-top: 20px;
   text-align: center;
 }
@@ -431,31 +435,34 @@ input:focus {
   .home-page-content-container {
     width: 100%;
   }
-  .home-page-content-container{
+  .home-page-content-container {
     margin-left: 0;
   }
 
-  .home-patient-profile-name-col, .home-patient-profile-date-col, .home-patient-profile-last-modified-col{
+  .home-patient-profile-name-col,
+  .home-patient-profile-date-col,
+  .home-patient-profile-last-modified-col {
     font-size: 2.1rem;
   }
 
-  .home-patient-profile-info-btn{
+  .home-patient-profile-info-btn {
     height: 54px;
     width: 55px;
   }
 
-  .home-patient-profile-info-export-btn, .home-patient-profile-info-delete-btn{
+  .home-patient-profile-info-export-btn,
+  .home-patient-profile-info-delete-btn {
     font-size: 1.5rem;
   }
 
-  .home-patient-profile-info-quick-info-container{
+  .home-patient-profile-info-quick-info-container {
     width: calc(100% - 300px);
   }
-  .home-patient-profile-info-btn-container{
+  .home-patient-profile-info-btn-container {
     width: 300px;
   }
 
-  .home-patient-profile-info-quick-info-container{
+  .home-patient-profile-info-quick-info-container {
     h2 {
       font-size: 1.8rem;
     }
@@ -464,8 +471,8 @@ input:focus {
     }
   }
 
-  .home-page-patient-header-grid{
-    p{
+  .home-page-patient-header-grid {
+    p {
       font-size: 1.3rem;
     }
   }
@@ -495,7 +502,6 @@ input:focus {
   transition: opacity 300ms, transform 300ms;
 }
 
-
 #modal-container {
   font-size: 12px;
   background-color: white;
@@ -522,12 +528,12 @@ input:focus {
     color: black;
     font-size: 1rem;
 
-    #modal-btn-container{
+    #modal-btn-container {
       background-color: white;
       color: black;
       cursor: default;
-  
-      button{
+
+      button {
         background-color: $color-primary-light;
         border: none;
         color: white;
@@ -541,12 +547,25 @@ input:focus {
         transition: all 0.15s ease;
         border-radius: 3px;
       }
-      button:hover{
+      button:hover {
         background-color: $color-primary;
       }
     }
   }
-
-  
 }
 
+.small-input-home {
+  font-size: 1rem;
+  width: 416px;
+  height: 30px;
+  outline: 0;
+  border-width: 0 0 2px;
+  border-color: #ccc;
+}
+
+.small-input-home:hover {
+  border-color: $color-primary-very-light;
+}
+.small-input-home:focus {
+  border-color: $color-primary-light;
+}

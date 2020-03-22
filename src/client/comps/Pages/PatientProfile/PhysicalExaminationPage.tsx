@@ -462,20 +462,22 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
       }).catch((err) => {
         console.log('could not get Physical Examinations data from database')
       })
-
-      canvasShowDispatch({
-        category: '',
-        condition_name: '',
-        state: get_initial_state(canvasInit(defaultMode))
-      })
-  
-      textShowDispatch({
-        category: '',
-        condition_name: '',
-        state: get_initial_state(textInit(defaultMode))
-      })
     }
   }, [currentPage]);
+
+  useEffect(() => {
+    canvasShowDispatch({
+      category: '',
+      condition_name: '',
+      state: get_initial_state(canvasInit(defaultMode))
+    })
+
+    textShowDispatch({
+      category: '',
+      condition_name: '',
+      state: get_initial_state(textInit(defaultMode))
+    })
+  }, [defaultMode])
 
   function input0to5(table: string, entry: string){
     return (

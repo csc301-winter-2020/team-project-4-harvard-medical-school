@@ -31,10 +31,20 @@
 .lab-results-table tbody tr td {
   font-size: 20px;
   padding: 4px;
+  width: 5px;
+}
+
+#dropdown-container {
+  max-width: 120px
 }
 
 .lab-results-table-align-right {
   text-align: right;
+}
+
+#dropdown-container .ui.fluid.dropdown {
+  width: 330px;
+  padding: 10px
 }
 
 .lab-results-add-value-button {
@@ -59,7 +69,7 @@
 
 .new-lab-result-input {
   input[type="text"] {
-    font-size: 1rem;
+    font-size: 1.2rem;
     outline: 0;
     border-width: 0 0 2px;
     border-color: #ccc;
@@ -72,6 +82,10 @@
   input[type="number"]:focus {
     border-color: $color-primary-light;
   }
+}
+
+#lab-result-table-div {
+  width: "700px"
 }
 
 #lab-result-drop-down {

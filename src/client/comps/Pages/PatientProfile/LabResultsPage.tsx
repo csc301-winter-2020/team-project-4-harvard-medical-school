@@ -129,7 +129,7 @@ export const LabResultsPage: IndividualPatientProfile = ({
         <div className="lab-results-page-outermost-container patient-profile-window">
           <div className="patient-profile-page-title">
             <h1>{pageName}</h1>
-            <div style={{ width: "700px" }}>
+            <div id='lab-result-table-div'>
               <table id="labResultsTable" className="lab-results-table">
                 <thead>
                   <tr>
@@ -153,12 +153,12 @@ export const LabResultsPage: IndividualPatientProfile = ({
                   <tr key="addInputs">
                       <td>
                           <div className = "new-lab-result-input">
-                            <input
+                            {/* <input
                               type="text"
                               id="nameInput"
                               placeholder="New Lab Result Name"
                               onChange={(e: any) => {nameInput = e.target.value;}}
-                            />
+                            /> */}
                             
                             <div id='dropdown-container'><Dropdown
                               placeholder= 'Select Lab Result'
@@ -166,7 +166,17 @@ export const LabResultsPage: IndividualPatientProfile = ({
                               fluid
                               selection
                               options={labResultOptions}
-                              onChange={(e: any) => {nameInput = e.target.value;}}
+                              onChange={(e: any) => {
+                                  let targetElem = document.querySelector('#dropdown-container .ui.fluid.dropdown .text');
+                                  //console.log(targetElem.textContent)
+                                  if(e.target.classList.contains('active selected item')){
+                                    nameInput = e.target.querySelector('.text').textContent;
+                                  }
+                                  else{
+                                    nameInput = e.target.textContent;
+                                  }
+                                  console.log("lab result set to " + nameInput)
+                              }}
                             /></div>
                             
                           </div>
@@ -189,12 +199,9 @@ export const LabResultsPage: IndividualPatientProfile = ({
 
             <button className="lab-results-add-value-button" 
               onClick={() => {
-                console.log(nameInput)
-                console.log(valueInput)
                 if(nameInput in defaultLabResults && valueInput != ""){
                   dispatch({ type: 'addEntry', value: [nameInput, valueInput] });
-                  // clear inputs
-                  (document.getElementById("nameInput") as HTMLInputElement).value = "";
+                  // clear input
                   (document.getElementById("valueInput") as HTMLInputElement).value = "";
                 }
                 else{
@@ -209,7 +216,6 @@ export const LabResultsPage: IndividualPatientProfile = ({
           </div>
           <div className="patient-profile-nav-btns">
             <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
-              // TODO : add POST request function here
               postToDB(state);
             }}>
               <FontAwesomeIcon icon="save" size="2x" />

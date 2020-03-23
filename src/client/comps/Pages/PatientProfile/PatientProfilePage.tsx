@@ -52,7 +52,7 @@ export type IndividualPatientProfile = React.FC<
 >;
 
 export async function postData(url: string, data: any, method?: string) {
-  if (method === undefined) method = 'PATCH';
+  if (method === undefined) method = "PATCH";
   console.log("PATCHING WITH DATA");
   console.log(data);
   const response = await fetch(url, {
@@ -74,7 +74,7 @@ export async function postData(url: string, data: any, method?: string) {
 
 export async function fetchAllCanvases(jsonResult: any) {
   for (let key in jsonResult) {
-    if (key.endsWith('_canvas') && jsonResult[key] !== undefined) {
+    if (key.endsWith("_canvas") && jsonResult[key] !== undefined) {
       let res = await fetch(jsonResult[key]);
       let canvasString = await res.text();
       jsonResult[key] = formatCanvas(canvasString);
@@ -85,12 +85,12 @@ export async function fetchAllCanvases(jsonResult: any) {
 
 function formatCanvas(canvas: string) {
   try {
-    let formattedCanvas = canvas.replace(/\\/g, '').slice(1, -1);
+    let formattedCanvas = canvas.replace(/\\/g, "").slice(1, -1);
 
     // Try to parse this cavas
     JSON.parse(formattedCanvas);
     return formattedCanvas;
-  } catch(err) {
+  } catch (err) {
     // Empty canvas
     console.log(err);
     return '{"lines":[],"width":600,"height":200}';
@@ -135,7 +135,9 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
       : "Demographics";
 
   const [currentPage, setCurrentPage] = useState<contentType>(initialPage);
-  const [isShowingSidebar, setIsShowingSidebar] = useState<boolean>(window.innerWidth > 1080);
+  const [isShowingSidebar, setIsShowingSidebar] = useState<boolean>(
+    window.innerWidth > 1080
+  );
   const [prevPage, setPrevPage] = useState<contentType>(null);
   const [isAvatarPopup, setIsAvatarPopup] = useState<boolean>(false);
   const [defaultMode, setDefaultMode] = useState<inputMode>("Both");
@@ -154,7 +156,6 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
   const [currentContentsPages, setCurrentContentsPages] = useState(
     contentsPages
   );
-  
 
   const incrementPage = () => {
     transitionName = "slide-left";
@@ -249,14 +250,16 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
         }
       })
       .then((data: any) => {
-        if (window.innerWidth > 1080){
+        if (window.innerWidth > 1080) {
           setIsShowingSidebar(data.default_sidebar);
         }
         setDefaultMode(data.default_mode);
         setUserType(data.user_type);
         setThisUserId(data.id);
-        if (data.user_type !== "Student"){
-          myToast.warn(`As an ${data.user_type}, no changes you make to this patient's profile will be saved.`);
+        if (data.user_type !== "Student") {
+          myToast.warn(
+            `As an ${data.user_type}, no changes you make to this patient's profile will be saved.`
+          );
         }
       })
       .catch((err: any) => {
@@ -265,47 +268,46 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
   }, []);
 
   useEffect(() => {
-    if (windowWidth < 1080 && isShowingSidebar){
+    if (windowWidth < 1080 && isShowingSidebar) {
       setIsShowingSidebar(false);
     }
-  }, [windowWidth])
+  }, [windowWidth]);
 
   useEffect(() => {
-    
     fetch(`/api/patientprofile/${thisPatientID}`)
-    .then(response => {
-      if (response.status === 200){
-        return response.json();
-      } else {
-        throw new Error("Cant find this patient profile.");
-      }
-    })
-    .then((data:any) => {
-      setClassId(data.class_id);
-    })
-    .catch((err:any) => {
-      console.log(err)
-    });
-  }, []);
-
-  useEffect(() => {
-    if (classId !== -1){
-      fetch(`/api/classes/${classId}`)
-      .then(res => {
-        if (res.status === 200) {
-          return res.json();
+      .then(response => {
+        if (response.status === 200) {
+          return response.json();
         } else {
-          throw new Error("Could not find this class.");
+          throw new Error("Cant find this patient profile.");
         }
       })
       .then((data: any) => {
-        setHelpEnabled(data[0].help_enabled);
+        setClassId(data.class_id);
       })
-      .catch((err:any) => {
+      .catch((err: any) => {
         console.log(err);
       });
+  }, []);
+
+  useEffect(() => {
+    if (classId !== -1) {
+      fetch(`/api/classes/${classId}`)
+        .then(res => {
+          if (res.status === 200) {
+            return res.json();
+          } else {
+            throw new Error("Could not find this class.");
+          }
+        })
+        .then((data: any) => {
+          setHelpEnabled(data[0].help_enabled);
+        })
+        .catch((err: any) => {
+          console.log(err);
+        });
     }
-  }, [classId])
+  }, [classId]);
 
   useEffect(() => {
     if (thisUserId !== null) {
@@ -321,7 +323,7 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
           //TODO: make sure to comment the correct one back in, instead of hardcoded.
           const templateId = data.template_id;
           setTemplateId(templateId);
-          const student_id:number = data.student_id;
+          const student_id: number = data.student_id;
           if (templateId !== undefined) {
             return fetch(`/api/student/${student_id}/template/${templateId}`);
           } else {
@@ -335,7 +337,9 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
             setCurrentContentsPages(contentsPages);
             setCurrentContents(contents);
             setCurrentPage("Demographics");
-            throw new Error("Could not find the template for this profile. Using default.");
+            throw new Error(
+              "Could not find the template for this profile. Using default."
+            );
           }
         })
         .then((data: any) => {
@@ -406,22 +410,24 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
         <div
           className="patient-profile-popup-outermost"
           onClick={(e: any) => {
-            if (e.className !== "patient-profile-popup-container") {              
+            if (e.className !== "patient-profile-popup-container") {
               setShowHelpPopup(false);
             }
           }}
         >
           <div className="patient-profile-popup-container">
-            <h3>Current Diagnosis Differentials:</h3><br></br>
-            <div> 
-            {isabelOutputArr.slice(0,15).map((x:any) => {
-                const name = x['diagnosis_name'];
-                const weightage = x['weightage'];
-                return (
-                  <p>{name + ": " + weightage}</p>
-                );
-              })
-              }
+            <h3>Current Diagnosis Differentials:</h3>
+            <br></br>
+            <div>
+              {isabelOutputArr === undefined ? (
+                <p>Isabel could not find anything conclusive.</p>
+              ) : (
+                isabelOutputArr.slice(0, 15).map((x: any) => {
+                  const name = x["diagnosis_name"];
+                  const weightage = x["weightage"];
+                  return <p>{name + ": " + weightage}</p>;
+                })
+              )}
             </div>
             <div className="patient-profile-popup-close">Close</div>
           </div>
@@ -433,7 +439,7 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
           style={{ marginLeft: isShowingSidebar ? "0" : "-250px" }}
         >
           <div className="patient-profile-sidebar-contents">
-            {currentContents.map((c, index:number) => {
+            {currentContents.map((c, index: number) => {
               return (
                 <div
                   key={index}
@@ -493,46 +499,41 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
             <div
               className="nav-btn-leftmost nav-btn"
               onClick={() => {
-                if (!helpEnabled){
-                  myToast.warn(
-                    "Help has not been enabled for this class."
-                  );
+                if (!helpEnabled) {
+                  myToast.warn("Help has not been enabled for this class.");
                 } else {
                   setShowHelpPopup(true);
                   // GET for isabel analysis
                   fetch(`/api/analysis/${thisPatientID}`)
-                  .then(response => {
-                    if (response.status === 200) {
-                      return response.json()
-                    } else {
-                      throw new Error("Response not 200.");
-                    }
-                  })
-                  .then((data:any) => {
-                    const isabelOutput = data['isbell_result']['diagnoses_checklist']['diagnoses'];
-                    console.log('isabel output set to:')
-                    console.log(isabelOutput);
-                    setIsabelOutputArr(isabelOutput);
-                  })
-                  .catch((err:any) => {
-                    console.log(err);
-                  })
+                    .then(response => {
+                      if (response.status === 200) {
+                        return response.json();
+                      } else {
+                        throw new Error("Response not 200.");
+                      }
+                    })
+                    .then((data: any) => {
+                      const isabelOutput =
+                        data["isbell_result"]["diagnoses_checklist"][
+                          "diagnoses"
+                        ];
+                      console.log("isabel output set to:");
+                      console.log(isabelOutput);
+                      setIsabelOutputArr(isabelOutput);
+                    })
+                    .catch((err: any) => {
+                      console.log(err);
+                    });
                 }
               }}
             >
               <FontAwesomeIcon icon="question-circle" size="2x" />
             </div>
 
-            <div
-              className="nav-btn-left nav-btn"
-              onClick={decrementPage}
-            >
+            <div className="nav-btn-left nav-btn" onClick={decrementPage}>
               <FontAwesomeIcon icon="arrow-left" size="2x" />
             </div>
-            <div
-              className="nav-btn-right nav-btn"
-              onClick={incrementPage}
-            >
+            <div className="nav-btn-right nav-btn" onClick={incrementPage}>
               <FontAwesomeIcon icon="arrow-right" size="2x" />
             </div>
           </div>

@@ -37,7 +37,7 @@ export const AdminStudentProfile: React.FC<AdminStudentProfileProps> = ({
               e.target.nodeName !== "path" &&
               e.target.nodeName !== "svg"
             ) {
-              history.push(`/profile/${studentId}`);
+              history.push(`/admin/${classId}/student/${studentId}`);
             }
           }}>
             <div className="home-patient-profile-name-col">

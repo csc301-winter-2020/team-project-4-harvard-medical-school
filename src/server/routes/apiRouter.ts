@@ -1209,7 +1209,6 @@ router.post(
         },
       };
       const [result] = await vision_client.annotateImage(request);
-      console.log(result);
       if (result.fullTextAnnotation) {
         const text: string = result.fullTextAnnotation.text;
         all_string += text;
@@ -1217,7 +1216,7 @@ router.post(
     }
     const profile_id: number = parseInt(req.params.profile_id);
     const db_res = await pool.query(
-      "SELECT patient_id, age, gender_at_birth, pregnant\
+      "SELECT patient_id, age, gender_at_birth, pregnant,\
       complaint, HPI, medical_history, hospital_history, medications, allergies\
        FROM csc301db.patient_profile WHERE id = $1",
       [profile_id]
@@ -1230,9 +1229,12 @@ router.post(
     const gender: string = db_res.rows[0].gender_at_birth === "Male" ? "m" : "f";
     // TODO: FIX THIS LATER
     const pregnant: string = "n";
-    const text_arr: any = ["complaint, HPI, medical_history, hospital_history, medications, allergies"];
+    const text_arr: any = ["complaint", "HPI", "medical_history", "hospital_history", "medications", "allergies"];
+    console.log(profile_id);
     for (let i = 0; i < text_arr.length; i++) {
-      all_string += " " + db_res.rows[0][text_arr[i]];
+      if (db_res.rows[0][text_arr[i]]) {
+        all_string += " " + db_res.rows[0][text_arr[i]];
+      }
     }
     const db_res_review: any = await pool.query("SELECT info FROM csc301db.review_of_systems WHERE patient_id = $1", [profile_id]);
     if (db_res_review.rowCount !== 0) {
@@ -1281,6 +1283,23 @@ router.get(
       } else {
         res.status(200).json(result.rows[0]);
       }
+    } catch (err) {
+      console.log(err);
+      res.status(400).json({});
+    }
+  }
+);
+
+router.get(
+  "/api/analysisAll/:profile_id",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const profile_id = req.params.profile_id;
+    const query_string: string =
+      "SELECT * FROM csc301db.analysis\
+     WHERE profile_id = $1 ORDER BY time_submitted DESC";
+    try {
+      const result: any = await pool.query(query_string, [profile_id]);
+      res.status(200).json(result.rows);
     } catch (err) {
       console.log(err);
       res.status(400).json({});

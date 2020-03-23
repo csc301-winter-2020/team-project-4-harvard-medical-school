@@ -18,7 +18,7 @@ interface HomePatientProfileProps {
   country: string;
   patientID: number;
   isPortraitMode: boolean;
-  isInstructorView: boolean;
+  userType: "Administrator" | "Educator" | "Student";
   givenFinalDiagnosis: string;
 }
 
@@ -33,7 +33,7 @@ export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
   country,
   isPortraitMode,
   patientID,
-  isInstructorView,
+  userType,
   givenFinalDiagnosis,
 }) => {
   const history = useHistory();
@@ -109,10 +109,10 @@ export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
             <div className="home-patient-profile-info-quick-info-container">
               <h2>Demographics</h2>
               <p>
-                <span className="bold-span">Age:</span> {age}
+                <span className="bold-span">Age:</span> {age === null ? "N/A" : age}
               </p>
               <p>
-                <span className="bold-span">Sex:</span> {sex}
+                <span className="bold-span">Sex:</span> {sex === null ? "N/A" : sex}
               </p>
               {isPregnant !== null ? (
                 <p>
@@ -120,9 +120,9 @@ export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
                 </p>
               ) : null}
               <p>
-                <span className="bold-span">Country:</span> {country}
+                <span className="bold-span">Country:</span> {country === null ? "N/A" : country}
               </p>
-              {isInstructorView && (
+              {userType === "Educator" && (
                 <p>
                   <span className="bold-span">Final Diagnosis:</span>{" "}
                   <span
@@ -198,13 +198,23 @@ export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
               )}
             </div>
             <div className="home-patient-profile-info-btn-container">
+              {
+                userType === "Administrator" && (
+                  <div
+                  className="home-patient-profile-info-export-btn"
+                  onClick={() => history.push(`/admin/analysis/${patientID}`)}
+                >
+                  View Analysis Deltas
+                </div>
+                )
+              }
               <div
                 className="home-patient-profile-info-export-btn"
                 onClick={() => alert("Not implemented")}
               >
                 Export Patient as PDF
               </div>
-              {!isInstructorView && (
+              {userType === "Student" && (
                 <Popup
                   trigger={
                     <div className="home-patient-profile-info-delete-btn">

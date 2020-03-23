@@ -65,3 +65,20 @@ export type userData = {
   default_sidebar: boolean;
   location: string;
 };
+
+export type Diagnosis = {
+  diagnosis_id: string;
+  diagnosis_name: string;
+  specialty: string;
+  weightage: string;
+
+}
+
+export type IsabelResult = {diagnoses_checklist: {diagnoses: Diagnosis[]}};
+
+export type Analysis = {
+  profile_id: number;
+  student_input: string;
+  isabel_result: IsabelResult;
+  time_submitted: Date;
+}

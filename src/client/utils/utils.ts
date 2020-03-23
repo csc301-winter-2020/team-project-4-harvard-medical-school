@@ -2,8 +2,10 @@ import { contentType, Class, userData } from "./types";
 import _ from "underscore";
 
 const dateFormat = require("dateformat");
-const dateStringFull = "mmmm d, yyyy";
-const dateStringCompact = "m/d/yyyy";
+const dateStringFull: string = "mmmm d, yyyy";
+const dateStringCompact: string = "m/d/yyyy";
+const dateStringExtra: string = "ddd, mmmm dS, yyyy - h:MM:ss TT";
+const dateStringCompactExtra: string = "m/d/yyyy - h:MM:ss TT";
 
 
 /**
@@ -21,6 +23,29 @@ export function dateFormatCompact(date: number): string {
 export function dateFormatFull(date: number): string {
   return dateFormat(new Date(date), dateStringFull);
 }
+
+/**
+ * Formats the date to a string like this: "Saturday, June 9th, 2007 - 5:46:21 PM"
+ * @param date The date as an int (in milliseconds)
+ */
+export function dateFormatExtra(date: number|Date): string {
+  const d: Date = new Date(date);
+  // Offset 4 hours to convert from UTC to EST.
+  d.setHours(d.getHours() - 4);
+  return dateFormat(d, dateStringExtra);
+}
+
+/**
+ * Formats the date to a string like this: "12/31/2018 - 5:46:21 PM"
+ * @param date The date as an int (in milliseconds)
+ */
+export function dateFormatCompactTime(date: number|Date): string {
+  const d: Date = new Date(date);
+  // Offset 4 hours to convert from UTC to EST.
+  d.setHours(d.getHours() - 4);
+  return dateFormat(d, dateStringCompactExtra);
+}
+
 
 /**
  * Return the max of two numbers.
@@ -58,6 +83,16 @@ export function canvasInit(mode: inputMode):boolean{
 
 export function textInit(mode:inputMode):boolean{
   return mode === "Both" || mode === "Typing";
+}
+
+export function textToDownloadFile(text: string, fileName: string): void {
+  // Learned from: https://stackoverflow.com/questions/44656610/download-a-string-as-txt-file-in-react/44661948
+  const element = document.createElement("a");
+  const file = new Blob([text], {type: 'text/plain'});
+  element.href = URL.createObjectURL(file);
+  element.download = fileName;
+  document.body.appendChild(element);
+  element.click();
 }
 
 /**
@@ -142,3 +177,13 @@ export const dummyData: userData = {
   default_sidebar: true,
   location: "Nowhere",
 };
+
+/**
+ * Capitalizes the first char of each word. Like This Sentence Here.
+ * @param str The string to convert.
+ */
+export function toTitleCase(str:string) {
+  return str.replace(/\w\S*/g, function(txt){
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+  });
+}

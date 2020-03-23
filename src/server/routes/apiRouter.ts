@@ -1208,6 +1208,7 @@ router.post(
         },
       };
       const [result] = await vision_client.annotateImage(request);
+      console.log(result);
       if (result.fullTextAnnotation) {
         const text: string = result.fullTextAnnotation.text;
         all_string += text;

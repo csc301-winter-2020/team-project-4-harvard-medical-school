@@ -20,7 +20,7 @@
     "@fortawesome/free-brands-svg-icons": "^5.12.1",
     "@fortawesome/free-solid-svg-icons": "^5.12.1",
     "@fortawesome/react-fontawesome": "^0.1.8",
-    "@google-cloud/vision": "^1.9.0",
+    "@google-cloud/vision": "^1.11.0",
     "aws-sdk": "^2.614.0",
     "axios": "^0.19.2",
     "bcryptjs": "^2.4.3",

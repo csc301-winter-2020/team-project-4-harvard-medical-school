@@ -97,14 +97,18 @@ async function saveData(patientID: number, state: any, classID: number, template
   if (state.allergiesImage !== undefined) {
     canvasImages.push(state.allergiesImage);
   }
-
-  await postData("/api/analysis/" + patientID, canvasImages, "POST");
-  // console.log(await (await fetch('/api/analysis/' + patientID)).json())
   allAttributes.class_id = classID;
   allAttributes.template_id = templateId;
   console.log(allAttributes);
-  const res = await postData("/api/patientprofile/" + patientID, allAttributes);
-  return await res.message;
+  const res = await postData(
+    "/api/patientprofile/" + patientID,
+    allAttributes
+  );
+  const msg = await res.message;
+  console.log("Saving canvas")
+  await postData("/api/analysis/" + patientID, canvasImages, "POST");
+  // console.log(await (await fetch('/api/analysis/' + patientID)).json())
+  return msg;
 }
 
 var allAttributes: any;

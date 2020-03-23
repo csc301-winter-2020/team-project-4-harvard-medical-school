@@ -114,6 +114,10 @@ async function saveData(patientID: number, state: any, classID: number, template
   if (state.allergiesImage !== undefined) {
     canvasImages.push(state.allergiesImage);
   }
+  
+  allAttributes.class_id = classID;
+  const res = await postData("/api/patientprofile/" + patientID, allAttributes);
+  const msg = await res.message;
 
   const isabelRes = await postData(
     "/api/analysis/" + patientID,
@@ -123,8 +127,7 @@ async function saveData(patientID: number, state: any, classID: number, template
   console.log(isabelRes);
   allAttributes.template_id = templateId;
   allAttributes.class_id = classID;
-  const res = await postData("/api/patientprofile/" + patientID, allAttributes);
-  return await res.message;
+  return msg;
 }
 
 var allAttributes: any;

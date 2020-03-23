@@ -128,6 +128,7 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
       if (saveDataObj['lines'] != [] && 
           (saveDataObj['width'] != canvasWidth || 
            saveDataObj['height'] != canvasHeight)) {
+        console.log(saveDataObj);
         setCanvasWidth(saveDataObj['width']);
         setCanvasHeight(saveDataObj['height']);
         return;

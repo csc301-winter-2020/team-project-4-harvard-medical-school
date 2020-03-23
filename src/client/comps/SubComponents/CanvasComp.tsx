@@ -125,7 +125,7 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
       if (!saveData) return;
       const saveDataObj = JSON.parse(saveData);
 
-      if (saveDataObj['lines'] != [] && 
+      if (saveDataObj['lines'].length > 0 && 
           (saveDataObj['width'] != canvasWidth || 
            saveDataObj['height'] != canvasHeight)) {
         console.log(saveDataObj);

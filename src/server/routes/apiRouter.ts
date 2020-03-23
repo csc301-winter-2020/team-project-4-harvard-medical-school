@@ -6,6 +6,7 @@ const https: any = require("axios");
 import * as dotenv from "dotenv";
 // @ts-ignore
 import bodyParser = require("body-parser");
+import { text } from "@fortawesome/fontawesome-svg-core";
 dotenv.config();
 type Router = express.Router;
 type Request = express.Request;
@@ -202,7 +203,7 @@ router.get(
           res.status(404).send();
         } else {
           const result: any = query_result.rows[0];
-          console.log(result);
+          // console.log(result);
 
           const attributes: Array<string> = [
             "pregnant",
@@ -232,7 +233,7 @@ router.get(
           for (let i = 0; i < attributes.length; i++) {
             const this_attribute = attributes[i] + "_canvas";
             if (result[this_attribute] !== null) {
-              console.log(this_attribute);
+              // console.log(this_attribute);
               result[this_attribute] = s3.getSignedUrl("getObject", {
                 Bucket: bucket,
                 Key: result[this_attribute],
@@ -259,12 +260,12 @@ function save_to_aws(data: any, key: string): any {
   };
   return new Promise((resolve, reject) => {
     s3.upload(params, function(err: any, data: any) {
-      console.log("upload success");
+      // console.log("upload success");
       if (err) {
         console.log(err);
         reject();
       } else {
-        console.log("Success");
+        // console.log("Success");
         resolve(key);
       }
     });
@@ -279,7 +280,7 @@ router.post(
   (req: Request, res: Response, next: NextFunction) => {
     // const patientId: string = req.params.patientId;
     const new_patient: any = req.body;
-    console.log(req.body);
+    // console.log(req.body);
     const params_arr: any = [];
     params_arr.push(new_patient.student_id);
     params_arr.push(new_patient.first_name);
@@ -332,7 +333,7 @@ router.post(
         for (let i = 0; i < values.length; i++) {
           params_arr.push(values[i]);
         }
-        console.log("upload sceesss");
+        // console.log("upload sceesss");
         return pool.query(
           "DELETE FROM csc301db.patient_profile WHERE student_id = $1 AND patient_id = $2",
           [new_patient.student_id, new_patient.patient_id]
@@ -369,7 +370,7 @@ router.post(
         return pool.query(insert_query, [...params_arr, new_patient.class_id, new_patient.template_id]);
       })
       .then((result: any) => {
-        console.log(result);
+        // console.log(result);
         res.status(200).json(result.rows[0]);
       })
       .catch((err: any) => {
@@ -428,7 +429,7 @@ router.patch(
     for (let i = 0; i < attributes.length; i++) {
       const time: number = Date.now();
       const key_name: string = `canvas_${req.user}_${attributes[i]}_${time}`;
-      console.log(key_name);
+      // console.log(key_name);
       if (new_patient[attributes[i] + "_canvas"] === null) {
         upload_promise.push(Promise.resolve(null));
       } else {
@@ -437,13 +438,13 @@ router.patch(
         );
       }
     }
-    console.log(upload_promise);
+    // console.log(upload_promise);
     Promise.all(upload_promise)
       .then(values => {
         for (let i = 0; i < values.length; i++) {
           params_arr.push(values[i]);
         }
-        console.log("upload sceesss");
+        // console.log("upload sceesss");
         return pool.query(
           "DELETE FROM csc301db.patient_profile WHERE id = $1",
           [profile_id]
@@ -480,7 +481,7 @@ router.patch(
         return pool.query(insert_query, [...params_arr, profile_id, class_id, template_id]);
       })
       .then((result: any) => {
-        console.log(result);
+        // console.log(result);
         res.status(200).json(result.rows[0]);
       })
       .catch((err: any) => {
@@ -1083,7 +1084,7 @@ router.post(
     pool
       .query(insert_string, [new_class.name, new_class.instructor_id])
       .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
-        console.log(result);
+        // console.log(result);
         res.status(200).json(result);
       })
       .catch((err: any) => {
@@ -1214,19 +1215,36 @@ router.post(
         all_string += text;
       }
     }
-    console.log(all_string);
     const profile_id: number = parseInt(req.params.profile_id);
     const db_res = await pool.query(
-      "SELECT age, gender_at_birth, pregnant FROM csc301db.patient_profile WHERE id = $1",
+      "SELECT patient_id, age, gender_at_birth, pregnant\
+      complaint, HPI, medical_history, hospital_history, medications, allergies\
+       FROM csc301db.patient_profile WHERE id = $1",
       [profile_id]
     );
     if (db_res.rowCount === 0) {
       res.status(404).json({});
     }
+    const patient_id: number = db_res.rows[0].patient_id; 
     const age: number = age_helper(db_res.rows[0].age);
     const gender: string = db_res.rows[0].gender_at_birth === "Male" ? "m" : "f";
     // TODO: FIX THIS LATER
     const pregnant: string = "n";
+    const text_arr: any = ["complaint, HPI, medical_history, hospital_history, medications, allergies"];
+    for (let i = 0; i < text_arr.length; i++) {
+      all_string += " " + db_res.rows[0][text_arr[i]];
+    }
+    const db_res_review: any = await pool.query("SELECT info FROM csc301db.review_of_systems WHERE patient_id = $1", [profile_id]);
+    if (db_res_review.rowCount !== 0) {
+      const review_of_systems: any = db_res_review.rows[0].info;
+      for (let key1 in review_of_systems) {
+        for (let key2 in review_of_systems[key1]) {
+          if (review_of_systems[key1][key2]) {
+            all_string += ","+ key2;
+          }
+        }
+      }
+    }
     const isbell_url: string = `https://apisandbox.isabelhealthcare.com/v2/ranked_differential_diagnoses?specialties=28&dob=${age}&sex=${gender}&pregnant=${pregnant}&region=10&querytext=${all_string}&suggest=suggest+differential+diagnosis&flag=sortbyrw_advanced&searchtype=0&web_service=json&callback=diagnosiscallback&authorization=urOSKOJyYvIOj8BnIgBwJI0KgXT4BR9VYShRyAPDdbcChStimoHWbUE6ILUM0Z4S`;
     try {
       const isbell_res: any = await https.get(isbell_url);

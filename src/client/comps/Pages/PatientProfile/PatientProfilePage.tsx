@@ -149,6 +149,7 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
   const [currentContents, setCurrentContents] = useState(contents);
   const [isLoadingTemplate, setIsLoadingTemplate] = useState(true);
   const [templateId, setTemplateId] = useState<number>(null);
+  const [helpEnabled, setHelpEnabled] = useState(null);
   const [currentContentsPages, setCurrentContentsPages] = useState(
     contentsPages
   );
@@ -285,6 +286,25 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
       console.log(err)
     });
   }, []);
+
+  useEffect(() => {
+    if (classId !== -1){
+      fetch(`/api/classes/${classId}`)
+      .then(res => {
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          throw new Error("Could not find this class.");
+        }
+      })
+      .then((data: any) => {
+        setHelpEnabled(data[0].help_enabled);
+      })
+      .catch((err:any) => {
+        console.log(err);
+      });
+    }
+  }, [classId])
 
   useEffect(() => {
     if (thisUserId !== null) {
@@ -463,10 +483,13 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
             <div
               className="nav-btn-leftmost nav-btn"
               onClick={() => {
-                setShowHelpPopup(true);
-                myToast.warn(
-                  "If the class_id for this PatientProfile had help disabled, then you need to warn appropriately here."
-                );
+                if (!helpEnabled){
+                  myToast.warn(
+                    "Help has not been enabled for this class."
+                  );
+                } else {
+                  setShowHelpPopup(true);
+                }
               }}
             >
               <FontAwesomeIcon icon="question-circle" size="2x" />

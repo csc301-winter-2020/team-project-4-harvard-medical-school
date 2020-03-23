@@ -483,24 +483,25 @@ export const ReviewOfSystemsPage: IndividualPatientProfile = ({
         myToast.error("Information could not be saved");
       });
 
-    getPatientInfo(patientID).then((data) => {
-      return fetchAllCanvases(data)
-    }).then((data) => {
-      const canvasImages = []
+    // getPatientInfo(patientID).then((data) => {
+    //   return fetchAllCanvases(data)
+    // }).then((data) => {
 
-      for(let canv in data){
-        if(data[canv] !== undefined){
-          canvasImages.push(data[canv])
-        }
-      }
+    //   const canvasImages = []
 
-      return postData(`/api/patientprofile/${patientID}`, canvasImages, 'POST')
-    }).then((data) => {
-      console.log('POST to Isabel successful')
-    }).catch((err) => {
-      console.log('Could not POST to Isabel')
-      console.log(err)
-    })
+    //   for(let key in data){
+    //     if(key.endsWith('_canvas') && data[key] !== undefined){
+    //       canvasImages.push(data[key])
+    //     }
+    //   }
+
+    //   return postData(`/api/analysis/${patientID}`, canvasImages, 'POST')
+    // }).then((data) => {
+    //   console.log('POST to Isabel successful')
+    // }).catch((err) => {
+    //   console.log('Could not POST to Isabel')
+    //   console.log(err)
+    // })
   };
 
   useEffect(() => {

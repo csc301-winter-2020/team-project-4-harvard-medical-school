@@ -1216,7 +1216,7 @@ router.post(
     }
     const profile_id: number = parseInt(req.params.profile_id);
     const db_res = await pool.query(
-      "SELECT patient_id, age, gender_at_birth, pregnant,\
+      "SELECT patient_id, age, gender, pregnant,\
       complaint, HPI, medical_history, hospital_history, medications, allergies\
        FROM csc301db.patient_profile WHERE id = $1",
       [profile_id]
@@ -1226,6 +1226,7 @@ router.post(
     }
     const patient_id: number = db_res.rows[0].patient_id; 
     const age: number = age_helper(db_res.rows[0].age);
+    console.log(db_res.rows[0].gender);
     const gender: string = db_res.rows[0].gender === "Male" ? "m" : "f";
     // TODO: FIX THIS LATER
     const pregnant: string = "n";

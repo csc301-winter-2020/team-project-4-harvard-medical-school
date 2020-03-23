@@ -1346,7 +1346,7 @@ router.post(
     }
     const profile_id: number = parseInt(req.params.profile_id);
     const db_res = await pool.query(
-      "SELECT patient_id, age, gender_at_birth, pregnant,\
+      "SELECT patient_id, age, gender, pregnant,\
       complaint, HPI, medical_history, hospital_history, medications, allergies\
        FROM csc301db.patient_profile WHERE id = $1",
       [profile_id]
@@ -1356,7 +1356,8 @@ router.post(
     }
     const patient_id: number = db_res.rows[0].patient_id; 
     const age: number = age_helper(db_res.rows[0].age);
-    const gender: string = db_res.rows[0].gender_at_birth === "Male" ? "m" : "f";
+    console.log(db_res.rows[0].gender);
+    const gender: string = db_res.rows[0].gender === "Male" ? "m" : "f";
     // TODO: FIX THIS LATER
     const pregnant: string = "n";
     const text_arr: any = ["complaint", "HPI", "medical_history", "hospital_history", "medications", "allergies"];
@@ -1379,6 +1380,7 @@ router.post(
     }
     const isbell_url: string = `https://apisandbox.isabelhealthcare.com/v2/ranked_differential_diagnoses?specialties=28&dob=${age}&sex=${gender}&pregnant=${pregnant}&region=10&querytext=${all_string}&suggest=suggest+differential+diagnosis&flag=sortbyrw_advanced&searchtype=0&web_service=json&callback=diagnosiscallback&authorization=urOSKOJyYvIOj8BnIgBwJI0KgXT4BR9VYShRyAPDdbcChStimoHWbUE6ILUM0Z4S`;
     try {
+      console.log(all_string);
       const isbell_res: any = await https.get(isbell_url);
       const final_result: string = isbell_res.data.slice(
         18,

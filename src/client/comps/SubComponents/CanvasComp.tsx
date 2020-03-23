@@ -207,6 +207,7 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
           className="canvas-draw-container"
           id={`canvas-draw-container-${id}`}
           onMouseUp={dispatchCanvasState}
+          onPointerUp={dispatchCanvasState}
         >
           <CanvasDraw
             ref={(canvasDraw: any) => setInputRef(canvasDraw)}

@@ -97,13 +97,18 @@ async function saveData(patientID: number, state: any, classID: number) {
   if (state.allergiesImage !== undefined) {
     canvasImages.push(state.allergiesImage);
   }
-
+  allAttributes.class_id = classID;
+  console.log("ClassId:" + classID);
+  console.log(allAttributes);
+  const res = await postData(
+    "/api/patientprofile/" + patientID,
+    allAttributes
+  );
+  const msg = await res.message;
+  console.log("Saving canvas")
   await postData("/api/analysis/" + patientID, canvasImages, "POST");
   // console.log(await (await fetch('/api/analysis/' + patientID)).json())
-  allAttributes.class_id = classID;
-  console.log(allAttributes);
-  const res = await postData("/api/patientprofile/" + patientID, allAttributes);
-  return await res.message;
+  return msg;
 }
 
 var allAttributes: any;

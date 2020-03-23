@@ -12,6 +12,7 @@ import { HomePatientProfile } from "../../SubComponents/Home/HomePatientProfile"
 interface InstructorStudentProfilePageProps {
   classID: number;
   studentID: number;
+  userType: "Administrator" | "Educator";
 }
 
 interface Encounter {
@@ -137,7 +138,7 @@ export const InstructorStudentProfilePage: React.FC<InstructorStudentProfilePage
                   patientID={e.patientID}
                   sex={e.sex}
                   isPortraitMode={windowWidth < 1080}
-                  isInstructorView={true}
+                  userType={props.userType}
                   givenFinalDiagnosis={e.finalDiagnosis}
                 />
               );

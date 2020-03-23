@@ -73,7 +73,6 @@ CREATE TABLE patient_profile (
     family_name TEXT,
     age INT NOT NULL CHECK (
         age > 0
-        AND age < 100
     ),
     gender_at_birth SEX_AT_BIRTH,
     gender TEXT NOT NULL,

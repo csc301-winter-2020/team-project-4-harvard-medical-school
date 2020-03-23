@@ -385,7 +385,7 @@ export const HomePage: React.FC<HomePageProps> = ({ classID }) => {
                   country={p.country}
                   isPregnant={p.isPregnant}
                   patientID={p.patientID}
-                  isInstructorView={false}
+                  userType={"Student"}
                   givenFinalDiagnosis={null}
                 />
               );

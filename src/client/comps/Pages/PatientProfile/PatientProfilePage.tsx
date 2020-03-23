@@ -412,9 +412,9 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
           }}
         >
           <div className="patient-profile-popup-container">
-            <h3>Current Diagnosis Differentials:</h3>
+            <h3>Current Diagnosis Differentials:</h3><br></br>
             <div> 
-            {isabelOutputArr.map((x:any) => {
+            {isabelOutputArr.slice(0,15).map((x:any) => {
                 const name = x['diagnosis_name'];
                 const weightage = x['weightage'];
                 return (

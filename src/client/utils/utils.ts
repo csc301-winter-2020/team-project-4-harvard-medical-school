@@ -1,5 +1,7 @@
 import { contentType, Class, userData } from "./types";
 import _ from "underscore";
+import html2canvas from "html2canvas";
+import jsPDF from 'jspdf';
 
 const dateFormat = require("dateformat");
 const dateStringFull = "mmmm d, yyyy";
@@ -68,6 +70,35 @@ export function textToDownloadFile(text: string, fileName: string): void {
   element.download = fileName;
   document.body.appendChild(element);
   element.click();
+}
+
+export function printAndDownloadElementToPDF(elementID: string, pdfName: string) {
+  const element = document.getElementById(elementID);
+  const mmElement = document.getElementById('mmDummy');
+  const mmByPixels = 100 / mmElement.clientWidth;
+  const mmWidth = Math.round(element.clientWidth * mmByPixels);
+  const mmHeight = Math.round(element.clientHeight * mmByPixels);
+
+  html2canvas(element)
+    .then((canvas: HTMLCanvasElement) => {
+      const imgData: any = canvas.toDataURL('image/png');
+      const pdf: any = new (jsPDF as any)({
+        orientation: 'landscape',
+        // Warning: 'in' is supposed to give inches but it randomly does it
+        // in pixels. I don't know if the library is busted since multiple
+        // unique runs can give differing results, so I guess I'll try pixels
+        // and pray this works. It might be defaulting to 'mm' actually, which
+        // would explain why [4, 2] is so small. What I'll do is make it in mm
+        // and hope.
+        unit: 'mm',
+        // And to make matters more fun, apparently the millimeters is off by
+        // a factor of 4. I have no idea if this only is for my computer or if
+        // it breaks on other computers... this needs to be seriously tested.
+        format: [mmWidth * 4, mmHeight * 4]
+      });
+      pdf.addImage(imgData, 'PNG', 0, 0);
+      pdf.save(pdfName);
+    });
 }
 
 /**

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../../../scss/admin/admin-page.scss";
 import { Header } from "../../SubComponents/Header";
-import { max } from "../../../utils/utils";
+import { max, printAndDownloadElementToPDF } from "../../../utils/utils";
 import { ClassRow } from "../../SubComponents/Admin/ClassRow";
 import { ToastContainer, toast } from "react-toastify";
 import { NewAdminClass } from "../../SubComponents/Admin/NewAdminClass";
@@ -78,7 +78,7 @@ export const AdminPage: React.FC<AdminPageProps> = (props: AdminPageProps) => {
   }, []);
 
   return (
-    <>
+    <div id="PRINT_ME_LMAO">
       <Header
         placeholder={"Search Classes..."}
         isAvatarPopup={isAvatarPopup}
@@ -122,9 +122,22 @@ export const AdminPage: React.FC<AdminPageProps> = (props: AdminPageProps) => {
       >
         <p>Create Class</p>
       </div>
+      <div
+        className="home-page-create-template-btn"
+        onClick={() => {
+          console.log('wtf???');
+          printAndDownloadElementToPDF('PRINT_ME_LMAO', 'download.pdf');
+        }}
+      >
+        <p>PRINT IT</p>
+      </div>
+
+      {/* TODO: Remove me later, this should go in the page where we print PDFs from. */}
+      <div id="mmDummy" style={{height: '100mm', width: '100mm'}}/>
+
       {showNewClassPopup && (
         <NewAdminClass setNewClassPopup={setNewClassPopup} refresh={refresh} />
       )}
-    </>
+    </div>
   );
 };

@@ -1288,4 +1288,21 @@ router.get(
   }
 );
 
+router.get(
+  "/api/analysisAll/:profile_id",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const profile_id = req.params.profile_id;
+    const query_string: string =
+      "SELECT * FROM csc301db.analysis\
+     WHERE profile_id = $1 ORDER BY time_submitted DESC";
+    try {
+      const result: any = await pool.query(query_string, [profile_id]);
+      res.status(200).json(result.rows);
+    } catch (err) {
+      console.log(err);
+      res.status(400).json({});
+    }
+  }
+);
+
 export default router;

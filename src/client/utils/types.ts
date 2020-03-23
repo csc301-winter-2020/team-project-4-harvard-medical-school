@@ -65,3 +65,11 @@ export type userData = {
   default_sidebar: boolean;
   location: string;
 };
+
+
+export type Analysis = {
+  profile_id: number;
+  student_input: string;
+  isabel_result: string;
+  time_submitted: Date;
+}

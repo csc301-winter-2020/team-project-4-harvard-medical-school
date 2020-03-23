@@ -47,6 +47,7 @@ import {
 import { AdminClassAddStudentsPage } from "./comps/Pages/Admin/AdminClassAddStudentsPage";
 import { UserProfile } from "./comps/Pages/UserProfile";
 import { HomePage } from "./comps/Pages/StudentHomePage";
+import { AdminAnalysisPage } from "./comps/Pages/Admin/AdminAnalysisPage";
 
 const myLibrary: any = library;
 myLibrary.add(
@@ -76,7 +77,7 @@ myLibrary.add(
   faGripVertical,
   faQuestionCircle,
   faQuestion,
-  faEnvelope,
+  faEnvelope
 );
 
 const browserRouter: JSX.Element = (
@@ -104,47 +105,84 @@ const browserRouter: JSX.Element = (
       <Route
         exact
         path="/class/:id"
-        render={props => <HomePage {...props} classID={props.match.params.id}/>}
+        render={props => (
+          <HomePage {...props} classID={props.match.params.id} />
+        )}
       />
       <Route
         exact
         path="/admin/:id/students"
-        render={props => <AdminClassStudentsPage {...props} classID={props.match.params.id}/>}
+        render={props => (
+          <AdminClassStudentsPage {...props} classID={props.match.params.id} />
+        )}
       />
       <Route
         exact
         path="/admin/:id/add"
-        render={props => <AdminClassAddStudentsPage {...props} classID={props.match.params.id}/>}
+        render={props => (
+          <AdminClassAddStudentsPage
+            {...props}
+            classID={props.match.params.id}
+          />
+        )}
+      />
+      <Route
+        exact
+        path="/admin/analysis/:pid"
+        render={props => (
+          <AdminAnalysisPage
+            {...props}
+            profileID={props.match.params.pid}
+          />
+        )}
+      />
+      <Route
+        exact
+        path="/admin/:cid/student/:sid"
+        render={props => (
+          <InstructorStudentProfilePage
+            {...props}
+            userType="Administrator"
+            classID={props.match.params.cid}
+            studentID={props.match.params.sid}
+          />
+        )}
       />
       <Route
         exact
         path="/instructor/:cid/students"
-        render={props => <InstructorStudentsPage {...props} classID={props.match.params.cid}/>}
+        render={props => (
+          <InstructorStudentsPage {...props} classID={props.match.params.cid} />
+        )}
       />
       <Route
         exact
         path="/instructor/:cid/student/:sid"
-        render={props =>
-          <InstructorStudentProfilePage {...props}
+        render={props => (
+          <InstructorStudentProfilePage
+            {...props}
+            userType="Educator"
             classID={props.match.params.cid}
             studentID={props.match.params.sid}
           />
-        }
+        )}
       />
       <Route
         exact
         path="/instructor/:cid/student/:sid/patient/:pid"
-        render={props =>
-          <InstructorStudentPatientPage {...props}
+        render={props => (
+          <InstructorStudentPatientPage
+            {...props}
             classID={props.match.params.cid}
             studentID={props.match.params.sid}
             patientID={props.match.params.pid}
           />
-        }
+        )}
       />
       <Route
-        exact path="/profile/:id"
-        render={props => <UserProfile {...props} id={props.match.params.id}/>}
+        exact
+        path="/profile/:id"
+        render={props => <UserProfile {...props} id={props.match.params.id} />}
       />
       <Route
         exact

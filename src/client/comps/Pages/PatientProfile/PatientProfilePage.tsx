@@ -254,8 +254,8 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
         setDefaultMode(data.default_mode);
         setUserType(data.user_type);
         setThisUserId(data.id);
-        if (data.user_type === "Educator"){
-          myToast.warn("As an instructor, no changes you make to this patient's profile will be saved.");
+        if (data.user_type !== "Student"){
+          myToast.warn(`As an ${data.user_type}, no changes you make to this patient's profile will be saved.`);
         }
       })
       .catch((err: any) => {

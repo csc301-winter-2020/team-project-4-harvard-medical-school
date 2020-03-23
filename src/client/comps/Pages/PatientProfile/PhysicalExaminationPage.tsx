@@ -704,97 +704,59 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
                     <p>{nameMap[condition]}</p>
                   </label>
                 </div>
-                {state[category][condition] === 'healthy' && (
-                  <PatientFormInput
-                    dispatch={(action: {
-                      type: string
-                      fieldName: string
-                      value: string
-                    }) => {
-                      if(action.fieldName.endsWith('Canvas')){
-                        canvasStateDispatch({
+                <div>
+                  {state[category][condition] === 'healthy' && (
+                    <PatientFormInput
+                      dispatch={(action: {
+                        type: string
+                        fieldName: string
+                        value: string
+                      }) => {
+                        if(action.fieldName.endsWith('Canvas')){
+                          canvasStateDispatch({
+                            category: category,
+                            condition_name: condition,
+                            value: action.value,
+                            state: null
+                          })
+                        }else{
+                          textStateDispatch({
+                            category: category,
+                            condition_name: condition,
+                            value: action.value,
+                            state: null
+                          })
+                        }
+                      }}
+                      id={condition+'_i'}
+                      inputType={'text'}
+                      inputVal={textState[category][condition]}
+                      placeholder={'Enter text here'}
+                      title={'Specifics'}
+                      isShowingCanvas={isShowingCanvasState[category][condition]}
+                      isShowingText={isShowingTextState[category][condition]}
+                      setIsShowingCanvas={() => {
+                        canvasShowDispatch({
                           category: category,
                           condition_name: condition,
-                          value: action.value,
                           state: null
                         })
-                      }else{
-                        textStateDispatch({
+                      }}
+                      setIsShowingText={() => {
+                        textShowDispatch({
                           category: category,
                           condition_name: condition,
-                          value: action.value,
                           state: null
                         })
-                      }
-                    }}
-                    id={condition+'_i'}
-                    inputType={'text'}
-                    inputVal={textState[category][condition]}
-                    placeholder={'Enter text here'}
-                    title={'Specifics'}
-                    isShowingCanvas={isShowingCanvasState[category][condition]}
-                    isShowingText={isShowingTextState[category][condition]}
-                    setIsShowingCanvas={() => {
-                      canvasShowDispatch({
-                        category: category,
-                        condition_name: condition,
-                        state: null
-                      })
-                    }}
-                    setIsShowingText={() => {
-                      textShowDispatch({
-                        category: category,
-                        condition_name: condition,
-                        state: null
-                      })
-                    }}
-                    canvasHeight={200}
-                    canvasWidth={600}
-                    canvasData={canvasState[category][condition]}
-                    isTextArea={true}
-                  />
-                )}
+                      }}
+                      canvasHeight={200}
+                      canvasWidth={600}
+                      canvasData={canvasState[category][condition]}
+                      isTextArea={true}
+                    />
+                  )}
+                </div>
               </div>
-              {state[category][condition] === "healthy" && (
-                <PatientFormInput
-                  dispatch={(action: {
-                    type: string;
-                    fieldName: string;
-                    value: string;
-                  }) => {
-                    textStateDispatch({
-                      category: category,
-                      condition_name: condition,
-                      value: action.value,
-                      state: null,
-                    });
-                  }}
-                  id={condition + "_i"}
-                  inputType={"text"}
-                  inputVal={textState[category][condition]}
-                  placeholder={"Enter text here"}
-                  title={"Specifics"}
-                  isShowingCanvas={isShowingCanvasState[category][condition]}
-                  isShowingText={isShowingTextState[category][condition]}
-                  setIsShowingCanvas={() => {
-                    canvasShowDispatch({
-                      category: category,
-                      condition_name: condition,
-                      state: null,
-                    });
-                  }}
-                  setIsShowingText={() => {
-                    textShowDispatch({
-                      category: category,
-                      condition_name: condition,
-                      state: null,
-                    });
-                  }}
-                  canvasHeight={200}
-                  canvasWidth={600}
-                  isTextArea={true}
-                />
-              )}
             </div>
           );
         })}

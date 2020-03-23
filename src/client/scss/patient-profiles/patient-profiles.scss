@@ -5,7 +5,7 @@
 }
 
 .patient-profile-page-sidebar-container{
-  z-index: 1;
+  z-index: 9999999;
   width: 250px;
   float: left;
   height: calc(100% - 60px);
@@ -176,3 +176,49 @@ $dot-size: 15px;
   }
 }
 
+.patient-profile-popup-outermost{
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.35);
+  z-index: 99999;
+
+  .patient-profile-popup-close{
+    background-color: $color-primary;
+    transition: all 0.15s ease;
+    padding: 10px;
+    text-align: center;
+    color: white;
+    margin: auto;
+    width: 50px;
+    cursor: pointer;
+    margin-top: 40px;
+  }
+
+  .patient-profile-popup-close:hover{
+    background-color: $color-primary-dim;
+  }
+
+  .patient-profile-popup-container{
+    background-color: white;
+    color: black;
+    width: 500px;
+    margin: auto;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+.patient-profile-instructor-barrier{
+  position: fixed;
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.35);
+  width: 100%;
+  height: calc(100% - 60px);
+  top: 60px;
+}

@@ -7,6 +7,7 @@ import { useHistory } from "react-router";
 import { postData } from "./PatientProfilePage";
 import { canvasInit, textInit } from "../../../utils/utils";
 import { toast } from "react-toastify";
+import { MyToast } from "../../../utils/types";
 
 function reducer(
   state: Assessment_State,
@@ -37,14 +38,7 @@ const initialState: Assessment_State = {
   assessment: "",
 };
 
-async function saveData(url: string, state: any) {
-  console.log(state)
-  allAttributes.assessments = state.assessment;
-  if (state.assessmentCanvas !== undefined) allAttributes.assessments_canvas = state.assessmentCanvas;
 
-  const res = await postData(url, allAttributes);
-  return await res.message
-}
 
 var allAttributes: any;
 
@@ -57,16 +51,30 @@ export const AssessmentAndPlanPage: IndividualPatientProfile = ({
   isShowingSidebar,
   patientID,
   defaultMode,
+  classID,
+  userType,
+  templateId,
 }) => {
+
+  async function saveData(url: string, state: any) {
+    console.log(state)
+    allAttributes.assessments = state.assessment;
+    if (state.assessmentCanvas !== undefined) allAttributes.assessments_canvas = state.assessmentCanvas;
+    allAttributes.class_id = classID;
+    allAttributes.template_id = templateId;
+    const res = await postData(url, allAttributes);
+    return await res.message
+  }
   
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [lastState, setLastState] = useState(state);
 
   const [showingAssessmentCanvas, setShowingAssessmentCanvas] = useState(true);
   const [showingAssessmentText, setShowingAssessmentText] = useState(false);
 
   const { assessment, assessmentCanvas } = state;
 
-  const myToast: any = toast
+  const myToast:MyToast = toast as any;
 
   const history = useHistory();
   useEffect(() => {
@@ -110,6 +118,33 @@ export const AssessmentAndPlanPage: IndividualPatientProfile = ({
     setShowingAssessmentText(textShow);
 
   }, [defaultMode]);
+
+  useEffect(() => {
+    if (lastState === initialState) {
+      setLastState(state);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      if (userType === "Student" && currentPage == pageName && state && state !== lastState) {
+        console.log(lastState);
+        console.log(state);
+
+        saveData("/api/patientprofile/" + patientID, state).then((data) => {
+          console.log(data);
+          myToast.success('Autosaved.', {
+            autoClose: 1000,
+          });
+        }).catch((err) => {
+          myToast.warn('Autosave failed.');
+        });
+
+        setLastState(state);
+      }
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [state, lastState]);
   
   return (
     <>
@@ -145,7 +180,8 @@ export const AssessmentAndPlanPage: IndividualPatientProfile = ({
           <div className="form-whitespace">
             <div className="home-page-content-whitespace-logo"></div>
           </div>
-          <div className="patient-profile-nav-btns">
+          {
+            userType === "Student" && <div className="patient-profile-nav-btns">
             <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
               // TODO : add POST request function here
               saveData('/api/patientprofile/' + patientID, state).then((data) => {
@@ -158,6 +194,8 @@ export const AssessmentAndPlanPage: IndividualPatientProfile = ({
               <FontAwesomeIcon icon="save" size="2x" />
             </div>
           </div>
+          }
+          
         </div>
       </CSSTransition>
     </>

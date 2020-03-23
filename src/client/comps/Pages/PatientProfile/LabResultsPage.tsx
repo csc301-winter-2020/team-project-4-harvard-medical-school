@@ -1,95 +1,76 @@
-import React, {useEffect, useReducer} from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import { IndividualPatientProfile } from "./PatientProfilePage";
 import { useHistory } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../../scss/patient-profiles/lab-results.scss";
 
-interface LabResultData {
-  name: string,
-  value: number,
-  lower: number,
-  upper: number,
-  scale: string
-}
+import { defaultLabResults } from "../../../utils/defaultLabResults";
+
+import { toast } from "react-toastify";
+
+import { Dropdown } from "semantic-ui-react";
 
 interface LabResultsState {
-  data: LabResultData[];
+  data: {
+    [key: string]: any;
+  };
 }
 
-const mockData: Array<LabResultData> = [
-  { name: 'Na', value: 11.5, lower: 7.1, upper: 18.2, scale: 'nmol/mL' },
-  { name: 'K', value: 4.5, lower: 3.0, upper: 4.5, scale: 'mmol/mL' },
-  { name: 'ALT', value: 0.15, lower: 0.5, upper: 0.8, scale: 'ng/L' },
-  { name: 'AST', value: 1.2, lower: 1.2, upper: 18.5, scale: 'peptides/mL' },
-  { name: 'Glucose', value: 4.1, lower: 2.1, upper: 12.7, scale: 'nmol/mL' },
-  { name: 'Iron', value: 12.8, lower: 8.8, upper: 29.2, scale: 'g/L' },
-  { name: 'Erythrocytes', value: 0.0, lower: 0.0, upper: 44.8, scale: 'g/mL' },
-  { name: 'Sedimentation Rate', value: 0.0, lower: 0.0, upper: 25.0, scale: 'g' },
-  { name: 'Neutrophils', value: 0.1, lower: 0.2, upper: 44.5, scale: 'mg/L' },
-  { name: 'Basophils', value: 0.0, lower: 0.0, upper: 100.0, scale: 'g/L' }
-];
+const labResultOptions = Object.entries(defaultLabResults).map(lr => {
+  return {
+    key: lr[0],
+    text: lr[0],
+    value: lr[0],
+  };
+});
 
 const initialState: LabResultsState = {
-  // TODO: This is only for the demo! This must be changed to `data: []` later on.
-  data: mockData
+  data: JSON.parse(JSON.stringify(defaultLabResults)),
 };
 
 function reducer(
   state: LabResultsState,
-  action: { type: string, fieldName?: string, value: string }
+  action: {
+    type: string;
+    fieldName?: string;
+    value: any;
+    newState?: { [key: string]: string | boolean | number | null };
+  }
 ): LabResultsState {
-  let newState:LabResultsState = JSON.parse(JSON.stringify(state));
+  let newState: LabResultsState = JSON.parse(JSON.stringify(state));
+
   switch (action.type) {
     case "addEntry":
-      newState.data.push({
-        name: action.value,
-        value: 0,
-        lower: 0,
-        upper: 0,
-        scale: "mg/L"
-      });
+      newState.data[action.value[0]] = {
+        value: action.value[1],
+        added: true,
+      };
       break;
-    case "updateName":
-      newState.data.forEach(result => {
-        if (result.name === action.fieldName) {
-          result.name = action.value;
-        }
-      });
-      break;
-    case "updateValue":
-      newState.data.forEach(result => {
-        if (result.name === action.fieldName) {
-          result.value = Number(action.value);
-        }
-      });
-      break;
-    case "updateLower":
-      newState.data.forEach(result => {
-        if (result.name === action.fieldName) {
-          result.lower = Number(action.value);
-        }
-      });
-      break;
-    case "updateUpper":
-      newState.data.forEach(result => {
-        if (result.name === action.fieldName) {
-          result.upper = Number(action.value);
-        }
-      });
-      break;
-    case "updateScale":
-      newState.data.forEach(result => {
-        if (result.name === action.fieldName) {
-          result.scale = action.value;
-        }
-      });
+    case "full_load":
+      newState = action.value;
       break;
     default:
       throw new Error("Invalid type on action.");
   }
-
   return newState;
+}
+
+async function getLabResults(patientID: number) {
+  const res = await fetch(`/api/labResults/${patientID}`, { method: "GET" });
+  return await res.json();
+}
+
+async function postLabResultsInfo(patientID: number, data: LabResultsState) {
+  const spec = {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify(data),
+  };
+  const res = await fetch(`/api/labResults/${patientID}`, spec);
+  return res;
 }
 
 export const LabResultsPage: IndividualPatientProfile = ({
@@ -98,17 +79,83 @@ export const LabResultsPage: IndividualPatientProfile = ({
   setCurrentPage,
   transitionDuration,
   transitionName,
+  isShowingSidebar,
   patientID,
+  defaultMode,
+  userType,
+  templateId,
 }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const [lastState, setLastState] = useState(state);
+
+  const mToast: any = toast;
+
+  const postToDB = (state: LabResultsState) => {
+    postLabResultsInfo(patientID, state)
+      .then(data => {
+        console.log(data);
+        mToast.success("Information saved");
+      })
+      .catch(err => {
+        mToast.error("Information could not be saved");
+      });
+  };
+
+  useEffect(() => {
+    if (lastState === initialState) {
+      setLastState(state);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      if (
+        userType === "Student" &&
+        currentPage == pageName &&
+        state &&
+        state !== lastState
+      ) {
+        console.log(lastState);
+        console.log(state);
+
+        postLabResultsInfo(patientID, state)
+          .then(data => {
+            console.log(data);
+            mToast.success("Autosaved.", {
+              autoClose: 1000,
+            });
+          })
+          .catch(err => {
+            mToast.warn("Autosave failed.");
+          });
+
+        setLastState(state);
+      }
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [state, lastState]);
+
   const history = useHistory();
   useEffect(() => {
     if (currentPage === pageName) {
       document.title = `Patient Profile: ${pageName}`;
       history.push(`/patient/${patientID}/lab`);
+
+      getLabResults(patientID)
+      .then(data => {
+        dispatch({ type: "full_load", value: data });
+        console.log("get data");
+        console.log(state.data);
+      })
+      .catch(err => {
+        console.log("could not get Lab Results data from database");
+      });
     }
+
   }, [currentPage]);
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  let nameInput = "";
+  let valueInput = "";
 
   return (
     <>
@@ -122,42 +169,121 @@ export const LabResultsPage: IndividualPatientProfile = ({
         <div className="lab-results-page-outermost-container patient-profile-window">
           <div className="patient-profile-page-title">
             <h1>{pageName}</h1>
-            <table id="labResultsTable" className="lab-results-table">
-              <thead>
-                <tr>
-                  <td>Test</td>
-                  <td>Value</td>
-                  <td>Range</td>
-                  <td>Concentration</td>
-                </tr>
-              </thead>
-              <tbody>
-              {state.data.map(row => {
-                const outOfRange = row.value < row.lower || row.value > row.upper;
-                const rowClass = outOfRange ? 'lab-results-out-of-range-red' : '';
-                return (
-                  <tr className={`${rowClass}`} key={row.name}>
-                    <td>{row.name}</td>
-                    <td>{row.value}</td>
-                    <td>{row.lower}, {row.upper}</td>
-                    <td>{row.scale}</td>
+            <div id="lab-result-table-div">
+              <table id="labResultsTable" className="lab-results-table">
+                <thead>
+                  <tr>
+                    <td>Test</td>
+                    <td>Value</td>
                   </tr>
-                );
-              })}
-              </tbody>
-            </table>
-            <button className="lab-results-add-value-button" onClick={() => dispatch({ type: 'addEntry', value: 'New' })}>
+                </thead>
+                <tbody>
+                  {Object.entries(state.data)
+                    .filter(entry => entry[1]["added"])
+                    .map(row => {
+                      const rowClass = "";
+                      return (
+                        <tr className={`${rowClass}`} key={row[0]}>
+                          <td>{row[0]}</td>
+                          <td>{row[1]["value"]}</td>
+                        </tr>
+                      );
+                    })}
+                  <tr key="addInputs">
+                    <td>
+                      <div className="new-lab-result-input">
+                        <div id="dropdown-container">
+                          <Dropdown
+                            placeholder="Select Lab Result"
+                            search
+                            fluid
+                            selection
+                            options={labResultOptions}
+                            onChange={(e: any) => {
+                              if (
+                                e.target.classList.contains(
+                                  "active selected item"
+                                )
+                              ) {
+                                nameInput = e.target.querySelector(".text")
+                                  .textContent;
+                              } else {
+                                nameInput = e.target.textContent;
+                              }
+                              console.log("nameInput changed to " + nameInput)
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <div className="new-lab-result-input">
+                        <input
+                          type="text"
+                          id="valueInput"
+                          placeholder="New Lab Result Value"
+                          onChange={(e: any) => {
+                            valueInput = e.target.value;
+                          }}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <button
+              className="lab-results-add-value-button"
+              onClick={() => {
+                if (nameInput in defaultLabResults && valueInput != "") {
+                  console.log(
+                    "added lab result " +
+                      nameInput +
+                      " with value " +
+                      valueInput
+                  );
+                  dispatch({
+                    type: "addEntry",
+                    value: [nameInput, valueInput],
+                  });
+                  // clear input
+                  (document.getElementById(
+                    "valueInput"
+                  ) as HTMLInputElement).value = "";
+                } else {
+                  mToast.warn("Invalid Lab Result");
+                  console.log(
+                    "attempted to add lab result " +
+                      nameInput +
+                      " with value " +
+                      valueInput
+                  );
+                  return;
+                }
+              }}
+            >
               Add Lab Result
             </button>
           </div>
-          <div className="patient-profile-nav-btns">
-            <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
-              // TODO : add POST request function here
-              
-            }}>
-              <FontAwesomeIcon icon="save" size="2x" />
+          {userType === "Student" && (
+            <div className="patient-profile-nav-btns">
+              <div
+                className="nav-btn"
+                style={{
+                  right: "20px",
+                  top: "70px",
+                  position: "fixed",
+                  borderRadius: "5px",
+                }}
+                onClick={() => {
+                  postToDB(state);
+                }}
+              >
+                <FontAwesomeIcon icon="save" size="2x" />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </CSSTransition>
     </>

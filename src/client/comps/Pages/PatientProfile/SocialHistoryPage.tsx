@@ -1,13 +1,17 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import "../../../scss/patient-profiles/social-history.scss";
-import { IndividualPatientProfile, fetchAllCanvases } from "./PatientProfilePage";
+import {
+  IndividualPatientProfile,
+  fetchAllCanvases,
+} from "./PatientProfilePage";
 import { useHistory } from "react-router";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { postData } from "./PatientProfilePage";
 import { canvasInit, textInit } from "../../../utils/utils";
 import { toast } from "react-toastify";
+import { MyToast } from "../../../utils/types";
 
 function reducer(
   state: SocialHistState,
@@ -83,7 +87,12 @@ const initialState: SocialHistState = {
   otherSubstances: "",
 };
 
-async function saveData(url: string, state: any) {
+async function saveData(
+  url: string,
+  state: any,
+  classID: number,
+  templateId: number
+) {
   console.log(state);
   allAttributes.work = state.work;
   allAttributes.sexual_history = state.sexualHistory;
@@ -102,26 +111,27 @@ async function saveData(url: string, state: any) {
     allAttributes.sexual_history_canvas = state.sexualHistoryCanvas;
   }
   if (state.livingConditionsCanvas !== undefined) {
-    allAttributes.living_conditions_canvas = state.livingConditionsCanvas; 
+    allAttributes.living_conditions_canvas = state.livingConditionsCanvas;
   }
   if (state.etOHCanvas !== undefined) {
-    allAttributes.etoh_canvas = state.etOHCanvas; 
+    allAttributes.etoh_canvas = state.etOHCanvas;
   }
   if (state.drinksPerWeekCanvas !== undefined) {
-    allAttributes.drinks_per_week_canvas = state.drinksPerWeekCanvas; 
+    allAttributes.drinks_per_week_canvas = state.drinksPerWeekCanvas;
   }
   if (state.lastTimeSmokedCanvas !== undefined) {
-    allAttributes.last_time_smoked_canvas = state.lastTimeSmokedCanvas; 
+    allAttributes.last_time_smoked_canvas = state.lastTimeSmokedCanvas;
   }
   if (state.packsPerDayCanvas !== undefined) {
-    allAttributes.packs_per_day_canvas = state.packsPerDayCanvas; 
+    allAttributes.packs_per_day_canvas = state.packsPerDayCanvas;
   }
   if (state.otherSubstancesCanvas !== undefined) {
     allAttributes.other_substances_canvas = state.otherSubstancesCanvas;
   }
-  
+  allAttributes.class_id = classID;
+  allAttributes.template_id = templateId;
   const res = await postData(url, allAttributes);
-  return await res.message
+  return await res.message;
 }
 
 var allAttributes: any;
@@ -135,6 +145,9 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
   isShowingSidebar,
   patientID,
   defaultMode,
+  classID,
+  userType,
+  templateId,
 }) => {
   const history = useHistory();
   useEffect(() => {
@@ -184,9 +197,10 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
     }
   }, [currentPage]);
 
-  const myToast: any = toast
+  const myToast: MyToast = toast as any;
 
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [lastState, setLastState] = useState(state);
 
   const [showingWorkCanvas, setShowingWorkCanvas] = useState(true);
   const [showingWorkText, setShowingWorkText] = useState(false);
@@ -276,7 +290,42 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
     setShowingPacksPerDayCanvas(canvasShow);
     setShowingPacksPerDayText(textShow);
     setShowingOtherSubstancesText(textShow);
+    setShowingOtherSubstancesCanvas(canvasShow);
   }, [defaultMode]);
+
+  useEffect(() => {
+    if (lastState === initialState) {
+      setLastState(state);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      if (
+        userType === "Student" &&
+        currentPage == pageName &&
+        state &&
+        state !== lastState
+      ) {
+        console.log(lastState);
+        console.log(state);
+
+        saveData("/api/patientprofile/" + patientID, state, classID, templateId)
+          .then(data => {
+            console.log(data);
+            myToast.success("Autosaved.", {
+              autoClose: 1000,
+            });
+          })
+          .catch(err => {
+            myToast.warn("Autosave failed.");
+          });
+
+        setLastState(state);
+      }
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [state, lastState]);
 
   return (
     <>
@@ -481,27 +530,36 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
           <div className="form-whitespace">
             <div className="home-page-content-whitespace-logo"></div>
           </div>
-          <div className="patient-profile-nav-btns">
-            <div
-              className="nav-btn"
-              style={{
-                right: "20px",
-                top: "70px",
-                position: "fixed",
-                borderRadius: "5px",
-              }}
-              onClick={() => {
-                saveData("/api/patientprofile/" + patientID, state).then((data) => {
-                  console.log(data)
-                  myToast.success('Information saved')
-                }).catch((err) => {
-                  myToast.success('Information could not be saved')
-                })
-              }}
-            >
-              <FontAwesomeIcon icon="save" size="2x" />
+          {userType === "Student" && (
+            <div className="patient-profile-nav-btns">
+              <div
+                className="nav-btn"
+                style={{
+                  right: "20px",
+                  top: "70px",
+                  position: "fixed",
+                  borderRadius: "5px",
+                }}
+                onClick={() => {
+                  saveData(
+                    "/api/patientprofile/" + patientID,
+                    state,
+                    classID,
+                    templateId
+                  )
+                    .then(data => {
+                      console.log(data);
+                      myToast.success("Information saved");
+                    })
+                    .catch(err => {
+                      myToast.success("Information could not be saved");
+                    });
+                }}
+              >
+                <FontAwesomeIcon icon="save" size="2x" />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </CSSTransition>
     </>

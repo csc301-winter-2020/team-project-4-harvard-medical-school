@@ -95,7 +95,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
         <FormGroup
           dispatch={dispatch}
           id="login-username"
-          label={isRegisterMode ? "Username" : "Username or Email"}
+          label={"Username"}
           value={username}
           type="text"
           name="username"

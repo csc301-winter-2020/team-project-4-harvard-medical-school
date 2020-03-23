@@ -4,6 +4,7 @@ import { CanvasComp } from "../CanvasComp";
 
 interface PatientFormInputProps {
   title: string;
+  subtext?: string;
   dispatch: Function;
   isShowingCanvas: boolean;
   setIsShowingCanvas: Function;
@@ -22,6 +23,7 @@ interface PatientFormInputProps {
 export const PatientFormInput: React.FC<PatientFormInputProps> = ({
   title,
   id,
+  subtext,
   isShowingCanvas,
   setIsShowingCanvas,
   isShowingText,
@@ -44,6 +46,7 @@ export const PatientFormInput: React.FC<PatientFormInputProps> = ({
         isShowingText={isShowingText}
         setIsShowingText={setIsShowingText}
       />
+      {subtext && (<p>{subtext}</p>)}
       {isShowingCanvas && (
         <CanvasComp
           id={id}
@@ -51,7 +54,6 @@ export const PatientFormInput: React.FC<PatientFormInputProps> = ({
           initialHeight={canvasHeight}
           initialWidth={canvasWidth}
           saveData={canvasData}
-          // loadSaveData={true}
         />
       )}
       {isShowingText && !isTextArea && (

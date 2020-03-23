@@ -1,8 +1,12 @@
 import * as express from "express";
 const { checkAuthenticated, checkGuest } = require("../auth/authCheck");
+const vision: any = require("@google-cloud/vision");
+const vision_client = new vision.ImageAnnotatorClient();
+const https: any = require("axios");
 import * as dotenv from "dotenv";
 // @ts-ignore
 import bodyParser = require("body-parser");
+import { text } from "@fortawesome/fontawesome-svg-core";
 dotenv.config();
 type Router = express.Router;
 type Request = express.Request;
@@ -29,7 +33,7 @@ const urlExpiredTime: number = 10;
  */
 
 /**
- * TODO: Get the details of the current logged in user in JSON
+ * Get the details of the current logged in user in JSON
  */
 router.get(
   "/api/me",
@@ -37,7 +41,30 @@ router.get(
   (req: Request, res: Response, next: NextFunction) => {
     const user: any = req.user;
     user.password = undefined; //Dont send password with JSON.
-    res.status(200).json(req.user);
+    res.status(200).json(user);
+  }
+);
+
+/**
+ * Get the details of a given user.
+ */
+router.get(
+  "/api/users/:userId",
+  (req: Request, res: Response, next: NextFunction) => {
+    const userId: number = parseInt(req.params.userId);
+    const query_string: string = "SELECT * FROM csc301db.users WHERE id = $1";
+    pool
+      .query(query_string, [userId])
+      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
+        if (result.rowCount !== 1) {
+          res.status(404).send();
+        } else {
+          res.status(200).json(result.rows[0]);
+        }
+      })
+      .catch((err: any) => {
+        res.status(400).send();
+      });
   }
 );
 
@@ -71,7 +98,31 @@ router.post(
 );
 
 /**
- * TODO: Return all the patient profiles that a user has.
+ * Update a final diagnosis for a patient profile with this ID.
+ */
+router.patch(
+  "/api/patientprofilefinaldiagnosis/:id",
+  (req: Request, res: Response) => {
+    const profile_id: number = parseInt(req.params.id);
+    const body: any = req.body;
+    const query_string: string =
+      "UPDATE csc301db.patient_profile SET \
+        final_diagnosis = $1 \
+        WHERE id = $2";
+    pool
+      .query(query_string, [body.final_diagnosis, profile_id])
+      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
+        res.status(200).json({ message: "Successful update." });
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(500).json({ error: err });
+      });
+  }
+);
+
+/**
+ * Return all the patient profiles that a user has.
  */
 router.get(
   "/api/student/:userId/patientprofiles",
@@ -84,7 +135,7 @@ router.get(
       .then(
         (query_result: { rowCount: number; rows: { [x: string]: any } }) => {
           if (query_result.rowCount === 0) {
-            res.status(404).send();
+            res.status(200).json([]);
           } else {
             const attributes: Array<string> = [
               "pregnant",
@@ -137,7 +188,7 @@ router.get(
 );
 
 /**
- * TODO: Return the patient profile of this id
+ * Return the patient profile of this id
  */
 router.get(
   "/api/patientprofile/:Id",
@@ -152,7 +203,7 @@ router.get(
           res.status(404).send();
         } else {
           const result: any = query_result.rows[0];
-          console.log(result);
+          // console.log(result);
 
           const attributes: Array<string> = [
             "pregnant",
@@ -182,7 +233,7 @@ router.get(
           for (let i = 0; i < attributes.length; i++) {
             const this_attribute = attributes[i] + "_canvas";
             if (result[this_attribute] !== null) {
-              console.log(this_attribute);
+              // console.log(this_attribute);
               result[this_attribute] = s3.getSignedUrl("getObject", {
                 Bucket: bucket,
                 Key: result[this_attribute],
@@ -209,12 +260,12 @@ function save_to_aws(data: any, key: string): any {
   };
   return new Promise((resolve, reject) => {
     s3.upload(params, function(err: any, data: any) {
-      console.log("upload success");
+      // console.log("upload success");
       if (err) {
         console.log(err);
         reject();
       } else {
-        console.log("Success");
+        // console.log("Success");
         resolve(key);
       }
     });
@@ -229,10 +280,9 @@ router.post(
   (req: Request, res: Response, next: NextFunction) => {
     // const patientId: string = req.params.patientId;
     const new_patient: any = req.body;
-    console.log(req.body);
+    // console.log(req.body);
     const params_arr: any = [];
     params_arr.push(new_patient.student_id);
-    // params_arr.push(new_patient.patient_id);
     params_arr.push(new_patient.first_name);
     params_arr.push(new_patient.family_name);
     params_arr.push(new_patient.age);
@@ -270,7 +320,6 @@ router.post(
     for (let i = 0; i < attributes.length; i++) {
       const time: number = Date.now();
       const key_name: string = `canvas_${req.user}_${attributes[i]}_${time}`;
-      console.log(key_name);
       if (new_patient[attributes[i] + "_canvas"] === null) {
         upload_promise.push(Promise.resolve(null));
       } else {
@@ -279,13 +328,12 @@ router.post(
         );
       }
     }
-    console.log(upload_promise);
     Promise.all(upload_promise)
       .then(values => {
         for (let i = 0; i < values.length; i++) {
           params_arr.push(values[i]);
         }
-        console.log("upload sceesss");
+        // console.log("upload sceesss");
         return pool.query(
           "DELETE FROM csc301db.patient_profile WHERE student_id = $1 AND patient_id = $2",
           [new_patient.student_id, new_patient.patient_id]
@@ -313,16 +361,16 @@ router.post(
             etoh_canvas, drinks_per_week_canvas, \
              last_time_smoked_canvas, \
             packs_per_day_canvas, other_substances_canvas, \
-             assessments_canvas, imaging_canvas \
+             assessments_canvas, imaging_canvas, class_id, template_id \
             ) VALUES (current_timestamp, $1, $2, $3, $4, $5, $6, $7, $8, $9\
                 ,$10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21,\
                 $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, \
                 $33, $34, $35, $36, $37, $38, $39, $40, $41, $42, $43, $44,\
-                $45, $46, $47, $48, $49, $50, $51) RETURNING id;";
-        return pool.query(insert_query, params_arr);
+                $45, $46, $47, $48, $49, $50, $51, $52, $53) RETURNING id;";
+        return pool.query(insert_query, [...params_arr, new_patient.class_id, new_patient.template_id]);
       })
       .then((result: any) => {
-        console.log(result);
+        // console.log(result);
         res.status(200).json(result.rows[0]);
       })
       .catch((err: any) => {
@@ -333,16 +381,16 @@ router.post(
 );
 
 /**
- * Create a new patient profile for patient <patientId>
+ * Patch a patient profile for patient <patientId>
  */
 router.patch(
   "/api/patientprofile/:id",
   (req: Request, res: Response, next: NextFunction) => {
     const profile_id: string = req.params.id;
     const new_patient: any = req.body;
-    console.log(req.body);
+    const class_id: string = new_patient.class_id;
+    const template_id: string = new_patient.template_id;
     const params_arr: any = [];
-    // params_arr.push(profile_id);
     params_arr.push(new_patient.student_id);
     params_arr.push(new_patient.first_name);
     params_arr.push(new_patient.family_name);
@@ -381,7 +429,7 @@ router.patch(
     for (let i = 0; i < attributes.length; i++) {
       const time: number = Date.now();
       const key_name: string = `canvas_${req.user}_${attributes[i]}_${time}`;
-      console.log(key_name);
+      // console.log(key_name);
       if (new_patient[attributes[i] + "_canvas"] === null) {
         upload_promise.push(Promise.resolve(null));
       } else {
@@ -390,13 +438,13 @@ router.patch(
         );
       }
     }
-    console.log(upload_promise);
+    // console.log(upload_promise);
     Promise.all(upload_promise)
       .then(values => {
         for (let i = 0; i < values.length; i++) {
           params_arr.push(values[i]);
         }
-        console.log("upload sceesss");
+        // console.log("upload sceesss");
         return pool.query(
           "DELETE FROM csc301db.patient_profile WHERE id = $1",
           [profile_id]
@@ -424,16 +472,16 @@ router.patch(
             etoh_canvas, drinks_per_week_canvas, \
              last_time_smoked_canvas, \
             packs_per_day_canvas, other_substances_canvas, \
-             assessments_canvas, imaging_canvas, id \
+             assessments_canvas, imaging_canvas, id, class_id, template_id \
             ) VALUES (current_timestamp, $1, $2, $3, $4, $5, $6, $7, $8, $9\
                 ,$10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21,\
                 $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, \
                 $33, $34, $35, $36, $37, $38, $39, $40, $41, $42, $43, $44,\
-                $45, $46, $47, $48, $49, $50, $51, $52) RETURNING id;";
-        return pool.query(insert_query, params_arr.concat([profile_id]));
+                $45, $46, $47, $48, $49, $50, $51, $52, $53, $54) RETURNING id;";
+        return pool.query(insert_query, [...params_arr, profile_id, class_id, template_id]);
       })
       .then((result: any) => {
-        console.log(result);
+        // console.log(result);
         res.status(200).json(result.rows[0]);
       })
       .catch((err: any) => {
@@ -444,7 +492,7 @@ router.patch(
 );
 
 /**
- * TODO: Return all templates for a user
+ * Return all templates for a user
  */
 router.get(
   "/api/student/:userId/templates",
@@ -573,22 +621,6 @@ router.post(
   }
 );
 
-// const example_template_json = {
-//     "user_id": 1,
-//     "template_name": "MyNewTemplate",
-//     "date_millis": 123123123123123,
-//     "template": [
-//         {
-//             "title": "Social History",
-//             "fields": ["Work"]
-//         },
-//         {
-//             "title": "Demographics",
-//             "fields": ["sexAtBirth", "lastName", "firstname"],
-//         },
-//     ],
-// }
-
 router.get(
   "/api/reviewOfSystems/:patientId",
   (req: Request, res: Response, next: NextFunction) => {
@@ -620,6 +652,49 @@ router.post(
       .then((result: any) => {
         const insert_string: string =
           "INSERT INTO csc301db.review_of_systems \
+      (patient_id, info ) VALUES ($1, $2)";
+        return pool.query(insert_string, [patientId, JSON.stringify(req.body)]);
+      })
+      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
+        res.status(200).send();
+      })
+      .catch((err: any) => {
+        res.status(400).send();
+      });
+  }
+);
+
+router.get(
+  "/api/physicalExaminations/:patientId",
+  (req: Request, res: Response, next: NextFunction) => {
+    const patientId: number = parseInt(req.params.patientId);
+    const query_string: string =
+      "SELECT info FROM csc301db.physical_examinations\
+      WHERE patient_id = $1";
+    pool
+      .query(query_string, [patientId])
+      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
+        if (result.rowCount === 0) {
+          res.status(404).send();
+        } else {
+          res.status(200).json(result.rows[0].info);
+        }
+      });
+  }
+);
+
+router.post(
+  "/api/physicalExaminations/:patientId",
+  (req: Request, res: Response, next: NextFunction) => {
+    const patientId: number = parseInt(req.params.patientId);
+    const delete_string: string =
+      "DELETE FROM csc301db.physical_examinations \
+    WHERE patient_id = $1";
+    pool
+      .query(delete_string, [patientId])
+      .then((result: any) => {
+        const insert_string: string =
+          "INSERT INTO csc301db.physical_examinations \
       (patient_id, info ) VALUES ($1, $2)";
         return pool.query(insert_string, [patientId, JSON.stringify(req.body)]);
       })
@@ -684,7 +759,7 @@ router.get(
     const student_id: number = parseInt(req.params.studentID);
     const query_string: string =
       "SELECT \
-        id, last_modified, first_name, family_name, gender, age, country_residence, pregnant\
+        id, last_modified, first_name, family_name, gender, age, country_residence, pregnant, class_id\
         FROM csc301db.patient_profile WHERE student_id = $1";
     pool
       .query(query_string, [student_id])
@@ -726,24 +801,490 @@ router.delete(
 );
 
 /**
- * TODO: Return all the classes this user (student) is in
+ * Get all the users of type student.
  */
 router.get(
-  "/api/student/:userId/classes",
+  "/api/students/all",
   (req: Request, res: Response, next: NextFunction) => {
-    const userId: string = req.params.userId;
-    res.status(200).json("");
+    const query_string: string =
+      "SELECT * FROM csc301db.users WHERE user_type = 'Student'";
+    pool
+      .query(query_string, [])
+      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
+        res.status(200).json(result.rows);
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(500).json({ error: err });
+      });
   }
 );
 
 /**
- * TODO: Return all the classes this instructor manages
+ * Get all the users.
  */
 router.get(
-  "/api/instructor/:userId/classes",
+  "/api/all/users",
   (req: Request, res: Response, next: NextFunction) => {
-    const userId: string = req.params.userId;
-    res.status(200).json("");
+    const query_string: string =
+      "SELECT * FROM csc301db.users";
+    pool
+      .query(query_string, [])
+      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
+        res.status(200).json(result.rows);
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(500).json({ error: err });
+      });
+  }
+);
+
+/**
+ * Get all students enrollment in a specific class
+ */
+router.get(
+  "/api/students/:classID",
+  (req: Request, res: Response, next: NextFunction) => {
+    const class_id: number = parseInt(req.params.classID);
+    const query_string: string =
+      "SELECT id, first_name, last_name, avatar_url\
+     FROM csc301db.users JOIN csc301db.students_enrollment\
+     ON csc301db.users.id = csc301db.students_enrollment.student_id\
+     WHERE csc301db.students_enrollment.class_id = $1";
+    pool
+      .query(query_string, [class_id])
+      .then((result: any) => {
+        if (result.rowCount === 0) {
+          res.status(404).send("No students in this class");
+        } else {
+          res.status(200).json(result.rows);
+        }
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(400).json({ error: err });
+      });
+  }
+);
+
+/**
+ * Get all classes that a student is in.
+ */
+router.get(
+  "/api/classesForStudent/:sid",
+  (req: Request, res: Response, next: NextFunction) => {
+    const sid: number = parseInt(req.params.sid);
+    const query_string: string =
+      "SELECT c.* \
+     FROM csc301db.class c JOIN csc301db.students_enrollment se \
+     ON c.id = se.class_id \
+     WHERE se.student_id = $1";
+    pool
+      .query(query_string, [sid])
+      .then((result: any) => {
+        res.status(200).json(result.rows);
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(400).json({ error: err });
+      });
+  }
+);
+
+/**
+ * Get all students not enrolled in a specific class
+ */
+router.get(
+  "/api/students/eligible/:classID",
+  (req: Request, res: Response, next: NextFunction) => {
+    const class_id: number = parseInt(req.params.classID);
+    const query_string: string =
+      "SELECT id, first_name, last_name\
+     FROM csc301db.users U1\
+     WHERE U1.user_type = 'Student' AND NOT EXISTS (SELECT 1\
+      FROM csc301db.users U2 JOIN csc301db.students_enrollment\
+      ON U2.id = csc301db.students_enrollment.student_id\
+      WHERE U1.id = U2.id AND csc301db.students_enrollment.class_id = $1)";
+    pool
+      .query(query_string, [class_id])
+      .then((result: any) => {
+        if (result.rowCount === 0) {
+          res.status(404).json("No more eligible students");
+        } else {
+          res.status(200).json(result.rows);
+        }
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(400).json({ error: err });
+      });
+  }
+);
+
+/**
+ * Add a student to a class
+ */
+router.post(
+  "/api/classes/:classID/:studentID",
+  (req: Request, res: Response, next: NextFunction) => {
+    const class_id: number = parseInt(req.params.classID);
+    const student_id: number = parseInt(req.params.studentID);
+    const insert_string: string =
+      "INSERT INTO csc301db.students_enrollment\
+      (class_id, student_id) VALUES ($1, $2)";
+    pool
+      .query(insert_string, [class_id, student_id])
+      .then((result: any) => {
+        res.status(200).send("Added student to class");
+      })
+      .catch((err: any) => {
+        res.status(400).send();
+      });
+  }
+);
+
+/**
+ * Remove a student from a class
+ */
+router.delete(
+  "/api/classes/:classID/:studentID",
+  (req: Request, res: Response, next: NextFunction) => {
+    const student_id: number = parseInt(req.params.studentID);
+    const class_id: number = parseInt(req.params.classID);
+    const delete_query: string =
+      "DELETE FROM csc301db.students_enrollment\
+       WHERE student_id = $1 AND class_id = $2";
+    pool
+      .query(delete_query, [student_id, class_id])
+      .then((result: any) => {
+        if (result.rowCount === 0) {
+          res.status(404).send("Enrolled student not found");
+        } else {
+          res.status(200).send();
+        }
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(400).send();
+      });
+  }
+);
+
+/**
+ * Get all classes
+ */
+router.get(
+  "/api/classes/all",
+  (req: Request, res: Response, next: NextFunction) => {
+    const query_string: string = "SELECT * FROM csc301db.class";
+    pool
+      .query(query_string, [])
+      .then((result: any) => {
+        res.status(200).json(result.rows);
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(400).json({ error: err });
+      });
+  }
+);
+
+/**
+ * Get a class name by ID
+ */
+router.get(
+  "/api/classes/:classID",
+  (req: Request, res: Response, next: NextFunction) => {
+    const class_id: number = parseInt(req.params.classID);
+    const query_string: string =
+      "SELECT c.*, u.first_name, u.last_name FROM csc301db.class c JOIN csc301db.users u ON \
+    u.id = c.instructor_id \
+    WHERE c.id = $1";
+    pool
+      .query(query_string, [class_id])
+      .then((result: any) => {
+        if (result.rowCount === 0) {
+          res.status(404).send("No specified class found");
+        } else {
+          res.status(200).json(result.rows);
+        }
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(400).json({ error: err });
+      });
+  }
+);
+
+/**
+ * Patch a class name by ID
+ */
+router.patch(
+  "/api/classes/:classID",
+  (req: Request, res: Response, next: NextFunction) => {
+    const class_id: number = parseInt(req.params.classID);
+    const body: any = req.body;
+    const query_string: string =
+      "UPDATE csc301db.class SET name = $1, instructor_id = $2, help_enabled = $3 \
+    WHERE id = $4";
+    pool
+      .query(query_string, [
+        body.name,
+        body.instructor_id,
+        body.help_enabled,
+        class_id,
+      ])
+      .then((result: any) => {
+        res.status(200).json(result.rows);
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(400).json({ error: err });
+      });
+  }
+);
+
+/**
+ * Patch a class for just help and tips for a given ID.
+ */
+router.patch(
+  "/api/classesTips/:classID",
+  (req: Request, res: Response, next: NextFunction) => {
+    const class_id: number = parseInt(req.params.classID);
+    const body: any = req.body;
+    const query_string: string =
+      "UPDATE csc301db.class SET help_enabled = $1 \
+    WHERE id = $2";
+    pool
+      .query(query_string, [
+        body.help_enabled,
+        class_id,
+      ])
+      .then((result: any) => {
+        res.status(200).json(result.rows);
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(400).json({ error: err });
+      });
+  }
+);
+
+/**
+ * Create new class
+ */
+router.post(
+  "/api/classes/",
+  (req: Request, res: Response, next: NextFunction) => {
+    const new_class = req.body;
+    const insert_string: string =
+      "INSERT INTO csc301db.class\
+      (name, instructor_id) VALUES ($1, $2)";
+    pool
+      .query(insert_string, [new_class.name, new_class.instructor_id])
+      .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
+        // console.log(result);
+        res.status(200).json(result);
+      })
+      .catch((err: any) => {
+        res.status(400).send();
+      });
+  }
+);
+
+/**
+ * Deleting a class
+ */
+router.delete(
+  "/api/classes/:classID",
+  (req: Request, res: Response, next: NextFunction) => {
+    const class_id: number = parseInt(req.params.classID);
+    const delete_enrollment: string =
+      "DELETE FROM csc301db.students_enrollment\
+       WHERE class_id = $1";
+    pool
+      .query(delete_enrollment, [class_id])
+      .then((result: any) => {
+        const delete_class: string =
+          "DELETE FROM csc301db.class\
+           WHERE id = $1";
+
+        return pool.query(delete_class, [class_id]);
+      })
+      .then((result: any) => {
+        res.status(200).send();
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(400).send();
+      });
+  }
+);
+
+/**
+ * Get all classes that an instructor teaches
+ */
+router.get(
+  "/api/classesOfInstructors/:instructorId",
+  (req: Request, res: Response, next: NextFunction) => {
+    const instructor_id: number = parseInt(req.params.instructorId);
+    const query_string: string =
+      "SELECT id, name \
+     FROM csc301db.class \
+     WHERE csc301db.class.instructor_id = $1";
+    pool
+      .query(query_string, [instructor_id])
+      .then((result: any) => {
+        res.status(200).json(result.rows);
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(400).json({ error: err });
+      });
+  }
+);
+
+/**
+ * Get all instructors
+ */
+router.get(
+  "/api/instructors/all",
+  (req: Request, res: Response, next: NextFunction) => {
+    const query_string: string =
+      "SELECT id, first_name, last_name \
+     FROM csc301db.users \
+     WHERE csc301db.users.user_type = 'Educator'";
+    pool
+      .query(query_string)
+      .then((result: any) => {
+        if (result.rowCount === 0) {
+          res.status(404).send("No instructors exist");
+        } else {
+          res.status(200).json(result.rows);
+        }
+      })
+      .catch((err: any) => {
+        console.log(err);
+        res.status(400).json({ error: err });
+      });
+  }
+);
+
+function age_helper(age: number) {
+  if (age <= 1) {
+    return 1;
+  } else if (age <= 5) {
+    return 3;
+  } else if (age <= 16) {
+    return 4;
+  } else if (age <= 29) {
+    return 7;
+  } else if (age <= 39) {
+    return 5;
+  } else {
+    return 8;
+  }
+}
+
+router.post(
+  "/api/analysis/:profile_id",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const image_payloads: string = req.body;
+    let all_string: string = "";
+    for (let i = 0; i < image_payloads.length; i++) {
+      console.log(i);
+      const image_payload: string = image_payloads[i];
+      const request: any = {
+        image: {
+          content: image_payload,
+        },
+        features: [
+          {
+            type: "DOCUMENT_TEXT_DETECTION",
+          },
+        ],
+        imageContext: {
+          languageHints: ["en-t-i0-handwrit"],
+        },
+      };
+      const [result] = await vision_client.annotateImage(request);
+      console.log(result);
+      if (result.fullTextAnnotation) {
+        const text: string = result.fullTextAnnotation.text;
+        all_string += text;
+      }
+    }
+    const profile_id: number = parseInt(req.params.profile_id);
+    const db_res = await pool.query(
+      "SELECT patient_id, age, gender_at_birth, pregnant\
+      complaint, HPI, medical_history, hospital_history, medications, allergies\
+       FROM csc301db.patient_profile WHERE id = $1",
+      [profile_id]
+    );
+    if (db_res.rowCount === 0) {
+      res.status(404).json({});
+    }
+    const patient_id: number = db_res.rows[0].patient_id; 
+    const age: number = age_helper(db_res.rows[0].age);
+    const gender: string = db_res.rows[0].gender_at_birth === "Male" ? "m" : "f";
+    // TODO: FIX THIS LATER
+    const pregnant: string = "n";
+    const text_arr: any = ["complaint, HPI, medical_history, hospital_history, medications, allergies"];
+    for (let i = 0; i < text_arr.length; i++) {
+      all_string += " " + db_res.rows[0][text_arr[i]];
+    }
+    const db_res_review: any = await pool.query("SELECT info FROM csc301db.review_of_systems WHERE patient_id = $1", [profile_id]);
+    if (db_res_review.rowCount !== 0) {
+      const review_of_systems: any = db_res_review.rows[0].info;
+      for (let key1 in review_of_systems) {
+        for (let key2 in review_of_systems[key1]) {
+          if (review_of_systems[key1][key2]) {
+            all_string += ","+ key2;
+          }
+        }
+      }
+    }
+    const isbell_url: string = `https://apisandbox.isabelhealthcare.com/v2/ranked_differential_diagnoses?specialties=28&dob=${age}&sex=${gender}&pregnant=${pregnant}&region=10&querytext=${all_string}&suggest=suggest+differential+diagnosis&flag=sortbyrw_advanced&searchtype=0&web_service=json&callback=diagnosiscallback&authorization=urOSKOJyYvIOj8BnIgBwJI0KgXT4BR9VYShRyAPDdbcChStimoHWbUE6ILUM0Z4S`;
+    try {
+      const isbell_res: any = await https.get(isbell_url);
+      const final_result: string = isbell_res.data.slice(
+        18,
+        isbell_res.data.length - 2
+      );
+      // console.log(JSON.parse(final_result));
+      const parsed_result: any = JSON.parse(final_result);
+      const insert_string: string =
+        "INSERT INTO csc301db.analysis \
+    (time_submitted, profile_id, student_input, isbell_result) VALUES \
+    (current_timestamp, $1, $2, $3)";
+      await pool.query(insert_string, [profile_id, all_string, parsed_result]);
+      res.status(200).json({});
+    } catch (err) {
+      console.log(err);
+      res.status(400).json({});
+    }
+  }
+);
+
+router.get(
+  "/api/analysis/:profile_id",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const profile_id = req.params.profile_id;
+    const query_string: string =
+      "SELECT * FROM csc301db.analysis\
+     WHERE profile_id = $1 ORDER BY time_submitted DESC";
+    try {
+      const result: any = await pool.query(query_string, [profile_id]);
+      if (result.rowCount === 0) {
+        res.status(404).json({});
+      } else {
+        res.status(200).json(result.rows[0]);
+      }
+    } catch (err) {
+      console.log(err);
+      res.status(400).json({});
+    }
   }
 );
 

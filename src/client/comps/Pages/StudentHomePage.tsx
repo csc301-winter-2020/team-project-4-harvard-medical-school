@@ -8,8 +8,12 @@ import { now, max } from "../../utils/utils";
 import { useHistory } from "react-router";
 import { HelixLoader } from "../SubComponents/HelixLoader";
 import { ToastContainer, toast } from "react-toastify";
+import { Class } from "../../utils/types";
+import { Template } from "./TemplatesPage";
 
-interface HomePageProps {}
+interface HomePageProps {
+  classID: number;
+}
 
 type PatientProfile = {
   title: string;
@@ -22,6 +26,7 @@ type PatientProfile = {
   sex: string;
   isPregnant: string | null;
   patientID: number;
+  class_id: number;
 };
 
 type HomePageState = {
@@ -104,7 +109,7 @@ const lastModSorterDesc = (a: PatientProfile, b: PatientProfile) => {
   return a.lastModified > b.lastModified ? 1 : -1;
 };
 
-export const HomePage: React.FC<HomePageProps> = ({}) => {
+export const HomePage: React.FC<HomePageProps> = ({ classID }) => {
   const [isAvatarPopup, setIsAvatarPopup] = useState(false);
   const [state, dispatch] = useReducer(reducer, initialState);
   const { nameSort, createdSort, lastModifiedSort, changed } = state;
@@ -114,6 +119,11 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [isLoading, setIsLoading] = useState(true);
   const [showNewPatientPopup, setNewPatientPopup] = useState(false);
+  const [currentClass, setCurrentClass] = useState<Class>(null);
+  const [instrFirstName, setInstrFirstName] = useState<string>(null);
+  const [instrLastName, setInstrLastName] = useState<string>(null);
+  const [user, setUser] = useState(null);
+  const [templates, setTemplates] = useState(null);
 
   const history = useHistory();
 
@@ -136,7 +146,7 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
         }
       })
       .then((data: any) => {
-        console.log(data);
+        setUser(data);
         return fetch(`/api/studentHomepage/${data.id}`);
       })
       .then((res: any) => {
@@ -146,26 +156,48 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
           throw new Error("res.status not 200");
         }
       })
-      .then((data: any) => {
+      .then((data: any[]) => {
         const patientsListNew: PatientProfile[] = [];
-        console.log(data);
         // TODO: some fields don't have the right data
-        for (let i = 0; i < data.length; i++) {
-          patientsListNew.push({
-            title: "Patient" + data[i].id,
-            date: now(),
-            lastModified: data[i].last_modified,
-            firstName: data[i].first_name,
-            lastName: data[i].family_name,
-            sex: data[i].gender,
-            isPregnant: data[i].gender === "Male" ? null : data[i].pregnant,
-            age: data[i].age,
-            country: data[i].country_residence,
-            patientID: data[i].id,
-          });
-        }
+        console.log(data);
+        console.log(classID);
+        data.forEach(d => {
+          if (d.class_id === Number(classID)) {
+            patientsListNew.push({
+              title: "Patient" + d.id,
+              date: now(),
+              lastModified: d.last_modified,
+              firstName: d.first_name,
+              lastName: d.family_name,
+              sex: d.gender,
+              isPregnant: d.gender === "Male" ? null : d.pregnant,
+              age: d.age,
+              country: d.country_residence,
+              patientID: d.id,
+              class_id: d.class_id,
+            });
+          }
+        });
         setAllPatients(patientsListNew);
         setPatientsList(patientsListNew);
+        return fetch(`/api/classes/${classID}`);
+      })
+      .then(res => {
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          throw new Error("did not find that class in the DB");
+        }
+      })
+      .then((data: any) => {
+        setCurrentClass({
+          help_enabled: data[0].help_enabled,
+          id: data[0].id,
+          instructor_id: data[0].instructor_id,
+          name: data[0].name,
+        });
+        setInstrFirstName(data[0].first_name);
+        setInstrLastName(data[0].last_name);
         setIsLoading(false);
       })
       .catch((err: any) => {
@@ -174,6 +206,36 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
         history.push("/err/500/Please try again.");
       });
   }, []);
+
+  useEffect(() => {
+    if (user === null) {
+      console.log("null user.");
+    } else {
+      fetch(`/api/student/${user.id}/templates`)
+        .then((res: Response) => {
+          if (res.status === 200) {
+            return res.json();
+          } else {
+            throw new Error("Failed to fetch user templates.");
+          }
+        })
+        .then((data: any) => {
+          const newTemplates: Template[] = [];
+          data.forEach((t: any) => {
+            t.template = JSON.parse(t.template);
+            t.text = t.template_name;
+            t.key = t.template_id;
+            t.value = t.template_id;
+            newTemplates.push(t);
+          });
+          console.log(newTemplates);
+          setTemplates(newTemplates);
+        })
+        .catch((err: any) => {
+          console.log(err);
+        });
+    }
+  }, [user]);
 
   useEffect(() => {
     if (nameSort !== null) {
@@ -259,6 +321,12 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
         <ToastContainer position={toast.POSITION.TOP_RIGHT} />
         {isLoading && <HelixLoader message="Loading Patients..." />}
         <div className="home-page-content-container">
+          <p style={{ marginLeft: "10px" }}>
+            Current Class:{" "}
+            {currentClass === null
+              ? "No Class Selected"
+              : `${currentClass.name} - Instructed by ${instrLastName}, ${instrFirstName}.`}
+          </p>
           <div className="home-page-your-patients-title">Your Patients</div>
           <div className="home-page-separator-line"></div>
           <div className="home-page-patient-header-grid">
@@ -310,7 +378,6 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
                   isPortraitMode={windowWidth < 1080}
                   firstName={p.firstName}
                   lastName={p.lastName}
-                  title={p.title}
                   date={p.date}
                   lastModified={p.lastModified}
                   sex={p.sex}
@@ -318,6 +385,8 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
                   country={p.country}
                   isPregnant={p.isPregnant}
                   patientID={p.patientID}
+                  isInstructorView={false}
+                  givenFinalDiagnosis={null}
                 />
               );
             })}
@@ -343,9 +412,12 @@ export const HomePage: React.FC<HomePageProps> = ({}) => {
 
         {showNewPatientPopup && (
           <NewPatient
+            templates={templates}
+            user={user}
             history={history}
             setShowNewPatientPopup={setNewPatientPopup}
-          ></NewPatient>
+            classID={Number(classID)}
+          />
         )}
       </div>
     </Fragment>

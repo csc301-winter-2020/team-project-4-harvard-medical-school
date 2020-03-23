@@ -10,8 +10,23 @@ interface CanvasCompProps {
   id: string;
   dispatch: Function;
   saveData: string;
-  // loadSaveData: boolean;
+  hidden?: boolean;
 }
+
+const HANDWRITING_CANVASES = [
+  "chiefComplaint",
+  "HPI",
+  "pastMedHist",
+  "pastHospits",
+  "medications",
+  "allergies",
+];
+
+const CANVAS_BLACK = "black";
+const CANVAS_RED = "#a51c30";
+const CANVAS_DARK_RED = "#791523";
+const CANVAS_BLUE = "#0097D1";
+const CANVAS_GREEN = "#30a51c";
 
 export const CanvasComp: React.FC<CanvasCompProps> = ({
   initialHeight,
@@ -19,19 +34,20 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
   id,
   dispatch,
   saveData,
-  // loadSaveData,
+  hidden,
 }) => {
   const [canvasHeight, setCanvasHeight] = useState(initialHeight);
   const [canvasWidth, setCanvasWidth] = useState(initialWidth);
   const [brushRadius, setBrushRadius] = useState(3);
   const [isErasing, setIsErasing] = useState(false);
-  const [brushColor, setBrushColor] = useState("black");
-  const [lastBrushColor, setLastBrushColor] = useState("black");
-  const [catenaryColor, setCatenaryColor] = useState("black");
   const [loadSaveData, setLoadSaveData] = useState(true);
+  const [brushColor, setBrushColor] = useState(CANVAS_BLACK);
+  const [lastBrushColor, setLastBrushColor] = useState(CANVAS_BLACK);
+  const [catenaryColor, setCatenaryColor] = useState(CANVAS_BLACK);
   const [lastDrag, setLastDrag] = useState(now());
+  const [inputRef, setInputRef] = useState(null);
+  let mobileLastDrag = now();
 
-  let inputRef: any;
   function saveCanvas() {
     let image: any = inputRef.canvas.drawing
       .toDataURL("image/png")
@@ -41,14 +57,30 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
 
   function clearCanvas() {
     inputRef.clear();
+    dispatchCanvasState();
+  }
+
+  function sendCanvasImages() {
+    // Send the canvas as an image for fields that need handwriting recognition
+    if (HANDWRITING_CANVASES.includes(id)) {
+      dispatch({
+        type: "field",
+        fieldName: id + "Image",
+        value: inputRef.canvas.drawing
+          .toDataURL("image/png")
+          .replace("data:image/png;base64,", ""),
+      });
+    }
   }
 
   function dispatchCanvasState() {
     dispatch({
-      type: 'field',
-      fieldName: id + 'Canvas',
-      value: inputRef.getSaveData()
+      type: "field",
+      fieldName: id + "Canvas",
+      value: inputRef.getSaveData(),
     });
+
+    sendCanvasImages();
   }
 
   function changeColor(color: string) {
@@ -71,7 +103,7 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
       setBrushRadius(12);
       setIsErasing(true);
       setLastBrushColor(brushColor);
-      setBrushColor("rgba(250,250,250,1)");
+      setBrushColor("rgba(255,255,255,1)");
     }
   }
 
@@ -88,29 +120,100 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
     }
   }
 
-  useEffect(() => {
-    if (loadSaveData && saveData) {
-      inputRef.loadSaveData(saveData);
-      setLoadSaveData(false);
+  function loadCanvas() {
+    try {
+      const saveDataObj = JSON.parse(saveData);
+
+      if (saveDataObj['lines'] != [] && 
+          (saveDataObj['width'] != canvasWidth || 
+           saveDataObj['height'] != canvasHeight)) {
+        setCanvasWidth(saveDataObj['width']);
+        setCanvasHeight(saveDataObj['height']);
+        return;
+      }
+
+      if (loadSaveData && inputRef && saveData) {
+        inputRef.loadSaveData(saveData, true);
+        setLoadSaveData(false);
+        sendCanvasImages();
+      }
+    } catch (err) {
+      console.log(err);
+      return;
     }
-  }, [saveData]);
+  }
+
+  useEffect(() => {
+    async function loadAsync() {
+      setTimeout(loadCanvas, 100);
+    }
+
+    if (now() - lastDrag <= 20) {
+      return;
+    }
+
+    loadAsync();
+  }, [inputRef, saveData, lastDrag, canvasWidth, canvasHeight]);
+
+  useEffect(() => {
+    const container = document.querySelector(".canvas-draw-resize-btn");
+
+    function touchEnd(e: any) {
+      container.removeEventListener("touchmove", touchMove);
+    }
+
+    function touchMove(e: any) {
+      // For some reason can't use useState here... doesn't work properly
+      if (now() - mobileLastDrag > 10) {
+        mobileLastDrag = now()
+        if (e.touches[0].clientX !== 0 && e.touches[0].clientY !== 0) {
+          const boundingRect = document
+            .querySelector(`#canvas-draw-container-${id}`)
+            .getBoundingClientRect();
+          setCanvasWidth(max(e.touches[0].clientX - boundingRect.left, initialWidth));
+          setCanvasHeight(max(e.touches[0].clientY - boundingRect.top, initialHeight));
+        }
+      }
+    }
+
+    function touchStart(e: any) {
+      console.log("START");
+      console.log(e.touches[0].clientX);
+      console.log(e.touches[0].clientY);
+      container.addEventListener("touchmove", touchMove);
+    }
+
+    container.addEventListener("touchstart", touchStart);
+    container.addEventListener("touchend", touchEnd);
+
+    return () => {
+      container.removeEventListener("touchstart", touchStart);
+      container.removeEventListener("touchend", touchEnd);
+    };
+  });
 
   return (
     <>
       <div
         id={id}
         className="canvas-draw-outermost"
-        style={{ width: String(canvasWidth), height: String(canvasHeight) }}
+        style={{
+          width: String(canvasWidth),
+          height: String(canvasHeight),
+          visibility: hidden ? "hidden" : "visible",
+        }}
       >
         <div
           className="canvas-draw-container"
           id={`canvas-draw-container-${id}`}
           onMouseUp={dispatchCanvasState}
+          onPointerUp={dispatchCanvasState}
         >
           <CanvasDraw
-            ref={(canvasDraw: any) => (inputRef = canvasDraw)}
+            ref={(canvasDraw: any) => setInputRef(canvasDraw)}
             canvasWidth={canvasWidth}
             canvasHeight={canvasHeight}
+            hideGrid={true}
             lazyRadius={0}
             brushRadius={brushRadius}
             brushColor={brushColor}
@@ -121,23 +224,23 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
         <div className="canvas-draw-colors">
           <div
             className="canvas-draw-btn"
-            style={{ backgroundColor: "black" }}
-            onClick={() => changeColor("black")}
+            style={{ backgroundColor: CANVAS_BLACK }}
+            onClick={() => changeColor(CANVAS_BLACK)}
           ></div>
           <div
             className="canvas-draw-btn"
-            style={{ backgroundColor: "#a51c30" }}
-            onClick={() => changeColor("#a51c30")}
+            style={{ backgroundColor: CANVAS_RED }}
+            onClick={() => changeColor(CANVAS_RED)}
           ></div>
           <div
             className="canvas-draw-btn"
-            style={{ backgroundColor: "#30a51c" }}
-            onClick={() => changeColor("#30a51c")}
+            style={{ backgroundColor: CANVAS_GREEN }}
+            onClick={() => changeColor(CANVAS_GREEN)}
           ></div>
           <div
             className="canvas-draw-btn"
-            style={{ backgroundColor: "#0097D1" }}
-            onClick={() => changeColor("#0097D1")}
+            style={{ backgroundColor: CANVAS_BLUE }}
+            onClick={() => changeColor(CANVAS_BLUE)}
           ></div>
         </div>
 
@@ -152,7 +255,9 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
             className="canvas-draw-btn"
             id="canvasEraser"
             onClick={toggleErase}
-            style={{backgroundColor: !isErasing ? "#791523" : "#a51c30"}}
+            style={{
+              backgroundColor: !isErasing ? CANVAS_DARK_RED : CANVAS_RED,
+            }}
           >
             <FontAwesomeIcon icon="eraser" size="1x" />
           </div>

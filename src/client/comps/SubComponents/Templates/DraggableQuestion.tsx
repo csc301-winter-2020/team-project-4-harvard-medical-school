@@ -70,7 +70,8 @@ export const DraggableQuestion: React.FC<DraggableQuestionProps> = ({
             </span>
             {question.title}
 
-            <span
+                {/** Commenting out the "Answers" part because its broken as fuck */}
+            {/* <span
               className="chevron-style"
               onClick={() => setIsShowing(!isShowing)}
             >
@@ -79,14 +80,14 @@ export const DraggableQuestion: React.FC<DraggableQuestionProps> = ({
               ) : (
                 <FontAwesomeIcon icon="chevron-up" />
               )}
-            </span>
-            <Answers
+            </span> */}
+            {/* <Answers
               questionNum={index}
               question={question}
               isShowing={isShowing}
               setQuestions={setQuestions}
               allQuestions={allQuestions}
-            />
+            /> */}
           </div>
         )}
       </Draggable>

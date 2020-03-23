@@ -1,0 +1,29 @@
+@import "../app.scss";
+
+.instructor-student-profile-container {
+  text-align: center;
+  margin-right: auto;
+  margin-left: auto;
+  width: 70%;
+}
+
+.instructor-student-profile-title {
+  font-weight: bold;
+  font-size: 2.2rem;
+}
+
+.instructor-student-profile-page-button {
+  color: white;
+  background-color: $color-primary-dim;
+  font-size: 35px;
+  height: 100px;
+  width: 400px;
+  margin: 30px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+
+.instructor-student-profile-page-button:hover {
+  background-color: $color-primary;
+}

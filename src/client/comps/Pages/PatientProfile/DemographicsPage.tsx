@@ -2,13 +2,17 @@ import React, { useEffect, useReducer, useState } from "react";
 import "../../../scss/patient-profiles/patient-profile-form.scss";
 import { useHistory } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
-import { IndividualPatientProfile, fetchAllCanvases } from "./PatientProfilePage";
+import {
+  IndividualPatientProfile,
+  fetchAllCanvases,
+} from "./PatientProfilePage";
 import "../../../scss/login/inputboxes.scss";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { postData } from "./PatientProfilePage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { textInit, canvasInit } from "../../../utils/utils";
 import { toast } from "react-toastify";
+import { MyToast } from "../../../utils/types";
 
 function reducer(
   state: DemographicsState,
@@ -83,24 +87,6 @@ const initialState: DemographicsState = {
   country: "",
 };
 
-async function saveData(url: string, state: DemographicsState) {
-  console.log(state);
-  allAttributes.first_name = state.firstName;
-  if (state.firstNameCanvas !== undefined) allAttributes.first_name_canvas = state.firstNameCanvas;
-  allAttributes.family_name = state.lastName;
-  if (state.lastNameCanvas !== undefined) allAttributes.family_name_canvas = state.lastNameCanvas;
-  allAttributes.age = state.age;
-  if (state.ageCanvas !== undefined) allAttributes.age_canvas = state.ageCanvas;
-  allAttributes.gender = state.sex;
-  allAttributes.pregnant = state.isPregnant;
-  allAttributes.country_residence = state.country;
-  if (state.countryCanvas !== undefined) allAttributes.country_residence_canvas = state.countryCanvas;
-  console.log(allAttributes);
-
-  const res = await postData(url, allAttributes);
-  return await res.message
-}
-
 var allAttributes: any;
 
 export const DemographicsPage: IndividualPatientProfile = ({
@@ -112,42 +98,85 @@ export const DemographicsPage: IndividualPatientProfile = ({
   isShowingSidebar,
   patientID,
   defaultMode,
+  setIsLoading,
+  classID,
+  userType,
+  templateId,
 }) => {
   const history = useHistory();
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [showingFirstNameCanvas, setShowingFirstNameCanvas] = useState(true);
-  const [showingFirstNameText, setShowingFirstNameText] = useState(false);
-  const [showingLastNameCanvas, setShowingLastNameCanvas] = useState(true);
-  const [showingLastNameText, setShowingLastNameText] = useState(false);
-  const [showingAgeCanvas, setShowingAgeCanvas] = useState(true);
-  const [showingAgeText, setShowingAgeText] = useState(false);
+  const [lastState, setLastState] = useState(state);
   const [showingCountryCanvas, setShowingCountryCanvas] = useState(true);
   const [showingCountryText, setShowingCountryText] = useState(false);
 
-  const { 
+  const {
     firstName,
-    firstNameCanvas,
     lastName,
-    lastNameCanvas, 
-    sex, 
-    age, 
-    ageCanvas, 
-    isPregnant, 
-    country, 
-    countryCanvas 
+    sex,
+    age,
+    isPregnant,
+    country,
+    countryCanvas,
   } = state;
 
-  const myToast: any = toast
+  const myToast: MyToast = toast as any;
+
+  async function saveData(url: string, state: DemographicsState) {
+    console.log(state);
+    allAttributes.first_name = state.firstName;
+    if (state.firstNameCanvas !== undefined)
+      allAttributes.first_name_canvas = state.firstNameCanvas;
+    allAttributes.family_name = state.lastName;
+    if (state.lastNameCanvas !== undefined)
+      allAttributes.family_name_canvas = state.lastNameCanvas;
+    allAttributes.age = state.age;
+    if (state.ageCanvas !== undefined)
+      allAttributes.age_canvas = state.ageCanvas;
+    allAttributes.gender = state.sex;
+    allAttributes.pregnant = state.isPregnant;
+    allAttributes.country_residence = state.country;
+    if (state.countryCanvas !== undefined)
+      allAttributes.country_residence_canvas = state.countryCanvas;
+    allAttributes.class_id = classID;
+    allAttributes.template_id = templateId;
+    console.log("ALL ATTRIBUTES");
+    console.log(allAttributes);
+    const res = await postData(url, allAttributes);
+    return await res.message;
+  }
+
+  useEffect(() => {
+    if (lastState === initialState) {
+      setLastState(state);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      if (userType === "Student" && currentPage == pageName && state && state !== lastState) {
+        console.log(lastState);
+        console.log(state);
+
+        saveData("/api/patientprofile/" + patientID, state)
+          .then(data => {
+            console.log(data);
+            myToast.success("Autosaved.", {
+              autoClose: 1000,
+            });
+          })
+          .catch(err => {
+            myToast.warn("Autosave failed.");
+          });
+
+        setLastState(state);
+      }
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [state, lastState]);
 
   useEffect(() => {
     const canvasShow: boolean = canvasInit(defaultMode);
     const textShow: boolean = textInit(defaultMode);
-    setShowingFirstNameCanvas(canvasShow);
-    setShowingFirstNameText(textShow);
-    setShowingLastNameCanvas(canvasShow);
-    setShowingLastNameText(textShow);
-    setShowingAgeCanvas(canvasShow);
-    setShowingAgeText(textShow);
     setShowingCountryCanvas(canvasShow);
     setShowingCountryText(textShow);
   }, [defaultMode]);
@@ -155,9 +184,9 @@ export const DemographicsPage: IndividualPatientProfile = ({
   useEffect(() => {
     if (currentPage === pageName) {
       document.title = `Patient Profile: ${pageName}`;
-      
-      history.push(`/patient/${patientID}/demographics`);
 
+      history.push(`/patient/${patientID}/demographics`);
+      setIsLoading(true);
       // Get request
       const url = "/api/patientprofile/" + patientID;
       fetch(url)
@@ -191,8 +220,8 @@ export const DemographicsPage: IndividualPatientProfile = ({
         })
         .catch(error => {
           console.log("An error occured with fetch:", error);
-        });
-      
+        })
+        .finally(() => setIsLoading(false));
     }
   }, [currentPage]);
 
@@ -223,13 +252,12 @@ export const DemographicsPage: IndividualPatientProfile = ({
               inputVal={firstName}
               placeholder={"Ex. John"}
               title={"First Name"}
-              isShowingCanvas={showingFirstNameCanvas}
-              isShowingText={showingFirstNameText}
-              setIsShowingCanvas={setShowingFirstNameCanvas}
-              setIsShowingText={setShowingFirstNameText}
+              isShowingCanvas={false}
+              isShowingText={true}
+              setIsShowingCanvas={() => {}}
+              setIsShowingText={() => {}}
               canvasHeight={200}
               canvasWidth={600}
-              canvasData={firstNameCanvas}
               isTextArea={false}
             />
 
@@ -240,13 +268,12 @@ export const DemographicsPage: IndividualPatientProfile = ({
               inputVal={lastName}
               placeholder={"Ex. Doe"}
               title={"Last Name"}
-              isShowingCanvas={showingLastNameCanvas}
-              isShowingText={showingLastNameText}
-              setIsShowingCanvas={setShowingLastNameCanvas}
-              setIsShowingText={setShowingLastNameText}
+              isShowingCanvas={false}
+              isShowingText={true}
+              setIsShowingCanvas={() => {}}
+              setIsShowingText={() => {}}
               canvasHeight={200}
               canvasWidth={600}
-              canvasData={lastNameCanvas}
               isTextArea={false}
             />
             <PatientFormInput
@@ -256,13 +283,12 @@ export const DemographicsPage: IndividualPatientProfile = ({
               inputVal={age}
               placeholder={"Ex. 18"}
               title={"Age"}
-              isShowingCanvas={showingAgeCanvas}
-              isShowingText={showingAgeText}
-              setIsShowingCanvas={setShowingAgeCanvas}
-              setIsShowingText={setShowingAgeText}
+              isShowingCanvas={false}
+              isShowingText={true}
+              setIsShowingCanvas={() => {}}
+              setIsShowingText={() => {}}
               canvasHeight={200}
               canvasWidth={600}
-              canvasData={ageCanvas}
               isTextArea={false}
             />
             <h3>Sex at Birth</h3>
@@ -353,28 +379,32 @@ export const DemographicsPage: IndividualPatientProfile = ({
           <div className="form-whitespace">
             <div className="home-page-content-whitespace-logo"></div>
           </div>
-          <div className="patient-profile-nav-btns">
-            <div
-              className="nav-btn"
-              style={{
-                right: "20px",
-                top: "70px",
-                position: "fixed",
-                borderRadius: "5px",
-              }}
-              onClick={() => {
-                // TODO : add POST request function here
-                saveData("/api/patientprofile/" + patientID, state).then((data) => {
-                  console.log(data)
-                  myToast.success('Information saved')
-                }).catch((err) => {
-                  myToast.success('Information could not be saved')
-                })
-              }}
-            >
-              <FontAwesomeIcon icon="save" size="2x" />
+          {userType === "Student" && (
+            <div className="patient-profile-nav-btns">
+              <div
+                className="nav-btn"
+                style={{
+                  right: "20px",
+                  top: "70px",
+                  position: "fixed",
+                  borderRadius: "5px",
+                }}
+                onClick={() => {
+                  // TODO : add POST request function here
+                  saveData("/api/patientprofile/" + patientID, state)
+                    .then(data => {
+                      console.log(data);
+                      myToast.success("Information saved");
+                    })
+                    .catch(err => {
+                      myToast.success("Information could not be saved");
+                    });
+                }}
+              >
+                <FontAwesomeIcon icon="save" size="2x" />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </CSSTransition>
     </>

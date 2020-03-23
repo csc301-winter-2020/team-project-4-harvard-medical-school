@@ -1,16 +1,26 @@
 import React, { useEffect, useState, useReducer } from "react";
 import { CSSTransition } from "react-transition-group";
-import { IndividualPatientProfile, fetchAllCanvases } from "./PatientProfilePage";
+import {
+  IndividualPatientProfile,
+  fetchAllCanvases,
+} from "./PatientProfilePage";
 import { PatientFormInput } from "../../SubComponents/PatientProfile/PatientFormInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router";
 import { postData } from "./PatientProfilePage";
 import { canvasInit, textInit } from "../../../utils/utils";
 import { toast } from "react-toastify";
+import { MyToast } from "../../../utils/types";
+import { CanvasComp } from "../../SubComponents/CanvasComp";
 
 function reducer(
   state: PMH_State,
-  action: { type: string; fieldName?: string; value?: string; newState?: {[key: string]: string |boolean|number|null} }
+  action: {
+    type: string;
+    fieldName?: string;
+    value?: string;
+    newState?: { [key: string]: string | boolean | number | null };
+  }
 ): PMH_State {
   switch (action.type) {
     case "field":
@@ -31,53 +41,96 @@ function reducer(
 type PMH_State = {
   pastMedHist: string;
   pastMedHistCanvas?: string;
+  pastMedHistImage?: string;
   pastHospits: string;
   pastHospitsCanvas?: string;
+  pastHospitsImage?: string;
   medications: string;
   medicationsCanvas?: string;
+  medicationsImage?: string;
   allergies: string;
-  allergiesCanvas?: string; 
-}
+  allergiesCanvas?: string;
+  allergiesImage?: string;
+  chiefComplaintCanvas?: string;
+  chiefComplaintImage?: string;
+  HPICanvas?: string;
+  HPIImage?: string;
+};
 
 const initialState: PMH_State = {
   pastMedHist: "",
-  pastHospits: "", 
+  pastHospits: "",
   medications: "",
   allergies: "",
 };
 
-async function saveData(url: string, state: any) {
-  console.log(state)
+async function saveData(patientID: number, state: any, classID: number, templateId: number) {
+  console.log(state);
   allAttributes.medical_history = state.pastMedHist;
 
   if (state.pastMedHistCanvas !== undefined) {
-    allAttributes.medical_history_canvas = state.pastMedHistCanvas; 
+    allAttributes.medical_history_canvas = state.pastMedHistCanvas;
   }
-  
+
   allAttributes.hospital_history = state.pastHospits;
 
   if (state.pastHospitsCanvas !== undefined) {
-    allAttributes.hospital_history_canvas = state.pastHospitsCanvas; 
+    allAttributes.hospital_history_canvas = state.pastHospitsCanvas;
   }
-  
+
   allAttributes.medications = state.medications;
 
   if (state.medicationsCanvas !== undefined) {
-    allAttributes.medications_canvas = state.medicationsCanvas; 
+    allAttributes.medications_canvas = state.medicationsCanvas;
   }
-  
+
   allAttributes.allergies = state.allergies;
 
   if (state.allergiesCanvas !== undefined) {
-    allAttributes.allergies_canvas = state.allergiesCanvas; 
+    allAttributes.allergies_canvas = state.allergiesCanvas;
+  }
+
+  const canvasImages = [];
+  if (state.chiefComplaintImage !== undefined) {
+    canvasImages.push(state.chiefComplaintImage);
+  }
+
+  if (state.HPIImage !== undefined) {
+    canvasImages.push(state.HPIImage);
+  }
+
+  if (state.pastHospitsImage !== undefined) {
+    canvasImages.push(state.pastHospitsImage);
+  }
+
+  if (state.pastMedHistImage !== undefined) {
+    canvasImages.push(state.pastMedHistImage);
+  }
+
+  if (state.medicationsImage !== undefined) {
+    canvasImages.push(state.medicationsImage);
+  }
+
+  if (state.allergiesImage !== undefined) {
+    canvasImages.push(state.allergiesImage);
   }
   
-  const res = await postData(url, allAttributes)
-  return await res.message
+  allAttributes.class_id = classID;
+  const res = await postData("/api/patientprofile/" + patientID, allAttributes);
+  const msg = await res.message;
+
+  const isabelRes = await postData(
+    "/api/analysis/" + patientID,
+    canvasImages,
+    "POST"
+  );
+  console.log(isabelRes);
+  allAttributes.template_id = templateId;
+  allAttributes.class_id = classID;
+  return msg;
 }
 
 var allAttributes: any;
-
 
 export const PastMedicalHistoryPage: IndividualPatientProfile = ({
   pageName,
@@ -87,40 +140,52 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
   transitionName,
   isShowingSidebar,
   patientID,
-  defaultMode
+  defaultMode,
+  classID,
+  userType,
+  templateId,
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [lastState, setLastState] = useState(state);
 
-  const [showingPastMedHistCanvas, setShowingPastMedHistCanvas] = useState(true);
+  const [showingPastMedHistCanvas, setShowingPastMedHistCanvas] = useState(
+    true
+  );
   const [showingPastMedHistText, setShowingPastMedHistText] = useState(false);
 
-  const [showingPastHospitsCanvas, setShowingPastHospitsCanvas] = useState(true);
+  const [showingPastHospitsCanvas, setShowingPastHospitsCanvas] = useState(
+    true
+  );
   const [showingPastHospitsText, setShowingPastHospitsText] = useState(false);
 
-  const [showingMedicationsCanvas, setShowingMedicationsCanvas] = useState(true);
+  const [showingMedicationsCanvas, setShowingMedicationsCanvas] = useState(
+    true
+  );
   const [showingMedicationsText, setShowingMedicationsText] = useState(false);
 
   const [showingAllergiesCanvas, setShowingAllergiesCanvas] = useState(true);
   const [showingAllergiesText, setShowingAllergiesText] = useState(false);
-  
-  const { 
-    pastMedHist, 
-    pastMedHistCanvas, 
-    pastHospits, 
+
+  const {
+    pastMedHist,
+    pastMedHistCanvas,
+    pastHospits,
     pastHospitsCanvas,
-    medications, 
+    medications,
     medicationsCanvas,
     allergies,
-    allergiesCanvas
+    allergiesCanvas,
+    chiefComplaintCanvas,
+    HPICanvas,
   } = state;
 
-  const myToast: any = toast
+  const myToast: MyToast = toast as any;
 
   const history = useHistory();
   useEffect(() => {
     const canvasShow: boolean = canvasInit(defaultMode);
     const textShow: boolean = textInit(defaultMode);
-    
+
     setShowingPastMedHistCanvas(canvasShow);
     setShowingPastMedHistText(textShow);
     setShowingPastHospitsCanvas(canvasShow);
@@ -137,21 +202,21 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
       history.push(`/patient/${patientID}/pastmedical`);
 
       // Get request
-      const url = '/api/patientprofile/' + patientID;
+      const url = "/api/patientprofile/" + patientID;
       fetch(url)
-        .then((res) => {
-          return res.json()
+        .then(res => {
+          return res.json();
         })
         .then(jsonResult => {
           return fetchAllCanvases(jsonResult);
         })
-        .then((jsonResult) => {
-          console.log("Get PMH")
-          console.log(jsonResult)
+        .then(jsonResult => {
+          console.log("Get PMH");
+          console.log(jsonResult);
           allAttributes = jsonResult;
-          dispatch({ 
-            type: "many_fields", 
-            newState:{
+          dispatch({
+            type: "many_fields",
+            newState: {
               pastMedHist: jsonResult.medical_history,
               pastMedHistCanvas: jsonResult.medical_history_canvas,
               pastHospits: jsonResult.hospital_history,
@@ -160,15 +225,51 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
               medicationsCanvas: jsonResult.medications_canvas,
               allergies: jsonResult.allergies,
               allergiesCanvas: jsonResult.allergies_canvas,
-            }
+
+              HPICanvas: jsonResult.hpi_canvas,
+              chiefComplaintCanvas: jsonResult.complaint_convas,
+            },
           });
-
-        }).catch((error) => {
-          console.log("An error occured with fetch:", error)
+        })
+        .catch(error => {
+          console.log("An error occured with fetch:", error);
         });
-
     }
   }, [currentPage]);
+
+  useEffect(() => {
+    if (lastState === initialState) {
+      setLastState(state);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      if (
+        userType === "Student" &&
+        currentPage == pageName &&
+        state &&
+        state !== lastState
+      ) {
+        console.log(lastState);
+        console.log(state);
+
+        saveData(patientID, state, classID, templateId)
+          .then(data => {
+            console.log(data);
+            myToast.success("Autosaved.", {
+              autoClose: 1000,
+            });
+          })
+          .catch(err => {
+            myToast.warn("Autosave failed.");
+          });
+
+        setLastState(state);
+      }
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [state, lastState]);
 
   return (
     <>
@@ -179,7 +280,13 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
         onEnter={() => setCurrentPage(pageName)}
         classNames={transitionName}
       >
-        <div className={ isShowingSidebar ? "patient-profile-window" : "patient-profile-window width-100"}>
+        <div
+          className={
+            isShowingSidebar
+              ? "patient-profile-window"
+              : "patient-profile-window width-100"
+          }
+        >
           <div className="patient-profile-page-title">
             <h2>{pageName}</h2>
           </div>
@@ -251,23 +358,53 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
               canvasData={allergiesCanvas}
               isTextArea={true}
             />
+
+            <CanvasComp
+              id={"medications"}
+              dispatch={dispatch}
+              initialWidth={600}
+              initialHeight={600}
+              saveData={chiefComplaintCanvas}
+              hidden={true}
+            />
+
+            <CanvasComp
+              id={"allergies"}
+              dispatch={dispatch}
+              initialWidth={600}
+              initialHeight={600}
+              saveData={HPICanvas}
+              hidden={true}
+            />
           </div>
           <div className="form-whitespace">
             <div className="home-page-content-whitespace-logo"></div>
           </div>
-          <div className="patient-profile-nav-btns">
-            <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
-              // TODO : add POST request function here
-              saveData('/api/patientprofile/' + patientID, state).then((data) => {
-                console.log(data)
-                myToast.success('Information saved')
-              }).catch((err) => {
-                myToast.success('Information could not be saved')
-              })
-            }}>
-              <FontAwesomeIcon icon="save" size="2x" />
+          {userType === "Student" && (
+            <div className="patient-profile-nav-btns">
+              <div
+                className="nav-btn"
+                style={{
+                  right: "20px",
+                  top: "70px",
+                  position: "fixed",
+                  borderRadius: "5px",
+                }}
+                onClick={() => {
+                  saveData(patientID, state, classID, templateId)
+                    .then(data => {
+                      console.log(data);
+                      myToast.success("Information saved");
+                    })
+                    .catch(err => {
+                      myToast.success("Information could not be saved");
+                    });
+                }}
+              >
+                <FontAwesomeIcon icon="save" size="2x" />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </CSSTransition>
     </>

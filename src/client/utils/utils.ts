@@ -60,6 +60,16 @@ export function textInit(mode:inputMode):boolean{
   return mode === "Both" || mode === "Typing";
 }
 
+export function textToDownloadFile(text: string, fileName: string): void {
+  // Learned from: https://stackoverflow.com/questions/44656610/download-a-string-as-txt-file-in-react/44661948
+  const element = document.createElement("a");
+  const file = new Blob([text], {type: 'text/plain'});
+  element.href = URL.createObjectURL(file);
+  element.download = fileName;
+  document.body.appendChild(element);
+  element.click();
+}
+
 /**
  * Reorders a genericly typed list.
  * @param list The list to reorder

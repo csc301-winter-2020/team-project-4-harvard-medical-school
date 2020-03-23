@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { CSSTransition } from "react-transition-group";
-import { IndividualPatientProfile } from "./PatientProfilePage";
+import { IndividualPatientProfile, fetchAllCanvases, postData } from "./PatientProfilePage";
 import { useHistory } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../../../scss/patient-profiles/patient-profile-form.scss";
@@ -336,7 +336,7 @@ const nameMap: nameMap = {
   wheezing: "Wheezing",
   snoring: "Snoring",
   aponoea: "Aponoea",
-  chestPainCardiovascular: "ChestPain",
+  chestPainCardiovascular: "Chest Pain",
   chestPressure: "Chest Pressure",
   shortBreathRest: "Shortness Of Breath At Rest",
   shortBreathExertion: "Shortness Of Breath With Exertion",
@@ -420,8 +420,8 @@ const nameMap: nameMap = {
   rashes: "Rashes",
   growingSores: "Sores That Grow/Don't Heal",
   lesions: "Lesions Changing In Size, Shape, Colour",
-  itching: "Itching",
-};
+  itching: "Itching"
+}
 
 async function getPatientInfo(patientID: number) {
   const res = await fetch(`/api/patientprofile/${patientID}`, {
@@ -482,6 +482,25 @@ export const ReviewOfSystemsPage: IndividualPatientProfile = ({
       .catch(err => {
         myToast.error("Information could not be saved");
       });
+
+    getPatientInfo(patientID).then((data) => {
+      return fetchAllCanvases(data)
+    }).then((data) => {
+      const canvasImages = []
+
+      for(let canv in data){
+        if(data[canv] !== undefined){
+          canvasImages.push(data[canv])
+        }
+      }
+
+      return postData(`/api/patientprofile/${patientID}`, canvasImages, 'POST')
+    }).then((data) => {
+      console.log('POST to Isabel successful')
+    }).catch((err) => {
+      console.log('Could not POST to Isabel')
+      console.log(err)
+    })
   };
 
   useEffect(() => {

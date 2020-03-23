@@ -586,6 +586,7 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
         <div style={{ fontSize: "1.2rem", fontWeight: "bold" }}>
           Motor Exams
         </div>
+        <br></br>
         <table>
           <tbody>
             <tr>

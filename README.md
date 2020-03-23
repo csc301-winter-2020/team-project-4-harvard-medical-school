@@ -69,3 +69,4 @@ The client configuration will also build the Sass files found at `/src/client/sc
 git checkout dev
 git checkout -b <utorid-feature_name>
 ```
+ 

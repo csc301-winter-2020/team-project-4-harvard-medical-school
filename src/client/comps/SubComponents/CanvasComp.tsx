@@ -122,6 +122,7 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
 
   function loadCanvas() {
     try {
+      if (!saveData) return;
       const saveDataObj = JSON.parse(saveData);
 
       if (saveDataObj['lines'] != [] && 
@@ -132,7 +133,7 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
         return;
       }
 
-      if (loadSaveData && inputRef && saveData) {
+      if (loadSaveData && inputRef) {
         inputRef.loadSaveData(saveData, true);
         setLoadSaveData(false);
         sendCanvasImages();

@@ -150,6 +150,7 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
   const [isLoadingTemplate, setIsLoadingTemplate] = useState(true);
   const [templateId, setTemplateId] = useState<number>(null);
   const [helpEnabled, setHelpEnabled] = useState(null);
+  const [isabelOutputArr, setIsabelOutputArr] = useState([]);
   const [currentContentsPages, setCurrentContentsPages] = useState(
     contentsPages
   );
@@ -405,14 +406,23 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
         <div
           className="patient-profile-popup-outermost"
           onClick={(e: any) => {
-            if (e.className !== "patient-profile-popup-container") {
+            if (e.className !== "patient-profile-popup-container") {              
               setShowHelpPopup(false);
             }
           }}
         >
           <div className="patient-profile-popup-container">
-            <p>Help and Tips:</p>
-            <p>Have you considered the following options?</p>
+            <h3>Current Diagnosis Differentials:</h3>
+            <div> 
+            {isabelOutputArr.map((x:any) => {
+                const name = x['diagnosis_name'];
+                const weightage = x['weightage'];
+                return (
+                  <p>{name + ": " + weightage}</p>
+                );
+              })
+              }
+            </div>
             <div className="patient-profile-popup-close">Close</div>
           </div>
         </div>
@@ -489,6 +499,24 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
                   );
                 } else {
                   setShowHelpPopup(true);
+                  // GET for isabel analysis
+                  fetch(`/api/analysis/${thisPatientID}`)
+                  .then(response => {
+                    if (response.status === 200) {
+                      return response.json()
+                    } else {
+                      throw new Error("Response not 200.");
+                    }
+                  })
+                  .then((data:any) => {
+                    const isabelOutput = data['isbell_result']['diagnoses_checklist']['diagnoses'];
+                    console.log('isabel output set to:')
+                    console.log(isabelOutput);
+                    setIsabelOutputArr(isabelOutput);
+                  })
+                  .catch((err:any) => {
+                    console.log(err);
+                  })
                 }
               }}
             >

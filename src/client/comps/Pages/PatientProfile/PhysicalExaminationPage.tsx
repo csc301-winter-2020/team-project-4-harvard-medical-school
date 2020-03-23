@@ -180,6 +180,24 @@ initialPhysicalExaminationsState.vitals = {
   bmi: '' 
 }
 
+function get_is_showing_init(default_state: boolean): state{
+  const result = get_initial_state(default_state)
+  result.misc = {
+    others: default_state
+  }
+  return result
+}
+
+const initialTextState = get_initial_state('')
+initialTextState.misc = {
+  others: ''
+}
+
+const initialCanvasState = get_initial_state(undefined)
+initialCanvasState.misc = {
+  others: undefined
+}
+
 const nameMap: {[key:string]: string} = {
   // category names
   general: 'General',
@@ -411,11 +429,11 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
 
   const [tableState, tableDispatch] = useReducer(reducer, initialTableState)
 
-  const [isShowingCanvasState, canvasShowDispatch] = useReducer(inputShowingReducer, get_initial_state(false))
-  const [isShowingTextState, textShowDispatch] = useReducer(inputShowingReducer, get_initial_state(false))
+  const [isShowingCanvasState, canvasShowDispatch] = useReducer(inputShowingReducer, get_is_showing_init(false))
+  const [isShowingTextState, textShowDispatch] = useReducer(inputShowingReducer, get_is_showing_init(false))
   
-  const [textState, textStateDispatch] = useReducer(reducer, get_initial_state(''))
-  const [canvasState, canvasStateDispatch] = useReducer(reducer, get_initial_state(undefined))
+  const [textState, textStateDispatch] = useReducer(reducer, initialTextState)
+  const [canvasState, canvasStateDispatch] = useReducer(reducer, initialCanvasState)
 
   const myToast: any = toast
 
@@ -433,16 +451,6 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
       myToast.error('Information could not be saved')
     })
   }
-
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     if(currentPage === pageName){
-  //       postToDB(state, tableState, textState, canvasState)
-  //     }
-  //   }, 5000)
-
-  //   return () => clearTimeout(timer)
-  // }, [state, tableState, textState, canvasState])
 
   useEffect(() => {
     if (currentPage === pageName) {
@@ -496,13 +504,13 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
     canvasShowDispatch({
       category: '',
       condition_name: '',
-      state: get_initial_state(canvasInit(defaultMode))
+      state: get_is_showing_init(canvasInit(defaultMode))
     })
 
     textShowDispatch({
       category: '',
       condition_name: '',
-      state: get_initial_state(textInit(defaultMode))
+      state: get_is_showing_init(textInit(defaultMode))
     })
   }, [defaultMode])
 
@@ -767,6 +775,56 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
                 return renderChoices(state, category)
               })
             }
+            <h2>Other Information</h2>
+            <br></br>
+            <PatientFormInput
+              dispatch={(action: {
+                type: string
+                fieldName: string
+                value: string
+              }) => {
+                if(action.fieldName.endsWith('Canvas')){
+                  canvasStateDispatch({
+                    category: 'misc',
+                    condition_name: 'others',
+                    value: action.value,
+                    state: null
+                  })
+                }else{
+                  textStateDispatch({
+                    category: 'misc',
+                    condition_name: 'others',
+                    value: action.value,
+                    state: null
+                  })
+                }
+              }}
+              id={'misc_i'}
+              inputType={'text'}
+              inputVal={textState.misc.others}
+              placeholder={'Enter text here'}
+              title={'Specifics'}
+              isShowingCanvas={isShowingCanvasState.misc.others}
+              isShowingText={isShowingTextState.misc.others}
+              setIsShowingCanvas={() => {
+                canvasShowDispatch({
+                  category: 'misc',
+                  condition_name: 'others',
+                  state: null
+                })
+              }}
+              setIsShowingText={() => {
+                textShowDispatch({
+                  category: 'misc',
+                  condition_name: 'others',
+                  state: null
+                })
+              }}
+              canvasHeight={200}
+              canvasWidth={600}
+              canvasData={canvasState.misc.others}
+              isTextArea={true}
+            />
           </div>
           <div className="patient-profile-nav-btns">
             <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {

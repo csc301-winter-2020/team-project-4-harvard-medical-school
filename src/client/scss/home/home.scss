@@ -189,6 +189,11 @@ input:focus {
   grid-template-columns: 2fr 1fr 1fr;
 }
 
+#analysis-grid {
+  grid-template-columns: 1fr;
+  cursor: default;
+}
+
 .home-patient-profile-name-col {
   grid-column-start: 1;
   grid-column-end: 2;
@@ -567,4 +572,26 @@ input:focus {
 }
 .small-input-home:focus {
   border-color: $color-primary-light;
+}
+
+.analysis-extra-info-container{
+  margin-left: 10px;
+
+  .isabel-diagnosis-row{
+    display: grid;
+    grid-template-columns: 1fr 1fr 100px;
+
+    .isabel-diagnosis-row-name{
+      grid-column-start: 1;
+      grid-column-end: 2;
+    }
+    .isabel-diagnosis-row-spec{
+      grid-column-start: 2;
+      grid-column-end: 3;
+    }
+    .isabel-diagnosis-row-weight{
+      grid-column-start: 3;
+      grid-column-end: 4;
+    }
+  }
 }

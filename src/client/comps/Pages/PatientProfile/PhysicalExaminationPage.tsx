@@ -360,13 +360,13 @@ const initialTableState: state = {
     ehl_r: "",
   },
   deep_tendon_reflexes: {
-    bi_l: "",
-    tri_l: "",
+    bir_l: "",
+    trir_l: "",
     brach_l: "",
     pat_l: "",
     ach_l: "",
-    bi_r: "",
-    tri_r: "",
+    bir_r: "",
+    trir_r: "",
     brach_r: "",
     pat_r: "",
     ach_r: "",
@@ -405,8 +405,8 @@ const motor_r: string[] = [
   "ehl_r",
 ];
 
-const ref_l: string[] = ["bi_l", "tri_l", "brach_l", "pat_l", "ach_l"];
-const ref_r: string[] = ["bi_r", "bri_r", "brach_r", "pat_r", "ach_r"];
+const ref_l: string[] = ["bir_l", "trir_l", "brach_l", "pat_l", "ach_l"];
+const ref_r: string[] = ["bir_r", "trir_r", "brach_r", "pat_r", "ach_r"];
 
 function round0To5(n: string): string {
   if (n === "") {

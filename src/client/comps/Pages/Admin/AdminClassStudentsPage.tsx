@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { HelixLoader } from "../../SubComponents/HelixLoader";
 import { Class, MyToast } from "../../../utils/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { textToDownloadFile } from "../../../utils/utils"
 
 interface AdminProfilePageProps {
   classID: number;
@@ -38,38 +39,48 @@ export const AdminClassStudentsPage: React.FC<AdminProfilePageProps> = (
 
   const mToast: MyToast = toast as any;
 
-  
-async function patchClass(data:Class){
-  fetch(`/api/classes/${props.classID}`, {
-    method: "PATCH",
-    mode: "cors",
-    cache: "no-cache",
-    credentials: "same-origin",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    redirect: "follow",
-    referrerPolicy: "no-referrer",
-    body: JSON.stringify(data),
-  })
-    .then(response => {
-      if (response.status === 200) {
-        return response.json();
-      } else {
-        throw new Error(
-          "Could not find this class. Perhaps it was deleted?"
-        );
+  function startStudentTextDataDownload() {
+    const studentInfo = students.map(student => {
+      return {
+        id: student.id,
+        name: `${student.firstName} ${student.lastName}`
       }
+    });
+
+    textToDownloadFile(JSON.stringify(studentInfo, null, 2), 'student-data.txt');
+  }
+
+  async function patchClass(data:Class){
+    fetch(`/api/classes/${props.classID}`, {
+      method: "PATCH",
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      redirect: "follow",
+      referrerPolicy: "no-referrer",
+      body: JSON.stringify(data),
     })
-    .then((data: any) => {
-      console.log(data);
-      mToast.success("Successful update.");
-    })
-    .catch((err: any) => {
-      mToast.warn(err);
-    })
-    .finally();
-}
+      .then(response => {
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          throw new Error(
+            "Could not find this class. Perhaps it was deleted?"
+          );
+        }
+      })
+      .then((data: any) => {
+        console.log(data);
+        mToast.success("Successful update.");
+      })
+      .catch((err: any) => {
+        mToast.warn(err);
+      })
+      .finally();
+  }
 
   useEffect(() => {
     document.title = `Scribe`;
@@ -230,7 +241,7 @@ async function patchClass(data:Class){
       </div>
       <div
         className="home-page-create-new-patient-btn"
-        onClick={() => alert("TODO")}
+        onClick={startStudentTextDataDownload}
       >
         <p>Export Data</p>
       </div>

@@ -9,6 +9,7 @@ import { useHistory } from "react-router";
 import { HelixLoader } from "../SubComponents/HelixLoader";
 import { ToastContainer, toast } from "react-toastify";
 import { Class } from "../../utils/types";
+import { Template } from "./TemplatesPage";
 
 interface HomePageProps {
   classID: number;
@@ -121,6 +122,8 @@ export const HomePage: React.FC<HomePageProps> = ({ classID }) => {
   const [currentClass, setCurrentClass] = useState<Class>(null);
   const [instrFirstName, setInstrFirstName] = useState<string>(null);
   const [instrLastName, setInstrLastName] = useState<string>(null);
+  const [user, setUser] = useState(null);
+  const [templates, setTemplates] = useState(null);
 
   const history = useHistory();
 
@@ -143,6 +146,7 @@ export const HomePage: React.FC<HomePageProps> = ({ classID }) => {
         }
       })
       .then((data: any) => {
+        setUser(data);
         return fetch(`/api/studentHomepage/${data.id}`);
       })
       .then((res: any) => {
@@ -202,6 +206,36 @@ export const HomePage: React.FC<HomePageProps> = ({ classID }) => {
         history.push("/err/500/Please try again.");
       });
   }, []);
+
+  useEffect(() => {
+    if (user === null) {
+      console.log("null user.");
+    } else {
+      fetch(`/api/student/${user.id}/templates`)
+        .then((res: Response) => {
+          if (res.status === 200) {
+            return res.json();
+          } else {
+            throw new Error("Failed to fetch user templates.");
+          }
+        })
+        .then((data: any) => {
+          const newTemplates: Template[] = [];
+          data.forEach((t: any) => {
+            t.template = JSON.parse(t.template);
+            t.text = t.template_name;
+            t.key = t.template_id;
+            t.value = t.template_id;
+            newTemplates.push(t);
+          });
+          console.log(newTemplates);
+          setTemplates(newTemplates);
+        })
+        .catch((err: any) => {
+          console.log(err);
+        });
+    }
+  }, [user]);
 
   useEffect(() => {
     if (nameSort !== null) {
@@ -337,26 +371,25 @@ export const HomePage: React.FC<HomePageProps> = ({ classID }) => {
             </p>
           </div>
           <div className="home-page-content">
-            {patientsList
-              .map((p, index) => {
-                return (
-                  <HomePatientProfile
-                    key={index}
-                    isPortraitMode={windowWidth < 1080}
-                    firstName={p.firstName}
-                    lastName={p.lastName}
-                    date={p.date}
-                    lastModified={p.lastModified}
-                    sex={p.sex}
-                    age={p.age}
-                    country={p.country}
-                    isPregnant={p.isPregnant}
-                    patientID={p.patientID}
-                    isInstructorView={false}
-                    givenFinalDiagnosis={null}
-                  />
-                );
-              })}
+            {patientsList.map((p, index) => {
+              return (
+                <HomePatientProfile
+                  key={index}
+                  isPortraitMode={windowWidth < 1080}
+                  firstName={p.firstName}
+                  lastName={p.lastName}
+                  date={p.date}
+                  lastModified={p.lastModified}
+                  sex={p.sex}
+                  age={p.age}
+                  country={p.country}
+                  isPregnant={p.isPregnant}
+                  patientID={p.patientID}
+                  isInstructorView={false}
+                  givenFinalDiagnosis={null}
+                />
+              );
+            })}
             <div
               className="home-page-content-whitespace"
               style={{ height: max(window.innerHeight - 400, 0) }}
@@ -379,6 +412,8 @@ export const HomePage: React.FC<HomePageProps> = ({ classID }) => {
 
         {showNewPatientPopup && (
           <NewPatient
+            templates={templates}
+            user={user}
             history={history}
             setShowNewPatientPopup={setNewPatientPopup}
             classID={Number(classID)}

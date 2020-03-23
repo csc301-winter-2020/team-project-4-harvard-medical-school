@@ -52,7 +52,8 @@ export const AssessmentAndPlanPage: IndividualPatientProfile = ({
   patientID,
   defaultMode,
   classID,
-  userType
+  userType,
+  templateId,
 }) => {
 
   async function saveData(url: string, state: any) {
@@ -60,6 +61,7 @@ export const AssessmentAndPlanPage: IndividualPatientProfile = ({
     allAttributes.assessments = state.assessment;
     if (state.assessmentCanvas !== undefined) allAttributes.assessments_canvas = state.assessmentCanvas;
     allAttributes.class_id = classID;
+    allAttributes.template_id = templateId;
     const res = await postData(url, allAttributes);
     return await res.message
   }

@@ -83,6 +83,7 @@ export const LabResultsPage: IndividualPatientProfile = ({
   patientID,
   defaultMode,
   userType,
+  templateId,
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [lastState, setLastState] = useState(state);

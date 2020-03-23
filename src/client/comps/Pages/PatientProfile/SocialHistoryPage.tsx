@@ -87,7 +87,12 @@ const initialState: SocialHistState = {
   otherSubstances: "",
 };
 
-async function saveData(url: string, state: any, classID: number) {
+async function saveData(
+  url: string,
+  state: any,
+  classID: number,
+  templateId: number
+) {
   console.log(state);
   allAttributes.work = state.work;
   allAttributes.sexual_history = state.sexualHistory;
@@ -124,6 +129,7 @@ async function saveData(url: string, state: any, classID: number) {
     allAttributes.other_substances_canvas = state.otherSubstancesCanvas;
   }
   allAttributes.class_id = classID;
+  allAttributes.template_id = templateId;
   const res = await postData(url, allAttributes);
   return await res.message;
 }
@@ -141,6 +147,7 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
   defaultMode,
   classID,
   userType,
+  templateId,
 }) => {
   const history = useHistory();
   useEffect(() => {
@@ -293,11 +300,16 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
     }
 
     const timer = setTimeout(() => {
-      if (userType === "Student" && currentPage == pageName && state && state !== lastState) {
+      if (
+        userType === "Student" &&
+        currentPage == pageName &&
+        state &&
+        state !== lastState
+      ) {
         console.log(lastState);
         console.log(state);
 
-        saveData("/api/patientprofile/" + patientID, state, classID)
+        saveData("/api/patientprofile/" + patientID, state, classID, templateId)
           .then(data => {
             console.log(data);
             myToast.success("Autosaved.", {
@@ -529,7 +541,12 @@ export const SocialHistoryPage: IndividualPatientProfile = ({
                   borderRadius: "5px",
                 }}
                 onClick={() => {
-                  saveData("/api/patientprofile/" + patientID, state, classID)
+                  saveData(
+                    "/api/patientprofile/" + patientID,
+                    state,
+                    classID,
+                    templateId
+                  )
                     .then(data => {
                       console.log(data);
                       myToast.success("Information saved");

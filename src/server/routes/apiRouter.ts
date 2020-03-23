@@ -360,13 +360,13 @@ router.post(
             etoh_canvas, drinks_per_week_canvas, \
              last_time_smoked_canvas, \
             packs_per_day_canvas, other_substances_canvas, \
-             assessments_canvas, imaging_canvas, class_id \
+             assessments_canvas, imaging_canvas, class_id, template_id \
             ) VALUES (current_timestamp, $1, $2, $3, $4, $5, $6, $7, $8, $9\
                 ,$10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21,\
                 $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, \
                 $33, $34, $35, $36, $37, $38, $39, $40, $41, $42, $43, $44,\
-                $45, $46, $47, $48, $49, $50, $51, $52) RETURNING id;";
-        return pool.query(insert_query, [...params_arr, new_patient.class_id]);
+                $45, $46, $47, $48, $49, $50, $51, $52, $53) RETURNING id;";
+        return pool.query(insert_query, [...params_arr, new_patient.class_id, new_patient.template_id]);
       })
       .then((result: any) => {
         console.log(result);
@@ -388,6 +388,7 @@ router.patch(
     const profile_id: string = req.params.id;
     const new_patient: any = req.body;
     const class_id: string = new_patient.class_id;
+    const template_id: string = new_patient.template_id;
     const params_arr: any = [];
     params_arr.push(new_patient.student_id);
     params_arr.push(new_patient.first_name);
@@ -470,13 +471,13 @@ router.patch(
             etoh_canvas, drinks_per_week_canvas, \
              last_time_smoked_canvas, \
             packs_per_day_canvas, other_substances_canvas, \
-             assessments_canvas, imaging_canvas, id, class_id \
+             assessments_canvas, imaging_canvas, id, class_id, template_id \
             ) VALUES (current_timestamp, $1, $2, $3, $4, $5, $6, $7, $8, $9\
                 ,$10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21,\
                 $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, \
                 $33, $34, $35, $36, $37, $38, $39, $40, $41, $42, $43, $44,\
-                $45, $46, $47, $48, $49, $50, $51, $52, $53) RETURNING id;";
-        return pool.query(insert_query, [...params_arr, profile_id, class_id]);
+                $45, $46, $47, $48, $49, $50, $51, $52, $53, $54) RETURNING id;";
+        return pool.query(insert_query, [...params_arr, profile_id, class_id, template_id]);
       })
       .then((result: any) => {
         console.log(result);

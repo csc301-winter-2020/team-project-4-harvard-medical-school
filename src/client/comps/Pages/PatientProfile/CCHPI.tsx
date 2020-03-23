@@ -61,7 +61,7 @@ const initialState: CCHPI_State = {
   HPI: "",
 };
 
-async function saveData(patientID: number, state: any, classID: number) {
+async function saveData(patientID: number, state: any, classID: number, templateId: number) {
   console.log(state);
   allAttributes.complaint = state.chiefComplaint;
   if (state.chiefComplaintCanvas !== undefined) {
@@ -101,6 +101,7 @@ async function saveData(patientID: number, state: any, classID: number) {
   await postData("/api/analysis/" + patientID, canvasImages, "POST");
   // console.log(await (await fetch('/api/analysis/' + patientID)).json())
   allAttributes.class_id = classID;
+  allAttributes.template_id = templateId;
   console.log(allAttributes);
   const res = await postData("/api/patientprofile/" + patientID, allAttributes);
   return await res.message;
@@ -119,6 +120,7 @@ export const CCHPIPage: IndividualPatientProfile = ({
   defaultMode,
   classID,
   userType,
+  templateId,
 }) => {
   const history = useHistory();
 
@@ -207,7 +209,7 @@ export const CCHPIPage: IndividualPatientProfile = ({
         console.log(lastState);
         console.log(state);
 
-        saveData(patientID, state, classID)
+        saveData(patientID, state, classID, templateId)
           .then(data => {
             console.log(data);
             myToast.success("Autosaved.", {
@@ -335,7 +337,7 @@ export const CCHPIPage: IndividualPatientProfile = ({
                   borderRadius: "5px",
                 }}
                 onClick={() => {
-                  saveData(patientID, state, classID)
+                  saveData(patientID, state, classID, templateId)
                     .then(data => {
                       console.log(data);
                       myToast.success("Information saved");

@@ -101,6 +101,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
   setIsLoading,
   classID,
   userType,
+  templateId,
 }) => {
   const history = useHistory();
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -137,6 +138,7 @@ export const DemographicsPage: IndividualPatientProfile = ({
     if (state.countryCanvas !== undefined)
       allAttributes.country_residence_canvas = state.countryCanvas;
     allAttributes.class_id = classID;
+    allAttributes.template_id = templateId;
     console.log("ALL ATTRIBUTES");
     console.log(allAttributes);
     const res = await postData(url, allAttributes);

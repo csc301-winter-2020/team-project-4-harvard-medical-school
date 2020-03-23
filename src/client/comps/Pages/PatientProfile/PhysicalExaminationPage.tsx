@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import { IndividualPatientProfile } from "./PatientProfilePage";
 import { useHistory } from "react-router";
@@ -180,7 +180,25 @@ initialPhysicalExaminationsState.vitals = {
   bmi: "",
 };
 
-const nameMap: { [key: string]: string } = {
+function get_is_showing_init(default_state: boolean): state{
+  const result = get_initial_state(default_state)
+  result.misc = {
+    others: default_state
+  }
+  return result
+}
+
+const initialTextState = get_initial_state('')
+initialTextState.misc = {
+  others: ''
+}
+
+const initialCanvasState = get_initial_state(undefined)
+initialCanvasState.misc = {
+  others: undefined
+}
+
+const nameMap: {[key:string]: string} = {
   // category names
   general: "General",
   heent: "HEENT",
@@ -445,36 +463,44 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
   const [tableState, tableDispatch] = useReducer(reducer, initialTableState);
 
   const [isShowingCanvasState, canvasShowDispatch] = useReducer(
-    inputShowingReducer,
-    get_initial_state(false)
-  );
+    inputShowingReducer, 
+    get_is_showing_init(false)
+  )
   const [isShowingTextState, textShowDispatch] = useReducer(
-    inputShowingReducer,
-    get_initial_state(false)
-  );
-
-  const [textState, textStateDispatch] = useReducer(
-    reducer,
-    get_initial_state("")
-  );
+    inputShowingReducer, 
+    get_is_showing_init(false)
+  )
+  
+  const [textState, textStateDispatch] = useReducer(reducer, initialTextState)
+  const [canvasState, canvasStateDispatch] = useReducer(reducer, initialCanvasState)
 
   const myToast: any = toast;
 
-  const postToDB = (state: state, tableState: state, textState: state) => {
+  const postToDB = (state: state, tableState: state, textState: state, canvasState: state) => {
     postPhysicalExaminationsInfo(patientID, {
       state: state,
       tableState: tableState,
       textState: textState,
+      canvasState: canvasState
+    }).then(data => {
+      console.log(data);
+      myToast.success("Information saved");
     })
-      .then(data => {
-        console.log(data);
-        myToast.success("Information saved");
-      })
-      .catch(err => {
-        console.log(err);
-        myToast.error("Information could not be saved");
-      });
+    .catch(err => {
+      console.log(err);
+      myToast.error("Information could not be saved");
+    });
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if(currentPage === pageName){
+        postToDB(state, tableState, textState, canvasState)
+      }
+    }, 3000)
+
+    return () => clearTimeout(timer)
+  }, [state, tableState, textState, canvasState])
 
   useEffect(() => {
     if (currentPage === pageName) {
@@ -503,27 +529,35 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
             value: "",
             state: data.textState,
           });
-          console.log("data retrieved from the database successfully");
+          
+          canvasStateDispatch({
+            category: '',
+            condition_name: '',
+            value: '',
+            state: data.canvasState
+          })
+          console.log('data retrieved from the database successfully')
+        }).catch((err) => {
+        console.log('could not get Physical Examinations data from database')
         })
-        .catch(err => {
-          console.log("could not get Physical Examinations data from database");
-        });
-
-      canvasShowDispatch({
-        category: "",
-        condition_name: "",
-        state: get_initial_state(canvasInit(defaultMode)),
-      });
-
-      textShowDispatch({
-        category: "",
-        condition_name: "",
-        state: get_initial_state(textInit(defaultMode)),
-      });
     }
   }, [currentPage]);
 
-  function input0to5(table: string, entry: string) {
+  useEffect(() => {
+    canvasShowDispatch({
+      category: '',
+      condition_name: '',
+      state: get_is_showing_init(canvasInit(defaultMode))
+    })
+
+    textShowDispatch({
+      category: '',
+      condition_name: '',
+      state: get_is_showing_init(textInit(defaultMode))
+    })
+  }, [defaultMode])
+
+  function input0to5(table: string, entry: string){
     return (
       <input
         key={entry}
@@ -670,47 +704,59 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
                     <p>{nameMap[condition]}</p>
                   </label>
                 </div>
+                <div>
+                  {state[category][condition] === 'healthy' && (
+                    <PatientFormInput
+                      dispatch={(action: {
+                        type: string
+                        fieldName: string
+                        value: string
+                      }) => {
+                        if(action.fieldName.endsWith('Canvas')){
+                          canvasStateDispatch({
+                            category: category,
+                            condition_name: condition,
+                            value: action.value,
+                            state: null
+                          })
+                        }else{
+                          textStateDispatch({
+                            category: category,
+                            condition_name: condition,
+                            value: action.value,
+                            state: null
+                          })
+                        }
+                      }}
+                      id={condition+'_i'}
+                      inputType={'text'}
+                      inputVal={textState[category][condition]}
+                      placeholder={'Enter text here'}
+                      title={'Specifics'}
+                      isShowingCanvas={isShowingCanvasState[category][condition]}
+                      isShowingText={isShowingTextState[category][condition]}
+                      setIsShowingCanvas={() => {
+                        canvasShowDispatch({
+                          category: category,
+                          condition_name: condition,
+                          state: null
+                        })
+                      }}
+                      setIsShowingText={() => {
+                        textShowDispatch({
+                          category: category,
+                          condition_name: condition,
+                          state: null
+                        })
+                      }}
+                      canvasHeight={200}
+                      canvasWidth={600}
+                      canvasData={canvasState[category][condition]}
+                      isTextArea={true}
+                    />
+                  )}
+                </div>
               </div>
-              {state[category][condition] === "healthy" && (
-                <PatientFormInput
-                  dispatch={(action: {
-                    type: string;
-                    fieldName: string;
-                    value: string;
-                  }) => {
-                    textStateDispatch({
-                      category: category,
-                      condition_name: condition,
-                      value: action.value,
-                      state: null,
-                    });
-                  }}
-                  id={condition + "_i"}
-                  inputType={"text"}
-                  inputVal={textState[category][condition]}
-                  placeholder={"Enter text here"}
-                  title={"Specifics"}
-                  isShowingCanvas={isShowingCanvasState[category][condition]}
-                  isShowingText={isShowingTextState[category][condition]}
-                  setIsShowingCanvas={() => {
-                    canvasShowDispatch({
-                      category: category,
-                      condition_name: condition,
-                      state: null,
-                    });
-                  }}
-                  setIsShowingText={() => {
-                    textShowDispatch({
-                      category: category,
-                      condition_name: condition,
-                      state: null,
-                    });
-                  }}
-                  canvasHeight={200}
-                  canvasWidth={600}
-                  isTextArea={true}
-                />
-              )}
             </div>
           );
         })}
@@ -740,71 +786,107 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
             <h2>{pageName}</h2>
           </div>
           <div className="patient-profile-form-container">
-            <h2>Vitals</h2>
+            <h2>Vitals</h2><br></br>
+            <table><tbody>
+            {
+              Object.keys(state.vitals).map((condition: string) => {
+                return (
+                  <tr key={condition}>
+                    <td>
+                    <label style={{
+                      fontSize: '1.2rem',
+                      marginRight: '30px'
+                    }}>{nameMap[condition]}</label>
+                    </td>
+                    <td>
+                    <input
+                      className="form-input-short"
+                      placeholder={'Put value here'}
+                      value={state.vitals[condition]}
+                      type={'number'}
+                      name={condition}
+                      style={{
+                        display: 'inline-block'
+                      }}
+                      onChange={e => {
+                        dispatch({
+                          category: 'vitals',
+                          condition_name: condition,
+                          value: e.target.value,
+                          state: null
+                        })
+                      }}
+                    />
+                    </td>
+                  </tr>
+                )
+              })
+            }
+            </tbody></table><br></br>
+            {
+              simpleRenderCategories.map((category: string) => {
+                return renderChoices(state, category)
+              })
+            }
+            <h2>Other Information</h2>
             <br></br>
-            <table>
-              <tbody>
-                {Object.keys(state.vitals).map((condition: string) => {
-                  return (
-                    <tr key={condition}>
-                      <td>
-                        <label
-                          style={{
-                            fontSize: "1.2rem",
-                            marginRight: "30px",
-                          }}
-                        >
-                          {nameMap[condition]}
-                        </label>
-                      </td>
-                      <td>
-                        <input
-                          className="form-input-short"
-                          placeholder={"Put value here"}
-                          value={state.vitals[condition]}
-                          type={"number"}
-                          name={condition}
-                          style={{
-                            display: "inline-block",
-                          }}
-                          onChange={e => {
-                            dispatch({
-                              category: "vitals",
-                              condition_name: condition,
-                              value: e.target.value,
-                              state: null,
-                            });
-                          }}
-                        />
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-            <br></br>
-            {simpleRenderCategories.map((category: string) => {
-              return renderChoices(state, category);
-            })}
+            <PatientFormInput
+              dispatch={(action: {
+                type: string
+                fieldName: string
+                value: string
+              }) => {
+                if(action.fieldName.endsWith('Canvas')){
+                  canvasStateDispatch({
+                    category: 'misc',
+                    condition_name: 'others',
+                    value: action.value,
+                    state: null
+                  })
+                }else{
+                  textStateDispatch({
+                    category: 'misc',
+                    condition_name: 'others',
+                    value: action.value,
+                    state: null
+                  })
+                }
+              }}
+              id={'misc_i'}
+              inputType={'text'}
+              inputVal={textState.misc.others}
+              placeholder={'Enter text here'}
+              title={'Specifics'}
+              isShowingCanvas={isShowingCanvasState.misc.others}
+              isShowingText={isShowingTextState.misc.others}
+              setIsShowingCanvas={() => {
+                canvasShowDispatch({
+                  category: 'misc',
+                  condition_name: 'others',
+                  state: null
+                })
+              }}
+              setIsShowingText={() => {
+                textShowDispatch({
+                  category: 'misc',
+                  condition_name: 'others',
+                  state: null
+                })
+              }}
+              canvasHeight={200}
+              canvasWidth={600}
+              canvasData={canvasState.misc.others}
+              isTextArea={true}
+            />
           </div>
-          {userType === "Student" && (
-            <div className="patient-profile-nav-btns">
-              <div
-                className="nav-btn"
-                style={{
-                  right: "20px",
-                  top: "70px",
-                  position: "fixed",
-                  borderRadius: "5px",
-                }}
-                onClick={() => {
-                  postToDB(state, tableState, textState);
-                }}
-              >
-                <FontAwesomeIcon icon="save" size="2x" />
-              </div>
+          <div className="patient-profile-nav-btns">
+            <div className="nav-btn" style={{ right: "20px", top: "70px", position: "fixed", borderRadius: "5px" }} onClick={() => {
+              postToDB(state, tableState, textState, canvasState)
+            }}>
+              <FontAwesomeIcon icon="save" size="2x" />
             </div>
           )}
+          </div>
         </div>
       </CSSTransition>
     </>

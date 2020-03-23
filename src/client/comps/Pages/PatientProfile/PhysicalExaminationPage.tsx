@@ -433,6 +433,7 @@ export const PhysicalExaminationPage: IndividualPatientProfile = ({
   patientID,
   defaultMode,
   userType,
+  templateId,
 }) => {
   const history = useHistory();
 

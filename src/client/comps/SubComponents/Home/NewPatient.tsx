@@ -3,26 +3,28 @@ import { defaultPatientProfile } from "../../../utils/defaultPatientProfile";
 import "../../../scss/home/home";
 import { toast } from "react-toastify";
 import { MyToast } from "../../../utils/types";
+import { Template } from "../../Pages/TemplatesPage";
+import { Dropdown } from "semantic-ui-react";
 
 interface NewPatientProps {
   history?: any;
   setShowNewPatientPopup: React.Dispatch<React.SetStateAction<boolean>>;
+  templates: Template[];
+  user: any;
   classID: number;
-}
-
-interface NewPatientState {
-  firstName: string;
-  lastName: string;
 }
 
 export const NewPatient: React.FC<NewPatientProps> = ({
   history,
   setShowNewPatientPopup,
   classID,
+  templates,
+  user,
 }) => {
   const mToast:MyToast = toast as any;
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
   const newPatient = async () => {
     if (firstName === "" || lastName === ""){
       mToast.warn("One or more fields are missing!");
@@ -32,11 +34,10 @@ export const NewPatient: React.FC<NewPatientProps> = ({
     data["first_name"] = firstName;
     data["family_name"] = lastName;
     data["class_id"] = classID;
-    // data['age'] = age;
-    data["student_id"] = (await (await fetch(`/api/me`)).json()).id;
-    delete data["patient_id"];
-    // const data = { first_name: firstName, last_name: lastName };
-
+    data["student_id"] = user.id;
+    data["template_id"] = selectedTemplate;
+    data["patient_id"] = undefined;
+    console.log(data);
     const res = await fetch(`/api/patientprofile/`, {
       method: "POST",
       headers: {
@@ -84,6 +85,18 @@ export const NewPatient: React.FC<NewPatientProps> = ({
             onChange={(e: any) => {
               setLastName(e.target.value);
             }}
+          />
+        </div>
+        <div id="dropdown-container">
+          <Dropdown
+            placeholder="Select Template"
+            fluid
+            search
+            selection
+            onChange={(event: any, { value }: {value: any}) => {
+              setSelectedTemplate(value);
+            }}
+            options={templates}
           />
         </div>
         <div className="home-page-create-new-patient-btn-cntr">

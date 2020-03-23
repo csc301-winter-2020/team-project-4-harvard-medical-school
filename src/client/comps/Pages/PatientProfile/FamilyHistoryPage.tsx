@@ -59,6 +59,7 @@ export const FamilyHistoryPage: IndividualPatientProfile = ({
   defaultMode,
   classID,
   userType,
+  templateId,
 }) => {
   const history = useHistory();
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -73,6 +74,7 @@ export const FamilyHistoryPage: IndividualPatientProfile = ({
     console.log(state.familyHist);
     allAttributes.family_history = state.familyHist;
     allAttributes.family_history_canvas = state.familyHistCanvas;
+    allAttributes.template_id = templateId;
     allAttributes.class_id = classID;
     const res = await postData(url, allAttributes);
     return await res.message;

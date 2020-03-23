@@ -59,6 +59,7 @@ export const ImagingResultsPage: IndividualPatientProfile = ({
   defaultMode,
   classID,
   userType,
+  templateId,
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [lastState, setLastState] = useState(state);
@@ -82,6 +83,7 @@ export const ImagingResultsPage: IndividualPatientProfile = ({
     }
 
     allAttributes.class_id = classID;
+    allAttributes.template_id = templateId;
     console.log(allAttributes);
 
     const res = await postData(url, allAttributes);

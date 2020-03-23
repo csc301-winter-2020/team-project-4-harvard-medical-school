@@ -121,10 +121,25 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
   }
 
   function loadCanvas() {
-    if (loadSaveData && inputRef && saveData) {
-      inputRef.loadSaveData(saveData, true);
-      setLoadSaveData(false);
-      sendCanvasImages();
+    try {
+      const saveDataObj = JSON.parse(saveData);
+
+      if (saveDataObj['lines'] != [] && 
+          (saveDataObj['width'] != canvasWidth || 
+           saveDataObj['height'] != canvasHeight)) {
+        setCanvasWidth(saveDataObj['width']);
+        setCanvasHeight(saveDataObj['height']);
+        return;
+      }
+
+      if (loadSaveData && inputRef && saveData) {
+        inputRef.loadSaveData(saveData, true);
+        setLoadSaveData(false);
+        sendCanvasImages();
+      }
+    } catch (err) {
+      console.log(err);
+      return;
     }
   }
 
@@ -133,8 +148,12 @@ export const CanvasComp: React.FC<CanvasCompProps> = ({
       setTimeout(loadCanvas, 100);
     }
 
+    if (now() - lastDrag <= 20) {
+      return;
+    }
+
     loadAsync();
-  }, [inputRef, saveData]);
+  }, [inputRef, saveData, lastDrag, canvasWidth, canvasHeight]);
 
   useEffect(() => {
     const container = document.querySelector(".canvas-draw-resize-btn");

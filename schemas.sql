@@ -50,6 +50,18 @@ CREATE TABLE patients (
 
 CREATE TYPE SMOKING_TYPE AS ENUM('NEVER', 'EX', 'CURRENT');
 
+
+CREATE TABLE templates (
+    user_id INT REFERENCES users(id) NOT NULL,
+    template_id SERIAL PRIMARY KEY,
+    UNIQUE (user_id, template_id),
+    template_name TEXT NOT NULL,
+    date_millis BIGINT NOT NULL,
+    -- Gimmick, backend does not need to understand what is in the
+    -- template, just store as a plain text
+    template TEXT NOT NULL
+);
+
 CREATE TABLE patient_profile (
     id SERIAL,
     last_modified TIMESTAMP,
@@ -112,6 +124,7 @@ CREATE TABLE patient_profile (
     imaging_canvas TEXT,
     final_diagnosis TEXT,
     class_id INT REFERENCES class(id),
+    template_id INT REFERENCES templates(template_id),
     PRIMARY KEY (id, last_modified)
 );
 
@@ -267,20 +280,6 @@ INSERT INTO
 VALUES
     ('CSC343 WINTER 2020', 3, false);
 
-
-CREATE TABLE templates (
-    user_id INT REFERENCES users(id) NOT NULL,
-    template_id SERIAL PRIMARY KEY,
-    UNIQUE (user_id, template_id),
-    template_name TEXT NOT NULL,
-    date_millis BIGINT NOT NULL,
-    -- Gimmick, backend does not need to understand what is in the
-    -- template, just store as a plain text
-    template TEXT NOT NULL
-);
-
--- INSERT INTO templates (user_id, template_id, template_name, date_millis, template)
--- VALUES (1, 1, 'mynew template', 12345, 'ddddddd');
 CREATE TABLE review_of_systems (
     id SERIAL PRIMARY KEY,
     patient_id INT,

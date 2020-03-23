@@ -461,6 +461,7 @@ export const ReviewOfSystemsPage: IndividualPatientProfile = ({
   isShowingSidebar,
   patientID,
   userType,
+  templateId,
 }) => {
   // state which keeps track of all input fields
   const [state, dispatch] = useReducer(reducer, initialState);

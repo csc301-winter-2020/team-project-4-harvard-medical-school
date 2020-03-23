@@ -55,20 +55,24 @@ export const AdminAnalysisRow: React.FC<AdminAnalysisRowProps> = ({
             <p className="isabel-diagnosis-row-spec">Specialty</p>
             <p className="isabel-diagnosis-row-weight">Weightage</p>
           </div>
-          {isabel_result.diagnoses_checklist.diagnoses.map(
-            (d, index: number) => {
-              return (
-                <div className="isabel-diagnosis-row" key={index}>
-                  <p className="isabel-diagnosis-row-name">
-                    {d.diagnosis_name}
-                  </p>
-                  <p className="isabel-diagnosis-row-spec">
-                    {toTitleCase(d.specialty)}
-                  </p>
-                  <p className="isabel-diagnosis-row-weight">{d.weightage}</p>
-                </div>
-              );
-            }
+          {isabel_result.diagnoses_checklist.diagnoses === undefined ? (
+            <p>There is no analysis for this time.</p>
+          ) : (
+            isabel_result.diagnoses_checklist.diagnoses.map(
+              (d, index: number) => {
+                return (
+                  <div className="isabel-diagnosis-row" key={index}>
+                    <p className="isabel-diagnosis-row-name">
+                      {d.diagnosis_name}
+                    </p>
+                    <p className="isabel-diagnosis-row-spec">
+                      {toTitleCase(d.specialty)}
+                    </p>
+                    <p className="isabel-diagnosis-row-weight">{d.weightage}</p>
+                  </div>
+                );
+              }
+            )
           )}
         </div>
       )}

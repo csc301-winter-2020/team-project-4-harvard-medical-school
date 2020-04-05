@@ -1,3 +1,9 @@
+/**
+ * This file represents the single page React App. Essentially it is just a 
+ * BrowserRouter that switches between different pages.
+ */
+
+
 import React from "react";
 import { render } from "react-dom";
 import "./scss/app";
@@ -49,6 +55,8 @@ import { UserProfile } from "./comps/Pages/UserProfile";
 import { HomePage } from "./comps/Pages/StudentHomePage";
 import { AdminAnalysisPage } from "./comps/Pages/Admin/AdminAnalysisPage";
 
+
+// Add relevant FontAwesome Icons to our library for use in the app.
 const myLibrary: any = library;
 myLibrary.add(
   fab,

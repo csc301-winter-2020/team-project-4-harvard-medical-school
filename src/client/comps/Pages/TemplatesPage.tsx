@@ -1,9 +1,12 @@
+/**
+ * This is the page where the user can select between different templates
+ * or create a new one.
+ */
+
 import React, { useState, useEffect } from "react";
 import { Header } from "../SubComponents/Header";
-import { Questions } from "../SubComponents/Templates/Questions";
 import "../../scss/templates/templates";
 import { contentType } from "../../utils/types";
-import { dummyTemplates } from "../../utils/dummyTemplates";
 import { TemplateRow } from "../SubComponents/Templates/TemplateRow";
 import { max } from "../../utils/utils";
 import { useHistory } from "react-router";

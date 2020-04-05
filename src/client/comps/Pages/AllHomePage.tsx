@@ -1,6 +1,11 @@
+/**
+ * This is the 'home' page. Every user sees this page. All it does is determine
+ * which type the logged in user is, and displays the corresponding home page
+ * for that appropriate user type.
+ */
+
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
-import { HomePage } from "./StudentHomePage";
 import { AdminPage } from "./Admin/AdminPage";
 import { InstructorPage } from "./Instructor/InstructorPage";
 import { HelixLoader } from "../SubComponents/HelixLoader";

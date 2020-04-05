@@ -1,3 +1,11 @@
+/**
+ * This is a page that shows an error. You can access it through /err/num/msg 
+ * and the error will display the corresponding error number and message.
+ * 
+ * You can also just go to any page that doesnt exist and itll show the default
+ * 404 error.
+ */
+
 import React from "react";
 import { useHistory, RouteComponentProps } from "react-router";
 

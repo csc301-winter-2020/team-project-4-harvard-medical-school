@@ -1,6 +1,9 @@
+/**
+ * This page just shows information about a user, similar to the settings page,
+ * but you cant edit stuff.
+ */
+
 import React, { useEffect, useState } from "react";
-import { User } from "../../../server/server";
-import { MyToast } from "../../utils/types";
 import { ToastContainer, toast } from "react-toastify";
 import { Header } from "../SubComponents/Header";
 import { HelixLoader } from "../SubComponents/HelixLoader";

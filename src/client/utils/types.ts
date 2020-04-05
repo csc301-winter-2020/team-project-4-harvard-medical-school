@@ -1,3 +1,7 @@
+/**
+ * Some types that are commonly used throughout the project.
+ */
+
 export type contentType =
   | "Demographics"
   | "Chief Complaint & History of Present Illness"

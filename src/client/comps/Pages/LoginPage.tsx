@@ -1,11 +1,13 @@
+/**
+ * This is the log in page that you first see when opening the site.
+ */
+
 import React, { useReducer, Fragment, useEffect } from "react";
 import "../../scss/login/login";
 import "../../scss/login/inputboxes";
 import { ScribeSVG } from "../SubComponents/ScribeSVG";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ToastContainer, toast } from "react-toastify";
 import "!style-loader!css-loader!react-toastify/dist/ReactToastify.css";
-import { Footer } from "../SubComponents/Footer";
 import { LoginForm } from "../SubComponents/Login/LoginForm";
 
 const createToast: any = toast;
@@ -136,7 +138,6 @@ export const LoginPage: React.FC = () => {
         </div>
         <ToastContainer position={toast.POSITION.BOTTOM_RIGHT} />
       </div>
-      {!isPortraitMode && <Footer />}
     </Fragment>
   );
 };

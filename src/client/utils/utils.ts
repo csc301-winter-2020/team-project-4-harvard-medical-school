@@ -1,3 +1,7 @@
+/**
+ * Utility functions used throughout the app.
+ */
+
 import { contentType, Class, userData } from "./types";
 import _ from "underscore";
 

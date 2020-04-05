@@ -1,10 +1,13 @@
+/**
+ * These are the API routes for literally everything not related to users logging in our out.
+ */
+
 import * as express from "express";
 const { checkAuthenticated, checkGuest } = require("../auth/authCheck");
 const vision: any = require("@google-cloud/vision");
 const vision_client = new vision.ImageAnnotatorClient();
 const https: any = require("axios");
 import * as dotenv from "dotenv";
-// @ts-ignore
 import bodyParser = require("body-parser");
 import { text } from "@fortawesome/fontawesome-svg-core";
 dotenv.config();
@@ -68,6 +71,10 @@ router.get(
   }
 );
 
+/**
+ * Update the params 'default_mode' and 'default_sidebar' for a user, which are 
+ * set in the user settings page.
+ */
 router.post(
   "/api/updateUser/:userId",
   (req: Request, res: Response, next: NextFunction) => {
@@ -575,6 +582,9 @@ router.patch(
   }
 );
 
+/**
+ * Deletes a template for a given user.
+ */
 router.delete(
   "/api/student/:userId/templates/:templateId",
   (req: Request, res: Response) => {
@@ -596,6 +606,9 @@ router.delete(
   }
 );
 
+/**
+ * Creates a new template for a user.
+ */
 router.post(
   "/api/student/:userId/templates/new",
   (req: Request, res: Response, next: NextFunction) => {

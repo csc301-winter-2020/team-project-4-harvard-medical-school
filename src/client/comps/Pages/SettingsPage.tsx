@@ -1,3 +1,9 @@
+/**
+ * This is the page that users get to when they click on the menu in the header
+ * and then click settings. Its the one with the picture and the radio buttons
+ * to change the user preferences like sidebar and text/canvas default mode.
+ */
+
 import React, { useState, useEffect } from "react";
 import { Header } from "../SubComponents/Header";
 import "../../scss/settings/settings.scss";

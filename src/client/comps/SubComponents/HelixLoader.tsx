@@ -1,3 +1,7 @@
+/**
+ * This is the loading animation that you see when a page loads.
+ */
+
 import React from "react";
 import "../../scss/helixloader";
 

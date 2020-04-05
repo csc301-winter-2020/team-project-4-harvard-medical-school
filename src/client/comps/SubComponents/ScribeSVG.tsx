@@ -1,3 +1,7 @@
+/**
+ * This is the fancy animated logo in the log in page.
+ */
+
 import React from "react";
 import "../../scss/login/scribelogo";
 

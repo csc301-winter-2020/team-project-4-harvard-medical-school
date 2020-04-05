@@ -1,10 +1,15 @@
+/**
+ * Helper middleware functions that are used to determine if users should be
+ * able to access certain routes.
+ */
+
 import * as express from 'express';
 type Request = express.Request;
 type Response = express.Response;
 type NextFunction = express.NextFunction;
 
 /**
- * Checks if the user is currently logged in. If not, send them to the '/' page.
+ * Checks if the user is currently logged in. If not, send them 403.
  */
 function checkAuthenticated(req: Request, res: Response, next:NextFunction){
   if (req.isAuthenticated()){

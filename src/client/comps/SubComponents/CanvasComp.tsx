@@ -1,3 +1,8 @@
+/**
+ * This represents a canvas and its
+ * behaviours, including the buttons associated with it.
+ */
+
 import React, { useState, useEffect } from "react";
 import CanvasDraw from "react-canvas-draw";
 import "../../scss/canvas-draw.scss";

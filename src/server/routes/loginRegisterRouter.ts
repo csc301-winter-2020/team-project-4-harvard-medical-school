@@ -1,3 +1,8 @@
+/**
+ * These API routes are used for anything that has to do with user accounts.
+ * Logging in, out, registration, modifying a user.
+ */
+
 import * as express from "express";
 import { Router, Request, Response, NextFunction } from "express";
 import * as passport from "passport";
@@ -13,7 +18,6 @@ const { checkAuthenticated, checkGuest } = require("../auth/authCheck");
 
 /**
  * Route to accept login POST requests.
- * TODO: Redirect to home on success, send a HTTP error code on failure, instead of redirect again to root.
  */
 router.post(
   "/login",
@@ -25,7 +29,7 @@ router.post(
 );
 
 /**
- * TODO: Register a user
+ * Registers a user.
  */
 router.post("/register", (req: Request, res: Response, next: NextFunction) => {
   const body: any = req.body;
@@ -89,7 +93,7 @@ router.get("/api/users/all", (req: Request, res: Response) => {
 });
 
 /**
- * TODO: Update user in the user table.
+ * Update user in the user table.
  */
 router.patch(
   "/me",

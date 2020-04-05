@@ -1,5 +1,10 @@
+/**
+ * Functions for passport initialization. Passport is the module we are using
+ * for logging in and out and stuff.
+ */
+
+
 const LocalStrategy = require("passport-local").Strategy;
-const bcrypt = require("bcryptjs");
 import * as passport from "passport";
 import { User } from "../server";
 
@@ -8,7 +13,7 @@ const { Pool, Client } = require("pg");
 const pool: any = new Pool();
 
 /**
- * TODO: Change from dummy data to PSQL query.
+ * Finds a user with a given username.
  * @param username The username of the user we are trying to find
  */
 function getUserByUsername(username: string) {
@@ -27,18 +32,10 @@ function getUserByUsername(username: string) {
         }
       });
   });
-
-  // IF there is not exactly one user with this username (because there are 0 users with this username)
-  // if (usersWithThisUsername.length !== 1){
-  //   return null;
-  // } else {
-  //   return usersWithThisUsername[0];
-  // }
 }
-// getUserByUsername('will');
 
 /**
- * * 
+ * * Finds a user based on an id.
  * @param id The id of the user we are trying to find.
  */
 function getUserById(id: number) {

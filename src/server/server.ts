@@ -1,3 +1,7 @@
+/**
+ * This file represents an express server which listens on port 3000.
+ */
+
 // Require our dependencies.
 import { Application, Response, Request } from "express";
 import * as path from "path";
@@ -12,7 +16,6 @@ const { Pool, Client } = require("pg");
 const vision = require("@google-cloud/vision");
 const aws = require("aws-sdk");
 import * as fs from "fs";
-// import Any = jasmine.Any;
 dotenv.config();
 
 //Locale Database Connection
@@ -25,55 +28,6 @@ const client = new Client({
 })
 client.connect()
 
-// Database Connection
-// const pool: Pool = new Pool();
-// pool.query('SELECT NOW()').then((res, err) => {
-//     console.log(res, err);
-//     pool.end();
-// });
-
-// Google Cloud vision API example usage
-const vision_client: any = new vision.ImageAnnotatorClient();
-const fileName: string = "/Users/will/Downloads/20200208_173237.jpg";
-// vision_client.documentTextDetection(fileName).then((result) => {
-//     console.log(result);
-// }).catch((err: Error) => {
-//     console.log(err);
-// });
-
-// AWS S3 Object Storage Examples
-// const s3 = new aws.S3();
-// aws.config.update({accessKeyId: process.env.AWSID, secretAccessKey: process.env.AWSKEY});
-
-// const myBucket: string = 'csc301';
-// const myKey: string = '20200208_173237.jpg';
-// const signedUrlExpireSeconds: number = 100;
-
-// // This limit the time the url is valid
-// const url: string = s3.getSignedUrl('getObject', {
-//     Bucket: myBucket,
-//     Key: myKey,
-//     Expires: signedUrlExpireSeconds
-// });
-
-// console.log(url);
-
-// Replace your file name here
-// const uploadFilename: string = "/Users/will/Desktop/737474.png";
-// // Upload File
-// fs.readFile(uploadFilename, (err, data) => {
-//     if (err) throw err;
-//     const params = {
-//         Bucket: 'csc301', // pass your bucket name
-//         Key: 'examplePhoto', // file will be saved as testBucket/contacts.csv
-//         Body: JSON.stringify(data, null, 2)
-//     };
-//     s3.upload(params, function(s3Err, data) {
-//         if (s3Err) throw s3Err;
-//         console.log(`File uploaded successfully at ${data.Location}`)
-//     });
-// });
-
 export interface User extends Express.User {
   id: number;
   username: string;
@@ -85,7 +39,7 @@ export interface User extends Express.User {
 // Create our express app
 const app: Application = express();
 
-//Passport Authentication
+//Passport Authentication, for login/logout and permissions.
 const initializePassport = require("./auth/passport-config");
 initializePassport(passport);
 
@@ -115,14 +69,18 @@ app.use(apiRouter);
 app.use(loginRegisterRouter);
 
 // Setup default routes for the server.
+
+// These routes require the user to be logged in to access.
 app.get(["/home", "/settings", "/templates", "/patient/*", "/template/*"], checkAuthenticated, (req, res) => {
   res.sendFile(path.resolve(__dirname + "/../public/index.html"));
 });
 
+// This route requires the user to be an instructor.
 app.get("/instructor/*", checkAuthenticated, checkInstructor, (req, res) => {
   res.sendFile(path.resolve(__dirname + "/../public/index.html"));
 });
 
+//This route requires the user to be an admin.
 app.get("/admin/*", checkAuthenticated, checkAdmin, (req, res) => {
   res.sendFile(path.resolve(__dirname + "/../public/index.html"));
 });

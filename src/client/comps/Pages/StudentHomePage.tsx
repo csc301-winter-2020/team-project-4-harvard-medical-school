@@ -1,3 +1,9 @@
+/**
+ * This is the page a student sees where they are able to select between
+ * the different patient profiles. The ones with the little red 'i' icon
+ * that pulls up extra info about the patient.
+ */
+
 import React, { Fragment, useState, useReducer, useEffect } from "react";
 import "../../scss/home/home";
 import { Header } from "../SubComponents/Header";

@@ -2,18 +2,35 @@
 
 # Getting Started
 
+This is a guide to running this project on your local host. Run the following to get started.
+
 ```bash
+git clone https://github.com/csc301-winter-2020/team-project-4-harvard-medical-school.git
+cd team-project-4-harvard-medical-school
 npm install
 touch .env
-npm run dev
+touch gcp_credential.json
 ```
 
-Server will start on port 3000. Ensure that any environment variables `process.env.X` where X is your variable are added to the .env file you created.
+You will need to paste the contents of the supplied `.env` file into the created `.env` file. Same goes for the `gcp_credential.json` file. 
 
-Deployment to heroku made easy with the `npm run build` script which runs automatically transpiles all files when you push to heroku.
+Look through the `.env` file, it is very likely you will have to change the database credentials to work on your own database. This project uses PostgreSQL. The `GOOGLE_APPLICATION_CREDENTIALS` is an absolute path that you will definitely have to change.
+
+Once these configuration files are filled out, you may type `npm run dev` to start the application. Doing so will build the project and attempt to start the development server on your local host simulataneously. Your other option is to run `npm run build` to build the app and then `npm run start` to start the app. This will not run webpack in watch mode, meaning that changes to files will not cause the Typescript compiler to recompile the project, which would be the case if you were to use `npm run dev`.
+
+This project is written in TypeScript and compiled into JavaScript during the build process. To be clear, the application is looking for the files `server.js` in the `/dist` folder and `app.js` in the `/public/js` folder. If they aren't there, nothing will run. That is where the typescript compiler and webpack come in, they compile all the front-end `*.tsx` files into one `app.js` file. These files are found in the `/src/client` folder. In a similar fashion, all the back-end `*.ts` files are compiled into a single `server.js` file, and these files can be found in the `/src/server` folder.
+
+Server will start on port 3000. If you ran `npm run dev`, then it is likely the first time that the server will fail since it is looking for files that have not yet compiled (`server.js` and `app.js`). The first time running the command, it will take some time to compile all the files (there are a lot). After this, any changes you make to a file will cause the Typescript compiler to re-compile the project on file save. This process can be very quick or take a good number of seconds depending on the speed of your computer.
 
 # Deployment
-Heroku will automatically deploy the app when you push to the master branch. 
+
+Heroku will automatically deploy the app to `https://csc301-scribe.herokuapp.com/` when you push to the master branch (on our private github repo). If you wish to deploy this to another Heroku app, then you can setup automatic deployment via Heroku or you can login via Heroku CLI and `git push heroku master` to deploy the project.
+
+Do note that since the `.env` and `gcp_credential.json` are `.gitignore`'d that they will not be visible to Heroku on the build. You will have to manually set these in `Heroku > Settings > Config Vars > Reveal Config Vars` and set them appropriately as they are set in the `.env` file. What we did was just copy over all the values from the `.env` file into the values section for each respective key. The `GOOGLE_CREDENTIALS` section is just JSON data.
+
+![](imgs/heroku_env_vars.png)
+
+Relevant values have been removed from the above picture.
 
 # Database & Google Vision
 Database connection has been set up. The following environmental variable must be defined in `.env` 
@@ -35,6 +52,8 @@ path to a json file that stored the credential. The credential file will be post
 
 # Connecting to the Database by Database Client (Windows)
 
+This section is for accessing the project's database using a client, for example if you wished to run queries on our database to view the data.
+
 1. Download [HeidiSQL](https://www.heidisql.com/download.php) or your choice of client.
 2. Then click new session in bottom left
 3. Network type: postgreSQL tcp/ip
@@ -55,18 +74,3 @@ AWS S3 requires yet two more environmental variables.
 `AWSKEY`: This is the key of the corresponding ID.
 
 Please see Slack Channel @private for the values.
-
-# Server
-The server build process compiles the TypeScript files found in `/src/server` into a single bundled JavaScript file located in the `/dist` directory.
-
-# Client
-The client build process compiles the React app located in `/src/client` into a bundled located at `/public/js/app.js`.
-
-The client configuration will also build the Sass files found at `/src/client/scss`.
-
-# Development Workflow
-```
-git checkout dev
-git checkout -b <utorid-feature_name>
-```
- 

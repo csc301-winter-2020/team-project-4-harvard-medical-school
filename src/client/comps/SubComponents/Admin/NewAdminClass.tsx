@@ -1,3 +1,8 @@
+/**
+ * This is the popup that allows an admin the ability to create a new class.
+ */
+
+
 import React, { useState, useEffect } from "react";
 import "../../../scss/home/home";
 import { toast } from "react-toastify";

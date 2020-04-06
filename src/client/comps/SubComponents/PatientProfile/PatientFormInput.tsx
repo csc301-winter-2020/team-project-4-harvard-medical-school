@@ -1,3 +1,9 @@
+/**
+ * This component represents both a canvas and a text field for use in an 
+ * individual patient profile page. The canvas and text are toggled visible using
+ * the CanvasTextToogleButtons.
+ */
+
 import React from "react";
 import { CanvasTextToggleButtons } from "./CanvasTextToggleButtons";
 import { CanvasComp } from "../CanvasComp";

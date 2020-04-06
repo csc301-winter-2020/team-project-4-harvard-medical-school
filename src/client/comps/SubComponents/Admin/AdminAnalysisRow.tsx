@@ -1,3 +1,8 @@
+/**
+ * A single row in the admin's analysis page. Includes the rows of 
+ * possible diagnosises that isabel suggests.
+ */
+
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {

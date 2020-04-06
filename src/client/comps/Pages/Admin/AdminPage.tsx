@@ -1,3 +1,7 @@
+/**
+ * This is the page which lets the admin view the different classes.
+ */
+
 import React, { useState, useEffect } from "react";
 import "../../../scss/admin/admin-page.scss";
 import { Header } from "../../SubComponents/Header";
@@ -5,7 +9,6 @@ import { max } from "../../../utils/utils";
 import { ClassRow } from "../../SubComponents/Admin/ClassRow";
 import { ToastContainer, toast } from "react-toastify";
 import { NewAdminClass } from "../../SubComponents/Admin/NewAdminClass";
-import { useHistory } from "react-router";
 import { HelixLoader } from "../../SubComponents/HelixLoader";
 
 interface AdminPageProps {}

@@ -1,3 +1,8 @@
+/**
+ * This view shows an admin what students are in the current class that was 
+ * selected.
+ */
+
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../../../scss/admin/admin-page.scss";

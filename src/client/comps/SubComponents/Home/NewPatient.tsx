@@ -1,3 +1,7 @@
+/**
+ * This popup lets a student create a new patient profile.
+ */
+
 import React, { useState } from "react";
 import { defaultPatientProfile } from "../../../utils/defaultPatientProfile";
 import "../../../scss/home/home";

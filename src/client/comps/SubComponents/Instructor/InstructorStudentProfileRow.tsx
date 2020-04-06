@@ -1,3 +1,8 @@
+/**
+ * A row that represents a student, including their name and picture.
+ * Viewable in the student select list view for the instructor.
+ */
+
 import React from "react";
 import "../../../scss/instructor/instructor-student-patient-encounter";
 import { useHistory } from "react-router";

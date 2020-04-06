@@ -1,3 +1,8 @@
+/**
+ * This page is the first page students see when the log in, where they select
+ * which class they want to enter.
+ */
+
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { Header } from "../../SubComponents/Header";

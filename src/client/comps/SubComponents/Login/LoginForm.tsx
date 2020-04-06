@@ -1,3 +1,8 @@
+/**
+ * This is the form for both logging in and registration, seen on the right
+ * side of the screen in the login page.
+ */
+
 import React, { Fragment, useEffect } from "react";
 import { FormGroup } from "./FormGroup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

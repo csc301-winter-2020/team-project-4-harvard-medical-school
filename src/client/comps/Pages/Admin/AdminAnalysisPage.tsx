@@ -1,3 +1,8 @@
+/**
+ * This is the page that lets admins view the different isabel outputs for
+ * the different times that the user took the note at.
+ */
+
 import React, { useState, useEffect } from "react";
 import { Header } from "../../SubComponents/Header";
 import { ToastContainer, toast } from "react-toastify";

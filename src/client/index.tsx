@@ -21,7 +21,6 @@ import { Error } from "./comps/Pages/Errors/Error";
 import { AdminClassStudentsPage } from "./comps/Pages/Admin/AdminClassStudentsPage";
 import { InstructorStudentsPage } from "./comps/Pages/Instructor/InstructorStudentsPage";
 import { InstructorStudentProfilePage } from "./comps/Pages/Instructor/InstructorStudentProfilePage";
-import { InstructorStudentPatientPage } from "./comps/Pages/Instructor/InstructorStudentPatientPage";
 import {
   faCheckSquare,
   faCoffee,
@@ -175,18 +174,7 @@ const browserRouter: JSX.Element = (
           />
         )}
       />
-      <Route
-        exact
-        path="/instructor/:cid/student/:sid/patient/:pid"
-        render={props => (
-          <InstructorStudentPatientPage
-            {...props}
-            classID={props.match.params.cid}
-            studentID={props.match.params.sid}
-            patientID={props.match.params.pid}
-          />
-        )}
-      />
+
       <Route
         exact
         path="/profile/:id"

@@ -1,3 +1,9 @@
+/**
+ * This is the page in which an instructor can view all the different
+ * patient profiles that a student has created, and edit the final diagnosis
+ * for a patient profile. Its the list view with the red 'i' button on the right.
+ */
+
 import React, { useState, useEffect } from "react";
 import "../../../scss/instructor/instructor-student-profile-page.scss";
 import { Header } from "../../SubComponents/Header";

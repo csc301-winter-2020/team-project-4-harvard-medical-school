@@ -1,3 +1,12 @@
+/**
+ * This page is a container that holds the individual patient profile
+ * that the user is viewing. An individual patient profile page is a single page
+ * of the entire patient profile, if we were to break up each section into
+ * different "pages". One page would be "Demographics", the next "CCHPI", etc.
+ * This page is also responsible for viewing the results from the Isabel API.
+ * This page also holds the sidebar.
+ */
+
 import React, { useState, useEffect } from "react";
 import { RouteComponentProps } from "react-router";
 import { DemographicsPage } from "./DemographicsPage";
@@ -19,6 +28,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { HelixLoader } from "../../SubComponents/HelixLoader";
 import { Template, TemplatePage } from "../TemplatesPage";
 
+// These are all the possible pages to have in a patient profile.
 const contentsPages: IndividualPatientProfile[] = [
   DemographicsPage,
   CCHPIPage,
@@ -53,8 +63,6 @@ export type IndividualPatientProfile = React.FC<
 
 export async function postData(url: string, data: any, method?: string) {
   if (method === undefined) method = "PATCH";
-  console.log("PATCHING WITH DATA");
-  console.log(data);
   const response = await fetch(url, {
     method: method,
     mode: "cors",
@@ -97,6 +105,9 @@ function formatCanvas(canvas: string) {
   }
 }
 
+/**
+ * Creates the appropriate number of nav dots at the bottom of the screen.
+ * */
 const initNavDots = (n: number) => {
   const container = [];
   for (let i = 0; i < n; i++) {
@@ -157,6 +168,9 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
     contentsPages
   );
 
+  /**
+   * Go to the next page.
+   */
   const incrementPage = () => {
     transitionName = "slide-left";
     const index = currentContents.indexOf(currentPage);
@@ -164,6 +178,9 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
     setCurrentPage(currentContents[newIndex]);
   };
 
+  /**
+   * Goes to the previous page.
+   */
   const decrementPage = () => {
     transitionName = "slide-right";
     const index = currentContents.indexOf(currentPage);
@@ -171,6 +188,9 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
     setCurrentPage(currentContents[newIndex]);
   };
 
+  /**
+   * Adds an event listener for screen resizing.
+   */
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
@@ -206,7 +226,13 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
       "patient-profile-page-dot patient-profile-page-dot--active";
   }, [currentPage]);
 
-  // Component did mount for swipe listners
+  
+  /**
+   * The following useEffect listens for the user dragging their finger to 
+   * left or right and then increments or decrements the page. Comment it in 
+   * to enable this function.
+   */
+  /*
   useEffect(() => {
     const container = document.querySelector(
       ".patient-profile-page-page-content"
@@ -239,7 +265,11 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
       container.removeEventListener("touchend", touchEnd);
     };
   });
+  */
 
+  /**
+   * If the user is NOT a student, then alert them and hide all the save buttons.
+   */
   useEffect(() => {
     fetch("/api/me")
       .then(res => {
@@ -309,6 +339,14 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
     }
   }, [classId]);
 
+  /**
+   * In this useEffect, we fetch the template that the user used to make
+   * this patient profile. If there is no template that is used,
+   * or the template was deleted, then it
+   * just uses the default template (shows everything in order).
+   * We achieve the custom ordering by adding the pages to an array in the
+   * same order that they are stored in the template.
+   */
   useEffect(() => {
     if (thisUserId !== null) {
       fetch(`/api/patientprofile/${thisPatientID}`)
@@ -377,10 +415,6 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
               }
             }
           });
-          console.log("new contents pages");
-          console.log(newContentsPages);
-          console.log("new contents");
-          console.log(newContents);
           setCurrentContentsPages(newContentsPages);
           setCurrentContents(newContents);
           if (newContents.length > 0) {
@@ -420,7 +454,7 @@ export const PatientProfilePage: React.FC<PatientProfilePageProps> = (
             <br></br>
             <div>
               {isabelOutputArr === undefined ? (
-                <p>Isabel could not find anything conclusive.</p>
+                <p>Isabel could not find anything conclusive for this timestamp.</p>
               ) : (
                 isabelOutputArr.slice(0, 15).map((x: any) => {
                   const name = x["diagnosis_name"];

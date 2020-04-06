@@ -1,3 +1,7 @@
+/**
+ * A single row representing a student in the admin's student selection page.
+ */
+
 import React, { useState } from "react";
 import "../../../scss/admin/admin-student-profile.scss";
 import Popup from "reactjs-popup";

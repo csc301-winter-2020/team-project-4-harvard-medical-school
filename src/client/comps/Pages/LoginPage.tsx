@@ -104,7 +104,6 @@ export const LoginPage: React.FC = () => {
 
   const onSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
     dispatch({ type: "login" });
-    // createToast.success("⚠️ GAMER DETECTED!!!!!! ");
   };
 
   return (

@@ -1,3 +1,7 @@
+/**
+ * This represents a single input field in a form.
+ */
+
 import React from "react";
 
 interface FormGroupProps {

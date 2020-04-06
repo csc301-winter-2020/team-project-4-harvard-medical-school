@@ -1,3 +1,8 @@
+/**
+ * This is the page where admins are able to add students to a class
+ * by clicking on them.
+ */
+
 import React, { useState, useEffect } from "react";
 import "../../../scss/admin/admin-page.scss";
 import { Student } from "./AdminClassStudentsPage";

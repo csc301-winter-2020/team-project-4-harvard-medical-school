@@ -1,3 +1,8 @@
+/**
+ * These are the two buttons that you see near the question that lets
+ * a user choose between seeing a text box or a canvas.
+ */
+
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 

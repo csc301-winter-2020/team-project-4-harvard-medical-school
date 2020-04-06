@@ -1,3 +1,9 @@
+/**
+ * This page represents a class that the instructor can view. It shows
+ * the instructor what students are in the class, and the instructor
+ * can change whether or not help is enabled in this view.
+ */
+
 import React, { useState, useEffect } from "react";
 import "../../../scss/instructor/instructor-page.scss";
 import { Header } from "../../SubComponents/Header";

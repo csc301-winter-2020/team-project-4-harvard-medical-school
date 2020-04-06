@@ -1,3 +1,8 @@
+/**
+ * A single row representing a patient profile, within the student List view of 
+ * all the patient profiles.
+ */
+
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useHistory } from "react-router-dom";

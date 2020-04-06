@@ -1,3 +1,7 @@
+/**
+ * A row representing a single class in the instructor's class select page.
+ */
+
 import React from "react";
 import "../../../scss/instructor/instructor-student-patient-encounter";
 import { useHistory } from "react-router";

@@ -1,3 +1,8 @@
+/**
+ * This is the page in which an instructor is able to view the 
+ * different classes he is instructing.
+ */
+
 import React, { useState, useEffect } from "react";
 import "../../../scss/instructor/instructor-page.scss";
 import { Header } from "../../SubComponents/Header";

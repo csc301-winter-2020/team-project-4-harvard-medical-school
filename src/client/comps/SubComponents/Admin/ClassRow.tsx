@@ -1,3 +1,7 @@
+/**
+ * A row representing a single class in the admin's class select page.
+ */
+
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AdminClass } from "../../Pages/Admin/AdminPage";

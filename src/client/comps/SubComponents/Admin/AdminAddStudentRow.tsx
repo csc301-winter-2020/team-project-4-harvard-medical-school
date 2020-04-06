@@ -1,3 +1,7 @@
+/**
+ * A single row in the admin's add student page.
+ */
+
 import React from "react";
 import "../../../scss/admin/admin-student-profile.scss";
 import {toast } from "react-toastify";

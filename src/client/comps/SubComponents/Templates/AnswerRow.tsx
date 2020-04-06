@@ -1,3 +1,9 @@
+/**
+ * This represents a singular row within the "Answers" component. Each one 
+ * has a name and displays whether they are enabled or not. In the current 
+ * implementation of the project, this component is UNUSED.
+ */
+
 import React, { useState, useEffect } from "react";
 import { Question } from "./Questions";
 

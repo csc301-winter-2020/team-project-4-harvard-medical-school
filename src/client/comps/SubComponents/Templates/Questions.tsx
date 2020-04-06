@@ -1,3 +1,8 @@
+/**
+ * This is a PAGE (not actually a subcomponent) that represents a single template.
+ * It holds DraggableQuestions that users can drag to reorder.
+ */
+
 import React, { useState, useEffect } from "react";
 import {
   DragDropContext,
@@ -47,10 +52,16 @@ type answer = {
   value: boolean;
 };
 
+/**
+ * Create the Questions given a template page.
+ * @param useDefault This is true if there is no TemplatePage[] 't'. It just then
+ * populates the default template which can be found in the utils folder.
+ * @param t A given template which will be turned into a Question Array.
+ */
 const getQuestions = (useDefault: boolean, t?: TemplatePage[]): Question[] => {
   const count: number = 10;
   if (useDefault) {
-    return Array.from({ length: count }, (v, k) => k).map(k => ({
+    return Array.from({ length: count }, (v, k) => k).map((k) => ({
       id: `question-${k}`,
       title: defaultTemplate.template[k].title,
       fields: getFields(defaultTemplate.template[k].fields),
@@ -58,7 +69,7 @@ const getQuestions = (useDefault: boolean, t?: TemplatePage[]): Question[] => {
     }));
   } else {
     console.log(t);
-    return Array.from({ length: count }, (v, k) => k).map(k => ({
+    return Array.from({ length: count }, (v, k) => k).map((k) => ({
       id: `question-${k}`,
       title: t[k].title,
       fields: getFields(t[k].fields),
@@ -80,30 +91,54 @@ export const Questions: React.FC<QuestionCompProps> = (
   const { useDefault } = props;
   const [isLoading, setIsLoading] = useState(true);
   const [questions, setQuestions] = useState<Question[]>(getQuestions(true));
+  const [userId, setUserId] = useState<number>(null);
 
   useEffect(() => {
-    if (!useDefault) {
-      fetch(`/api/student/1/template/${templateID}`)
-        .then(res => {
+    fetch(`/api/me`)
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          throw new Error(
+            `Err with api/me call: ${res.status} ${res.statusText}`
+          );
+        }
+      })
+      .then((data) => {
+        setUserId(data.id);
+      })
+      .catch((err: any) => {
+        console.log(err);
+        myToast.warn(
+          "Could not validate your session. Please refresh to try again."
+        );
+      });
+  }, []);
+
+  // Find the template for the relevant student from the DB.
+  useEffect(() => {
+    if (!useDefault && userId !== null) {
+      fetch(`/api/student/${userId}/template/${templateID}`)
+        .then((res) => {
           if (res.status === 200) {
             return res.json();
           } else {
             throw new Error(`Err: ${res.status} ${res.statusText}`);
           }
         })
-        .then(data => {
+        .then((data) => {
           console.log(data);
           setQuestions(getQuestions(false, JSON.parse(data.template)));
           setTitle(data.template_name);
           setIsLoading(false);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     } else {
       setIsLoading(false);
     }
-  }, []);
+  }, [userId]);
 
   function onDragStart(result: DropResult, provided: ResponderProvided) {
     setChangeFlag(!changeFlag);
@@ -272,9 +307,10 @@ export const Questions: React.FC<QuestionCompProps> = (
       <div
         className="question-floating-save-btn"
         onClick={() => {
+          console.log(userId);
           const url: string = useDefault
-            ? `/api/student/1/templates/new`
-            : `/api/student/1/template/${templateID}`;
+            ? `/api/student/${userId}/templates/new`
+            : `/api/student/${userId}/template/${templateID}`;
           fetch(url, {
             method: useDefault ? "POST" : "PATCH",
             mode: "cors",
@@ -293,7 +329,7 @@ export const Questions: React.FC<QuestionCompProps> = (
               template: questions,
             }),
           })
-            .then(res => {
+            .then((res) => {
               console.log(res);
               if (res.status === 200) {
                 myToast.success("Template saved.");
@@ -301,7 +337,7 @@ export const Questions: React.FC<QuestionCompProps> = (
                 throw new Error(res.status + " " + res.statusText);
               }
             })
-            .catch(error => {
+            .catch((error) => {
               myToast.warn("An error occurred while saving your template.");
               console.log("An error occured with POST:", error);
             });

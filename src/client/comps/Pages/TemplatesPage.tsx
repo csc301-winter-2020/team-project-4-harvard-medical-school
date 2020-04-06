@@ -42,22 +42,34 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({}) => {
   const history = useHistory();
 
   useEffect(() => {
-    fetch("/api/student/1/templates")
-    .then(res => {
-      console.log(res);
-      if (res.status === 200){
-        return res.json();
-      } else {
-        throw new Error(res.status + " " + res.statusText);
-      }
-    })
-    .then(data => {
-      setTemplates(data);
-      setIsLoading(false);
-    })
-    .catch(err => {
-      console.log(err);
-    })
+    fetch(`/api/me`)
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          throw new Error(
+            `Err with api/me call: ${res.status} ${res.statusText}`
+          );
+        }
+      })
+      .then((data) => {
+        return fetch(`/api/student/${data.id}/templates`);
+      })
+      .then((res) => {
+        console.log(res);
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          throw new Error(res.status + " " + res.statusText);
+        }
+      })
+      .then((data) => {
+        setTemplates(data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   return (
@@ -70,11 +82,14 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({}) => {
         setSearchValue={setSearchValue}
         placeholder={"Search Templates"}
       />
-      {isLoading && <HelixLoader message="Loading Templates..."/>}
+      {isLoading && <HelixLoader message="Loading Templates..." />}
       <ToastContainer position={toast.POSITION.TOP_RIGHT} />
       <div className="templates-outermost">
         <div className="templates-main-container">
-          <div className="templates-title" style={{display: "block", marginRight: "0"}}>
+          <div
+            className="templates-title"
+            style={{ display: "block", marginRight: "0" }}
+          >
             <h1>Template List</h1>
             <div className="home-page-separator-line"></div>
             <div className="home-page-patient-header-grid">
@@ -87,7 +102,7 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({}) => {
           </div>
           <div className="templates-scroller">
             {templates
-              .filter(t =>
+              .filter((t) =>
                 t.template_name
                   .toLowerCase()
                   .includes(searchValue.toLowerCase())
@@ -112,9 +127,14 @@ export const TemplatesPage: React.FC<TemplatesPageProps> = ({}) => {
           </div>
         </div>
       </div>
-      <div className="template-floating-add-btn" onClick={() => {
-        history.push("/templates/new");
-      }}>New Template</div>
+      <div
+        className="template-floating-add-btn"
+        onClick={() => {
+          history.push("/templates/new");
+        }}
+      >
+        New Template
+      </div>
     </>
   );
 };

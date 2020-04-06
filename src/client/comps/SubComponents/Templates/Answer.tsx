@@ -1,3 +1,10 @@
+/**
+ * This section is currently unused in the implementation. An answer is a dropdown
+ * box underneith a "Question" component that lets the user reorder the 
+ * "Answer" components. In this case the Answers represent individual
+ * subsections of a PatientProfilePage (Demographics, CCHPI, etc.).
+ */
+
 import React, { useState } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import { getItemStyle, getAnswerListStyle } from "../../../utils/utils";

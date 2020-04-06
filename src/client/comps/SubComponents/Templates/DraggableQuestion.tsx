@@ -1,3 +1,8 @@
+/**
+ * This represents a single draggable "Question". This component is the row that
+ * holds the checkbox and the name of the PatientProfilePage.
+ */
+
 import React, { useState, useEffect } from "react";
 import { Draggable, DragDropContext } from "react-beautiful-dnd";
 import { nameToUrl, getItemStyle } from "../../../utils/utils";
@@ -29,7 +34,11 @@ export const DraggableQuestion: React.FC<DraggableQuestionProps> = ({
   const [isShowing, setIsShowing] = useState(false);
   const [disabled, setDisabled] = useState(initChecked);
 
-  
+  /**
+   * This seems to be a hacky way to refresh the status of the checkbox each time
+   * the component is dragged. Otherwise the checkbox of the draggable question
+   * of the same index will show up as checked (even though in state, it is not).
+   *  */ 
   useEffect(() => {
     setDisabled(initChecked);
   });
@@ -70,7 +79,12 @@ export const DraggableQuestion: React.FC<DraggableQuestionProps> = ({
             </span>
             {question.title}
 
-                {/** Commenting out the "Answers" part because its broken as fuck */}
+                {/** Commenting out the "Answers" part because while it works in
+                 * the templates section, it does not have actual functionality
+                 * within the app when taking notes. You can comment the lower 
+                 * section back in to be able to view and drag the "Answers"
+                 * component of each Question.
+                */}
             {/* <span
               className="chevron-style"
               onClick={() => setIsShowing(!isShowing)}

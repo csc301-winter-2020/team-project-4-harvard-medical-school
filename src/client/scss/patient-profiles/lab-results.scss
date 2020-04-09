@@ -34,13 +34,15 @@
   width: 5px;
 }
 
-#dropdown-container {
-  max-width: 120px;
-  margin-top: 20px;
-  
-  .ui.fluid.dropdown {
-    width: 330px;
-    padding: 10px;
+.new-lab-result-input{
+  #dropdown-container {
+    max-width: 120px;
+    margin-top: 20px;
+    
+    .ui.fluid.dropdown {
+      width: 330px;
+      padding: 10px;
+    }
   }
 }
 

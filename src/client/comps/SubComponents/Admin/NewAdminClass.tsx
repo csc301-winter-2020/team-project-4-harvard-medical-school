@@ -132,7 +132,7 @@ export const NewAdminClass: React.FC<NewAdminClassProps> = ({
         </div>
         <div id="dropdown-container">
           <Dropdown
-            placeholder="Select Instructor"
+            placeholder="Please select an instructor for this class."
             fluid
             search
             selection

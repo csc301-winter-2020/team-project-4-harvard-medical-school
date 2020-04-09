@@ -93,7 +93,7 @@ export const NewPatient: React.FC<NewPatientProps> = ({
         </div>
         <div id="dropdown-container">
           <Dropdown
-            placeholder="Select Template"
+            placeholder="Select template, or leave empty to use the default."
             fluid
             search
             selection

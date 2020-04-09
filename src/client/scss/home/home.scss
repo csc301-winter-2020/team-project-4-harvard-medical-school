@@ -327,7 +327,7 @@ input:focus {
 }
 
 .home-page-create-user-btn {
-  bottom: 200px;
+  bottom: 100px;
 }
 
 .home-page-content-whitespace-logo {
@@ -433,6 +433,10 @@ input:focus {
 .home-page-create-new-patient-btn-cntr {
   margin-top: 20px;
   text-align: center;
+}
+
+.home-patient-profile-info-export-btn{
+  display:none;
 }
 
 @media only screen and (max-width: 1080px) {

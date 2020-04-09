@@ -206,7 +206,7 @@ export const HomePatientProfile: React.FC<HomePatientProfileProps> = ({
               {
                 userType === "Administrator" && (
                   <div
-                  className="home-patient-profile-info-export-btn"
+                  className="home-patient-profile-info-analysis-btn"
                   onClick={() => history.push(`/admin/analysis/${patientID}`)}
                 >
                   View Analysis Deltas

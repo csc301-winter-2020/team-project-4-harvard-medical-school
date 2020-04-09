@@ -394,10 +394,10 @@ export const PastMedicalHistoryPage: IndividualPatientProfile = ({
                   saveData(patientID, state, classID, templateId)
                     .then(data => {
                       console.log(data);
-                      myToast.success("Information saved");
+                      myToast.success("Information saved", {autoClose: 1000});
                     })
                     .catch(err => {
-                      myToast.success("Information could not be saved");
+                      myToast.warn("Information could not be saved");
                     });
                 }}
               >

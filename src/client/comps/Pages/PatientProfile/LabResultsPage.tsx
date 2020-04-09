@@ -17,7 +17,7 @@ interface LabResultsState {
   };
 }
 
-const labResultOptions = Object.entries(defaultLabResults).map(lr => {
+const labResultOptions = Object.entries(defaultLabResults).map((lr) => {
   return {
     key: lr[0],
     text: lr[0],
@@ -92,12 +92,12 @@ export const LabResultsPage: IndividualPatientProfile = ({
 
   const postToDB = (state: LabResultsState) => {
     postLabResultsInfo(patientID, state)
-      .then(data => {
+      .then((data) => {
         console.log(data);
-        mToast.success("Information saved");
+        mToast.success("Information saved", { autoClose: 1000 });
       })
-      .catch(err => {
-        mToast.error("Information could not be saved");
+      .catch((err) => {
+        mToast.warn("Information could not be saved");
       });
   };
 
@@ -118,13 +118,13 @@ export const LabResultsPage: IndividualPatientProfile = ({
         console.log(state);
 
         postLabResultsInfo(patientID, state)
-          .then(data => {
+          .then((data) => {
             console.log(data);
             mToast.success("Autosaved.", {
               autoClose: 1000,
             });
           })
-          .catch(err => {
+          .catch((err) => {
             mToast.warn("Autosave failed.");
           });
 
@@ -142,16 +142,15 @@ export const LabResultsPage: IndividualPatientProfile = ({
       history.push(`/patient/${patientID}/lab`);
 
       getLabResults(patientID)
-      .then(data => {
-        dispatch({ type: "full_load", value: data });
-        console.log("get data");
-        console.log(state.data);
-      })
-      .catch(err => {
-        console.log("could not get Lab Results data from database");
-      });
+        .then((data) => {
+          dispatch({ type: "full_load", value: data });
+          console.log("get data");
+          console.log(state.data);
+        })
+        .catch((err) => {
+          console.log("could not get Lab Results data from database");
+        });
     }
-
   }, [currentPage]);
 
   let nameInput = "";
@@ -168,7 +167,8 @@ export const LabResultsPage: IndividualPatientProfile = ({
       >
         <div className="lab-results-page-outermost-container patient-profile-window">
           <div className="patient-profile-page-title">
-            <h1>{pageName}</h1>
+            <h2>{pageName}</h2>
+          </div>
             <div id="lab-result-table-div">
               <table id="labResultsTable" className="lab-results-table">
                 <thead>
@@ -179,8 +179,8 @@ export const LabResultsPage: IndividualPatientProfile = ({
                 </thead>
                 <tbody>
                   {Object.entries(state.data)
-                    .filter(entry => entry[1]["added"])
-                    .map(row => {
+                    .filter((entry) => entry[1]["added"])
+                    .map((row) => {
                       const rowClass = "";
                       return (
                         <tr className={`${rowClass}`} key={row[0]}>
@@ -210,7 +210,7 @@ export const LabResultsPage: IndividualPatientProfile = ({
                               } else {
                                 nameInput = e.target.textContent;
                               }
-                              console.log("nameInput changed to " + nameInput)
+                              console.log("nameInput changed to " + nameInput);
                             }}
                           />
                         </div>
@@ -265,7 +265,7 @@ export const LabResultsPage: IndividualPatientProfile = ({
             >
               Add Lab Result
             </button>
-          </div>
+          
           {userType === "Student" && (
             <div className="patient-profile-nav-btns">
               <div

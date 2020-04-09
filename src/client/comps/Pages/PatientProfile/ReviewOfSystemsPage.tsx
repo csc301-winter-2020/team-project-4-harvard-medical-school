@@ -477,10 +477,10 @@ export const ReviewOfSystemsPage: IndividualPatientProfile = ({
     postReviewOfSystemsInfo(patientID, state)
       .then(data => {
         console.log(data);
-        myToast.success("Information saved");
+        myToast.success("Information saved", {autoClose: 1000});
       })
       .catch(err => {
-        myToast.error("Information could not be saved");
+        myToast.warn("Information could not be saved");
       });
 
     // getPatientInfo(patientID).then((data) => {

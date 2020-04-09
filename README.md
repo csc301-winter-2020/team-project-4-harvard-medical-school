@@ -1,5 +1,20 @@
 [Deliverable 2 README](deliverables/deliverable-2)
 
+# Notes
+
+Please use Google Chrome when accessing this project.
+We were never able to test this project on a real tablet - a tablet-like mode can be simulated on Google Chrome by pressing `F12` and then `ctrl + shift + M` and selecting "iPad" or "iPad Pro" from the dropdown near the top of the screen. This is how we tested our views for "tablet" use. iPad and iPad Pro are the only two mobile settings we tested the views on. This means that visiting the website on a phone which has much less screen space will likely have poor results.
+
+# Issues/Bugs
+
+* While in tablet-mode, dragging to resize the canvas is extremely finicky and pretty much does not work. It works fine on desktop.
+* Canvases don't save when you draw on them in tablet mode - only in desktop mode. This is counter-intuitive and we realize this, but for whatever reason this part was not completed.
+
+# Items not completed
+
+* With regards to templates, you can only enable/disable and reorder top level pages, not the individual components of the page.
+* We could not end up implementing the export patient profile as PDF.
+
 # Getting Started
 
 This is a guide to running this project on your local host. Run the following to get started.

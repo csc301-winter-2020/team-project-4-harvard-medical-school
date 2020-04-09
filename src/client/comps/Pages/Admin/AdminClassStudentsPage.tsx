@@ -246,12 +246,6 @@ export const AdminClassStudentsPage: React.FC<AdminProfilePageProps> = (
         <Link to={`/admin/${props.classID}/add`} className="btn btn-primary">Add Students</Link>
       </div>
       <div
-        className="home-page-create-new-patient-btn"
-        onClick={startStudentTextDataDownload}
-      >
-        <p>Export Data</p>
-      </div>
-      <div
         className="home-page-create-template-btn"
         onClick={() => {
           const data: Class = {

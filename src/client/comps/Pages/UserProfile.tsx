@@ -10,6 +10,7 @@ import { HelixLoader } from "../SubComponents/HelixLoader";
 import { useHistory } from "react-router";
 import { dummyData, numberToYearStr } from "../../utils/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { LeftSideBackButton } from "../SubComponents/Home/LeftSideBackButton";
 
 interface UserProfileProps {
   id: number;
@@ -89,14 +90,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ id }) => {
           <div className="settings-bottom-container"></div>
         </div>
       </div>
-      <div
-        className="question-floating-back-btn"
-        onClick={() => {
-          history.goBack();
-        }}
-      >
-        <FontAwesomeIcon icon="arrow-left" size="2x" />
-      </div>
+      <LeftSideBackButton/>
     </>
   );
 };

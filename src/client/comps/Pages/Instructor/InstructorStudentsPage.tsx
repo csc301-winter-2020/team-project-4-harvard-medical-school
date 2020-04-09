@@ -12,6 +12,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { max } from "../../../utils/utils";
 import { HelixLoader } from "../../SubComponents/HelixLoader";
 import { MyToast } from "../../../utils/types";
+import { LeftSideBackButton } from "../../SubComponents/Home/LeftSideBackButton";
 
 interface InstructorPageProps {
   classID: number;
@@ -172,6 +173,7 @@ export const InstructorStudentsPage: React.FC<InstructorPageProps> = (
       >
         {helpEnabled ? <p>Disable Help</p> : <p>Enable Help</p>}
       </div>
+      <LeftSideBackButton/>
     </>
   );
 };

@@ -12,6 +12,7 @@ import { defaultAvatar, numberToYearStr, dummyData } from "../../utils/utils";
 import { HelixLoader } from "../SubComponents/HelixLoader";
 import { toast, ToastContainer } from "react-toastify";
 import { MyToast, userData } from "../../utils/types";
+import { LeftSideBackButton } from "../SubComponents/Home/LeftSideBackButton";
 
 interface SettingsPageProps {}
 
@@ -324,6 +325,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = ({}) => {
           )}
         </div>
       </div>
+      <LeftSideBackButton/>
     </>
   );
 };

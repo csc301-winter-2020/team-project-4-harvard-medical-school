@@ -75,7 +75,7 @@ const initialState: LoginState = {
   password: "",
   repassword: "",
   isLoading: false,
-  isPortraitMode: false,
+  isPortraitMode: window.innerWidth < 1080,
   isRegisterMode: false,
 };
 

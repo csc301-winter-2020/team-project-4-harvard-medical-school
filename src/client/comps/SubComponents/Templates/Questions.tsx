@@ -253,7 +253,7 @@ export const Questions: React.FC<QuestionCompProps> = (
                   maxLength={20}
                   style={{
                     fontSize: "3rem",
-                    width: "800px",
+                    width: "calc(100% - 100px)",
                     outline: "none",
                     marginBottom: "16px",
                     marginLeft: "10px",

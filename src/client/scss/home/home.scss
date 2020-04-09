@@ -446,7 +446,7 @@ input:focus {
   .home-patient-profile-name-col,
   .home-patient-profile-date-col,
   .home-patient-profile-last-modified-col {
-    font-size: 2.1rem;
+    font-size: 1.8rem;
   }
 
   .home-patient-profile-info-btn {
@@ -595,3 +595,12 @@ input:focus {
     }
   }
 }
+
+
+@media only screen and (max-width: 1080px) {
+  .home-page-content-container {
+    padding-right: 0;
+  }
+}
+
+

@@ -12,6 +12,7 @@ import { max } from "../../../utils/utils";
 import { HelixLoader } from "../../SubComponents/HelixLoader";
 import { ToastContainer, toast } from "react-toastify";
 import { MyToast } from "../../../utils/types";
+import { LeftSideBackButton } from "../../SubComponents/Home/LeftSideBackButton";
 
 interface AdminAddStudentPageProps {
   classID: number;
@@ -118,6 +119,7 @@ export const AdminClassAddStudentsPage: React.FC<AdminAddStudentPageProps> = (
           </div>
         </div>
       </div>
+      <LeftSideBackButton/>
     </>
   );
 };

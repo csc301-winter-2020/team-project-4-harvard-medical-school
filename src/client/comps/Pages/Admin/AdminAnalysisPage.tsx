@@ -10,6 +10,10 @@ import { HelixLoader } from "../../SubComponents/HelixLoader";
 import { max } from "../../../utils/utils";
 import { Analysis } from "../../../utils/types";
 import { AdminAnalysisRow } from "../../SubComponents/Admin/AdminAnalysisRow";
+import { useHistory } from "react-router";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { LeftSideBackButton } from "../../SubComponents/Home/LeftSideBackButton";
+
 
 interface AdminAnalysisPageProps {
   profileID: number;
@@ -22,6 +26,8 @@ export const AdminAnalysisPage: React.FC<AdminAnalysisPageProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [analysis, setAnalysis] = useState<Analysis[]>([]);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  const history = useHistory();
 
   useEffect(() => {
     document.title = "Scribe: Analysis Deltas";
@@ -99,6 +105,7 @@ export const AdminAnalysisPage: React.FC<AdminAnalysisPageProps> = ({
           </div>
         </div>
       </div>
+      <LeftSideBackButton/>
     </>
   );
 };

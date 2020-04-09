@@ -2,6 +2,10 @@
  * This is the page in which an instructor can view all the different
  * patient profiles that a student has created, and edit the final diagnosis
  * for a patient profile. Its the list view with the red 'i' button on the right.
+ * 
+ * This page is actually also used for the ADMIN view that shows all student
+ * patient profiles - since the view is pretty much identical. 
+ * this component is not exactly aptly named.
  */
 
 import React, { useState, useEffect } from "react";
@@ -14,6 +18,7 @@ import { HelixLoader } from "../../SubComponents/HelixLoader";
 import { ToastContainer, toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { HomePatientProfile } from "../../SubComponents/Home/HomePatientProfile";
+import { LeftSideBackButton } from "../../SubComponents/Home/LeftSideBackButton";
 
 interface InstructorStudentProfilePageProps {
   classID: number;
@@ -166,6 +171,7 @@ export const InstructorStudentProfilePage: React.FC<InstructorStudentProfilePage
           </p>
         </div>
       </a>
+      <LeftSideBackButton/>
     </>
   );
 };

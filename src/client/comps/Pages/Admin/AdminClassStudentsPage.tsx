@@ -14,6 +14,7 @@ import { HelixLoader } from "../../SubComponents/HelixLoader";
 import { Class, MyToast } from "../../../utils/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { textToDownloadFile } from "../../../utils/utils"
+import { LeftSideBackButton } from "../../SubComponents/Home/LeftSideBackButton";
 
 interface AdminProfilePageProps {
   classID: number;
@@ -267,6 +268,7 @@ export const AdminClassStudentsPage: React.FC<AdminProfilePageProps> = (
       >
         {thisClass.help_enabled ? <p>Disable Help</p> : <p>Enable Help</p>}
       </div>
+      <LeftSideBackButton/>
     </>
   );
 };

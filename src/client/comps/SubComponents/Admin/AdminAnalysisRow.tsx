@@ -32,7 +32,9 @@ export const AdminAnalysisRow: React.FC<AdminAnalysisRowProps> = ({
   const [isShowingInfo, setIsShowingInfo] = useState(false);
   return (
     <>
-      <div className="home-patient-profile-container" id="analysis-grid">
+      <div className="home-patient-profile-container" id="analysis-grid" onClick={() => {
+        setIsShowingInfo(!isShowingInfo);
+      }} style={{cursor: "pointer"}}>
         <div className="home-patient-profile-name-col">
           {isPortraitMode
             ? dateFormatCompactTime(time_submitted)
@@ -40,10 +42,6 @@ export const AdminAnalysisRow: React.FC<AdminAnalysisRowProps> = ({
         </div>
         <div
           className="home-patient-profile-info-btn"
-          onClick={() => {
-            setIsShowingInfo(!isShowingInfo);
-            console.log(isabel_result);
-          }}
         >
           <div className="home-patient-profile-info-icon">
             <FontAwesomeIcon

@@ -2,6 +2,7 @@
 
 .settings-outermost {
   background-color: $background-dim;
+  overflow-x: hidden;
 }
 
 .settings-main-container {
@@ -132,4 +133,35 @@
 
 .settings-toggle-edit-btn:hover{
   background-color: $color-primary-light;
+}
+
+@media only screen and (max-width: 1080px) {
+  .settings-main-container {
+    width: 100%;
+
+    .settings-avatar{
+      width: 200px;
+      height: 200px;
+    }
+
+    .settings-top-info{
+      float: left;
+      margin-left: 50px;
+      width: calc(100% - 350px);
+    }
+    
+    .settings-bottom-container{
+      h3{
+        font-size: 1.6rem;
+      }
+      p{
+        font-size: 1.4rem;
+      }
+
+      input[type="radio"]{
+        width: 26px;
+        height: 26px;
+      }
+    }
+  }
 }

@@ -66,6 +66,7 @@ router.get(
         }
       })
       .catch((err: any) => {
+        console.log("error1")
         res.status(400).send();
       });
   }
@@ -99,6 +100,7 @@ router.post(
           res.status(400).send();
         });
     } else {
+      console.log("error2")
       res.status(400).send();
     }
   }
@@ -123,6 +125,7 @@ router.patch(
       })
       .catch((err: any) => {
         console.log(err);
+        console.log("error3")
         res.status(500).json({ error: err });
       });
   }
@@ -188,7 +191,9 @@ router.get(
         }
       )
       .catch((err: any) => {
+        console.log("error4")
         console.log(err);
+        
         res.status(500).json(err);
       });
   }
@@ -252,6 +257,7 @@ router.get(
         }
       })
       .catch((err: any) => {
+        console.log("error5")
         console.log(err);
         res.status(500).send();
       });
@@ -269,6 +275,7 @@ function save_to_aws(data: any, key: string): any {
     s3.upload(params, function(err: any, data: any) {
       // console.log("upload success");
       if (err) {
+        console.log("error6")
         console.log(err);
         reject();
       } else {
@@ -381,6 +388,7 @@ router.post(
         res.status(200).json(result.rows[0]);
       })
       .catch((err: any) => {
+        console.log("error7")
         console.log(err);
         res.status(400).json(err);
       });
@@ -492,6 +500,7 @@ router.patch(
         res.status(200).json(result.rows[0]);
       })
       .catch((err: any) => {
+        console.log("error9")
         console.log(err);
         res.status(400).json(err);
       });
@@ -513,6 +522,7 @@ router.get(
         res.status(200).json(result.rows);
       })
       .catch((err: any) => {
+        console.log("error10")
         console.log(err);
         res.status(500).json({ error: err });
       });
@@ -532,18 +542,19 @@ router.get(
     pool
       .query(query_string, [userId, templateId])
       .then((result: { rowCount: number; rows: { [x: string]: any } }) => {
-        // console.log(result);
         if (result.rowCount === 0) {
           res.status(404).json({ error: "That template does not exist." });
         }
-        // const template_arr: any = result.rows;
-        // for (let i = 0; i < template_arr.length; i++) {
-        //   template_arr[i].template = JSON.parse(template_arr[i].template);
-        // }
         res.status(200).json(result.rows[0]);
       })
       .catch((err: any) => {
-        console.log(err);
+        console.log("error11")
+        if (Number.isNaN(templateId)){
+          console.log("PatientProfile has Null (or deleted) template. The default template will be used instead.");
+        } else {
+          console.log(`There was an error fetching the corresponding template for user ${userId} and templateId ${templateId}`);
+          console.log(err);
+        }
         res.status(500).json({ error: err });
       });
   }
@@ -576,6 +587,7 @@ router.patch(
         res.status(200).json({ message: "Successful update." });
       })
       .catch((err: any) => {
+        console.log("error12")
         console.log(err);
         res.status(500).json({ error: err });
       });
@@ -598,6 +610,7 @@ router.delete(
         res.status(200).json({ message: "Successful deletion." });
       })
       .catch((err: any) => {
+        console.log("error13")
         console.log(err);
         res
           .status(500)
@@ -628,6 +641,7 @@ router.post(
         res.status(200).send();
       })
       .catch((err: any) => {
+        console.log("error14")
         console.log(err);
         res.status(400).send();
       });
@@ -672,6 +686,7 @@ router.post(
         res.status(200).send();
       })
       .catch((err: any) => {
+        console.log("error15")
         res.status(400).send();
       });
   }
@@ -715,6 +730,7 @@ router.post(
         res.status(200).send();
       })
       .catch((err: any) => {
+        console.log("error16")
         res.status(400).send();
       });
   }
@@ -758,6 +774,7 @@ router.post(
         res.status(200).send();
       })
       .catch((err: any) => {
+        console.log("error17")
         res.status(400).send();
       });
   }
@@ -780,6 +797,7 @@ router.get(
         res.status(200).json(result.rows);
       })
       .catch((err: any) => {
+        console.log("error18")
         console.log(err);
         res.status(400).json(err);
       });
@@ -807,6 +825,7 @@ router.delete(
         }
       })
       .catch((err: any) => {
+        console.log("error19")
         console.log(err);
         res.status(400).send();
       });
@@ -827,6 +846,7 @@ router.get(
         res.status(200).json(result.rows);
       })
       .catch((err: any) => {
+        console.log("error20")
         console.log(err);
         res.status(500).json({ error: err });
       });
@@ -847,6 +867,7 @@ router.get(
         res.status(200).json(result.rows);
       })
       .catch((err: any) => {
+        console.log("error21")
         console.log(err);
         res.status(500).json({ error: err });
       });
@@ -875,6 +896,7 @@ router.get(
         }
       })
       .catch((err: any) => {
+        console.log("error22")
         console.log(err);
         res.status(400).json({ error: err });
       });
@@ -899,6 +921,7 @@ router.get(
         res.status(200).json(result.rows);
       })
       .catch((err: any) => {
+        console.log("error23")
         console.log(err);
         res.status(400).json({ error: err });
       });
@@ -929,6 +952,7 @@ router.get(
         }
       })
       .catch((err: any) => {
+        console.log("error24")
         console.log(err);
         res.status(400).json({ error: err });
       });
@@ -952,6 +976,7 @@ router.post(
         res.status(200).send("Added student to class");
       })
       .catch((err: any) => {
+        console.log("error25")
         res.status(400).send();
       });
   }
@@ -978,6 +1003,7 @@ router.delete(
         }
       })
       .catch((err: any) => {
+        console.log("error26")
         console.log(err);
         res.status(400).send();
       });
@@ -997,6 +1023,7 @@ router.get(
         res.status(200).json(result.rows);
       })
       .catch((err: any) => {
+        console.log("error27")
         console.log(err);
         res.status(400).json({ error: err });
       });
@@ -1024,6 +1051,7 @@ router.get(
         }
       })
       .catch((err: any) => {
+        console.log("error28")
         console.log(err);
         res.status(400).json({ error: err });
       });
@@ -1052,6 +1080,7 @@ router.patch(
         res.status(200).json(result.rows);
       })
       .catch((err: any) => {
+        console.log("error29")
         console.log(err);
         res.status(400).json({ error: err });
       });
@@ -1078,6 +1107,7 @@ router.patch(
         res.status(200).json(result.rows);
       })
       .catch((err: any) => {
+        console.log("error30")
         console.log(err);
         res.status(400).json({ error: err });
       });
@@ -1101,6 +1131,7 @@ router.post(
         res.status(200).json(result);
       })
       .catch((err: any) => {
+        console.log("error31")
         res.status(400).send();
       });
   }
@@ -1129,6 +1160,7 @@ router.delete(
         res.status(200).send();
       })
       .catch((err: any) => {
+        console.log("error32")
         console.log(err);
         res.status(400).send();
       });
@@ -1152,6 +1184,7 @@ router.get(
         res.status(200).json(result.rows);
       })
       .catch((err: any) => {
+        console.log("error33")
         console.log(err);
         res.status(400).json({ error: err });
       });
@@ -1178,6 +1211,7 @@ router.get(
         }
       })
       .catch((err: any) => {
+        console.log("error34")
         console.log(err);
         res.status(400).json({ error: err });
       });
@@ -1367,7 +1401,7 @@ router.post(
     if (db_res.rowCount === 0) {
       res.status(404).json({});
     }
-    const patient_id: number = db_res.rows[0].patient_id; 
+    
     const age: number = age_helper(db_res.rows[0].age);
     console.log(db_res.rows[0].gender);
     const gender: string = db_res.rows[0].gender === "Male" ? "m" : "f";
@@ -1408,6 +1442,7 @@ router.post(
       await pool.query(insert_string, [profile_id, all_string, parsed_result]);
       res.status(200).json({});
     } catch (err) {
+      console.log("error36")
       console.log(err);
       res.status(400).json({});
     }
@@ -1429,6 +1464,7 @@ router.get(
         res.status(200).json(result.rows[0]);
       }
     } catch (err) {
+      console.log("error37")
       console.log(err);
       res.status(400).json({});
     }
@@ -1446,6 +1482,7 @@ router.get(
       const result: any = await pool.query(query_string, [profile_id]);
       res.status(200).json(result.rows);
     } catch (err) {
+      console.log("error38")
       console.log(err);
       res.status(400).json({});
     }

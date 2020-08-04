@@ -4,6 +4,13 @@
 
 Scribe is a web application targetted to medical students taking notes during patient interviews. Students are able to take notes via keyboard or stylus and have their recorded information parsed and sent for analysis. Course instructors are able to view the student's notetaking process as Isabel (a differential diagnosis tool) suggests possible diagnosies for a given patient. This application was developed alongside Harvard Medical School and University of Toronto Computer Science graduate researchers.
 
+# Images
+![](https://i.gyazo.com/a90a1a9e09e510168995376ba7e797b0.png)
+![](https://i.gyazo.com/23faec87c67cd9bfb211f0dffcdea48a.png)
+![](https://i.gyazo.com/73755cb54c4d476da8caf599096d7db4.png)
+![](https://i.gyazo.com/8d3dc54281c443e9392bb6a5e797f34e.png)
+![](https://i.gyazo.com/1bb0acdd0f708bbf1a0239994dd3b47f.jpg)
+
 # Notes
 
 Please use Google Chrome when accessing this project.

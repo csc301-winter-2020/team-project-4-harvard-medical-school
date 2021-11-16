@@ -21,7 +21,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.12.1",
     "@fortawesome/react-fontawesome": "^0.1.8",
     "@google-cloud/vision": "^1.11.0",
-    "aws-sdk": "^2.614.0",
+    "aws-sdk": "^2.814.0",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "css-loader": "^1.0.1",
